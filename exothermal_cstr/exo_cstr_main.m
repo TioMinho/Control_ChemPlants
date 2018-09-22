@@ -15,6 +15,8 @@ cols = [209 17 65;    % 1 - Metro Red
         255 196 37;   % 5 - Metro Yellow
         ]/255;  
 
+    
+    
 %% MODEL PARAMETERS %%
 alpha = 30.8285 / 60; beta = 86.688 / 60; gamma = 0.1; delta = 3.556e-4;
 K10 = 1.287e12 / 60; K20 = 9.043e6 / 60;
@@ -39,39 +41,7 @@ d_Tc = @(t,U,X)   beta * (X(3) - X(4)) + gamma * U(2);
 d_X  = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
 
 %% Simulation (Using Euler Method) %%
-% Simulation Parameters
-t = (0:0.1:15)';                                         % Time
-y0 = [0 0 85 79.8 0 0];                               % Initial Conditions
-U = [ones(numel(t),1)*0.55 ones(numel(t),1)*0];   % Input Signal
- 
-% Simulation of the Outputs
-y = zeros(size(t,1), size(y0,2));
-y(1,:) = y0;
-for i = 2:size(t,1)
-    [~, y_aux] = odeSolver(d_X, t(i-1:i), U(i-1,:), y(i-1,:), 100); 
-    y(i,:) = y_aux(end,:);
-end
-    
-% Visualization
-figure;
-subplot(2,2,1), plot(t,U(:,1), 'linewidth', 1.5), title("Input Signal")
-xlabel("Time (min)"), ylabel("Flow-rate (m^3/min)")
-grid()
 
-subplot(2,2,2), p = plot(t,y(:, [1 2 5 6])); title("Output Signals")
-p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
-p(3).LineStyle='--'; p(4).LineStyle='--';
-legend("C_A", "C_B", "C_C", "C_D"),
-xlabel("Time (min)"), ylabel("Concentration (mol/m^3)")
-grid()
-
-subplot(2,2,3), plot(t,U(:,2), 'linewidth', 1.5)
-xlabel("Time (min)"), ylabel("Cooling Capacity (MJ/min)")
-grid()
-
-subplot(2,2,4), plot(t,y(:, 3:4), 'linewidth', 1.5);
-legend("T", "T_C"), xlabel("Time (min)"), ylabel("Temperatures (K)")
-grid()
 
 %% STATIONARY POINTS %%
 % Inputs Stationary Spaces
