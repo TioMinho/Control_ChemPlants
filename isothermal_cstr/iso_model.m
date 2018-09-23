@@ -14,10 +14,10 @@ K1 = 5/6; K2 = 5/3; K3 = 1/6;
 cAf = 10; V = 1;
 
 %% SYSTEM DYNAMICS %%
-d_cA = @(t,U,X)  U(1) * (cAf - X(1)) + (-K1 * X(1) - K3 * X(1)^2);
-d_cB = @(t,U,X) -U(1) * X(2)            + (K1 * X(1) - K2 * X(2));
-d_cC = @(t,U,X) -U(1) * X(3)            + (K2 * X(2));
-d_cD = @(t,U,X) -U(1) * X(4)            + (1/2 * K3 * X(1)^2);
+d_cA = @(t,U,X)  U(1) * (cAf - X(:,1)) + (-K1 * X(:,1) - K3 * X(:,1)^2);
+d_cB = @(t,U,X) -U(1) * X(:,2)            + (K1 * X(:,1) - K2 * X(:,2));
+d_cC = @(t,U,X) -U(1) * X(:,3)            + (K2 * X(:,2));
+d_cD = @(t,U,X) -U(1) * X(:,4)            + (1/2 * K3 * X(:,1)^2);
 
 d_X   = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
 
@@ -52,22 +52,45 @@ X_ss = [cA_ss(U_ss) cB_ss(U_ss)];
 % xlabel("Input Flow-rate (m^3/min)"), ylabel("Outflow Concentration (mol/m^3)")
 
 %% LINEAR STATE-SPACE REPRESENTATION %%
-A_e = @(U_e,X_e) [-U_e(:,1) - K1 - 2*K3*X_e(:,1)                  0      ;
-                                                 K1                             -U_e(:,1) - K2];
+A_e = @(op)      [-U_ss(op,1) - K1 - 2*K3*X_ss(op,1)                  0      ;
+                                                 K1                             -U_ss(op,1) - K2];
 
-B_e   = @(U_e,X_e) [ cAf - X_e(:,1);
-                                      -X_e(:,2)   ];
+B_e   = @(op)    [ cAf - X_ss(op,1);
+                                      -X_ss(op,2)   ];
 
-C = [0 0; 0 1];
+C = [1 0; 0 1];
 D = [0; 0];
+
+%% SYSTEM POLES FROM THE CHARACTERISTIC POLYNOMIAL %%
+lambda = zeros(size(X_ss));
+for i = 1:size(X_ss,1)
+    lambda(i,:) = eig(A_e(i));
+end
+
+%% SYSTEM MODES %%
+modes = @(t) exp(lambda*t);
+modes = sym(modes);
+
+%% SYSTEM TRANSFER MATRICES %%
+syms t
+e_At = sym(t * ones(2, 2, size(X_ss,1)));
+for i = 1:size(X_ss,1)
+    e_At(:,:,i) = expm(A_e(i) * t);
+end
 
 %% CONSTRUCTS THE MODEL %%
 newVars = setdiff(who, vars);
 
 iso_cstr.param        = struct('K1', K1, 'K2', K2, 'K3', K3, 'cA_f', cAf);
 iso_cstr.model         = d_X;
-iso_cstr.oper            = struct('U_op', U_ss, 'X_op', X_ss);
+iso_cstr.oper            = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss,1));
 iso_cstr.ss_model    = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
+iso_cstr.poles           = lambda;
+iso_cstr.modes        = modes;
+iso_cstr.trf_matrix    = e_At;
+iso_cstr.sizeX           = size(C, 1);
+iso_cstr.sizeU          = size(D, 2);
+iso_cstr.sizeY           = sum(sum(C, 2) ~= 0);
 
 % Clean up the mess
 clear(newVars{:})
