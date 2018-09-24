@@ -67,7 +67,7 @@ t = (0:0.1:15)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(25,:); X_0 = iso_cstr.oper.X(25,:);                                     
 % Input Signal
-U = sin(t)*0 + U_0;
+U = sin(t)*1;
  
 % Linear Model
 A = iso_cstr.ss_model.A(20);
@@ -120,11 +120,11 @@ t = 0:0.1:3;
 figure(4);
 for i = 1:iso_cstr.oper.size
     tic
-    subplot(1,2,1), plot(t, subs(iso_cstr.modes(i,1), t), 'color', ccmap.linear(i,:)), 
+    subplot(1,2,1), plot(t, subs(iso_cstr.modes(i,1), t), 'color', ccmap.linear(i,:))
     title("First Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_1 t}"), hold on
     
-    subplot(1,2,2), plot(t, subs(iso_cstr.modes(i,2), t), 'color', ccmap.linear(i,:)), title("Second Mode"), hold on
-    title("First Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_2 t}"), hold on
+    subplot(1,2,2), plot(t, subs(iso_cstr.modes(i,2), t), 'color', ccmap.linear(i,:))
+    title("Second Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_2 t}"), hold on
     
     drawnow
     toc
