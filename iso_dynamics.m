@@ -25,7 +25,7 @@ cpal = [209 17 65;    % 1 - Metro Red
                               ]/255;  
 
 %% %%%%%%%%%%%%
-%  ISOTHERMAL CSTR $$
+%  ISOTHERMAL CSTR 
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
 run isothermal_cstr/iso_model.m
@@ -62,16 +62,18 @@ print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_01', '-dpdf', '-r300')
 
 %% Model Linearized Simulation %%
 % - Simulation Parameters
+% Linear Model Index
+idx = 25;
 % Time
 t = (0:0.1:15)';                                         
 % Initial Conditions
-U_0 = iso_cstr.oper.U(25,:); X_0 = iso_cstr.oper.X(25,:);                                     
+U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);                                     
 % Input Signal
-U = sin(t)*1;
+U = sin(t)*0;
  
 % Linear Model
-A = iso_cstr.ss_model.A(20);
-B = iso_cstr.ss_model.B(20);
+A = iso_cstr.ss_model.A(idx);
+B = iso_cstr.ss_model.B(idx);
 iso_cstr_lin = ss(A, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
 
 % - Simulation of the Outputs
@@ -91,7 +93,8 @@ legend("C_A", "C_B", "C_C", "C_D")
 xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 grid()
 
-subplot(2,2,4), plot(t, y_lin+X_0,'linewidth', 1.5); title("Linearized CSTR")
+subplot(2,2,4), plot(t, y_lin,'linewidth', 1.5); title("Linearized CSTR")
+legend("C_A", "C_B") 
 xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 grid()
 

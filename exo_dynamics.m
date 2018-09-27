@@ -71,16 +71,18 @@ print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_sim_01', '-dpdf', '-r300')
 
 %% Model Linearized Simulation %%
 % - Simulation Parameters
+% Linear Model Index
+idx = [13 13];
 % Time
 t = (0:0.1:10)';                                         
 % Initial Conditions
-U_0 = [exo_cstr.oper.U(13,1) exo_cstr.oper.U(13,2)]; X_0 = squeeze(exo_cstr.oper.X(13,13,:));
+U_0 = [exo_cstr.oper.U(idx(1),1) exo_cstr.oper.U(idx(2),2)]; X_0 = squeeze(exo_cstr.oper.X(idx(1),idx(2),:));
 % Input Signal
-U = [sin(2*t)*0.3     sin(2*t)*-0.05];
+U = [sin(2*t)*0.1     sin(2*t)*-0.05];
 
 % Linear Model
-A = exo_cstr.ss_model.A(313);
-B = exo_cstr.ss_model.B(313);
+A = exo_cstr.ss_model.A( (idx(1)-1)*25 + idx(2) );
+B = exo_cstr.ss_model.B( (idx(1)-1)*25 + idx(2) );
 exo_cstr_lin = ss(A, B, exo_cstr.ss_model.C, exo_cstr.ss_model.D);
 
 % - Simulation of the Outputs
@@ -151,11 +153,12 @@ for i = 1:exo_cstr.oper.size
     subplot(2,2,1), plot(t, subs(exo_cstr.modes(i,1), t), 'color', ccmap.area(pos(1), pos(2), :)), 
     title("First Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_1 t}"), hold on
     
-    subplot(2,2,2), plot(t, subs(exo_cstr.modes(i,2), t), 'color', ccmap.area(pos(1), pos(2), :))
-    title("Second Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_2 t}"), hold on
+    pseudo_mode = subs(exo_cstr.modes(i,2), t);
+    subplot(2,2,2), plot(t, pseudo_mode, 'color', ccmap.area(pos(1), pos(2), :))
+    title("Second Mode"), xlabel("Time (min)"), ylabel("e^{\alpha_2 t} cos(\omega_2 t)"), hold on
     
-    subplot(2,2,3), plot(t, subs(exo_cstr.modes(i,3), t), 'color', ccmap.area(pos(1), pos(2), :))
-    title("Third Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_3 t}"), hold on
+    subplot(2,2,3), plot(t, pseudo_mode, 'color', ccmap.area(pos(1), pos(2), :))
+    title("Third Mode"), xlabel("Time (min)"), ylabel("e^{\alpha_3 t}cos(\omega_3 t)"), hold on
     
     subplot(2,2,4), plot(t, subs(exo_cstr.modes(i,4), t), 'color', ccmap.area(pos(1), pos(2), :))
     title("Fourth Mode"), xlabel("Time (min)"), ylabel("e^{\lambda_4 t}"), hold on
@@ -171,36 +174,42 @@ fig.PaperPositionMode = 'auto';
 print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_sim_modes_01', '-dpdf', '-r300')
 
 %% Transfer Matrices Visualization %%
-t = 0:0.1:3.5;
+t = 0:0.1:4;
 figure(5);
 for i = 1:exo_cstr.oper.size
     tic
     pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
      
     for j = 1:4 
-        for k = 1:4
-            subplot(4,4,j+4*(k-1)), plot(t, subs(exo_cstr.trf_matrix(j,k,i), t), 'color', ccmap.area(pos(1), pos(2), :)), hold on
-        end
+    for k = 1:4
+        subplot(4,4,j+4*(k-1)), plot(t, subs(exo_cstr.trf_matrix(j,k,i), t), 'color', ccmap.area(pos(1), pos(2), :)), hold on
     end
+    end
+    
     drawnow
+    fprintf("%d\n", i);
     toc
 end
 
 subplot(4,4,1), title("X_1"), ylabel("X_1")
-subplot(4,4,2), title("X_2")
-subplot(4,4,3), ylabel("X_2"), xlabel("Time (min)")
-subplot(4,4,4), xlabel("Time (min)")
+subplot(4,4,2), title("X_2"), subplot(4,4,3), title("X_3"), subplot(4,4,4), title("X_4")
+subplot(4,4,5), ylabel("X_2"), subplot(4,4,9), ylabel("X_3")
+subplot(4,4,13), ylabel("X_4"), xlabel("Time (min)")
+subplot(4,4,14), xlabel("Time (min)"), subplot(4,4,15), xlabel("Time (min)"), subplot(4,4,16), xlabel("Time (min)")
 
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_expAt_01', '-dpdf', '-r300')
+print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_sim_expAt_01', '-dpdf', '-r300')
 
 %% Stability Analysis - Pole-Zero Mapping %%
 figure(6);
-for i = 1:iso_cstr.oper.size
+for i = 1:exo_cstr.oper.size
     tic
-    plot(iso_cstr.poles(i,:), 0, 'x', 'color', ccmap.linear(i,:), 'markersize', 10); hold on
+    pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
+    
+    pole = exo_cstr.poles(i,:);
+    plot(real(pole), imag(pole), 'x', 'color', ccmap.area(pos(1), pos(2),:), 'markersize', 10); hold on
     drawnow
     toc
 end
@@ -212,16 +221,18 @@ sgrid()
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_stab_pz_01', '-dpdf', '-r300')
+print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_pz_01', '-dpdf', '-r300')
 
 %% Stability Analysis - Bode Plots %%
 figure(7);
-for i = 1:iso_cstr.oper.size
+for i = 1:exo_cstr.oper.size
     tic
-    bodeplot(ss(iso_cstr.ss_model.A(i), iso_cstr.ss_model.B(i), iso_cstr.ss_model.C, iso_cstr.ss_model.D), 'b'), hold on;
+    pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
+    
+    bodeplot(ss(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D), 'b'), hold on;
 
     lineHandle = findobj(gcf,'Type','line','-and','Color','b');
-    set(lineHandle,'Color',ccmap.linear(i,:));
+    set(lineHandle,'Color',ccmap.area(pos(1), pos(2),:));
     
     drawnow
     toc
@@ -231,16 +242,18 @@ grid()
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_stab_bode_01', '-dpdf', '-r300')
+print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_bode_01', '-dpdf', '-r300')
 
 %% Stability Analysis - Nyquist Plots %%
 figure(8);
 for i = 1:iso_cstr.oper.size
     tic
-    nyquistplot(ss(iso_cstr.ss_model.A(i), iso_cstr.ss_model.B(i), iso_cstr.ss_model.C, iso_cstr.ss_model.D), 'b'), hold on;
+    pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
+    
+    nyquistplot(ss(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D), 'b'), hold on;
 
     lineHandle = findobj(gcf,'Type','line','-and','Color','b');
-    set(lineHandle,'Color',ccmap.linear(i,:));
+    set(lineHandle,'Color',ccmap.area(pos(1), pos(2),:));
     
     drawnow
     toc
@@ -250,5 +263,5 @@ grid()
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_stab_nyquist_01', '-dpdf', '-r300')
+print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_nyquist_01', '-dpdf', '-r300')
 

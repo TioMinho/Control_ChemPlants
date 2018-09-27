@@ -90,8 +90,8 @@ modes = sym(modes);
 
 %% SYSTEM TRANSFER MATRICES %%
 syms t
-e_At = sym(t * ones(4, 4, size(X_ss,1)));
-for i = 1:size(X_ss,1)
+e_At = sym(t * ones(4, 4, numOp));
+for i = 1:numOp
     [V, J] = jordan(A_e(i));
     e_At(:,:,i) = V*expm(J*t)*pinv(V);
 end
