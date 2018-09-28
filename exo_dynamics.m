@@ -224,17 +224,24 @@ fig.PaperPositionMode = 'auto';
 print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_pz_01', '-dpdf', '-r300')
 
 %% Stability Analysis - Bode Plots %%
+exo_cstr.ss_model.C = [0 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 0];
+
 figure(7);
 for i = 1:exo_cstr.oper.size
     tic
     pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
     
-    bodeplot(ss(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D), 'b'), hold on;
+    [NUM1, ~] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 1);
+    [NUM2, DEN] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 2);
+    G = [tf(NUM1(2,:), DEN) tf(NUM2(2,:), DEN); tf(NUM1(3,:), DEN) tf(NUM2(3,:), DEN)];
+    
+    bodeplot(G, 'b'), hold on;
 
     lineHandle = findobj(gcf,'Type','line','-and','Color','b');
     set(lineHandle,'Color',ccmap.area(pos(1), pos(2),:));
     
     drawnow
+     fprintf("%d\n", i);
     toc
 end
 grid()
@@ -244,18 +251,24 @@ fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_bode_01', '-dpdf', '-r300')
 
+close(7)
 %% Stability Analysis - Nyquist Plots %%
 figure(8);
-for i = 1:iso_cstr.oper.size
+for i = 1:exo_cstr.oper.size
     tic
     pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
     
-    nyquistplot(ss(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D), 'b'), hold on;
+    [NUM1, ~] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 1);
+    [NUM2, DEN] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 2);
+    G = [tf(NUM1(2,:), DEN) tf(NUM2(2,:), DEN); tf(NUM1(3,:), DEN) tf(NUM2(3,:), DEN)];
+   
+    nyquistplot(G, 'b'), hold on;
 
     lineHandle = findobj(gcf,'Type','line','-and','Color','b');
     set(lineHandle,'Color',ccmap.area(pos(1), pos(2),:));
     
     drawnow
+     fprintf("%d\n", i);
     toc
 end
 grid()
@@ -265,3 +278,4 @@ fig = gcf;
 fig.PaperPositionMode = 'auto';
 print('-bestfit', 'exothermal_cstr/simulation/exoCSTR_stab_nyquist_01', '-dpdf', '-r300')
 
+close(8)

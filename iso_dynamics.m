@@ -33,11 +33,11 @@ run isothermal_cstr/iso_model.m
 %% Model Non-Linear Simulation %%
 % - Simulation Parameters
 % Time
-t = (0:0.1:15)';                                         
+t = (0:0.1:4)';                                         
 % Initial Conditions
-X_0 = [0 0 0 0];                                     
+X_0 = [iso_cstr.oper.X(25,:) 0 0];
 % Input Signal
-U = [ones(15,1)*0; ones(40,1); ones(numel(t)-55,1)*0];
+U = ones(numel(t),1)*iso_cstr.oper.U(25) + heaviside(t-1)*30;
  
 % - Simulation of the Outputs
 [~, y] = simulate(iso_cstr.model, t, U, X_0);
@@ -65,24 +65,25 @@ print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_01', '-dpdf', '-r300')
 % Linear Model Index
 idx = 25;
 % Time
-t = (0:0.1:15)';                                         
+t = (0:0.1:5)';                                         
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);                                     
 % Input Signal
-U = sin(t)*0;
+U = (square(t-1.5)+1)*0;
  
 % Linear Model
 A = iso_cstr.ss_model.A(idx);
 B = iso_cstr.ss_model.B(idx);
-iso_cstr_lin = ss(A, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
+K = lqr(A, B, [2 0; 0 2],  [2]);
+iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
 
 % - Simulation of the Outputs
 [~, y] = simulate(iso_cstr.model, t, U_0+U, [X_0 0 0]);
-[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t);
+[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t, [10 20]);
     
 % - Visualization of the Simulation
 figure(2);
-subplot(2,2,1), plot(t, U, 'linewidth', 1.5), title("Input Signal")
+subplot(2,2,1), plot(t, U_0+U, 'linewidth', 1.5), title("Input Signal")
 xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
 grid()
 
@@ -93,7 +94,7 @@ legend("C_A", "C_B", "C_C", "C_D")
 xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 grid()
 
-subplot(2,2,4), plot(t, y_lin,'linewidth', 1.5); title("Linearized CSTR")
+subplot(2,2,4), plot(t, y_lin+X_0,'linewidth', 1.5); title("Linearized CSTR")
 legend("C_A", "C_B") 
 xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 grid()
@@ -139,7 +140,7 @@ fig.PaperPositionMode = 'auto';
 print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_modes_01', '-dpdf', '-r300')
 
 %% Transfer Matrices Visualization %%
-t = 0:0.1:3.5;
+t = 0:0.1:4;
 figure(5);
 for i = 1:iso_cstr.oper.size
     tic
