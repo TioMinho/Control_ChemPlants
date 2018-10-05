@@ -30,7 +30,7 @@ cpal = [209 17 65;    % 1 - Metro Red
 %% Model Loading %%
 run isothermal_cstr/iso_model.m
 
-%% Model Linearized Simulation %%
+%% Continuous-Time Infinite Horizon Linear Quadratic Regulator %%
 % - Simulation Parameters
 % Linear Model Index
 idx = 25;
@@ -72,48 +72,55 @@ grid()
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_lin_01', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_lqr-ih_01', '-dpdf', '-r300')
 
-%% Model Linearized Simulation %%
+%% Discrete-Time Finite Horizon Linear Quadratic Regulator %%
 % - Simulation Parameters
 % Linear Model Index
 idx = 25;
-% Time
-t = (0:0.05:2)';                                         
-% Initial Conditions
-U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
- 
-% Linear Model
-A = iso_cstr.ss_model.A(idx); B = iso_cstr.ss_model.B(idx);
-C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
-K = lqr(A, B, [2 0; 0 2],  [2]);
-iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
-
-% - Simulation of the Outputs
-[y_lin, ~, U, ~] = lqr_fh_sim(A, B, C, D, [3 0; 0 5] , [2], [10, 2] - X_0, t);  
-[~, y] = simulate(iso_cstr.model, t, U_0+U, [10 2 0 0]);
-
-% [y_lin2, ~] = lsim((A-B*K), B, C, D, zeros(1,numel(t)), t, [10, 2] - X_0);
-    
-% - Visualization of the Simulation
 figure(2);
-subplot(2,2,1), plot(t, U_0+U, 'linewidth', 1.5), title("Input Signal")
-xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
-grid()
+for idx = 25:26
+    tic
+    % Time
+    t = (0:0.05:2)';                                         
+    % Initial Conditions
+    U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 
-subplot(2,2,2), p = plot(t, y); title("Non-Linear CSTR")
-p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
-p(3).LineStyle='--'; p(4).LineStyle='--';
-legend("C_A", "C_B", "C_C", "C_D") 
-xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-grid()
+    % Linear Model
+    A = iso_cstr.ss_model.A(idx); B = iso_cstr.ss_model.B(idx);
+    C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
+    iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
 
-subplot(2,2,4), plot(t, y_lin+X_0,'linewidth', 1.5); title("Linearized CSTR")
-legend("C_A", "C_B") 
-xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-grid()
+    % - Simulation of the Outputs
+    [y_lin, ~, U, ~] = lqr_fh_sim(A, B, C, D, [10 0; 0 40] , [5], 10, [0.5, 12] - X_0, t);  
+    [~, y] = simulate(iso_cstr.model, t, U_0+U, [0.5, 12 0 0]);
+
+    % - Visualization of the Simulation
+
+    subplot(2,2,1), plot(t, U_0+U, 'linewidth', 1.5, 'color', ccmap.linear(idx,:)); hold on
+    title("Input Signal")
+    xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
+    grid()
+
+    subplot(2,2,2), p = plot(t, y, 'color', ccmap.linear(idx,:)); hold on
+    title("Non-Linear CSTR")
+    p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
+    p(3).LineStyle='--'; p(4).LineStyle='--';
+    legend("C_A", "C_B", "C_C", "C_D") 
+    xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
+    grid()
+
+    subplot(2,2,4), plot(t, y_lin,'linewidth', 1.5, 'color', ccmap.linear(idx,:)); hold on
+    title("Linearized CSTR")
+    legend("C_A", "C_B") 
+    xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
+    grid()
+
+    drawnow
+    toc
+end
 
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_lin_01', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_lqr-dh_01', '-dpdf', '-r300')
