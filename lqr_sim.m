@@ -14,7 +14,7 @@ function [ y_out, x_out, u_out, t_out ] = lqr_sim( A, B, C, D, Q, R, X0, t )
         n_resp = expm( A * (t_out(i) - t_out(1)) ) * X0;
         f_resp = 0;
         for j = 1:i
-            f_resp = f_resp + deltaX*0.67 * expm( A * (t_out(i) - t_out(j)) ) * B * u_out(:,j);
+            f_resp = f_resp + deltaX * expm( A * (t_out(i) - t_out(j)) ) * B * u_out(:,j);
         end
         
         x_out(:, i) =  n_resp + f_resp;
@@ -22,6 +22,6 @@ function [ y_out, x_out, u_out, t_out ] = lqr_sim( A, B, C, D, Q, R, X0, t )
 
     y_out = C * x_out + D * u_out;
     
-    y_out = y_out'; x_out = x_out'; u_out = u_out'; t_out;
+    y_out = y_out'; x_out = x_out'; u_out = u_out'; 
 end
 
