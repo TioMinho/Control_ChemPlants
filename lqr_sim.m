@@ -2,7 +2,7 @@ function [ y_out, x_out, u_out, t_out ] = lqr_sim( A, B, C, D, Q, R, X0, t )
 %LQR_SIM Simulates the system with a Continuous-Time Infinite-Horizon LQR Controller 
 %   Detailed explanation goes here
 
-    t_out = t'; x_out = zeros(size(A,2), numel(t)); u_out = zeros(size(B,2), numel(t)); X0 = X0';
+    t_out = t'; x_out = zeros(size(A,2), numel(t)); x_hat = zeros(size(A,2), numel(t)); u_out = zeros(size(B,2), numel(t)); X0 = X0';
     
     [K, ~, ~] = lqr(A, B, Q, R);
     
