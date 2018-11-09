@@ -38,39 +38,36 @@ idx = 25;
 t = (0:0.05:2)';                                         
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
- 
+% Reference Signal
+r = zeros(numel(t), 1);
+
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
+% Controller and Observer
 [K, P] = lqr_(A, B, [2 0; 0 2], [2], 'inf');
+L = [0.1 0.1];
 
 iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
 
 % - Simulation of the Outputs
-[y_lin, ~, U, ~] = lqr_sim(A, B, C, D, [3 0; 0 7] , [5], [15, 0] - X_0, t);  
-[~, y] = simulate(iso_cstr.model, t, U_0+U, [15 0 0 0]);
-
-% [y_lin2, ~] = lsim((A-B*K), B, C, D, zeros(1,numel(t)), t, [10, 2] - X_0);
+[~, yout, xout, uout] = simulation(iso_cstr.model, A, B, C, D, t, r, [15, 0] - X_0, K, L);
     
 % - Visualization of the Simulation
 figure(1);
-subplot(2,2,1), plot(t, U_0+U, 'linewidth', 1.5), title("Input Signal")
+subplot(1,2,1), plot(t, U_0+uout, 'linewidth', 1.5), title("Input Signal")
 xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
 grid()
 
-subplot(2,2,2), 
-p = plot(t, y(:,1:2), 'linewidth', 1.5);
-line([0, t(end)], [X_0(1), X_0(1)], 'linestyle', '--', 'color', 'black'); 
-line([0, t(end)], [X_0(2), X_0(2)], 'linestyle', '--', 'color', 'black')
-title("Non-Linear CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-legend("C_A", "C_B") 
-grid()
+subplot(1,2,2), 
+plot(t, yout(:,1:2), 'linewidth', 1.5); hold on
+plot(t, y(:,1:2), 'linewidth', 1.5);
 
-subplot(2,2,4), plot(t, y_lin+X_0, 'linewidth', 1.5);
 line([0, t(end)], [X_0(1), X_0(1)], 'linestyle', '--', 'color', 'black'); 
 line([0, t(end)], [X_0(2), X_0(2)], 'linestyle', '--', 'color', 'black')
-title("Linearized CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
+
+title("Isothermal CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 legend("C_A", "C_B") 
 grid()
 
