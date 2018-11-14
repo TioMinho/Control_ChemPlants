@@ -39,7 +39,9 @@ t = (0:0.05:2)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 % Reference Signal
-r = zeros(numel(t), 1);
+r = zeros(numel(t), 1); %[0 repmat([ones(1,25000)*0.45 zeros(1,25000)],1, 2); 0 repmat([ones(1,25000)*0.25 zeros(1,25000)],1, 2); 0 repmat([ones(1,25000)*0.35 zeros(1,25000)],1, 2);]
+% Disturbance signal
+w = randn(1,numel(t))*1.5;
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
@@ -49,10 +51,10 @@ C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 [K, P] = lqr_(A, B, [2 0; 0 2], [2], 'inf');
 L = [0.1 0.1];
 
-iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
+% iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulation(iso_cstr.model, A, B, C, D, t, r, [15, 0] - X_0, K, L);
+[~, yout, xout, uout] = simulation(iso_cstr, idx, t, r, [15, 0], K, L, w);
     
 % - Visualization of the Simulation
 figure(1);
@@ -60,12 +62,14 @@ subplot(1,2,1), plot(t, U_0+uout, 'linewidth', 1.5), title("Input Signal")
 xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
 grid()
 
-subplot(1,2,2), 
-plot(t, yout(:,1:2), 'linewidth', 1.5); hold on
-plot(t, y(:,1:2), 'linewidth', 1.5);
+subplot(1,2,2)
+plot(t, r, 'linestyle', '--', 'color', 'black')
 
-line([0, t(end)], [X_0(1), X_0(1)], 'linestyle', '--', 'color', 'black'); 
-line([0, t(end)], [X_0(2), X_0(2)], 'linestyle', '--', 'color', 'black')
+p = plot(t, xout, 'linewidth', 1.5); hold on
+set(h, {'color'}, {cpal(3,:); cpal(4,:)});
+
+p = plot(t, yout+X_0, 'linewidth', 1.5, 'linestyle', '--',);
+set(h, {'color'}, {cpal(3,:); cpal(4,:)});
 
 title("Isothermal CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 legend("C_A", "C_B") 

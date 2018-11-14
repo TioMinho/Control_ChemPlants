@@ -7,7 +7,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         %   @param t       The initial conditions of the simulation.
         %   @param U       The input signal for the simulation.        
         %   @param X_0     The initial conditions of the simulation.
-        model = varargin{1}; t = varargin{2}; U = varargin{3}; X_0 = varargin{4};
+        model = varargin{1}.model; t = varargin{2}; U = varargin{3}; X_0 = varargin{4};
         
         tout = t; uout = U;
         yout = zeros(size(t, 1), size(X_0, 2));
@@ -32,42 +32,48 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         a = 'TODO: nonlinear model control'
             
         
-        case 10
+        case num2cell(7:1:8)
         %   @param model     The non-linear ODEs representing the system model.
-        %   @param A,B,C,D   The matrices representing the linear state-space model.
+        %   @param idx       The index position of the linear state-space model to use.
         %   @param t         The initial conditions of the simulation.
         %   @param r         The input signal for the simulation.        
         %   @param X_0       The initial conditions of the simulation.
         %   @param K         The state feedback gain vector being used.
         %   @param L         The Luenberger gain vector being used.
-        model = varargin{1}; A = varargin{2}; B = varargin{3}; C = varargin{4}; D = varargin{3};
-        t = varargin{6}; r = varargin{7}; X_0 = varargin{8}; K = varargin{9}; L = varargin{10};
-            
+        model = varargin{1}; idx = varargin{2}; t = varargin{3}; r = varargin{4}; X_0 = varargin{5}; 
+        K = varargin{6}; L = varargin{7}; w = 0;
+
+        if(varargin == 8)
+            w = varargin{8};
+        end
+        
+        A = model.ss_model.A(idx); B = model.ss_model.B(idx); C = model.ss_model.C; D = model.ss_model.D;
+        
         u = zeros(size(B, 1), numel(t)); 
         x = zeros(size(A,1), numel(t)); x_hat = zeros(size(A,1), numel(t));
 
-        x(:,1) = X_0 + (rand()-0.5)*4; x_hat(:,0) = X_0;
-        if(size(K, 1) > 1) % Case for a Finite-time Discrete Linear Quadratic Regulator
+        x(:,1) = X_0; x_hat(:,1) = model.oper.X(idx,:);
+        if(size(K, 1) > 1) % Case for a Finite-Horizon Discrete-Time Linear Quadratic Regulator
             N = size(K,1);
 
             for i = 1:numel(t)-1
                 if(i <= N)
-                    u(:,i) = (r(:,i) - K(i,:)*x_hat(:,i));
+                    u(:,i) = K(i,:)*( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)) );
                 end
 
-                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:), x(i,:), 100);
+                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:)+model.oper.U(idx,:), x(i,:), 100);
 
-                x(:,i+1) = y_aux;
-                x_hat(:, i+1) = (A - L * C)  * x_hat(:, i) + B * u(:, i) + L * C * x(:, i); 
+                x(:,i+1) = y_aux(:, 1:size(A,1)) + w(:, i+1);
+                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:, i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) ); 
             end
-        else
+        else                % Case for a Infinite-Horizon Continuous-Time Linear Quadratic Regulator
             for i = 1:numel(t)-1
-                u(:,i) = (r(:,i) - K*x_hat(:,i));
+                u(:,i) = K * ( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)) );
                 
-                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:), x(i,:), 100);
+                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:)+model.oper.U(idx,:), x(i,:), 100);
 
-                x(:,i+1) = y_aux;
-                x_hat(:, i+1) = (A - L * C)  * x_hat(:, i) + B * u(:, i) + L * C * x(:, i); 
+                x(:,i+1) = y_aux(:, 1:size(A,1));
+                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:, i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) ); 
             end
         end
 
