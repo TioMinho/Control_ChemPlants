@@ -1,7 +1,7 @@
 function [ tout, yout, xout, uout ] = simulate( varargin )
 %SIMULATE Simulates a non-linear model using the Euler method.
 
-    switch varargin
+    switch length(varargin)
         case 4
         %   @param model   The non-linear ODEs representing the system model.
         %   @param t       The initial conditions of the simulation.
@@ -29,7 +29,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         model = varargin{1}; t = varargin{2}; U = varargin{3}; X_0 = varargin{4};
         K = varargin{5}; L = varargin{6};
 
-        a = 'TODO: nonlinear model control'
+        a = 'TODO: nonlinear model control';
             
         
         case num2cell(7:1:8)
@@ -43,36 +43,46 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         model = varargin{1}; idx = varargin{2}; t = varargin{3}; r = varargin{4}; X_0 = varargin{5}; 
         K = varargin{6}; L = varargin{7}; w = 0;
 
-        if(varargin == 8)
+        if(length(varargin) == 8)
             w = varargin{8};
         end
         
         A = model.ss_model.A(idx); B = model.ss_model.B(idx); C = model.ss_model.C; D = model.ss_model.D;
         
-        u = zeros(size(B, 1), numel(t)); 
-        x = zeros(size(A,1), numel(t)); x_hat = zeros(size(A,1), numel(t));
+        u = zeros(size(B,2), numel(t)); 
+        x = zeros(size(A,1), numel(t)); 
+        x_hat = zeros(size(A,1), numel(t));
+        y = zeros(4, numel(t));
 
-        x(:,1) = X_0; x_hat(:,1) = model.oper.X(idx,:);
+        y(:,1) = [X_0 0 0]; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:);
+        y(:,1)
         if(size(K, 1) > 1) % Case for a Finite-Horizon Discrete-Time Linear Quadratic Regulator
             N = size(K,1);
 
             for i = 1:numel(t)-1
                 if(i <= N)
-                    u(:,i) = K(i,:)*( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)) );
+                    u(:,i) = -K(i,:)*( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)') );
                 end
+                
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i)', 100);
 
-                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:)+model.oper.U(idx,:), x(i,:), 100);
-
-                x(:,i+1) = y_aux(:, 1:size(A,1)) + w(:, i+1);
-                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:, i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) ); 
+                y(:,i+1) = y_aux(end,:);
+                x(:,i+1) = y_aux(end, 1:size(A,1)) + w(:, i+1);
+                
+                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') ); 
             end
         else                % Case for a Infinite-Horizon Continuous-Time Linear Quadratic Regulator
             for i = 1:numel(t)-1
                 u(:,i) = K * ( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)) );
                 
-                [~, y_aux] = odeSolver(model, t(i:i+1), u(i,:)+model.oper.U(idx,:), x(i,:), 100);
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:)', 100);
 
-                x(:,i+1) = y_aux(:, 1:size(A,1));
+                y(:,i+1) = y_aux(end,:);
+                x(:,i+1) = y_aux(end, 1:size(A,1)) + w(:, i+1);
+                
+                A*x_hat(:, i)
+                B*u(:, i)
+                L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) )
                 x_hat(:, i+1) = A*x_hat(:, i) + B*u(:, i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) ); 
             end
         end
