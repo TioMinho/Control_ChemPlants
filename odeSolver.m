@@ -3,11 +3,11 @@ function [ t, y ] = odeSolver( odefun, tspan, u, y0, N )
 %   Detailed explanation goes here
     h = (tspan(2) - tspan(1)) / (N - 1);
     t = linspace(tspan(1), tspan(2), N);
-    y = zeros(N, numel(y0));
+    y = zeros(numel(y0), N);
     
-    y(1,:) = y0;
+    y(:,1) = y0;
     for i = 1:N-1
-        y(i+1,:) = y(i,:) + h * odefun(t(i), u, y(i,:));
+        y(:, i+1) = y(:,i) + h * odefun(t(i), u, y(:,i));
     end
 end
 

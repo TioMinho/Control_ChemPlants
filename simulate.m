@@ -10,11 +10,11 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         model = varargin{1}.model; t = varargin{2}; U = varargin{3}; X_0 = varargin{4};
         
         tout = t; uout = U;
-        yout = zeros(size(t, 1), size(X_0, 2));
-        yout(1,:) = X_0;
+        yout = zeros(numel(X_0), numel(t));
+        yout(:,1) = X_0;
         for i = 1:numel(t)
-            [~, y_aux] = odeSolver(model, t(i:i+1), U(i,:), yout(i,:), 100); 
-            yout(i+1,:) = y_aux(end,:);
+            [~, y_aux] = odeSolver(model, t(i:i+1), U(:,i), yout(:,i), 100); 
+            yout(:,i+1) = y_aux(:,end);
         end
         
         xout = yout;
@@ -54,36 +54,33 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         x_hat = zeros(size(A,1), numel(t));
         y = zeros(4, numel(t));
 
-        y(:,1) = [X_0 0 0]; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:);
-        y(:,1)
+        y(:,1) = [X_0 0 0]; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:)';
+
         if(size(K, 1) > 1) % Case for a Finite-Horizon Discrete-Time Linear Quadratic Regulator
             N = size(K,1);
 
             for i = 1:numel(t)-1
                 if(i <= N)
-                    u(:,i) = -K(i,:)*( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)') );
+                    u(:,i) = -K(i,:)*( r(:,i) - (x_hat(:, i)) );
                 end
                 
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i)', 100);
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i), 100);
 
-                y(:,i+1) = y_aux(end,:);
-                x(:,i+1) = y_aux(end, 1:size(A,1)) + w(:, i+1);
+                y(:,i+1) = y_aux(:,end) + w(:, i);
+                x(:,i+1) = y_aux(1:size(A,1),:);
                 
                 x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') ); 
             end
         else                % Case for a Infinite-Horizon Continuous-Time Linear Quadratic Regulator
             for i = 1:numel(t)-1
-                u(:,i) = K * ( r(:,i) - (x_hat(:, i) + model.oper.X(idx,:)) );
+                u(:,i) = -K * ( r(:,i) - (x_hat(:, i)) );
                 
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:)', 100);
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i), 100);
 
-                y(:,i+1) = y_aux(end,:);
-                x(:,i+1) = y_aux(end, 1:size(A,1)) + w(:, i+1);
+                y(:,i+1) = y_aux(:,end) + w(:, i);
+                x(:,i+1) = y_aux(1:size(A,1),:);
                 
-                A*x_hat(:, i)
-                B*u(:, i)
-                L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) )
-                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:, i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)) ); 
+                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') );
             end
         end
 

@@ -39,20 +39,19 @@ t = (0:0.05:9.95)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 % Reference Signall
-r = [ones(1,50)*X_0(2) ones(1,50)*0.5 ones(1,50)*2 ones(1,50)*1.3;
-    ones(1,50)*X_0(1) ones(1,50)*5.4 ones(1,50)*6.8 ones(1,50)*6.1;];
+r = [ones(1,50)*X_0(1) ones(1,50)*iso_cstr.oper.X(10,1) ones(1,50)*iso_cstr.oper.X(40,1) ones(1,50)*iso_cstr.oper.X(20,1);
+    ones(1,50)*X_0(2) ones(1,50)*iso_cstr.oper.X(10,2) ones(1,50)*iso_cstr.oper.X(40,2) ones(1,50)*iso_cstr.oper.X(20,2);];
 % Disturbance signal
-w = randn(1,numel(t))*0;
+w = randn(2,numel(t))*0;
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 % Controller and Observer
-[K, P] = lqr_(A, B, [2 0; 0 2], [2], 50);
-L = [0.1 0.1; 0.1 0.1];
-
-% iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
+[K, P] = lqr_(A, B, [5 0; 0 5], [5], numel(t));
+L = [1 1; 
+	 1 1];
 
 % - Simulation of the Outputs
 [~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, K, L, w);
@@ -64,7 +63,7 @@ xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
 grid()
 
 subplot(1,2,2)
-plot(t, r, 'linestyle', '--', 'color', 'black')
+plot(t, r, 'linestyle', '--', 'color', 'black'); hold on;
 
 p = plot(t, xout, 'linewidth', 1.5); hold on
 set(p, {'color'}, {cpal(3,:); cpal(4,:)});
