@@ -47,40 +47,44 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             w = varargin{8};
         end
         
+        deltaX = t(2) - t(1);
+        
         A = model.ss_model.A(idx); B = model.ss_model.B(idx); C = model.ss_model.C; D = model.ss_model.D;
+        ss_d = c2d(ss(A,B,C,D), deltaX);
+        A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;
         
         u = zeros(size(B,2), numel(t)); 
         x = zeros(size(A,1), numel(t)); 
         x_hat = zeros(size(A,1), numel(t));
-        y = zeros(4, numel(t));
+        y = zeros(numel(t), 4);
 
-        y(:,1) = [X_0 0 0]; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:)';
-
+        y(1,:) = [X_0 0 0]; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:);
+        r = r - model.oper.X(idx,:)';
         if(size(K, 1) > 1) % Case for a Finite-Horizon Discrete-Time Linear Quadratic Regulator
             N = size(K,1);
 
             for i = 1:numel(t)-1
                 if(i <= N)
-                    u(:,i) = -K(i,:)*( r(:,i) - (x_hat(:, i)) );
+                    u(:,i) = K(i,:)*( r(:,i) - x(:, i) );
                 end
                 
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i), 100);
-
-                y(:,i+1) = y_aux(:,end) + w(:, i);
-                x(:,i+1) = y_aux(1:size(A,1),:);
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
+                y(i+1,:) = y_aux(end, :) + [w(:, i); 0; 0]';
                 
-                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') ); 
+                x(:,i+1) = A*x(:,i) + B*u(:,i); % y(i+1, 1:size(A,1));
+                
+                % x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') ); 
             end
         else                % Case for a Infinite-Horizon Continuous-Time Linear Quadratic Regulator
             for i = 1:numel(t)-1
-                u(:,i) = -K * ( r(:,i) - (x_hat(:, i)) );
+                u(:,i) = K * ( r(:,i) - (x_hat(:, i)) );
                 
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(:,i), 100);
-
-                y(:,i+1) = y_aux(:,end) + w(:, i);
-                x(:,i+1) = y_aux(1:size(A,1),:);
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
+                y(i+1,:) = y_aux(end, :) + [w(:, i); 0; 0]';
                 
-                x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') );
+                x(:,i+1) = y(i+1, 1:size(A,1));
+                
+                x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + L*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
             end
         end
 

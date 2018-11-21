@@ -33,14 +33,16 @@ run isothermal_cstr/iso_model.m
 %% Continuous-Time Infinite Horizon Linear Quadratic Regulator %%
 % - Simulation Parameters
 % Linear Model Index
+clc
 idx = 25;
 % Time
 t = (0:0.05:9.95)';                                         
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 % Reference Signall
-r = [ones(1,50)*X_0(1) ones(1,50)*iso_cstr.oper.X(10,1) ones(1,50)*iso_cstr.oper.X(40,1) ones(1,50)*iso_cstr.oper.X(20,1);
-    ones(1,50)*X_0(2) ones(1,50)*iso_cstr.oper.X(10,2) ones(1,50)*iso_cstr.oper.X(40,2) ones(1,50)*iso_cstr.oper.X(20,2);];
+r = [ones(1,50)*X_0(1) ones(1,50)*iso_cstr.oper.X(2,1) ones(1,50)*iso_cstr.oper.X(50,1) ones(1,50)*iso_cstr.oper.X(idx,1);
+    ones(1,50)*X_0(2) ones(1,50)*iso_cstr.oper.X(2,2) ones(1,50)*iso_cstr.oper.X(50,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
+%r = r .* [0; 0];
 % Disturbance signal
 w = randn(2,numel(t))*0;
 
@@ -49,12 +51,12 @@ A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 % Controller and Observer
-[K, P] = lqr_(A, B, [5 0; 0 5], [5], numel(t));
-L = [1 1; 
-	 1 1];
+[K, P] = lqr_(A, B, [20 0; 0 30], [10], 'inf');
+L = [0.01 0.01; 
+	 0.01 0.01];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, K, L, w);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0 + [1 -1], K, L, w);
     
 % - Visualization of the Simulation
 figure(1);
