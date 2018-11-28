@@ -40,6 +40,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         %   @param X_0       The initial conditions of the simulation.
         %   @param K         The state feedback gain vector being used.
         %   @param L         The Luenberger gain vector being used.
+        %   @param w         The matrix of additive disturbance in the nonlinear model.
         model = varargin{1}; idx = varargin{2}; t = varargin{3}; r = varargin{4}; X_0 = varargin{5}; 
         K = varargin{6}; L = varargin{7}; w = 0;
 
@@ -65,22 +66,22 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
             for i = 1:numel(t)-1
                 if(i <= N)
-                    u(:,i) = K(i,:)*( r(:,i) - x(:, i) );
+                    u(:,i) = K(i,:) * ( r(:,i) - x(:, i) );
                 end
                 
                 [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
-                y(i+1,:) = y_aux(end, :) + [w(:, i); 0; 0]';
+                y(i+1,:) = y_aux(end, :) + w(i, :);
                 
-                x(:,i+1) = A*x(:,i) + B*u(:,i); % y(i+1, 1:size(A,1));
+                x(:,i+1) = y(i+1, 1:size(A,1));
                 
-                % x_hat(:, i+1) = A*x_hat(:, i) + B*u(:,i) + L*( x(:, i) - C*(x_hat(:, i) + model.oper.X(idx,:)') ); 
+                x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + L*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
             end
         else                % Case for a Infinite-Horizon Continuous-Time Linear Quadratic Regulator
             for i = 1:numel(t)-1
                 u(:,i) = K * ( r(:,i) - (x_hat(:, i)) );
                 
                 [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
-                y(i+1,:) = y_aux(end, :) + [w(:, i); 0; 0]';
+                y(i+1,:) = y_aux(end, :) + w(i, :);
                 
                 x(:,i+1) = y(i+1, 1:size(A,1));
                 
