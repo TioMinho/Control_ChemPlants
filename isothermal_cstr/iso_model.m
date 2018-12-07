@@ -19,7 +19,8 @@ d_cB = @(t,U,X) -U(1) * X(:,2)            + (K1 * X(:,1) - K2 * X(:,2));
 d_cC = @(t,U,X) -U(1) * X(:,3)            + (K2 * X(:,2));
 d_cD = @(t,U,X) -U(1) * X(:,4)            + (1/2 * K3 * X(:,1)^2);
 
-d_X   = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
+d_X   = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X)];
+sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
 
 %% OPERATING POINTS %%
 % Stationary Equations
@@ -82,15 +83,16 @@ end
 newVars = setdiff(who, vars);
 
 iso_cstr.param        = struct('K1', K1, 'K2', K2, 'K3', K3, 'cA_f', cAf);
-iso_cstr.model         = d_X;
-iso_cstr.oper            = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss,1));
-iso_cstr.ss_model    = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
-iso_cstr.poles           = lambda;
+iso_cstr.model        = d_X;
+iso_cstr.sysVar       = sysVar;
+iso_cstr.oper         = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss,1));
+iso_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
+iso_cstr.poles        = lambda;
 iso_cstr.modes        = modes;
-iso_cstr.trf_matrix    = e_At;
-iso_cstr.sizeX           = size(C, 1);
-iso_cstr.sizeU          = size(D, 2);
-iso_cstr.sizeY           = sum(sum(C, 2) ~= 0);
+iso_cstr.trf_matrix   = e_At;
+iso_cstr.sizeX        = size(C, 1);
+iso_cstr.sizeU        = size(D, 2);
+iso_cstr.sizeY        = sum(sum(C, 2) ~= 0);
 
 % Clean up the mess
 clear(newVars{:})
