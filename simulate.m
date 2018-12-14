@@ -62,7 +62,6 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         x     = zeros(size(A,1), numel(t)); 
         x_hat = zeros(size(A,1), numel(t));
         
-        
         y(1,:) = X_0; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:);
         r = r - model.oper.X(idx,:)';
         
@@ -79,7 +78,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
                     y(i+1,:) = y_aux(end, :) + w(i, :);
 
-                    x(:,i+1) = y(i+1, 1:size(A,1));
+                    x(:,i+1) = y(i+1, :);
 
                     x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + L*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
                 end
@@ -97,7 +96,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     n_resp = expm( A * (t(i) - t(1)) ) * x_hat(:,1);
                     f_resp = 0;
                     for j =1:i+1
-                        f_resp = f_resp + deltaX * expm( A * (t(i) - t(j)) ) * (B * u(:,j) + L *(x(:,j) - C * (x_hat(:,j) + model.oper.X(idx,:)')) );
+                        f_resp = f_resp + deltaX * expm( A * (t(i+1) - t(j)) ) * (B * u(:,j) + L *(x(:,j) - C * (x_hat(:,j) + model.oper.X(idx,:)')) );
                     end
                     
                     x_hat(:, i+1) = n_resp + f_resp;
@@ -131,7 +130,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         if(length(varargin) == 8)
             w = varargin{8};
         else
-            w = zeros(1, size(A, 1));
+            w = zeros(numel(t), size(A, 1));
         end
         
         deltaX = t(2) - t(1);
@@ -140,23 +139,23 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % Augment the state and input matrices
             A_i = [A, zeros(size(C')); -C, zeros(size(C,1), size(C,1))];
             B_i = [B; zeros(size(C,1), size(B,2))];
-            L_i = [L; zeros(1, size(L,2))];
-            F_i = [zeros(size(A,1), size(r,1)); eye(size(r,1))]
+            L_i = [L; zeros(size(C,1), size(L,2))];
+            F_i = [zeros(size(A,1), size(r,1)); eye(size(r,1))];
 
             % Calculate the new LQR gain matrix
-            Q = varargin{8}; R = varargin{9}; N = varargin{10};
+            Q = varargin{9}; R = varargin{10}; N = varargin{11};
             K = lqr_(A_i, B_i, Q, R, N);
 
             % Defines the discrete matrices associated to augmented matrices
-            ss_d = c2d(ss(A_i, B_i, C_i, D_i), deltaX);
-            A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;
+            % ss_d = c2d(ss(A_i, B_i, C, D), deltaX);
+            % A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;
             
             u     = zeros(size(B,2), numel(t)); 
             y     = zeros(numel(t), size(A,1));
             x     = zeros(size(A,1), numel(t)); 
             x_hat = zeros(size(A_i,1), numel(t));
                     
-            y(1,:) = X_0; x(:,1) = X_0; x_hat(:,1) = X_0 - model.oper.X(idx,:);
+            y(1,:) = X_0; x(:,1) = X_0; x_hat(:,1) = [X_0' - model.oper.X(idx,:)'; X_0' - r(:,1)];
             r = r - model.oper.X(idx,:)';
 
             % Case for a Finite-Horizon Discrete-Time Linear Quadratic Regulator
@@ -184,10 +183,10 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                     x(:,i+1) = y(i+1, :);
 
-                    n_resp = expm( A * (t(i) - t(1)) ) * x_hat(:,1);
+                    n_resp = expm( A_i * (t(i) - t(1)) ) * x_hat(:,1);
                     f_resp = 0;
                     for j =1:i+1
-                        f_resp = f_resp + deltaX * expm( A * (t(i) - t(j)) ) * (B * u(:,j) + F_i*r(:,i) + L_i *(x(:,j) - C * (x_hat(1:size(x,1),j) + model.oper.X(idx,:)')) );
+                        f_resp = f_resp + deltaX * expm( A_i * (t(i) - t(j)) ) * (B_i * u(:,j) + F_i*r(:,i) + L_i *(x(:,j) - C * (x_hat(1:size(x,1), j) + model.oper.X(idx,:)')) );
                     end
                     
                     x_hat(:, i+1) = n_resp + f_resp;

@@ -51,12 +51,12 @@ A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 % Controller and Observer
-[K, P] = lqr_(A, B, [20 0; 0 30], [5], 'inf');
+[K, P] = lqr_(A, B, diag([20,30]), [10], 'inf');
 L = [0.5 0.5; 
 	 0.5 0.5];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0 + [1 -1], 'lqr', K, L, w);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0 + [1, -1], 'lqri', L, w, diag([20,30,0.1,0.1]), [10], 'inf');
     
 % - Visualization of the Simulation
 figure(1);
@@ -67,14 +67,14 @@ grid()
 subplot(1,2,2)
 plot(t, r, 'linestyle', '--', 'color', 'black'); hold on;
 
-p = plot(t, xout, 'linewidth', 1.5); hold on
-set(p, {'color'}, {cpal(3,:); cpal(4,:)});
-
 p = plot(t, yout+X_0', 'linewidth', 1.5, 'linestyle', '--');
 set(p, {'color'}, {cpal(3,:); cpal(4,:)});
 
+p = plot(t, xout, 'linewidth', 1.5); hold on
+set(p, {'color'}, {cpal(3,:); cpal(4,:)});
+
 title("Isothermal CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-legend("C_A", "C_B") 
+legend("C_{Ar}", "C_{Ar}", "C_{Ae}", "C_{Be}", "C_{A}", "C_{B}") 
 grid()
 
 % - Exporting the Visualization to an Image
