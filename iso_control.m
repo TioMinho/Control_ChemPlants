@@ -9,7 +9,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Preamble %%
-cd /home/omenezes/Documents/Minho/Control_ChemPlants/
+% cd /home/omenezes/Documents/Minho/Control_ChemPlants/
+cd /home/minhotmog/Dropbox/Research/TCC/Codes/
 clc; clear all; close all;
 
 % Sets the Default Rendere to tbe the Painters
@@ -31,32 +32,34 @@ cpal = [209 17 65;    % 1 - Metro Red
 run isothermal_cstr/iso_model.m
 
 %% Continuous-Time Infinite Horizon Linear Quadratic Regulator %%
+clc
 % - Simulation Parameters
 % Linear Model Index
-clc
 idx = 25;
 % Time
-t = (0:0.05:9.95)';                                         
+t = (0:0.05:19.95)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
+
 % Reference Signall
-r = [ones(1,50)*X_0(1) ones(1,50)*iso_cstr.oper.X(2,1) ones(1,50)*iso_cstr.oper.X(50,1) ones(1,50)*iso_cstr.oper.X(idx,1);
-    ones(1,50)*X_0(2) ones(1,50)*iso_cstr.oper.X(2,2) ones(1,50)*iso_cstr.oper.X(50,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
-%r = r .* [0; 0];
+r = [ones(1,50)*X_0(1) ones(1,150)*iso_cstr.oper.X(2,1) ones(1,150)*iso_cstr.oper.X(50,1) ones(1,50)*iso_cstr.oper.X(idx,1);
+       ones(1,50)*X_0(2) ones(1,150)*iso_cstr.oper.X(2,2) ones(1,150)*iso_cstr.oper.X(50,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
+
 % Disturbance signal
-w = randn(numel(t),2)*0;
+w = randn(numel(t), 2) * 0;
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 % Controller and Observer
-[K, P] = lqr_(A, B, diag([20,30]), [10], 'inf');
-L = [0.5 0.5; 
-	 0.5 0.5];
+Q = diag([10, 10]);
+R = [5];
+L = [1 1; 
+	   1 1];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0 + [1, -1], 'lqri', L, w, diag([20,30,0.1,0.1]), [10], 'inf');
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqr', Q, R, 'inf', L, w);
     
 % - Visualization of the Simulation
 figure(1);
