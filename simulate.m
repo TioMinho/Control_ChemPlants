@@ -62,7 +62,6 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         
         % Simulation variables
         u        = zeros(size(B,2), numel(t)); 
-        y        = zeros(numel(t), size(A,1));
         x        = zeros(size(A,2), numel(t)); 
         x_hat = zeros(size(A,2), numel(t));
         
@@ -70,8 +69,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         r = r - model.oper.X(idx,:)';
         
         % Initial States
-        y(1,:)        = X_0; 
-        x(:,1)        = X_0; 
+        x(:,1)        = X_0 + w(1, :); 
         x_hat(:,1) = X_0' - model.oper.X(idx,:)';
         
         % == LINEAR QUADRATIC REGULATOR ==
@@ -172,9 +170,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                     % Simulates the real physical plant using the non-linear model
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
-                    y(i+1,:) = y_aux(end, :) + w(i, :);
-
-                    x(:,i+1) = y(i+1, :);
+                    x(:,i+1) = y_aux(end, :) + w(i, :);
 
                     % Simulates the linear model using the Lagrange formula
                     %       x_k = e^{A_i (t - t_0)} x_0 + \int{ e^{A_i (t - \tau)} B_i u_\tau + F_i r_\tau + L_i ( Y_\tau - C_i x_\tau ) }
@@ -188,6 +184,62 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     
                 end
                 
+            end
+            
+        % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==
+        elseif(strcmp(type, 'lqg'))
+            % Calculate the LQR gain matrix
+            K = lqr_(A, B, Q, R, N);  
+            
+            % Generates the Kalman observer state-space
+            [kest, M] = kalman(ss(A,B,C,D), 5, eye(2));
+            A_e = kest.A; B_e = kest.B; C_e = kest.C; D_e = kest.D; 
+            
+            % Case for the Finite-Horizon Discrete-Time
+            if(size(K, 1) > 1) 
+                % Defines the discrete matrices associated to state-space matrices
+                ss_d = c2d(ss(A, B, C, D), deltaX);
+                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;              
+
+                % == Simulation for each timestep (i) on time signal (t) ==
+                for i = 1:numel(t)-1
+                    % Calculates the input signal (if still on control horizon)
+                    if(i <= N)
+                        u(:,i) = K(i,:) * ( r(:,i) - x_hat(:, i) );
+                    end
+
+                    % Simulates the real physical plant using the non-linear model
+                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
+                    x(:,i+1) = y_aux(end, :) + w(i, :);
+
+                    % Simulates the linear model using the discrete differences equation
+                    %       x_{k+1} = A x_k + B u_k + L ( Y_k - C x_k )
+                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + M*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
+                    
+                end
+
+            % Case for the Infinite-Horizon Continuous-Time
+            else
+                % == Simulation for each timestep (i) on time signal (t) ==
+                for i = 1:numel(t)-1
+                    % Calculates the input signal
+                    u(:,i) = K * ( r(:,i) - (x_hat(:, i)) );
+
+                    % Simulates the real physical plant using the non-linear model
+                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
+                    x(:,i+1)= y_aux(end, :) + w(i, :);
+
+                    % Simulates the linear model using the Lagrange formula
+                    %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
+                    n_resp = expm( A * (t(i+1) - t(1)) ) * x_hat(:,1);
+                    f_resp = 0;
+                    for j =1:i+1
+                        f_resp = f_resp + deltaX * expm( A * (t(i+1) - t(j)) ) * (B * u(:,j) + M *(x(:,j) - C * (x_hat(:,j) + model.oper.X(idx,:)')) );
+                    end
+
+                    x_hat(:, i+1) = n_resp + f_resp;
+                    
+                end
             end
         end
 
