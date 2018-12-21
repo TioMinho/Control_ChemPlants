@@ -81,22 +81,24 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             if(size(K, 1) > 1) 
                 % Defines the discrete matrices associated to state-space matrices
                 ss_d = c2d(ss(A, B, C, D), deltaX);
-                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;              
+                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D; 
+                
+                K = lqr_(A_d, B_d, Q, R, N);  
 
                 % == Simulation for each timestep (i) on time signal (t) ==
                 for i = 1:numel(t)-1
                     % Calculates the input signal (if still on control horizon)
-                    if(i <= N)
-                        u(:,i) = K(i,:) * ( r(:,i) - x_hat(:, i) );
+                    if(i < N)
+                        u(:,i) = K(i,:) * ( C_d * x_hat(:, i) - r(:,i));
                     end
 
                     % Simulates the real physical plant using the non-linear model
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
-                    x(:,i+1) = y_aux(end, :) + w(i, :);
+                    x(:, i+1) = y_aux(end, :) + w(i, :);
 
                     % Simulates the linear model using the discrete differences equation
                     %       x_{k+1} = A x_k + B u_k + L ( Y_k - C x_k )
-                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + L*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
+                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:, i) + L * ( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
                     
                 end
 
@@ -105,7 +107,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 % == Simulation for each timestep (i) on time signal (t) ==
                 for i = 1:numel(t)-1
                     % Calculates the input signal
-                    u(:,i) = K * ( r(:,i) - (x_hat(:, i)) );
+                    u(:,i) = K * ( r(:,i) - C * x_hat(:, i) );
 
                     % Simulates the real physical plant using the non-linear model
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
@@ -144,6 +146,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 ss_d = c2d(ss(A_i, B_i, C, D), deltaX);
                 A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;
             
+                K = lqr_(A_d, B_d, Q, R, N);
+                
                 % == Simulation for each timestep (i) on time signal (t) ==
                 for i = 1:numel(t)-1
                     % Calculates the input signal (if still on control horizon)
@@ -192,38 +196,54 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             K = lqr_(A, B, Q, R, N);  
             
             % Generates the Kalman observer state-space
-            [kest, M] = kalman(ss(A,B,C,D), 5, eye(2));
+            [kest, M] = kalman(ss(A,B,C,D), cov(w(:)), eye(2));
             A_e = kest.A; B_e = kest.B; C_e = kest.C; D_e = kest.D; 
+            
+            Q_k = cov(w(:));
+            R_k = eye(2);
+            
+            P_k = zeros(2);
             
             % Case for the Finite-Horizon Discrete-Time
             if(size(K, 1) > 1) 
                 % Defines the discrete matrices associated to state-space matrices
                 ss_d = c2d(ss(A, B, C, D), deltaX);
-                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;              
+                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;       
+                
+                K = lqr_(A_d, B_d, Q, R, N);
 
                 % == Simulation for each timestep (i) on time signal (t) ==
                 for i = 1:numel(t)-1
                     % Calculates the input signal (if still on control horizon)
                     if(i <= N)
-                        u(:,i) = K(i,:) * ( r(:,i) - x_hat(:, i) );
+                        u(:,i) = K(i, :) * ( C_d *  x_hat(:, i) - r(:,i) );
                     end
 
                     % Simulates the real physical plant using the non-linear model
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
                     x(:,i+1) = y_aux(end, :) + w(i, :);
-
-                    % Simulates the linear model using the discrete differences equation
-                    %       x_{k+1} = A x_k + B u_k + L ( Y_k - C x_k )
-                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i) + M*( x(:, i) - C_d*(x_hat(:, i) + model.oper.X(idx,:)') );
+                    
+                    % == PREDICT ==
+                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i);
+                    P_k = A_d * P_k * A_d' + Q_k;
+                    
+                    % == UPDATE ==
+                    S_k = C_d * P_k * C_d' + R_k;
+                    K_k = P_k * C_d' * pinv(S_k);
+                    
+                    x_hat(:, i+1) = x_hat(:, i+1) + K_k * (x(:,i+1) - C_d *  x_hat(:, i+1));
+                    P_k = P_k - K_k * S_k * K_k';
                     
                 end
-
+                
+                yout = C_d * x_hat + D_d * u;
+            
             % Case for the Infinite-Horizon Continuous-Time
             else
                 % == Simulation for each timestep (i) on time signal (t) ==
                 for i = 1:numel(t)-1
                     % Calculates the input signal
-                    u(:,i) = K * ( r(:,i) - (x_hat(:, i)) );
+                    u(:,i) = K * ( r(:,i) - C * x_hat(:, i) );
 
                     % Simulates the real physical plant using the non-linear model
                     [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
@@ -240,13 +260,15 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     x_hat(:, i+1) = n_resp + f_resp;
                     
                 end
+                
+                yout = C * x_hat + D * u;
             end
         end
 
         tout = t;
         uout = u;
         xout = x;
-        yout = C * x_hat(1:size(C,2), :) + D * u;
+        yout = C * x_hat(1:size(C,2),:) + D * u;
     end
    
 end

@@ -46,20 +46,20 @@ r = [ones(1,50)*X_0(1) ones(1,150)*iso_cstr.oper.X(2,1) ones(1,150)*iso_cstr.ope
        ones(1,50)*X_0(2) ones(1,150)*iso_cstr.oper.X(2,2) ones(1,150)*iso_cstr.oper.X(50,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
 
 % Disturbance signal
-w = randn(numel(t), 2) * 0.1;
+w = randn(numel(t), 1) * 0.1;
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 % Controller and Observer
-Q = diag([10, 10]);
-R = [5];
-L = [1 1; 
-	   1 1];
+Q = diag([20, 30]);
+R = [10];
+L = [0 0; 
+	   0 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqg', Q, R, 'inf', L, w);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqg', Q, R, numel(t), L, w);
     
 % - Visualization of the Simulation
 figure(1);

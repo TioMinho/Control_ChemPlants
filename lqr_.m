@@ -6,7 +6,7 @@ function [ K, P ] = lqr_( A, B, Q, R, N )
         K = zeros(N-1, size(A,1));
 
         for i = N:-1:2
-            P(:,:,i-1) = Q + A' * P(:,:,i) * A - A' * P(:,:,i) * B * pinv(R + B' * P(:,:,i) * B) * B' * P(:,:,i) * A;
+            P(:, :, i-1) = Q + A' * P(:, :, i) * A - A' * P(:, :, i) * B * pinv(R + B' * P(:, :, i) * B) * B' * P(:, :, i) * A;
             K(i-1, :) = - pinv(R + B' * P(:,:,i) * B) * B' * P(:,:,i) * A;
         end
 
