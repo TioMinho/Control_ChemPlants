@@ -25,10 +25,11 @@ cpal = [209 17 65;    % 1 - Metro Red
                               ]/255;  
                           
 %% %%%%%%%%%%%%
-%  EXOTHERMAL CSTR $$
+%  EXOTHERMAL CSTR %%
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
-run exothermal_cstr/exo_model.m
+% run exothermal_cstr/exo_model.m
+load('data/exo_cstr_model.mat')
 
 %% Model Non-Linear Simulation %%
 % Simulation Parameters
@@ -37,29 +38,29 @@ t = (0:0.1:15)';
 % Initial Conditions
 X_0 = [0 0 85 79.8 0 0];
 % Input Signal
-U = [ones(numel(t),1)*0.55     ones(numel(t),1)*0];   
+U = [ones(numel(t),1)*0.55 ones(numel(t),1)*0]';   
  
 % Simulation of the Outputs
-[~, y] = simulate(exo_cstr.model, t, U, X_0);
+[~, y] = simulate(exo_cstr.sysVar, t, U, X_0);
     
 % Visualization
 figure(1);
-subplot(2,2,1), plot(t, U(:,1), 'linewidth', 1.5), title("Input Signal")
+subplot(2,2,1), plot(t, U(1,:), 'linewidth', 1.5), title("Input Signal")
 xlabel("Time (min)"), ylabel("Flow-rate (m^3/min)")
 grid()
 
-subplot(2,2,2), p = plot(t, y(:, [1 2 5 6])); title("Output Signals")
+subplot(2,2,2), p = plot(t, y( [1 2 5 6], :)); title("Output Signals")
 p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
 p(3).LineStyle='--'; p(4).LineStyle='--';
 legend("C_A", "C_B", "C_C", "C_D"),
 xlabel("Time (min)"), ylabel("Concentration (mol/m^3)")
 grid()
 
-subplot(2,2,3), plot(t, U(:,2), 'linewidth', 1.5)
+subplot(2,2,3), plot(t, U(2,:), 'linewidth', 1.5)
 xlabel("Time (min)"), ylabel("Cooling Capacity (MJ/min)")
 grid()
 
-subplot(2,2,4), plot(t, y(:, 3:4), 'linewidth', 1.5);
+subplot(2,2,4), plot(t, y(3:4, :), 'linewidth', 1.5);
 legend("T", "T_C"), 
 xlabel("Time (min)"), ylabel("Temperatures (K)")
 grid()
@@ -78,24 +79,25 @@ t = (0:0.1:10)';
 % Initial Conditions
 U_0 = [exo_cstr.oper.U(idx(1),1) exo_cstr.oper.U(idx(2),2)]; X_0 = squeeze(exo_cstr.oper.X(idx(1),idx(2),:));
 % Input Signal
-U = [sin(2*t)*0.1     sin(2*t)*-0.05];
+U = [sin(2*t)*0.1     sin(2*t)*-0.05]';
 
 % Linear Model
-A = exo_cstr.ss_model.A( (idx(1)-1)*25 + idx(2) );
-B = exo_cstr.ss_model.B( (idx(1)-1)*25 + idx(2) );
-exo_cstr_lin = ss(A, B, exo_cstr.ss_model.C, exo_cstr.ss_model.D);
+A = exo_cstr.ss_model.A( (idx(1)-1)*25 + idx(2) ); B = exo_cstr.ss_model.B( (idx(1)-1)*25 + idx(2) );
+C = exo_cstr.ss_model.C;                                        D = exo_cstr.ss_model.D;
+
+exo_cstr_lin = ss(A, B, C, D);
 
 % - Simulation of the Outputs
-[~, y] = simulate(exo_cstr.model, t, U_0+U, [X_0' 0 0]);
+[~, y] = simulate(exo_cstr.sysVar, t, U_0' + U, [X_0' 0 0]);
 [y_lin, ~, ~] = lsim(exo_cstr_lin, U, t);
 
 % - Visualization of the Simulation
 figure(2);
-subplot(2,3,1), plot(t, U_0(1)+U(:,1), 'linewidth', 1.5), title("Input Signal")
+subplot(2,3,1), plot(t, U_0(1)+U(1, :), 'linewidth', 1.5), title("Input Signal")
 ylim([5/60, 35/60]), xlabel("Time (min)"), ylabel("Flow-rate (m^3/min)")
 grid()
 
-subplot(2,3,2), p = plot(t, y(:, [1 2 5 6])); title("Non-Linear CSTR")
+subplot(2,3,2), p = plot(t, y([1 2 5 6], :)); title("Non-Linear CSTR")
 p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
 p(3).LineStyle='--'; p(4).LineStyle='--';
 legend("C_A", "C_B", "C_C", "C_D"),
@@ -107,13 +109,13 @@ legend("C_A", "C_B"),
 ylim([0 inf]), xlabel("Time (min)"), ylabel("Concentration (mol/m^3)")
 grid()
 
-subplot(2,3,4), plot(t, U_0(2)+U(:,2), 'linewidth', 1.5)
+subplot(2,3,4), plot(t, U_0(2)+U(2, :), 'linewidth', 1.5)
 ylim([-8.5/60, 0]), xlabel("Time (min)"), ylabel("Cooling Capacity (MJ/min)")
 grid()
 
-subplot(2,3,5), plot(t, y(:, [3 4]), 'linewidth', 1.5) 
+subplot(2,3,5), plot(t, y([3 4], :), 'linewidth', 1.5) 
 legend("T", "T_C"), 
-xlabel("Time (min)"), ylabel("Concentration (mol/m^3)")
+xlabel("Time (min)"), ylabel("Temperatures (K)")
 grid()
 
 subplot(2,3,6), plot(t, y_lin(:, 3:4)+X_0(3:4)', 'linewidth', 1.5);
@@ -258,7 +260,7 @@ for i = 1:exo_cstr.oper.size
     tic
     pos = [mod(i,25)+(mod(i,25) == 0)*25 ceil(i/25)];
     
-    [NUM1, ~] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 1);
+    [NUM1, ~]     = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 1);
     [NUM2, DEN] = ss2tf(exo_cstr.ss_model.A(i), exo_cstr.ss_model.B(i), exo_cstr.ss_model.C, exo_cstr.ss_model.D, 2);
     G = [tf(NUM1(2,:), DEN) tf(NUM2(2,:), DEN); tf(NUM1(3,:), DEN) tf(NUM2(3,:), DEN)];
    

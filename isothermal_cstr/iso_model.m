@@ -35,22 +35,10 @@ U_ss = linspace(0, 20, 200);
 % Output Stationary Space
 Y_ss = cB_ss(U_ss);
 
-% % Visualization of the Stationary Space
-% figure; 
-% plot(U_ss, Y_ss,'linewidth',1.5), grid()
-% title("Stationary Points - C_B")
-% xlabel("Input Flow-rate (m^3/min)"), ylabel("Outflow Concentration (mol/m^3)")
-
 % Getting the Operating Space
 I = find(Y_ss > 2/3 * max(Y_ss));
 U_ss = U_ss(I)';
 X_ss = [cA_ss(U_ss) cB_ss(U_ss)];
-
-% % Visualization of the Operation Space
-% figure; 
-% plot(U_ss, X_ss(:,2),'linewidth',1.5), grid()
-% title("Stationary Points - C_B")
-% xlabel("Input Flow-rate (m^3/min)"), ylabel("Outflow Concentration (mol/m^3)")
 
 %% LINEAR STATE-SPACE REPRESENTATION %%
 A_e = @(op)      [-U_ss(op,1) - K1 - 2*K3*X_ss(op,1)                  0      ;
@@ -93,6 +81,8 @@ iso_cstr.trf_matrix   = e_At;
 iso_cstr.sizeX        = size(C, 1);
 iso_cstr.sizeU        = size(D, 2);
 iso_cstr.sizeY        = sum(sum(C, 2) ~= 0);
+
+save('../data/iso_cstr_model.mat', 'iso_cstr')
 
 % Clean up the mess
 clear(newVars{:})

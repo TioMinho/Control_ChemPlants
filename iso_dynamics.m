@@ -28,19 +28,20 @@ cpal = [209 17 65;    % 1 - Metro Red
 %  ISOTHERMAL CSTR 
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
-run isothermal_cstr/iso_model.m
+ run isothermal_cstr/iso_model.m
+% load('data/iso_cstr_model.mat')
 
 %% Model Non-Linear Simulation %%
 % - Simulation Parameters
 % Time
-t = (0:0.1:4)';                                         
+t = (0:0.01:4)';                                         
 % Initial Conditions
-X_0 = [iso_cstr.oper.X(25,:) 0 0];
+X_0 = [iso_cstr.oper.X(25,:) iso_cstr.oper.X(25,:)+[2 -2]];
 % Input Signal
-U = ones(numel(t),1)*iso_cstr.oper.U(25) + heaviside(t-1)*30;
+U = ones(1, numel(t)) * iso_cstr.oper.U(25) + heaviside(t-1)' * 30;
  
 % - Simulation of the Outputs
-[~, y] = simulate(iso_cstr.model, t, U, X_0);
+[~, y] = simulate(iso_cstr.sysVar, t, U, X_0);
     
 % - Visualization of the Simulation
 figure(1);
@@ -69,17 +70,16 @@ t = (0:0.1:5)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);                                     
 % Input Signal
-U = (square(t-1.5)+1)*0;
+U = square(t-1.5)' + 1;
  
 % Linear Model
-A = iso_cstr.ss_model.A(idx);
-B = iso_cstr.ss_model.B(idx);
-K = lqr(A, B, [2 0; 0 2],  [2]);
-iso_cstr_lin = ss(A-K*B, B, iso_cstr.ss_model.C, iso_cstr.ss_model.D);
+A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
+C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
+iso_cstr_lin = ss(A, B, C, D);
 
 % - Simulation of the Outputs
-[~, y] = simulate(iso_cstr.model, t, U_0+U, [X_0 0 0]);
-[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t, [10 20]);
+[~, y] = simulate(iso_cstr.sysVar, t, U_0+U, [X_0 0 0]);
+[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t);
     
 % - Visualization of the Simulation
 figure(2);

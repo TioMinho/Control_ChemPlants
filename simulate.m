@@ -7,14 +7,14 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         %   @param t       The initial conditions of the simulation.
         %   @param U       The input signal for the simulation.        
         %   @param X_0     The initial conditions of the simulation.
-        model = varargin{1}.model; t = varargin{2}; U = varargin{3}; X_0 = varargin{4};
+        model = varargin{1}; t = varargin{2}; u = varargin{3}; x_0 = varargin{4};
         
-        tout = t; uout = U;
-        yout = zeros(numel(X_0), numel(t));
-        yout(:,1) = X_0;
-        for i = 1:numel(t)
-            [~, y_aux] = odeSolver(model, t(i:i+1), U(:,i), yout(:,i), 100); 
-            yout(:,i+1) = y_aux(:,end);
+        tout = t; uout = u;
+        yout = zeros(numel(x_0), numel(t));
+        yout(:,1) = x_0;
+        for i = 1:numel(t)-1
+            [~, y_aux] = odeSolver(model, t(i:i+1), u(:,i), yout(:,i), 100); 
+            yout(:,i+1) = y_aux(end, :);
         end
         
         xout = yout;

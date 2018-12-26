@@ -30,7 +30,8 @@ d_cD = @(t,U,X)   1/2 * K2(X(3)) * X(1)^2 - X(6) * U(1);
 d_T  = @(t,U,X)   h(X(1), X(2), X(3)) + alpha * (X(4) - X(3)) + (T_in - X(3)) * U(1);
 d_Tc = @(t,U,X)   beta * (X(3) - X(4)) + gamma * U(2);
 
-d_X  = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
+d_X  = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X)];
+sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
 
 %% OPERATING POINTS %%
 % Stationary Space Numerical Calculation
@@ -99,9 +100,10 @@ end
 %% SAVES THE MODEL %%
 newVars = setdiff(who, vars);
 
-exo_cstr.param = struct('alpha', alpha, 'beta', beta, 'gamma', gamma, 'delta', delta, 'K10', K10, 'K20', K20, ...
+exo_cstr.param         = struct('alpha', alpha, 'beta', beta, 'gamma', gamma, 'delta', delta, 'K10', K10, 'K20', K20, ...
                                         'E1', E1, 'E2', E2, 'dH_AB', dH_AB, 'dH_BC', dH_BC, 'dH_AD', dH_AD, 'c_in', c_in, 'T_in', T_in);
-exo_cstr.model = d_X;
+exo_cstr.model         = d_X;
+exo_cstr.sysVar         = sysVar;
 exo_cstr.oper            = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss, 1)*size(X_ss, 2));
 exo_cstr.ss_model    = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
 exo_cstr.poles           = lambda;
@@ -110,6 +112,8 @@ exo_cstr.trf_matrix    = e_At;
 exo_cstr.sizeX           = size(C, 1);
 exo_cstr.sizeU          = size(D, 2);
 exo_cstr.sizeY           = sum(sum(C, 2) ~= 0);
+
+save('../data/exo_cstr_model.mat', 'exo_cstr')
 
 % Clean up the mess
 clear(newVars{:})
