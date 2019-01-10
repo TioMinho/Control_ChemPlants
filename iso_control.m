@@ -30,6 +30,7 @@ cpal = [209 17 65;    % 1 - Metro Red
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
 run isothermal_cstr/iso_model.m
+% load('data/iso_cstr_model.mat')
 
 %% Continuous-Time Infinite Horizon Linear Quadratic Regulator %%
 clc
@@ -42,24 +43,27 @@ t = (0:0.05:19.95)';
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 
 % Reference Signall
-r = [ones(1,50)*X_0(1) ones(1,150)*iso_cstr.oper.X(2,1) ones(1,150)*iso_cstr.oper.X(50,1) ones(1,50)*iso_cstr.oper.X(idx,1);
-       ones(1,50)*X_0(2) ones(1,150)*iso_cstr.oper.X(2,2) ones(1,150)*iso_cstr.oper.X(50,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
+r = [ones(1,50)*X_0(1) ones(1,150)*iso_cstr.oper.X(15,1) ones(1,150)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(idx,1);
+       ones(1,50)*X_0(2) ones(1,150)*iso_cstr.oper.X(15,2) ones(1,150)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(idx,2);];
 
 % Disturbance signal
-w = randn(numel(t), 1) * 0.1;
+w = randn(numel(t), 2) * 0.0;
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
-C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
+C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
+
+%iso_cstr.ss_model.C = [0 1];
+%iso_cstr.ss_model.D = [0];
 
 % Controller and Observer
-Q = diag([20, 30]);
-R = [10];
-L = [0 0; 
-	   0 0];
+Q = diag([20, 20, 10000, 10000]);
+R = diag([5.111]);
+L = [1 1; 
+	   1 1];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqg', Q, R, numel(t), L, w);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqri', Q, R, 'inf', L, w);
     
 % - Visualization of the Simulation
 figure(1);
@@ -70,14 +74,14 @@ grid()
 subplot(1,2,2)
 plot(t, r, 'linestyle', '--', 'color', 'black'); hold on;
 
-p = plot(t, yout+X_0', 'linewidth', 1.5, 'linestyle', '--');
+p = plot(t, C*(yout+X_0'), 'linewidth', 1.5, 'linestyle', '--');
 set(p, {'color'}, {cpal(3,:); cpal(4,:)});
 
 p = plot(t, xout, 'linewidth', 1.5); hold on
 set(p, {'color'}, {cpal(3,:); cpal(4,:)});
 
 title("Isothermal CSTR"), xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-legend("C_{Ar}", "C_{Ar}", "C_{Ae}", "C_{Be}", "C_{A}", "C_{B}") 
+legend("C_{Br}", "C_{Ae}", "C_{Be}", "C_{A}", "C_{B}") 
 grid()
 
 % - Exporting the Visualization to an Image

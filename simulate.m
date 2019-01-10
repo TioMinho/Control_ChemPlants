@@ -66,7 +66,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         x_hat = zeros(size(A,2), numel(t));
         
         % Re-scale the reference signal to the linearized system output
-        r = r - model.oper.X(idx,:)';
+        r = r - C * model.oper.X(idx,:)';
         
         % Initial States
         x(:,1)        = X_0 + w(1, :); 
@@ -131,11 +131,14 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % Augment the state and input matrices
             A_i = [A, zeros(size(C')); -C, zeros(size(C,1), size(C,1))];
             B_i = [B; zeros(size(C,1), size(B,2))];
+            C_i = [C, zeros(size(C))];
+            D_i = D;
+            
             L_i = [L; zeros(size(C,1), size(L,2))];
             F_i = [zeros(size(A,1), size(r,1)); eye(size(r,1))];
 
             x_hat = zeros(size(A_i,1), numel(t));
-            x_hat(:,1) = [X_0' - model.oper.X(idx,:)'; X_0' - r(:,1)];
+            x_hat(:,1) = [X_0' - model.oper.X(idx,:)'; C*(X_0' - model.oper.X(idx,:)') - r(:,1)];
             
             % Calculate the LQRI gain matrix
             K = lqr_(A_i, B_i, Q, R, N);
@@ -143,7 +146,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % Case for a Finite-Horizon Discrete-Time
             if(size(K, 1) > 1) 
                 % Defines the discrete matrices associated to augmented matrices
-                ss_d = c2d(ss(A_i, B_i, C, D), deltaX);
+                ss_d = c2d(ss(A_i, B_i, C_i, D_i), deltaX);
                 A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;
             
                 K = lqr_(A_d, B_d, Q, R, N);
@@ -156,12 +159,12 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     end
 
                     % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
+                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
                     x(:,i+1) = y_aux(end, :) + w(i, :);
 
                     % Simulates the linear model using the discrete differences equation
                     %       x_{k+1} = A x_k + B u_k + L ( Y_k - C x_k )
-                    x_hat(:, i+1) = (A_d*x_hat(:, i) + B_d*u(:,i) + F_i*r(:,i)) + L_i*( x(:, i) - C_d*(1:x_hat(size(x,1), i) + model.oper.X(idx,:)' ));
+                    x_hat(:, i+1) = (A_d*x_hat(:, i) + B_d*u(:,i) + F_i*r(:,i)); % + L_i*( x(:, i) - C_d*(1:x_hat(size(x,1), i) + model.oper.X(idx,:)' ));
                     
                 end
                 
@@ -173,7 +176,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     u(:,i) = - K * x_hat(:, i);
 
                     % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), y(i,:), 100);
+                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
                     x(:,i+1) = y_aux(end, :) + w(i, :);
 
                     % Simulates the linear model using the Lagrange formula
@@ -181,7 +184,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     n_resp = expm( A_i * (t(i) - t(1)) ) * x_hat(:,1);
                     f_resp = 0;
                     for j =1:i+1
-                        f_resp = f_resp + deltaX * expm( A_i * (t(i) - t(j)) ) * (B_i * u(:,j) + F_i * r(:,j) + L_i *(x(:,j) - C * (x_hat(1:size(x,1), j) + model.oper.X(idx,:)')) );
+                        f_resp = f_resp + deltaX * expm( A_i * (t(i+1) - t(j)) ) * (B_i * u(:,j) + F_i * r(:,j) ); % +  L_i *(x(:,j) - C * (x_hat(1:size(x,1), j) + model.oper.X(idx,:)')) );
                     end
                     
                     x_hat(:, i+1) = n_resp + f_resp;
@@ -190,17 +193,19 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 
             end
             
-        % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==
+        % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmp(type, 'lqg'))
             % Calculate the LQR gain matrix
             K = lqr_(A, B, Q, R, N);  
             
+            z = randn(numel(t), size(C,1)) * 0.1;
+            
             % Generates the Kalman observer state-space
-            [kest, M] = kalman(ss(A,B,C,D), cov(w(:)), eye(2));
+            [kest, M] = kalman(ss(A,B,C,D), cov(w(:)), cov(z));
             A_e = kest.A; B_e = kest.B; C_e = kest.C; D_e = kest.D; 
             
-            Q_k = cov(w(:));
-            R_k = eye(2);
+            Q_k = cov(w);
+            R_k = cov(z);
             
             P_k = zeros(2);
             
@@ -220,8 +225,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                     end
 
                     % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i)+model.oper.U(idx,:), x(:,i), 100);
-                    x(:,i+1) = y_aux(end, :) + w(i, :);
+                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + model.oper.U(idx,:) + w(i, :), x(:,i), 100);
+                    x(:,i+1) = y_aux(end, :) + z(i, :);
                     
                     % == PREDICT ==
                     x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i);
