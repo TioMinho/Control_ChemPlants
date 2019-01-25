@@ -57,10 +57,10 @@ C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
 %iso_cstr.ss_model.D = [0];
 
 % Controller and Observer
-Q = diag([20, 20, 10000, 10000]);
-R = diag([5.111]);
-L = [1 1; 
-	   1 1];
+Q = diag([20, 20, 1e4, 1e4]);
+R = diag([3]);
+L = [1 0; 
+	    0 1];
 
 % - Simulation of the Outputs
 [~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqri', Q, R, 'inf', L, w);
