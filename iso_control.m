@@ -42,12 +42,12 @@ t = (0:0.05:20.95)';
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 
 % Reference Signal
-r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(10,1) ones(1,160)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(idx,1);
-       ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(10,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(idx,2)];
+r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(15,1) ones(1,160)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(idx,1);
+       ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(15,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(idx,2)];
 
 % Disturbance signal
-w = randn(numel(t), 1) * .00;     % Process Noise
-z = randn(numel(t), 2) .* [.0 .00];      % Measurement Noise
+w = randn(numel(t), 1) * .01;             % Process Noise
+z = randn(numel(t), 2) .* [.075 .025];      % Measurement Noise
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
@@ -59,13 +59,13 @@ iso_cstr.sizeY = 2;
 
 % Controller and Observer
 Q1 = diag([20, 20, 1e4, 1e4]);
-R1 = diag([13]);
+R1 = diag([3]);
 
 L = [0 0; 0 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqri', Q1, R1, 'inf', L, w, z);
-mts1 = metrics(xout, r, t)
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'lqgi', Q1, R1, 'inf', L, w, z);
+mts1 = metrics(yout, r, t)
 
 % - Visualization of the Simulation
 figure(1);
