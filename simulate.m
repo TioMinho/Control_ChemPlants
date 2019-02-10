@@ -228,7 +228,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         elseif(strcmp(type, 'lqg'))
             % Estimate the covariances for the process and measurement noises
             Q_k = cov(w);
-            R_k = cov(z);
+            R_k = cov((C * z')');
             P_k = zeros(2);
             
             % Case for the Finite-Horizon Discrete-Time
@@ -302,7 +302,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         elseif(strcmp(type, 'lqgi'))
             % Estimate the covariances for the process and measurement noises
             Q_k = cov(w);
-            R_k = cov(z);
+            R_k = cov((C * z')');
             P_k = zeros(2);
             
             % Case for the Finite-Horizon Discrete-Time
