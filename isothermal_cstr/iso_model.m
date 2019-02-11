@@ -41,11 +41,18 @@ U_ss = U_ss(I)';
 X_ss = [cA_ss(U_ss) cB_ss(U_ss)];
 
 %% LINEAR STATE-SPACE REPRESENTATION %%
-A_e = @(op)      [-U_ss(op,1) - K1 - 2*K3*X_ss(op,1)                  0      ;
-                                                 K1                             -U_ss(op,1) - K2];
+A_e = @(op)      [-U_ss(op,1) - K1 - 2*K3*X_ss(op,1)                    0           ;
+                                                 K1                                    -U_ss(op,1) - K2];
 
+A_l = @(X_e, U_e)     [-U_e - K1 - 2*K3*X_e(1)                  0       ;
+                                                 K1                               -U_e - K2];
+
+                                             
 B_e   = @(op)    [ cAf - X_ss(op,1);
-                                      -X_ss(op,2)   ];
+                                -X_ss(op,2)   ];
+
+B_l   = @(X_e, U_e)    [ cAf - X_e(1);
+                                        -X_e(2)   ];
 
 C = [1 0; 0 1];
 D = [0; 0];
@@ -74,7 +81,7 @@ iso_cstr.param        = struct('K1', K1, 'K2', K2, 'K3', K3, 'cA_f', cAf);
 iso_cstr.model        = d_X;
 iso_cstr.sysVar       = sysVar;
 iso_cstr.oper         = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss,1));
-iso_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
+iso_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D, 'A_l', A_l, 'B_l', B_l);
 iso_cstr.poles        = lambda;
 iso_cstr.modes        = modes;
 iso_cstr.trf_matrix   = e_At;
