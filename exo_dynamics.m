@@ -9,8 +9,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Preamble %%
-cd /home/minhotmog/Dropbox/Research/TCC/Codes/
-clc; clear all; close all;
+cd /home/minho/Documents/Minho/Control_ChemPlants/
+% cd /home/minhotmog/Dropbox/Research/TCC/Codes/
 
 % Sets the Default Rendere to tbe the Painters
 set(0, 'DefaultFigureRenderer', 'painters');

@@ -46,7 +46,7 @@ r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(15,1) ones(1,
      ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(15,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(idx,2)];
 
 % Disturbance signal
-w = randn(numel(t), 1) * .0;               % Process Noise
+w = randn(numel(t), 1) * .0;            % Process Noise
 z = randn(numel(t), 2) .* [.0 .0];      % Measurement Noise
 
 % Linear Model
