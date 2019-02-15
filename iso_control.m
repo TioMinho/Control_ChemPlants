@@ -9,8 +9,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Preamble %%
-% cd /home/omenezes/Documents/Minho/Control_ChemPlants/
-cd /home/minhotmog/Dropbox/Research/TCC/Codes/
+cd /home/minho/Documents/Minho/Control_ChemPlants/
+% cd /home/minhotmog/Dropbox/Research/TCC/Codes/
 clc; clear all; close all;
 
 % Sets the Default Rendere to tbe the Painters
@@ -42,29 +42,29 @@ t = (0:0.05:20.95)';
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 
 % Reference Signal
-r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(15,1) ones(1,160)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(35,1);
-       ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(15,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(35,2)];
+r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(15,1) ones(1,160)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(idx,1);
+     ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(15,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(idx,2)];
 
 % Disturbance signal
-w = randn(numel(t), 1) * .01;             % Process Noise
-z = randn(numel(t), 2) .* [.00 .00];      % Measurement Noise
+w = randn(numel(t), 1) * .0;               % Process Noise
+z = randn(numel(t), 2) .* [.0 .0];      % Measurement Noise
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
-C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
+C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 iso_cstr.ss_model.C = [1 0; 0 1];
 iso_cstr.ss_model.D = [0; 0];
 iso_cstr.sizeY = 2;
 
 % Controller and Observer
-Q1 = diag([20, 20]);
-R1 = diag([10]);
+Q = diag([250, 250]);
+R = diag([200]);
 
-L = [1 0; 0 1];
+L = [0 0; 0 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'switch-lqr', Q1, R1, numel(t), L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'switch-lqr', Q, R, numel(t), L, w, z);
 mts1 = metrics(yout, r, t)
 
 % - Visualization of the Simulation
