@@ -53,18 +53,18 @@ z = randn(numel(t), 2) .* [.0 .0];      % Measurement Noise
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
-iso_cstr.ss_model.C = [1 0; 0 1];
-iso_cstr.ss_model.D = [0; 0];
-iso_cstr.sizeY = 2;
+iso_cstr.ss_model.C = [0 1];
+iso_cstr.ss_model.D = [ 0];
+iso_cstr.sizeY = 1;
 
 % Controller and Observer
-Q = diag([250, 250]);
+Q = diag([2, 2, 1e4]);
 R = diag([200]);
 
-L = [0 0; 0 0];
+L = [0 ; 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'switch-lqr', Q, R, numel(t), L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r(2,:), X_0, 'lqri', Q, R, 'inf', L, w, z);
 mts1 = metrics(yout, r, t)
 
 % - Visualization of the Simulation
