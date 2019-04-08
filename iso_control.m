@@ -37,34 +37,34 @@ run isothermal_cstr/iso_model.m
 % Linear Model Index
 idx = 25;
 % Time
-t = (0:0.05:20.95)';
+t = (0:0.05:30.95)';
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);
 
 % Reference Signal
-r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,160)*iso_cstr.oper.X(15,1) ones(1,160)*iso_cstr.oper.X(35,1) ones(1,50)*iso_cstr.oper.X(35,1);
-       ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,160)*iso_cstr.oper.X(15,2) ones(1,160)*iso_cstr.oper.X(35,2) ones(1,50)*iso_cstr.oper.X(35,2)];
+r = [ones(1,50)*iso_cstr.oper.X(idx,1) ones(1,260)*iso_cstr.oper.X(30,1) ones(1,260)*iso_cstr.oper.X(15,1) ones(1,50)*iso_cstr.oper.X(20,1);
+       ones(1,50)*iso_cstr.oper.X(idx,2) ones(1,260)*iso_cstr.oper.X(30,2) ones(1,260)*iso_cstr.oper.X(15,2) ones(1,50)*iso_cstr.oper.X(20,2)];
 
 % Disturbance signal
-w = randn(numel(t), 1) * .01;             % Process Noise
-z = randn(numel(t), 2) .* [.00 .00];      % Measurement Noise
+w = randn(numel(t), 1) * .005;             % Process Noise
+z = randn(numel(t), 2) .* [.03 .01];      % Measurement Noise
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
 C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
 
-iso_cstr.ss_model.C = [1 0; 0 1];
-iso_cstr.ss_model.D = [0; 0];
-iso_cstr.sizeY = 2;
+iso_cstr.ss_model.C = [0 1];
+iso_cstr.ss_model.D = [0];
+iso_cstr.sizeY = 1;
 
 % Controller and Observer
-Q1 = diag([20, 20]);
-R1 = diag([10]);
+Q1 = diag([1, 10, 1e3]);
+R1 = diag([1]);
 
-L = [1 0; 0 1];
+L = [0 ; 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, X_0, 'switch-lqr', Q1, R1, numel(t), L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r(2,:), X_0, 'lqgi', Q1, R1, numel(t), L, w, z);
 mts1 = metrics(yout, r, t)
 
 % - Visualization of the Simulation
@@ -72,14 +72,16 @@ figure(1);
 subplot(1,2,1)
 plot(t, uout, 'linewidth', 1.5, 'color', cpal(1,:)); 
 xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)"),  title("Input Signal")
+xlim([min(t), max(t)])
 grid()
 
 subplot(2,2,2)
 plot(t, r(1,:), 'linestyle', '--', 'color', 'black'); hold on;
 scatter(t, xout(1,:), 'marker', 'x', 'MarkerEdgeColor', cpal(3,:)); hold on; 
 plot(t, xout(1,:)-z(:,1)', 'linewidth', 1.5, 'linestyle', '--', 'color', cpal(1,:));
-plot(t, yout(1,:), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on;
+plot(t, yout(1,:)+X_0(1)', 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on;
 xlabel("Time (min)"), ylabel("Outflow Concentration - C_a (mol/l)"), title("Isothermal CSTR")
+xlim([min(t), max(t)])
 legend('Reference', 'y(t)', 'x(t)', 'x\_hat(t)')
 grid()
 
@@ -87,16 +89,17 @@ subplot(2,2,4),
 plot(t, r(2,:), 'linestyle', '--', 'color', 'black'); hold on;
 scatter(t, xout(2,:), 'marker', 'x', 'MarkerEdgeColor', cpal(3,:)); hold on; 
 plot(t, xout(2,:)-z(:,2)', 'linewidth', 1.5, 'linestyle', '--', 'color', cpal(1,:));
-plot(t, yout(2,:), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on; 
+plot(t, yout(2,:)+X_0(2)', 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on; 
 xlabel("Time (min)"), ylabel("Outflow Concentration - C_b (mol/l)")
+xlim([min(t), max(t)])
 legend('Reference', 'y(t)', 'x(t)', 'x\_hat(t)')
 grid()
 
 % - Exporting the Visualization to an Image
-% fig = gcf;
-% fig.PaperPositionMode = 'auto';
-% set(fig,'PaperOrientation', 'landscape');
-% print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_lqri_01', '-dpdf', '-r300')
+fig = gcf;
+fig.PaperPositionMode = 'auto';
+set(fig,'PaperOrientation', 'landscape');
+print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_lqri_01', '-dpdf', '-r300')
 
 %% Discrete-Time Finite Horizon Linear Quadratic Regulator %%
 % - Simulation Parameters
