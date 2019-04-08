@@ -10,11 +10,11 @@
 fprintf('%s\n', "Loading the Exothermal CSTR model...")
 vars = who;
 %% MODEL PARAMETERS %%
-alpha = 30.8285 / 60; beta = 86.688 / 60; gamma = 0.1; delta = 3.556e-4;
+alpha = 10 / 60; beta = 100 / 60; gamma = 0.3; delta = 3.556e-4;
 K10 = 1.287e12 / 60; K20 = 9.043e6 / 60;
-E1 = 9758.3; E2 = 8560;
-dH_AB = 4.2; dH_BC = -11; dH_AD = -41.85;
-c_in = 5100; T_in = 104.9;
+E1 = 9758.3; E2 = 9000;
+dH_AB = 4.2; dH_BC = -30; dH_AD = -41.85;
+c_in = 5100; T_in = 105;
 
 %% REACTION AUXILIARY EQUATIONS %%
 K1 = @(T)         K10 * exp( -E1 / (T + 273.15) );
@@ -35,26 +35,38 @@ sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_
 
 %% OPERATING POINTS %%
 % Stationary Space Numerical Calculation
-% U_ss = [linspace(5/60, 35/60, 100)' linspace(-8.5/60, 0, 100)'];
-% X_ss = zeros(100,100,4);
-% prev = [0 0 0 0];
-% for i = 1:1:100
-%     for j = 1:1:100
-%         F = @(X) [-K1(X(3))*X(1) - K2(X(3))*X(1)^2 + (c_in - X(1)) * U_ss(i,1);
-%                    K1(X(3))*(X(1) - X(2)) - X(2)*U_ss(i,1);
-%                    h(X(1),X(2),X(3)) + alpha*(X(4) - X(3)) + (T_in - X(3))* U_ss(i,1);
-%                    beta*(X(3) - X(4)) + gamma*U_ss(j,2)];      
-%         
-%         X_ss(i,j,:) = fsolve(F, prev);
-%         prev = Y(i,j,:);
-%     end
-% end
+U_ss = [linspace(5/60, 35/60, 25)' linspace(-8.5/60, 0, 25)'];
+X_ss = zeros(25,25,4);
+prev = [0 0 0 0];
+for i = 1:1:25
+    for j = 1:1:25
+        F = @(X) [-K1(X(3))*X(1) - K2(X(3))*X(1)^2 + (c_in - X(1)) * U_ss(i,1);
+                   K1(X(3))*(X(1) - X(2)) - X(2)*U_ss(i,1);
+                   h(X(1),X(2),X(3)) + alpha*(X(4) - X(3)) + (T_in - X(3))* U_ss(i,1);
+                   beta*(X(3) - X(4)) + gamma*U_ss(j,2)];      
+        
+        X_ss(i,j,:) = fsolve(F, prev);
+        prev = X_ss(i,j,:);
+    end
+end
 
 % Operating Space
-lStruct = load('../data/exoCSTR_opPoints.mat');
-U_ss = lStruct.U_ss;
-X_ss = lStruct.X_ss;
-numOp = 25*25;
+% lStruct = load('../data/exoCSTR_opPoints.mat');
+% U_ss = lStruct.U_ss;
+% X_ss = lStruct.X_ss;
+% numOp = 25*25;
+
+figure(3);
+subplot(1,2,1), surf(U_ss(:,1), U_ss(:,2), X_ss(:,:,2)', ...
+                                    ccmap.area(:,:,1:3), 'AlphaData', ccmap.area(:,:,4), 'FaceAlpha', 'flat')
+title("Operation Points - C_B")
+xlabel("Input Flow-rate (m^3/min)"), ylabel("Cooling Capacity (MJ/h)"), zlabel("Outflow Concentration (mol/m^3)")
+
+subplot(1,2,2), surf(U_ss(:,1), U_ss(:,2), X_ss(:,:,3)', ...
+                                    ccmap.area(:,:,1:3), 'AlphaData', ccmap.area(:,:,4), 'FaceAlpha', 'flat')
+title("Operation Points - T")
+xlabel("Input Flow-rate (m^3/min)"), ylabel("Cooling Capacity (MJ/h)"), zlabel("Tank Temperature (K)")
+
 
 %% LINEAR STATE-SPACE REPRESENTATION %%
 % Auxiliary Derivatives

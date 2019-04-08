@@ -1,0 +1,916 @@
+% ---------------------------------------------------------------
+% Preamble
+% ---------------------------------------------------------------
+\documentclass[a4paper,11pt]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[margin=1in,a4paper,pdftex]{geometry}
+\usepackage[protrusion=true,expansion=true]{microtype} 
+\usepackage{amsmath,amsfonts,amsthm,amssymb, bm}
+\usepackage{rotating}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=magenta]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{color, xcolor}
+\usepackage{listings}
+\usepackage[ruled]{algorithm2e}
+\usepackage{cite}
+\usepackage{makecell}
+\usepackage[printwatermark]{xwatermark}
+
+\usepackage{framed}
+\definecolor{shadecolor}{rgb}{0.97,0.97,0.97}
+
+\numberwithin{figure}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{table}{chapter}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+
+\usepackage{graphicx}
+\graphicspath{ {imgs/} }
+
+\lstset{
+    backgroundcolor=\color[rgb]{0.86,0.88,0.93},
+    language=matlab, keywordstyle=\color[rgb]{0,0,1},
+    basicstyle=\footnotesize \ttfamily,breaklines=true,
+    escapeinside={\%*}{*)}
+}
+
+% --------------------------------------------------------------------
+% Definitions
+% --------------------------------------------------------------------
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}} 
+
+\makeatletter                       
+\def\printtitle{
+    {\centering \@title\par}}
+\makeatother                                    
+
+\makeatletter 
+\def\printauthor{
+    {\centering \large \@author}}               
+\makeatother                            
+
+\newcounter{boxed-theorem}
+\makeatletter
+\newenvironment{boxed-theorem}[1]
+{\begin{shaded} \begin{theorem}{#1}}
+{\end{theorem} \end{shaded}}
+
+% ---------------------------------------------------------------
+% Metadata 
+% ---------------------------------------------------------------
+\title{ \normalsize \textsc{Course Conclusion Paper - DRAFT} 
+        \\[2.0cm]             
+        \HRule{0.5pt} \\              
+        \LARGE \textbf{\uppercase{Dynamical Modelling and Control of Chemical Reactive Systems}}
+        \HRule{2pt} \\[0.5cm]  
+}
+
+\author{
+        Otacílio Bezerra Leite Neto\\   
+        Federal University of Ceará\\  
+        Department of Teleinformatics Engineering\\
+        \texttt{minhotmog@gmail.com} \\
+}
+
+\begin{document}
+% ---------------------------------------------------------------
+% Maketitle
+% ---------------------------------------------------------------
+\thispagestyle{empty}       % Remove page numbering on this page
+
+\printtitle                 % Print the title data as defined above
+    \vfill
+\printauthor                % Print the author data as defined above
+\newpage
+
+% ---------------------------------------------------------------
+% Begin document
+% ---------------------------------------------------------------
+% Set page numbering to begin on this page
+\thispagestyle{empty}   
+\tableofcontents
+
+% 1 - Introduction
+% ---------------------------------------------------------------
+\clearpage
+\setcounter{page}{1}
+\chapter{Introduction}
+
+This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactive Systems, therefore the discussion will follow the notation common to the literature of this field, and a "modern" approach to this theory is explored. 
+
+The sections are organized as follows: Section 1.1 provides general definitions for control systems engineering, Section 1.2 discuss chemical reactive systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
+
+\section{Control Systems Engineering}
+
+The discipline of Control Systems Engineering deals with the design of devices, named \textit{controllers}, that are integrated to a physical system (a \textit{dynamical system}, in most cases) in order to impose a desired behavior to this system. To achieve this goal, the discipline covers topics ranging from applied mathematics, such as dynamical systems theory and signal processing, to a more engineering discussion, regarding instrumentation and implementation of these controllers in a real-life plant or individual system. 
+
+A system, in a broad physical sense, is defined as a ensemble of interacting components that responds to external stimuli producing a determined dynamical response, and whose individual parts are not able to produce the same functionality by their own. Thus, the first essential element in Control Theory is a mathematical model of the system of interest. One such model is the \textit{Input-Output Representation}, as shown in \textbf{fig!!!}, in which an input stimuli, a signal $u(t)$, acts on the system producing an output response, a signal $y(t)$, described by the following differential equation:
+\begin{equation} \label{eq:01-01}
+\begin{split}
+    \alpha_n \cfrac{d^n y(t)}{dt^n} + \alpha_{n-1} & \cfrac{d^{n-1} y(t)}{dt^{n-1}} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) = \\
+    & \beta_m \cfrac{d^m u(t)}{dt^m} + \beta_{m-1} \cfrac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t)
+\end{split}
+\end{equation}
+
+[fig]
+
+In this representation, the input $u(t)$ is called the \textit{manipulated variable}, since it represents a arbitrary stimuli that can be given directly by human action or a by an automatic controller, while the output $y(t)$ is called the \textit{controlled variable}, since it can only be modified indirectly through $u(t)$. This also leads to a \textit{cause-and-effect} interpretation of the system.
+
+A model can provide a quantitative understanding of the system that is useful both to access some response specifications and to design controllers to modify them based on some requirements. In the case of the model in Equation \eqref{eq:01-01}, it is possible to calculate the response $y(t)$, and its derivatives, resulting from any specific action $u(t)$. Besides, a model can be used to perform computer simulations, in order to visualize the dynamical behavior of the system without actually manipulating it, since real experiments could be expensive or even damage the system. Consider, for instance, a schematic and a simulation for a model representing a mass-spring-damper system, shown at \textbf{!!!!}.
+
+[fig]
+
+In this simulation, the \textit{rise time}, \textit{peak time}, \textit{overshoot ratio} and \textit{steady-state value} are examples of response specifications that can be defined to describe the system behavior to a external stimuli (in this case, a constant force of unit magnitude). These specified parameters are characteristic to responses of a class of systems known as \textit{underdamped second-order systems}, that will be discussed further in the document. 
+
+A controller is used to calculate, for a time $t \in \left[ t_0, t_N\right)$, the necessary input $u(t)$ to produce an output $y(t)$ as close as possible to a desired reference signal $r(t)$. There are two common configurations, shown in \textbf{Fig!!!}, of how to connect the controller to the system.
+
+[fig]
+
+The configuration in \textbf{Fig!!!.a}, known as \textit{Open-Loop Controller}, calculates the action as a function $u(t) = \pi(r, t)$, given an initial condition $y(t_0) = y_0$. In this case, the controller does not observe the output $y(t)$, and relies on the model to guarantee that the system is driven to the reference. Of course, if there are any external disturbances acting on this configuration, or if the model is not reliable enough, it is not possible to guarantee that the requirements are met. Thus, these type of controllers are not suitable for critical applications, and its use is restricted to systems where deviance from the desired reference can be tolerated. \textbf{[exemplos de aplicações?]}
+
+In contrast, the configuration in \textbf{Fig!!!.b}, known as \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \textbf{[exemplos de aplicações? + references]}
+
+\section{Chemical Reactive Systems}
+
+A chemical reaction, the transformation of a chemical substance into another, is a process central to chemistry and to nature itself. A reaction equation is a intuitive representation of such transformations. For instance, consider the following equation representing a \textit{synthesis reaction}:
+\begin{equation}
+    A + 2 B \longrightarrow 3 C + D 
+\end{equation} 
+
+In this equation, the compounds $A$ and $2 B$ forms the set of \textit{reactants}, $\mathcal{R}$, while $3 C$ and $D$ forms the set of \textit{products}, $\mathcal{P}$. The coefficients in such equations are the \textit{stoichiometric numbers}, providing an information about proportionality between the quantity of each substances in the reaction. 
+
+Usually the products can be directly used as reactants in another reaction, in which case they can also be referred as a intermediate product (or byproduct), and the equations can be appended in a "series" representation. In this case, each $k$-th intermediate product forms a set $\mathcal{I}_k$. In addition to a chain of series reactions, there is also the possibility of different reactions to occur in parallel, in the same system. The combination of these sets of reactants, byproducts, products and reactions are often referred as a \textit{chemical reaction network}, and the associated equation can be represented in general form as:
+\begin{equation} \label{eq:chemNetwork}
+\left\{ \begin{matrix}
+    \mathcal{R}^{(1)}  & \longrightarrow & \mathcal{I}^{(1)}_1  &  \longrightarrow & \cdots & \longrightarrow & \mathcal{I}^{(1)}_{M_1} & \longrightarrow & \mathcal{P}^{(1)} \\
+    \mathcal{R}^{(2)} & \longrightarrow & \mathcal{I}^{(2)}_1  &  \longrightarrow & \cdots & \longrightarrow & \mathcal{I}^{(2)}_{M_2} & \longrightarrow & \mathcal{P}^{(2)} \\
+    \vdots &  & \vdots &  & \vdots &  & \vdots &  & \vdots \\
+    \mathcal{R}^{(N)} & \longrightarrow & \mathcal{I}^{(N)}_1  &  \longrightarrow & \cdots & \longrightarrow & \mathcal{I}^{(N)}_{M_N} & \longrightarrow & \mathcal{P}^{(N)} \\
+\end{matrix} \right.
+\end{equation} 
+
+Moreover, chemical reactions displays a dynamical behavior concerning the speed at which a reaction occurs. This rate of reaction, its \textit{kinetics}, are dependent on the conditions in the environment, such as temperature and pressure, and on some properties of the reaction itself. In the case of a \textit{isothermal process}, i.e., when the temperature in the environment remains constant, this rate can be calculated as a constant $K$, leading to a representation on the form:
+\begin{equation}
+    \mathcal{R} \overset{K}{\longrightarrow} \mathcal{P}
+\end{equation} 
+
+When the temperature in the environment is not constant, the process is said to be \textit{endothermic} or \textit{exothermic} if, respectively, it consumes or produces energy. The kinetics of the reactions in such processes are usually functions of the temperature which, given an activation energy $E$, are assumed to follow the Arrhenius equation:
+\begin{equation} \label{eq:arrhenius1}
+    K(T) = K_0 e^{-E / T}
+\end{equation}
+
+In practice, these chemical reactions are produced by mixing the reactants in some environment with adequate conditions. In order to control the quantities of these substances, actual processes consists in a manipulation of the concentrations of reactants in some container, usually by providing a mass flow of these substances through some fluid. A major interest is to manipulate the reactants in some way to produce a desired concentration of one or more products in the chemical reaction network, allowing this problem to be addressed by a control engineering perspective. A \textit{chemical reactor system}, depicted in \textbf{Fig!!!}, is a system where a controller can manipulate the concentration of some reactants to produce a desired concentration of some products.
+
+[img]
+
+When the process is not isothermal, the occurrence of a reaction contributes to the entropy of the environment, and consequently affects the kinetics of the subsequent ones. To compensate for this, practical applications also try to control the conditions in the environment using instruments external to the reactions themselves. Because of the use of the Arrhenius equation to model these reaction rates, this control is usually implemented through a cooling or heating system coupled to the original reactor system, resulting in the schematic on \textbf{Fig!!!}.
+
+[img]
+
+\section{Motivation}
+
+The use of automatic controllers to impose a desired behaviour to physical systems is a practice ubiquitous in many engineering fields. In the last years, the price of digital computers have been dropping while their performance have been growing. Consequently, digital controllers have became the central key in developments in important and innovative fields such as aeronautics \textbf{[reference]} and autonomous driving \textbf{[reference]}. In parallel, this theory is also useful to understand and bring inspiration from nature itself since, for instance, the mechanisms for temperature regulation observed in vertebrate animals behave as a feedback controller \cite{Heller:1978}.
+
+Most recent developments in Control Theory focus on using Feedback Controllers to achieve \textit{Robust and Optimal Control}. This theory accounts for the design of controllers that deals with uncertainty, either from the model or from the observation of the system, and are able to achieve the control objectives in a \textit{optimal manner}. Despite being a few decades old, these fields have gained a lot of interest in the last years thanks to recent results in \textit{Machine Learning}, particularly in \textit{Reinforcement Learning}, that are having success in using optimization techniques for artificial agents to control themselves in environments loaded with uncertainty \textbf{[reference]}.
+
+Furthermore, the specific application of controlling chemical reactor systems brings benefits from the fact that chemical reactions are present in most biological and industrial processes. In this sense, controllers can be used to guarantee safety constraints, maximize productivity and minimize the use of resources, in such way that is unfeasible without automatic and high performing machinery.
+
+\section{Objectives}
+
+This works aims to provide a self-contained discussion of modelling and control of chemical reactive systems in the perspective of modern control theory. Therefore, the results are focused on \textit{state feedback controllers} modelled in continuous and discrete time, but analysis in the frequency domain is also considered in order to explain some concepts. Several properties of these models, both in the open-loop and closed-loop regime, are summarized in the document and the intention is to have a generalized framework to understand, evaluate and design those systems. Finally, the theory of more advanced methods such as optimal estimation and optimal control is also developed in the same sense.
+
+\section{Chapters Organization}
+
+The chapters of this document are mainly organized in two parts. The first part, comprised by the chapters 2, 3 and 4, builds the necessary theoretical background and provides the mathematical framework for the applications. The second part, comprised by the chapters 5 and 6, describes the experiments and results of applying these methods in real-world applications.
+
+Individually, the chapters are organized as follows: chapter 2 introduces the dynamical models and its several properties with respect to the real system behavior, chapter 3 discusses classical methods in developing automatic controllers and state observers, chapter 4 presents more advanced methods in optimal estimation and optimal control, chapter 5 describes the practical experiments used to validate the previous discussions, chapter 6 summarizes and discusses the results of the experiments and evaluate the several controllers performances and, finally, chapter 7 provides the conclusion of the document and possible future works.
+
+% 2 - Dynamical System Modelling
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Dynamical System Analysis}
+
+This chapter discuss the mathematical models for dynamical systems and its use in response analysis. The sections starts by introducing a procedure to build models from physical principles and presenting equivalent common representations. Next, the response of systems, both in time domain and frequency domain, are analyzed in the light of such models, relating the mathematical structure with the dynamical behavior. Finally, some important properties are defined and proved using this formulation.
+
+\section{Model from First Principles}
+
+A dynamical system is a physical system whose states evolves with time. For this reason, one can represent a dynamical system using the \textit{first principles} from physics itself, and formulate the evolution in time by calculating the rate of change of the states in respect to time. Thus, dynamical model can be equated using differential equations, with time derivatives. 
+
+A straightforward procedure to model a system consists in identify the variables of interest and relate them using conservation laws, such as conservation of mass, conservation of energy or conservation of momentum. The resulting differential equations are in the form:
+\begin{equation}
+	\begin{pmatrix}
+		\text{Rate of} \\ \text{Accumulation}
+	\end{pmatrix} = \begin{pmatrix}
+		\text{Mass/Energy/Momentum} \\ \text{entering the System}
+	\end{pmatrix} - \begin{pmatrix}
+		\text{Mass/Energy/Momentum} \\ \text{leaving the System}
+	\end{pmatrix}
+\end{equation}
+
+The choice of which conservation law to use depends on the system itself, since the variables of interest can provide dynamics to the system in many forms. Usually, conservation of mass is used to relate dynamics of concentrations and volumes, or other material variables, while conservation of momentum is often used to relate dynamics of motion. Since energy can be converted on form, the conservation laws of this quantity can be used to model several dynamics, such as the rate of change in heat, electrical charges or velocity of a system.
+
+In the case of a chemical reactor system, the variables of interest are the concentrations of the chemical substances in the system. Hence, the rate of accumulation of a substance can be represented using the mass conservation law, or mass balance:
+\begin{equation}
+\begin{split}
+	\begin{pmatrix}
+		\text{Accumulation} \\ \text{of mass} \\ \text{in the system}
+	\end{pmatrix} &= 
+	\begin{pmatrix}
+		\text{Mass} \\ \text{entering} \\ \text{the System}
+	\end{pmatrix} - \begin{pmatrix}
+		\text{Mass} \\ \text{leaving} \\ \text{the System}
+	\end{pmatrix} \\
+	&= \left[ \begin{pmatrix}
+		\text{Mass flow} \\ \text{entering} \\ \text{System}
+	\end{pmatrix} + \begin{pmatrix}
+		\text{Mass} \\  \text{produced} \\ \text{by reactions}
+	\end{pmatrix} \right] - \left[ \begin{pmatrix}
+		\text{Mass flow} \\ \text{leaving} \\ \text{System}
+	\end{pmatrix} + \begin{pmatrix}
+		\text{Mass} \\ \text{consumed} \\ \text{by reactions}
+	\end{pmatrix} \right]
+\end{split}
+\end{equation}
+
+From definition, mass is a quantity obtain by integrating the density (or concentration) $\rho$ of a material trough a volume $V$. If the density is assumed constant throughout this volume, the result is the simple equation:
+\begin{equation}
+	M = \int_V \rho dV = \rho \int_V dV = \rho V
+\end{equation}
+
+Hence, the mass flow of any substance $A$ entering and leaving the system, $M_{in}$ and $M_{out}$, respectively, given a fluid inflow $F_{in}$ with density $\rho_{in}$ and a fluid outflow $F_{out}$ with $\rho_{out}$, can be calculated as:
+\begin{equation}
+	\begin{matrix}
+		M_{in} = \rho_{in} F_{in} & & M_{out} = \rho_{out} F_{out}
+	\end{matrix}
+\end{equation}
+
+To calculate the mass contribution from the reactions, it is necessarily to formulate the mass contribution for a single reaction, first. In this case, consider a reaction between two chemical compounds $A$ and $B$, with stoichiometric numbers $s_{a}$ and $s_{b}$:
+\begin{equation} \label{eq:simpleEq01}
+	s_{a} A \overset{K_{AB}}{\longrightarrow} s_{b} B
+\end{equation}
+
+Under the assumption that the reactant is in a dilute solution, the rate of this equation obeys the \textit{law of mass action} \textbf{[seek reference]}. Given the kinetic rate $K_{AB}$ and the volume of the solution $V$, and considering the constant concentrations $\rho_A$ and $\rho_B$, the mass of $A$ consumed, $M^{(A)}_\text{cons}$, and the mass of $B$ produced, $M^{(B)}_\text{prod}$, are given by the power-law:
+\begin{equation}
+	\begin{matrix}
+		M^{(A)}_\text{cons} = \cfrac{V}{s_B} K_{AB} (\rho_A)^{s_{a}} & & M^{(B)}_\text{prod} = \cfrac{V}{s_A} K_{AB} (\rho_A)^{s_{a}}
+	\end{matrix}
+\end{equation}
+
+Now, consider the generalized form of a chemical reaction network, defined in Equation \eqref{eq:chemNetwork}. It is possible to obtain an equivalent representation after converting a chain of series equations in parallel equations, since each step of the series reactions also occurs simultaneously:
+\begin{equation} \label{eq:newChemNetwork}
+\left\{ \begin{matrix}
+    \mathcal{R}^{(1)}  \longrightarrow & \cdots \longrightarrow & \mathcal{I}^{(1)}_{M_1} \longrightarrow & \mathcal{P}^{(1)}
+\end{matrix} \right. \Longleftrightarrow \left\{ \begin{matrix}
+    \mathcal{R}^{(1)}  & \longrightarrow & \mathcal{I}^{(1)}_1  \\ 
+    \mathcal{I}^{(1)}_1 & \longrightarrow & \mathcal{I}^{(1)}_2 \\
+	 & \vdots & \\
+	\mathcal{I}^{(1)}_{M_1} & \longrightarrow & \mathcal{P}^{(1)}
+\end{matrix} \right.
+\end{equation} 
+
+Thus, it is possible to convert the entire network into direct reactions in the form $\mathcal{R} \rightarrow \mathcal{P}$. In this sense, define the new reactant set as $\mathcal{SR} = \mathcal{R}^{(i)} \cup \mathcal{I}_1^{(i)} \cup \cdots \cup \mathcal{I}_{M_i}^{(i)},\ i = 1,2,...,N$, and similarly define the new product set as $\mathcal{SP} = \mathcal{P}^{(i)} \cup \mathcal{I}_1^{(i)} \cup \cdots \cup \mathcal{I}_{M_i}^{(i)},\ i = 1,2,...,N$. 
+
+If each individual reactant set and product set are singleton, i.e., all the parallel reactions are in the form of Equation \eqref{eq:simpleEq01}, it is easy to calculate the mass contribution to a substance due to the entire network of reactions. Let $\mathcal{R}_A$ be the set of all reactions where a substance $A$ is a reactant in the network, and let $\mathcal{P}_A$ be the set of all reactions where the same substance $A$ is a product, after converting the entire network to the parallel form of Equation \eqref{eq:newChemNetwork}. More formally, define these sets as: 
+\begin{equation}
+	\begin{matrix}
+		\mathcal{R}_A = \left\{ s_A A \overset{K_{AX}}{\rightarrow} s_X X,\ \forall A \in \mathcal{SR} \right\} & & \mathcal{P}_A = \left\{ s_X X \overset{K_{XA}}{\rightarrow} s_A A,\ \forall A \in \mathcal{SP} \right\}
+	\end{matrix}
+\end{equation}
+
+Assuming that the network represents a set of reactions occurring within an chemical solution of volume $V$, the mass of a substance $A$, with concentration $\rho_A$, that is consumed and produced by the reactions, $M^{(A)}_\text{cons}$ and $M^{(B)}_\text{prod}$, respectively, are given by the summation:
+\begin{equation}
+		M_\text{cons} = V \sum_{\mathcal{R_A}} \cfrac{1}{s_X} K_{AX} (\rho_A)^{s_{A}}\ \ \ \ \  M_\text{prod} = V \sum_{\mathcal{P_A}} \cfrac{1}{s_A} K_{XA} (\rho_X)^{s_{X}}
+\end{equation}
+
+Finally, packing all together, the mass balance of any substance $A$ in a isothermal chemical reactive system can be represented by the general dynamical model:
+\begin{equation}
+		\cfrac{d (\rho_A V)}{dt} = \left[ \rho_{in} F_{in} + V \sum_{\mathcal{P_A}} \cfrac{1}{s_A} K_{XA} (\rho_X)^{s_{X}} \right] - \left[ \rho_{out} F_{out} + V \sum_{\mathcal{R_A}} \cfrac{1}{s_X} K_{AX} (\rho_A)^{s_{A}} \right]
+\end{equation}
+
+In real processes, the fluid flows $F_{out}$ and $F_{in}$ are manipulated variables of the system. A common practice is to operate using $F_{out} = F_{in} = F$ so that the volume of the chemical solution becomes constant, assuming that there are no leaks and that the system is closed. This is a desired condition because it eliminates the need to model the dynamics of the volume, usually not the variable of interest. In this case, the model can be simplified by normalizing all the terms by the volume and defining a new variable $q = F/V$ so that:
+\begin{equation} \label{eq:isoModel1}
+		\cfrac{d (\rho_A)}{dt} = q (\rho_{in} - \rho_{out}) + \left( \sum_{\mathcal{P_A}} \cfrac{1}{s_A} K_{XA} (\rho_X)^{s_{X}} \right) - \left(\sum_{\mathcal{R_A}} \cfrac{1}{s_X} K_{AX} (\rho_A)^{s_{A}} \right)
+\end{equation}
+
+This is a simple model that can describe several applications, and the same modeling procedure can be used to describe more complex systems. In addition to this realization, it is possible to extend the description to account for exothermic and endothermic processes. In this case, the kinetics constants $K_{AB}$ becomes functions of the temperature in the system, following the Arrhenius equation presented in Equation \eqref{eq:arrhenius1} and rewritten here:
+\begin{equation} \label{eq:arrhenius2}
+	K_{AB}(T) = K_{AB_0} e^{-E_{AB} / T}
+\end{equation}
+
+In this formula, the term $K_{AB_0}$ is the frequency factor and $E_{AB}$ is the activation energy necessary for such reaction to occur. Notice that, in the case that the temperature $T$ is constant, the kinetic rate is also constant and be calculated using this equation. By substituting \eqref{eq:arrhenius2} into \eqref{eq:isoModel1}, the resulting and more general model is:
+\begin{equation} \label{eq:isoModel2}
+		\cfrac{d (\rho_A)}{dt} = q (\rho_{in} - \rho_{out}) + \left( \sum_{\mathcal{P_A}} \cfrac{1}{s_A} K_{XA_0} e^{-E_{XA} / T} (\rho_X)^{s_{X}} \right) - \left(\sum_{\mathcal{R_A}} \cfrac{1}{s_X} K_{AX_0} e^{-E_{AX} / T} (\rho_A)^{s_{A}} \right)
+\end{equation}
+
+When discussing non-isothermal processes, it is also common to discuss heating or cooling systems that tries to impose certain operational conditions to the reactions. In exothermic processes, for instance, the heat accumulated in the system tends to grows as the reactions occurs, which can be very dangerous. Therefore, it is useful to model the evolution in time of these systems and its relationships with the previous model.
+
+One approach to regulate the temperature consists in involving the chemical solution, or the container containing it, with a material whose temperature can be manipulated, transferring heat by conductance. The temperature of this material can be manipulated by, for instance, running a heated fluid or converting electrical energy to heat energy. Then, the dynamics of temperature inside this regulator system can be formulated by conservation of heat energy:
+\begin{equation} \label{eq:jacket01}
+\begin{split}
+	\begin{pmatrix}
+		\text{Accumulation} \\ \text{of heat}
+	\end{pmatrix} &= \begin{pmatrix}
+		\text{Heat entering} \\ \text{the System}
+	\end{pmatrix} - \begin{pmatrix}
+		\text{Heat leaving} \\ \text{the System}
+	\end{pmatrix} \\
+	\cfrac{d (T_R)}{dt} &= Q + \beta (T - T_R)
+\end{split}
+\end{equation}
+
+In this model, the term $Q$ accounts for the direct heat manipulated to the material (e.g., trough a fluid or electrical energy) while the term $\beta (T - T_R)$ represents the heat transfer from this system to the original reactive one. Using the same conservation law, it is possible to describe the evolution of the temperature of the chemical solution in the reactive system. In this case, however: 
+\begin{equation}
+\begin{split}
+	\begin{pmatrix}
+		\text{Accumulation} \\ \text{of heat}
+	\end{pmatrix} &= \begin{pmatrix}
+		\text{Heat entering} \\ \text{the System}
+	\end{pmatrix} - \begin{pmatrix}
+		\text{Heat leaving} \\ \text{the System}
+	\end{pmatrix} \\
+	 &= \begin{pmatrix}
+		\text{Heat transfer} \\ \text{from mass-flow}
+	\end{pmatrix} + \begin{pmatrix}
+		\text{Heat transfer} \\ \text{from regulator}
+	\end{pmatrix} + \begin{pmatrix}
+		\text{Entropy} \\ \text{contribution} \\ \text{from reactions}
+	\end{pmatrix}
+\end{split}
+\end{equation}
+
+In this case, the heat transfer direction is oriented from the material with higher temperature to the one with lower temperature. The flow of fluid entering the reactive system can contribute to the heat if its temperature is different from that of the solution, in addition to the contribution from the heating or cooling system itself. The third contribution, however, is provided by the energy released or absorbed from each chemical reaction. For a simple reaction, such as the one in Equation \eqref{eq:simpleEq01}, the temperature \textbf{[seek reference]}. 
+
+[..]
+
+\section{Mathematical Models of Systems}
+
+The last section presented the basis for modeling a dynamical system using first principles from physics. Although it was a well-defined formulation, the resulting models from that procedure are not guaranteed to be practical in a mathematical sense. This is to due to the fact that the differential equations, as evidenced in Equation \eqref{eq:isoModel2}, are usually non-linear functions of the variables of interest, and the analysis of such functions are quite more challenging. 
+
+In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations, both depicted in Figure \textbf{!!!}. 
+
+[img]
+
+The first representation, as already discussed, is a cause-and-effect interpretation of a system in which the model maps a input signal, denoted as $u(t) : \mathcal{R} \rightarrow \mathcal{R}$, directly to a output signal, denoted as $y(t) : \mathcal{R} \rightarrow \mathcal{R}$. It is formulated as the differential equation:
+\begin{equation} \label{eq:IORepr01}
+\begin{split}
+    \alpha_n \cfrac{d^n y(t)}{dt^n} + \alpha_{n-1} \cfrac{d^{n-1} y(t)}{dt^{n-1}} &+ \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) = \\
+    & \beta_m \cfrac{d^m u(t)}{dt^m} + \beta_{m-1} \cfrac{d^{m-1} u(t)}{dt^{m-1}} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t)
+\end{split}
+\end{equation}
+
+\noindent where the parameters $\alpha_0, \alpha_1, ..., \alpha_n$ and $\beta_0, \beta_1, ..., \beta_m$ are individual functions of any domain $\mathcal{D}$, so that $\alpha_i : \mathcal{D}_i \rightarrow \mathcal{R}, i = 1,2,...,n$ and $\beta_j : \mathcal{D}_j \rightarrow \mathcal{R}, j = 1,2,...,m$. A system with order of derivation $n$ in the outputs is known as a \textit{$n$-th Order System}.
+
+In practice, the input signal $u(t)$ is given by a manipulated variable, where the output signal $y(t)$ is the result in the controlled variable. This is known as a \textit{Single-Input Single-Output} (SISO) configuration. To represent a configuration where there are $r$ manipulated variables influencing $p$ controlled variables, i.e., $\mathbf{u}(t) : \mathcal{R} \rightarrow \mathcal{R}^r$ and $\mathbf{y}(t) : \mathcal{R} \rightarrow \mathcal{R}^p$, the IO representation consists in having a differential equation for each pair $(u_i(t), y_j(t)),\ i = 1,2,...,r,\ j = 1,2,...,p$. The result is a matrix of differential equations describing a \textit{Multiple-Input Multiple-Output} (MIMO) configuration.
+
+The State-Space representation is yet another formulation for a dynamical model, but centered in the concept of \textit{state variables}, denoted $\mathbf{x}(t) : \mathcal{R} \rightarrow \mathcal{R}^n$. A system with $n$ states is known as a \textit{$n$-th Order System}, similar to the IO representation. Those are variables that stores informations about the intrinsic state of the system, and can be used to determine the output $\mathbf{y}(t)$ given any input $\mathbf{u}(t)$, similarly to the IO representation. This model is formulated as a set of $n$ ordinary differential equations describing the evolution of the states and a single algebraic equation describing the output as observed through the states: 
+\begin{align} \label{eq:SSRepr01}
+\begin{cases}
+	\dot{\mathbf{x}}(t) &= \bm{f}(\bm{x}(t), u(t), t) \\
+	y(t) &= g(\bm{x}(t), u(t), t) 	
+\end{cases} \Leftrightarrow \begin{cases}
+	\dot{x}_1(t) &= f_1(x_1(t), x_2(t), \cdots, x_n(t), u(t), t) \\
+	\dot{x}_2(t) &= f_2(x_1(t), x_2(t), \cdots, x_n(t), u(t), t) \\
+	 \vdots \\
+	\dot{x}_n(t) &= f_n(x_1(t), x_2(t), \cdots, x_n(t), u(t), t) \\
+	y(t) &= g(x_1(t), x_2(t), \cdots, x_n(t), u(t), t) 
+\end{cases}
+\end{align}
+
+\noindent where $\dot{x}_i(t) = d(x_i(t))/dt,\ i \in \{1,2,..,n\},$ and $\bm{f}$ is a vectorial function describing the internal behavior of the system through the states. A nice property of the SS representation is that the extension to the MIMO configuration is done by augmenting the original formulation with more algebraic output equations, and changing the parameters to include the new input variables. Therefore, the number of state equations does not depends on the number of other variables:
+\begin{align} \label{eq:SSRepr02}
+\begin{cases}
+	\dot{\bm{x}}(t) &= \bm{f}(\bm{x}(t), \bm{u}(t), t) \\
+	\bm{y}(t) &= \bm{g}(\bm{x}(t), \bm{u}(t), t) 	
+\end{cases} \Leftrightarrow \begin{cases}
+	\dot{x}_1(t) &= f_1(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) \\
+	\dot{x}_2(t) &= f_2(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) \\
+	 \vdots \\
+	\dot{x}_n(t) &= f_n(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) \\
+	y_1(t) &= g_1(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) \\
+	y_2(t) &= g_2(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) \\
+	\vdots \\
+	y_p(t) &= g_p(x_1(t), \cdots, x_n(t), u_1(t), \cdots, u_r(t), t) 
+\end{cases}
+\end{align}
+
+Now, it is possible to classify the systems in respect to the structure of the mathematical models describing them. There are five main properties used for this classification: if the system is causal or non-causal, linear or non-linear, dynamical or instantaneous, time-invariant or time-varying and with or without delay. The necessary and sufficient conditions for each one of these properties, in respect to models, is summarized in Table \ref{table:classes01}.
+
+\begin{table}[hp]
+	\centering
+	\begin{tabular}{r | c | c }
+	 & \textbf{Input-Output} & \textbf{State-Space} \\
+	\hline 
+		\textbf{Causal}			& $m \leq n$ & Always causal \\
+	\hline 
+		\textbf{Linear}			& \makecell{$y(t) \notin \mathcal{D}_i, i=1,2,...,n$\\$u(t) \notin \mathcal{D}_j, j=1,2,...,m$} & \makecell{$f_i = \bm{a}_i(t) \bm{x}(t) + \bm{b}_i(t) \bm{u}(t), i = 1,2,...,n$ \\ $g_j = \bm{c}_j(t) \bm{x}(t) + \bm{d}_j(t) \bm{u}(t), j = 1,2,...,p$ \\ $\bm{a}_i,\bm{c}_j \in \mathcal{R}^{1 \times n}$ and $\bm{b}_i, \bm{d}_j \in \mathcal{R}^{1 \times r}$} \\
+	\hline 
+		\textbf{Dynamical}		& $n > 0$ or $m > 0$ & $n > 0$ \\
+	\hline 
+		\textbf{Time-Invariant}	& \makecell{$t \notin \mathcal{D}_i, i=1,2,...,n$\\$t \notin \mathcal{D}_j, j=1,2,...,m$} & \makecell{$\dot{\bm{x}}(t) = \bm{f}(\bm{x}(t), \bm{u}(t))$ \\ $\bm{y}(t) = \bm{g}(\bm{x}(t), \bm{u}(t))$} \\
+	\hline 
+		\textbf{Without-Delay}	& \makecell{All the signals share\\the same arguments} & \makecell{All the signals share\\the same arguments} \\
+	\end{tabular} 
+	\caption{necessary and sufficient conditions for model classifications.}
+	\label{table:classes01}	
+\end{table} 
+
+This work focus on dynamical linear systems, since its models are the most well studied in the control theory community. Under this assumption, a nice result is the possibility to represent the SS representation of Equation \eqref{eq:SSRepr02} in a matrix form:
+\begin{align} \label{eq:SSRepr03}
+\begin{cases}
+	\dot{\bm{x}}(t) &= \bm{A}(t) \bm{x}(t) + \bm{B}(t) \bm{u}(t) \\
+	\bm{y}(t) &= \bm{C}(t) \bm{x}(t) + \bm{D}(t) \bm{u}(t)
+\end{cases}
+\end{align}
+
+\noindent where $\bm{A}(t) : \mathcal{R} \rightarrow \mathcal{R}^{n \times n}$, $\bm{B}(t) : \mathcal{R} \rightarrow \mathcal{R}^{n \times r}$, $\bm{C}(t) : \mathcal{R} \rightarrow \mathcal{R}^{p \times n}$ and $\bm{D}(t) : \mathcal{R} \rightarrow \mathcal{R}^{p \times r}$. In the case of a time-invariant system linear system, these matrices becomes constants. 
+
+This formulation has the advantages that the time response of the system can be easily calculated and the analysis of the dynamics follows useful results from linear algebra. Furthermore, the representation benefits from the use of state variables to enhance the interpretation of the model, which is usually not so straightforward in IO representation. Thus, the model presented in Equation \eqref{eq:SSRepr03} will be the basis for the results later in this document.
+
+In addition to the SS representation, the linear assumption also benefits IO representations as defined in Equation \eqref{eq:IORepr01}. One major analytical tool that can be used in these cases is to transform this model to a frequency domain, using an linear transform operator, in order to simplify the differential equation. The most popular choice of transformation is the \textit{Laplace transform}, $\mathcal{L}\{ h(t) \}$, which converts functions in time to functions in complex frequencies. Using the Laplace transform theorems, differential equations are transformed into algebraic equations, simplifying the model:
+\begin{equation} \label{eq:IORepr02}
+\begin{split}
+    \mathcal{L} \left\{\alpha_n \cfrac{d^n y(t)}{dt^n} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) \right\}  &= \mathcal{L} \left\{ \beta_m \cfrac{d^m u(t)}{dt^m} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t) \right \}  \\
+    \alpha_0 Y(s) + \sum_{i=1}^{n} \alpha_i \left(s^i Y(s) - \sum^{i-1}_{j = 0} s^j \cfrac{d^j y(0^-)}{dt^j} \right) &= \beta_0 U(s) + \sum_{k=1}^{m} \beta_i \left(s^i U(s) - \sum^{k-1}_{l = 0} s^l \cfrac{d^l u(0^-)}{dt^l} \right)
+\end{split}
+\end{equation}
+
+By assuming that all the initial conditions are zero, $y(0^-) = u(0^-) = 0$, and doing some basic algebra, this model can be even more simplified to a relation popularly known as the transfer function, $G(s)$, between the output, $Y(s)$, and input, $U(s)$:
+\begin{equation} \label{eq:transFun01}
+ G(s) = \cfrac{Y(s)}{U(s)} = \cfrac{\beta_m s^m + \beta_{m-1} s^{m-1} + \beta_{1} s + \beta_0}{\alpha_n s^n + \alpha_{n-1} s^{n-1} + \alpha_{1} s + \alpha_0}
+\end{equation}
+
+An indirect result of this is that the SS representation can be converted to the IO representation using basically the same procedure. Consider, for instance, the Laplace transform on the state equations of a LTI system, with initial states $\bm{x}(0^-) \equiv 0$:
+\begin{equation} \label{eq:convertSSIO01}
+\begin{split}
+	\mathcal{L} \left\{ \dot{\bm{x}}(t) \right\} &= \bm{A} \mathcal{L} \left\{ \bm{x}(t) \right\} + \bm{B} \mathcal{L} \left\{ u(t) \right\} \\
+	s \bm{X}(s) - \dot{\bm{x}}(0^-) &= \bm{A} \bm{X}(s) + \bm{B} \bm{U}(s) \\
+	(s\bm{I}  - \bm{A}) \bm{X}(s) &=  \bm{B} \bm{U}(s) \\
+	 \bm{X}(s) &= (s\bm{I}  - \bm{A})^{-1} \bm{B} \bm{U}(s)
+\end{split}
+\end{equation}
+
+By applying the same procedure in the output equations, using the previous result, the Laplace transform of the output is:
+\begin{equation} \label{eq:convertSSIO02}
+\begin{split}
+	\mathcal{L} \left\{ \bm{y}(t) \right\} &= \bm{C} \mathcal{L} \left\{ \bm{y}(t) \right\} + \bm{D} \mathcal{L} \left\{ u(t) \right\} \\
+	\bm{Y}(s)  &= \bm{C} \bm{X}(s) + \bm{D} \bm{U}(s) \\
+	\bm{Y}(s)  &= \bm{C} \left( (s\bm{I}  - \bm{A})^{-1} \bm{B} \bm{U}(s) \right) + \bm{D} \bm{U}(s) \\
+	\bm{Y}(s)  &= \left( \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B}   + \bm{D} \right) \bm{U}(s) \\
+\end{split}
+\end{equation}
+
+In conclusion, it is possible to obtain the transfer function matrix $\bm{G}(s) = \bm{Y}(s)\bm{U}^{-1}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B}   + \bm{D}$ as an equivalent representation of the same system.
+
+Despite of the discussion about the benefits of linear models, it is necessary to account for the fact that physical systems will present, in most situations, non-linear behavior, as evidenced in Equation \eqref{eq:isoModel2}. For this reason, some effort must be done to develop a linear model that can describe the non-linear behavior with certain accuracy, even if over some small region of the space. With this motivation, a technique for \textit{linearization} of a non-linear model, such as the one developed by the first principle method, is detailed below.
+
+Consider a system represented by state equations $\bm{f}(.)$ and output equations $\bm{g}(.)$, with steady-state operation points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$. Now, consider a small perturbation $\Delta u(t)$ in the input signal around these operation points. This perturbation will result in small changes in the state and output variables:
+\begin{align}
+\begin{cases}
+	\bm{x}(t) &= \bm{x}_o + \Delta \bm{x}(t) \\
+	\bm{u}(t) &= \bm{u}_o + \Delta \bm{u}(t) \\
+	\bm{y}(t) &= \bm{y}_o + \Delta \bm{y}(t) \\
+\end{cases}
+\end{align}
+
+This results in the following configuration on the State-Space:
+\begin{align}
+\begin{cases}
+	\cfrac{d(\bm{x}_o + \Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o + \Delta \bm{x}(t), \bm{u}_o + \Delta \bm{u}(t) ) \\
+	\bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o + \Delta \bm{x}(t), \bm{u}_o + \Delta \bm{u}(t) ) \\
+\end{cases}
+\end{align}
+
+Where $d(\bm{x}_o + \Delta \bm{x}(t)) / dt = d(\Delta \bm{x}(t)) / dt$, since $\bm{x}_o$ is constant. The perturbations are very close to the operation points, and hence the functions $f(.)$ and $g(.)$ can be fairly approximated by a Taylor series expansion, yielding:
+\begin{align}
+\begin{cases}
+	\cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{s} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{s}  \Delta \bm{u}(t) + \text{high order terms} \\ \\
+	\mathbf{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{s} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{s}  \Delta \bm{u}(t) + \text{high order terms} \\
+\end{cases}
+\end{align}
+
+Since the steady-state condition implies zero variation, it is possible to assume $f(\bm{x}_o, \bm{u}_o) = 0$ and $g(\bm{x}_o, \bm{u}_o) = 0$, since they are ordinary differential equations. Truncating in the first order terms and substituting $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o$, $\Delta \bm{u}(t) = \bm{u}(t) - \bm{u}_o$ and $\Delta \bm{y}(t) = \bm{y}(t) - \bm{y}_o$ results in:
+\begin{align}
+\begin{cases}
+	\cfrac{d(\Delta \bm{x}(t))}{dt} &=\left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{s} (\bm{x}(t) - \bm{x}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{s}  (\bm{u}(t) - \bm{u}_o) \\ \\
+	\Delta \bm{y}(t) &= \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{s} (\bm{x}(t) - \bm{x}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{s}  (\bm{u}(t) - \bm{u}_o) \\
+\end{cases}
+\end{align}
+
+Finally, since all the Jacobians involved are actually matrices of appropriate dimensions, the final linear approximation of the system is the SS model given by:
+\begin{align}
+\begin{cases}
+	\Delta \bm{\dot{x}}(t) &= \bm{A}\Delta \bm{x}(t) + \bm{B}\Delta \bm{u}(t) \\
+	\Delta \bm{y}(t) &= \bm{C}\Delta \bm{x}(t) + \bm{D}\Delta \bm{u}(t)
+\end{cases}
+\end{align}
+
+\section{Time Response Analysis}
+
+Once that a model is well-established, it is possible to simulate the system and analyze its response, both in a natural or forced regime. This section, then, focus on developing a quantitative understanding of a system behavior through a linear model. The results are focused on continuous-time response of LTI systems (however, the extension to discrete-time models is straightforward):
+\begin{align}
+\begin{cases}
+	\bm{\dot{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) \\
+	\bm{y}(t) &= \bm{C} \bm{x}(t) + \bm{D} \bm{u}(t)
+\end{cases}
+\end{align}
+
+First of all, it is necessary so access some properties of the matrix $\bm{A}$, which describes the natural evolution of the states. 
+
+\begin{definition}{(State-Transition Matrix)} \label{def:stateTransM}
+	Consider any model in SS representation with matrix $\bm{A} \in \mathcal{R}^{n \times n}$. the State-Transition Matrix, $e^{\bm{A}t} \in \mathcal{R}^{n \times n}$ , of this system is the converging series:
+\begin{equation}
+	e^{\bm{A}t} = \bm{I} + \bm{At} + \cfrac{\bm{A}^2 t^2}{2!} + \cfrac{\bm{A}^3 t^3}{3!} + \cdots = \sum_{k=0}^{\infty} \cfrac{A^k t^k}{k!}
+\end{equation} 
+\end{definition}
+
+This matrix is central to the computation of the system time response, as it will be shown shortly. Since the matrix $A$ is a square matrix, this operation leads to some useful properties, as stated below:
+
+\begin{boxed-theorem}{} \label{th:stateTransMProp}
+	Consider a matrix exponential as in Definition \ref{def:stateTransM}, for a matrix $\bm{A}  \in \mathcal{R}^{n \times n}$. Then:
+	
+\begin{tabular}{c c c c c}
+		1. $\cfrac{d ( e^{\bm{A} t} )}{dt} = \bm{A} e^{\bm{A} t}$ & &
+		2. $e^{\bm{A} t} e^{\bm{A} \tau} = e^{\bm{A} (t - \tau)}$ & &
+		3. $e^{-\bm{A} t} e^{\bm{A} t} = e^{\bm{A} t} e^{-\bm{A} t} = \bm{I}$
+	\end{tabular}
+\end{boxed-theorem}
+
+\begin{proof}
+	Consider Definition \ref{def:stateTransM}. In this case:
+	\begin{equation}
+		\cfrac{d ( e^{\bm{A} t})}{dt} = \cfrac{d}{dt} \left( \sum_{k=0}^{\infty} \cfrac{\bm{A}^k  t^k}{k!} \right) = \sum_{k=1}^{\infty} \cfrac{\bm{A}^k  t^{k-1}}{(k-1)!}  = \bm{A} \sum_{k=1}^{\infty} \cfrac{\bm{A}^{k-1}  t^{k-1}}{(k-1)!}  = \bm{A} e^{\bm{A} t}
+	\end{equation}
+
+\noindent which proofs the first assertive. Similarly, it is possible to calculate:
+	\begin{equation}
+	\begin{split}
+		 e^{\bm{A} t} e^{\bm{A} \tau} = \left( \sum_{k=0}^{\infty} \cfrac{\bm{A}^k  t^k}{k!} \right) \left( \sum_{k=0}^{\infty} \cfrac{\bm{A}^k  \tau^k}{k!} \right) &= \bm{I} + \bm{A}(t-\tau) + \cfrac{\bm{A^2}}{2!}(t-\tau)^2 + \cfrac{\bm{A}^3}{3!}(t-\tau)^3 + ...  \\
+		 &= \sum_{k=0}^{\infty} \cfrac{\bm{A}^k}{k!} (t + \tau)^{k} = e^{\bm{A} (t+\tau)}
+	\end{split}
+	\end{equation}
+
+\noindent which proofs the second assertive.  Using this result, it is possible to prove the third assertive:
+	\begin{equation}
+		 e^{\bm{A} t} e^{-\bm{A} t} = e^{\bm{A} (t-t)} = e^{0} = \bm{I}  
+	\end{equation} 
+\end{proof}
+
+Given the properties proved in this theorem, the calculation of the time response of a system in SS representation becomes straightforward.
+
+\begin{boxed-theorem}{(Lagrange Formula)} \label{th:lagrangeForm}
+	Consider a LTI system in SS representation. Its response for any time $t \geq t_0,\ t$, initial state $\bm{x}(t_0)$ and input signal $\bm{u}(t)$ is given by the solutions of the state and output equation:
+	\begin{align}
+	\begin{cases}
+		\bm{x}(t) &= e^{\bm{A}(t - t_0)} \bm{x}(t) + \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau \\
+		\bm{y}(t) &= \bm{C} e^{\bm{A}(t - t_0)} \bm{x}(t) + \bm{C} \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau + \bm{D} \bm{u}(t)
+	\end{cases}
+	\end{align}
+\end{boxed-theorem}
+
+\begin{proof}
+	First of all, consider a system in SS representation with state equation as defined in Equation \eqref{eq:SSRepr03}. Multiplying both sides by $e^{-\bm{A} t}$:
+	\begin{equation} \label{eq:lagrTH01}
+	\begin{split}
+	    e^{-\bm{A} t} \dot{\bm{x}}(t) &= e^{-\bm{A} t} (\bm{A} \bm{x}(t) + \bm{B} \bm{u}(t)) \\
+	    e^{-\bm{A} t} \dot{\bm{x}}(t) - \bm{A}e^{-\bm{A} t} \bm{x}(t)  &=  e^{-\bm{A} t} \bm{B} \bm{u}(t)
+    \end{split}
+	\end{equation}
+	
+	Using the first assertive in Theorem \ref{th:stateTransMProp}, it is easy to see that $d[e^{-\bm{A} t} x(t)]/dt = e^{-\bm{A} t} \dot{\bm{x}}(t) - \bm{A} e^{-\bm{A} t} \bm{x}(t)$. Substituting this result in \eqref{eq:lagrTH01} and integrating both sides from $t_0$ to $t$:
+	\begin{equation} \label{eq:lagrTH02}
+	\begin{split}
+	    \cfrac{d(e^{-\bm{A} t} \bm{x}(t))}{dt} &= e^{-\bm{A} t} \bm{B} \bm{u}(t) \\
+	    \left. e^{-\bm{A} t} \bm{x}(t) \right|^{t}_{t_0}  &= \int_{t_0}^{t} e^{-\bm{A} t} \bm{B} \bm{u}(t) dt \\
+	    e^{-\bm{A} t} \bm{x}(t) - e^{-\bm{A} t_0} \bm{x}(t_0)  &= \int_{t_0}^{t} e^{-\bm{A} \tau} \bm{B} \bm{u}(\tau) d\tau
+    \end{split}
+	\end{equation}
+	
+	Multiplying both sides by $e^{\bm{A} t}$ and using the second and third assertive from Theorem \ref{th:stateTransMProp}, the state response can be calculated as:
+	\begin{equation} \label{eq:lagrTH03}
+	\begin{split}
+	    e^{\bm{A} t} \left( e^{-\bm{A} t} \bm{x}(t) \right. &- \left. e^{-\bm{A} t_0} \bm{x}(t_0) \right) = e^{\bm{A} t} \int_{t_0}^{t} e^{-\bm{A} \tau} \bm{B} \bm{u}(\tau) d\tau \\
+	    \bm{I} \bm{x}(t) &- e^{\bm{A} (t - t_0)} \bm{x}(t_0) = \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d\tau \\
+	    \bm{x}(t) &= e^{\bm{A} (t - t_0)} \bm{x}(t_0) + \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d\tau \\
+    \end{split}
+	\end{equation}
+	
+	Finally, substituting \eqref{eq:lagrTH03} into the output equation leads to:
+	\begin{equation} \label{eq:lagrTH04}
+	\begin{split}
+	    \bm{y}(t) &= \bm{C} \left( e^{\bm{A} (t - t_0)} \bm{x}(t_0) + \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d\tau \right) + \bm{D} \bm{u}(t) \\ 
+	    \bm{y}(t) &= \bm{C} e^{\bm{A}(t - t_0)} \bm{x}(t) + \bm{C} \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau + \bm{D} \bm{u}(t) 
+    \end{split}
+	\end{equation}
+\end{proof}
+
+When discussing the response of a system, the focus is actually directed to the state equation describing its dynamics, since the output equation only represents an observation of the system through the states. In this sense, the Lagrange formula exposes the nice characteristic of linear systems that the total response is a composition of two separated actions:
+\begin{equation}
+    \bm{x}(t) = \bm{x}_{\text{n}}(t) + \bm{x}_{\text{f}}(t) 
+\end{equation}
+
+\noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral. The only problem remaining is to compute the state-transition matrix, which can be done in several ways \cite{Moler_VanLoan:2003}. A specific method, known as the \textit{Sylvester expansion}, is an analytical solution that brings an interesting understanding of the system behavior through the state-state matrix $A$.
+
+\begin{boxed-theorem}{(Sylvester expansion)} \label{th:sylvester01}
+    Consider a matrix exponential function $f(\bm{A}) = e^{\bm{A} t}$ for any square matrix $\bm{A} \in \mathcal{R}^{n \times n}$, whose distinct eigenvalues $\bm{\lambda} \in \mathcal{R}^{m},\ m \leq n,$ of multiplicities $\bm{\nu} \in \mathcal{R}^m$ are given by the roots of the characteristic polynomial $(s\bm{I} - \bm{A})$. The result of this function can be expanded as:
+    \begin{equation} 
+        f(\bm{A}) = e^{\bm{A} t} = \beta_0(t) \bm{I} + \beta_1(t) \bm{A} + \beta_2(t) \bm{A}^2 + ... + \beta_{n-1}(t) \bm{A}^{n-1} = \sum_{i=0}^{n-1} \beta_i(t) \bm{A}^i
+    \end{equation} 
+    
+    \noindent where $\beta_i(t) : \mathcal{R} \rightarrow \mathcal{R},\ i = 1,2,...,n-1,$ are the functions of time that solve the linear system:
+    \begin{equation} 
+        \bm{V} \bm{\beta} = \bm{\eta}
+    \end{equation} 
+    
+    \noindent for matrices $\mathcal{\beta} = [\beta_0(t), \beta_1(t), ..., \beta_n(t)]^T$, $\mathcal{\eta} = [e^{\lambda_i t}, te^{\lambda_i t}, ..., t^{\nu_i-1}e^{\lambda_i t}]^T,\ i=1,2,...,m,$ and the confluent Vandermonde matrix $\bm{V} \in \mathcal{R}^{n \times n}$:
+    \begin{equation} 
+        \bm{V} = \begin{bmatrix}
+            1 & \lambda_j & \lambda_j^2 & \cdots & \lambda_j^{(\nu_j - 1)} & \cdots & \lambda_j^{n-1} \\
+            0 & 1 & 2\lambda_j & \cdots & (\nu_j - 1) \lambda_j^{(\nu_j - 1)} & \cdots & (n-1)\lambda_j^{n-2} \\
+            \vdots & \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+            0 & 0 & 0 & \cdots & (\nu_j - 1)! & \cdots & \cfrac{(n - 1)!}{(n - \nu_j)!}\lambda_j^{n-\nu_j} \\
+        \end{bmatrix}\ (j = 1,2,...,m)
+    \end{equation} 
+\end{boxed-theorem}
+
+\begin{proof}
+    \textbf{[Need to proof?]} Left as an exercise to the interested reader. See Cayley-Hamilton theorem and 1883 Sylvester article. 
+\end{proof}
+
+From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
+
+Consider, for the sake of illustration, a model in SS representation with matrix $\bm{A}$:
+\begin{equation}
+    \bm{A} = \begin{bmatrix} 
+        \alpha & \alpha & \alpha \\
+        0 & \alpha & \alpha \\
+        0 & 0 & \alpha
+    \end{bmatrix}
+\end{equation}
+
+It is easy to see that $\bm{\lambda} = [1, 1, 1]$. Solving the linear system defined in the Sylvester expansion yields $\bm{\beta} = [1, 1, 1]$. The resulting state-transition matrix is: 
+\begin{equation}
+    e^{\bm{A} t} = \begin{bmatrix} 
+        \alpha & \alpha & \alpha \\
+        0 & \alpha & \alpha \\
+        0 & 0 & \alpha
+    \end{bmatrix}
+\end{equation}
+
+A simulation in time, shown in Figure \textbf{!!!}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) \equiv 0,\ \forall t \in [t_0, t)$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
+
+[fig]
+
+Now, attention must be drawn to the case where the eigenvalues are not real, but complex and conjugate. 
+
+\begin{boxed-theorem}{} \label{th:sylvester02}
+    Consider the same matrix $\bm{A}$ defined in Theorem \ref{th:sylvester01}. Consider, now, that this matrix has two distinct eigenvalues $\lambda_c, \lambda_c' \in \mathcal{C}$ in the form $\lambda_c, \lambda_c' = \alpha \pm j \omega$. In this case, the linear system solved by the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ will have two equations:
+    \begin{align} \label{eq:sylvEq02}
+    \begin{cases}
+        \beta_0 + \alpha \beta_1 + \alpha^{2} \beta_2 + ... + \alpha^{n-1} \beta_{n-1} &= e^{\alpha t} cos(\omega t) \\
+        0 + \omega \beta_1 + \omega^{2} \beta_2 + ... + \omega^{n-1} \beta_{n-1} &= e^{\alpha t} sin(\omega t)
+    \end{cases}
+    \end{align}
+\end{boxed-theorem}
+
+\begin{proof}
+    Consider the matrix $\bm{A}$ with eigenvalues as specified and the Sylvester expansion as presented. In this case, there will be two equations in the system:
+    \begin{align} \label{eq:sylvEq01}
+    \begin{cases}
+        \beta_0 + \lambda_c \beta_1 + \lambda_c^2  \beta_2 + ... + \lambda_c^{n-1} \beta_{n-1} &= e^{\lambda_c t} \\
+        \beta_0 + \lambda_c' \beta_1 + \lambda_c'^{2} \beta_2 + ... + \lambda_c'^{n-1} \beta_{n-1} &= e^{\lambda_c' t}
+    \end{cases}
+    \end{align}
+    
+    Since the eigenvalues are complex and conjugate, it has that $\lambda_c + \lambda'_c = 2 \mathcal{R}e[\lambda_c]$ and $\lambda_c - \lambda'_c = 2j \mathcal{I}m[\lambda_c]$. Moreover, the Euler identity $e^{\alpha \pm j \omega} = e^{\alpha t}(cos(\omega) \pm j sin(\omega))$ shows that $e^{\lambda} + e^{\lambda'} = 2 e^{\alpha t} cos(\omega t)$ and $e^{\lambda} - e^{\lambda'} = 2 e^{\alpha t} sin(\omega t)$. Finally, the first row of $\ref{eq:sylvEq01}$ is obtained by summing the two rows of $\eqref{eq:sylvEq02}$ and dividing by $2$ and the second row of $\eqref{eq:sylvEq01}$ is obtained by subtracting the first row by the second row of $\eqref{eq:sylvEq02}$ and dividing by $2j$. 
+\end{proof}
+
+From the same reasons stated before, this result implies that the actual response of the system will have sinusoidal components that produces oscillations in the response. The modes associated with complex and conjugate eigenvalues are classified as \textit{pseudo-periodic}, since they are composed by an exponential growth (or decay) enveloping a sinusoidal function. Consider, again for the sake of illustration, the following system in SS representation:
+\begin{equation}
+    \bm{A} = \begin{bmatrix} 
+        \alpha & \alpha \\
+        \alpha & \alpha
+    \end{bmatrix}
+\end{equation}
+
+The eigenvalues of this system are $\bm{\lambda} = [1, 1]$. Solving the linear system defined in the Sylvester expansion, considering = the equivalent form of Theorem \ref{th:sylvester02}, yields $\bm{\beta} = [1, 1]$. The resulting state-transition matrix is: 
+\begin{equation}
+    e^{\bm{A} t} = \begin{bmatrix} 
+        \alpha & \alpha \\
+        \alpha & \alpha
+    \end{bmatrix}
+\end{equation}
+
+The elements of the resulting state-transition matrix are simulated for an specific time-interval and shown in Figure \textbf{!!!}. It is possible to see, in this case, the pseudo-periodic behavior of the complex conjugate modes, where the dashed lines represents the exponential envelope. 
+
+[fig]
+
+The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately excluded. Now, the analysis focus the opposite case.  
+
+Consider, for instance, the state response for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below. Considering initial states $\bm{x}^{(1)}(t_0) \equiv \bm{x}^{(2)}(t_0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, $t \in [t_0, \infty)$, the time evolution of these states are given in \textbf{!!!}.
+\begin{equation}
+\begin{matrix}
+    \bm{A}^{(1)} = \begin{bmatrix} 
+        \alpha 
+    \end{bmatrix} & b^{(1)} = \begin{bmatrix} \alpha \end{bmatrix} & & & \bm{A}^{(2)} = \begin{bmatrix} 
+        \alpha & \alpha \\
+        \alpha & \alpha
+    \end{bmatrix} & b^{(2)} = \begin{bmatrix} \alpha \\ \alpha \end{bmatrix}
+\end{matrix}
+\end{equation}
+
+[Fig]
+
+Those systems are comprised by, basically, just one aperiodic and one pseudo-periodic mode, respectively. Therefore, it is possible to consider that those are characteristic response of the modes to a unitary step input. The forced response to an unitary step is the default evolution used in literature to characterize the behavior of modes (and ultimately, of systems) in respect to some specifications defined below.
+
+\begin{definition}{(Unit-Step Response Specifications)}
+	Given an aperiodic mode $e^{\lambda t}$ of the matrix $\bm{A}$ associated with the eigenvalue $\lambda \in \mathcal{R}$, its contribution to the response has a time constant ($\tau$) defined as
+	\begin{equation}
+		\tau = - \cfrac{1}{\lambda}
+	\end{equation}	
+	
+	Furthermore, given pseudo-periodic modes $e^{\lambda t}$ and $e^{\lambda' t}$ of the matrix $\bm{A}$ associated with the eigenvalues $\lambda,\lambda' = \alpha \pm j \omega$, their contribution to the response has a time constant ($\tau$), a natural frequency ($\omega_n$) and a damping coefficient ($\zeta$) defined as:
+	\begin{equation}
+	\begin{matrix}
+		\tau = - \cfrac{1}{\alpha} & & & \omega_n = \sqrt{\alpha^2 + \omega^2} & & & \zeta = - \cfrac{\alpha}{\omega_n}
+	\end{matrix}
+	\end{equation}
+	
+\end{definition}   
+
+The specifications just defined provides a quantitative way to describe the response of a system in terms of time and frequencies. The time constant, for instance, is a quantity that represents the time needed for the mode to lost $63\%$ of its initial value, since $e^{\lambda \tau} = e^{-1} = 0.37$. A greater value of a time constant indicates that the system is able to "discharge" energy faster. The damping coefficient, by its turn, provides an information about the intensity of the peak in the pseudo-periodic responses, which is known as \textit{overshoot} (or \textit{undershoot} in the case that of a negative peak). From the perspective of control theory, these are some of the specifications used to define desirable behaviors to a controlled system.
+
+Notice that the response specifications are always functions of the real and imaginary parts of the discussed eigenvalues. This brings the possibility of a visualization in the complex plane to interpret how each eigenvalue contributes to the total response. A straightforward notion is that the closer an eigenvalue is to the imaginary axis, the faster is its contribution. Similarly, the furthest an eigenvalue is to the real axis, the more oscillatory is its contribution. Finally, a vector from the origin of the plane to a complex eigenvalue has a norm equal to the natural frequency ($\omega_n$) and the cosine of the angle formed with the imaginary axis is equal to the damping factor ($\zeta$). Finally, a simulation of the contributions from different eigenvalues are shown in \textbf{!!!!}.
+
+[fig] 
+
+
+\section{Similarity Transformations}
+
+A state-space representation can be interpreted, in some sense, as a system of coordinates. A state, in this context, represents a vector as visualized through this reference. Under the assumption of a linear time-invariant system, there is an intuition that is possible to change the representation of the states by changing this system of coordinates through some linear transformation, obtaining a different model to the same system. This is the motivation for the discussion in this section.
+
+\begin{definition}{(Similarity Transformation)}
+	Consider a system in SS representation described by the matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ and an invertible transformation matrix $\bm{P} \in \mathcal{R}^{n \times n}$. Making $\bm{z}(t) = \bm{P} \bm{x}(t)$ results in:
+	\begin{align}
+	\begin{cases}
+		\dot{\bm{z}}(t) = \tilde{\bm{A}} \bm{z}(t) + \tilde{\bm{B}} \bm{u}(t) & \\
+		\bm{y}(t) = \tilde{\bm{C}} \bm{z}(t) + \tilde{\bm{D}} \bm{u}(t)
+	\end{cases}	
+	\end{align}
+	
+	\noindent where:
+	\begin{equation}
+		\begin{matrix}
+			\tilde{\bm{A}} = \bm{P}^{-1} \bm{A} \bm{P} & \tilde{\bm{B}} = \bm{P}^{-1} \bm{B} & \tilde{\bm{C}} = \bm{C} \bm{P} & \tilde{\bm{D}} = \bm{D}
+		\end{matrix}
+	\end{equation}
+\end{definition}
+
+\section{Stability Analysis}
+
+at
+
+\section{Controlability and Observability}
+
+a
+
+\section{Frequency Response Analysis}
+
+Although the response of dynamical systems are naturally perceived in time, there are advantages of analyzing the models in a frequency domain perspective.
+
+% 3 - Controller Design
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Controller Design}
+
+a
+
+\section{Control Architectures}
+
+a
+
+\section{Full-State Feedback}
+
+a
+
+\section{Regulation and Reference Tracking}
+
+a
+
+\section{Deterministic State Observers}
+
+a
+
+% 4 - Optimal Control
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Optimal Control}
+
+a
+
+\section{General Formulation}
+
+a
+
+\section{Linear Quadratic Regulator (LQR)}
+
+a
+
+\section{Optimal State Estimators}
+
+a
+
+\section{Linear Quadratic Gaussian (LQG)}
+
+a
+
+\section{Robustness and Stability Analysis}
+
+
+% 5 - Methodology
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Methodology}
+
+a
+
+% 6 - Results and Discussion
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Results and Discussion}
+
+a
+
+% 7 - Conclusion
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Conclusion}
+
+a
+
+% Bibliography
+% ---------------------------------------------------------------
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliographystyle{apalike}
+\bibliography{citations}
+
+% A - Apêndice A
+% ---------------------------------------------------------------
+\clearpage
+\addcontentsline{toc}{chapter}{Appendix A}
+\chapter*{Appendix A}
+
+a
+	
+% ---------------------------------------------------------------
+% End document
+% ---------------------------------------------------------------
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Drafts:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Figure:
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[trim={0cm 0cm 0cm 0cm},clip,scale=1]{nameFigure}
+% 	\caption{caption of the figure.}
+% 	\label{fig:nameFigure}
+% \end{figure} \vskip0.25cm
+%
+%%%%% Equation:
+% \begin{equation} \label{eq:nameEquation}
+% \begin{split}
+%	 X = 1 + 1
+% \end{split}
+% \end{equation} \vskip0.25cm
+%
+%%%% Table:
+% \begin{table}[hp]
+% 	\centering
+% 	\begin{tabular}{l | c c }
+% 	Principal & Coluna1 & Coluna2 \\
+% 	\hline 
+% 	ABC	& 1 & 2 \\
+% 	DFG	& 3 & 4 \\
+% 	HIJ	& 5 & 6 \\
+% 	\end{tabular} 
+% 	\caption{caption of the table.}
+% 	\label{table:nameTable}	
+% \end{table} \vskip0.25cm
