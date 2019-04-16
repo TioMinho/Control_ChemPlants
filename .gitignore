@@ -39,3 +39,7 @@ slides/*
 .AppleDouble
 .LSOverride
 ._*
+
+# Images from the simulation folders #
+######################################
+*/simulation/*.pdf
