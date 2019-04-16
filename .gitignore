@@ -29,9 +29,9 @@ octave-workspace
 
 # Latex Temporary Files #
 #########################
-slides/*
-!slides/*.pdf
-!slides/imgs/*
+report/*
+!report/*.pdf
+!report/imgs/*
 
 # Mac OS strange folders #
 ##########################
