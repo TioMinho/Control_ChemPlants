@@ -9,7 +9,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Preamble %%
-cd /home/minhotmog/Dropbox/Research/TCC/Codes/
+%cd /home/minhotmog/Dropbox/Research/TCC/Codes/
 clc; clear all; close all;
 
 % Sets the Default Rendere to tbe the Painters
@@ -18,11 +18,17 @@ set(0, 'DefaultFigureRenderer', 'painters');
 % Some colors
 load('data/ccmap.mat');
 cpal = [209 17 65;    % 1 - Metro Red
-             0 177 89;     % 2 - Metro Green
-            0 174 219;    % 3 - Metro Blue
-           243 119 53;   % 4 - Metro Orange
-           255 196 37;   % 5 - Metro Yellow
-                              ]/255;  
+        0 177 89;     % 2 - Metro Green
+        0 174 219;    % 3 - Metro Blue
+        243 119 53;   % 4 - Metro Orange
+        255 196 37;   % 5 - Metro Yellow
+        %%
+        217,83,79     % 6 - Bootstrap Red
+        91,192,222    % 7 - Bootstrap Light Blue
+        92,184,92     % 8 - Bootstrap Green
+        66,139,202    % 9 - Bootstrap Blue
+        255,167,0     % 10 - Google Yellow    
+       ]/255;  
 
 %% %%%%%%%%%%%%
 %  ISOTHERMAL CSTR 
@@ -34,11 +40,11 @@ cpal = [209 17 65;    % 1 - Metro Red
 %% Model Non-Linear Simulation %%
 % - Simulation Parameters
 % Time
-t = (0:0.01:4)';                                         
+t = (0:0.01:3.99)';                                         
 % Initial Conditions
-X_0 = [iso_cstr.oper.X(25,:) iso_cstr.oper.X(25,:)+[2 -2]];
+X_0 = [0 0 0 0];
 % Input Signal
-U = ones(1, numel(t)) * iso_cstr.oper.U(25) + heaviside(t-1)' * 30;
+U = ones(1, numel(t))*3.03;
  
 % - Simulation of the Outputs
 [~, y] = simulate(iso_cstr.sysVar, t, U, X_0);
@@ -47,6 +53,7 @@ U = ones(1, numel(t)) * iso_cstr.oper.U(25) + heaviside(t-1)' * 30;
 figure(1);
 subplot(1,2,1), plot(t, U, 'linewidth', 1.5), title("Input Signal")
 xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
+ylim([0, 5])
 grid()
 
 subplot(1,2,2), p = plot(t, y); title("Output Signals")
@@ -57,52 +64,56 @@ xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
 grid()
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_01', '-dpdf', '-r300')
+% fig = gcf;
+% fig.PaperPositionMode = 'auto';
+% print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_01', '-dpdf', '-r300')
 
 %% Model Linearized Simulation %%
 % - Simulation Parameters
 % Linear Model Index
 idx = 25;
 % Time
-t = (0:0.1:5)';                                         
+t = (0:0.01:1.99)';                                         
 % Initial Conditions
 U_0 = iso_cstr.oper.U(idx,:); X_0 = iso_cstr.oper.X(idx,:);                                     
 % Input Signal
-U = square(t-1.5)' + 1;
+U = [ones(1, numel(t)/4)*1  ones(1, numel(t)/4)*1  ones(1, numel(t)/4)*1 ones(1, numel(t)/4)*1];
  
 % Linear Model
-A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
-C = iso_cstr.ss_model.C;          D = iso_cstr.ss_model.D;
+A = iso_cstr.ss_model.A_full(X_e, 3.03);     B = iso_cstr.ss_model.B_full(X_e, 3.03);
+C = eye(4);          D = zeros(4,1);
 iso_cstr_lin = ss(A, B, C, D);
 
 % - Simulation of the Outputs
-[~, y] = simulate(iso_cstr.sysVar, t, U_0+U, [X_0 0 0]);
-[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t);
-    
+[~, y] = simulate(iso_cstr.sysVar, t, 3.03+U, [0 0 0 0]);
+[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t, [10 10 10 10]/3);
+[y_lin_nat, ~, ~] = lsim(iso_cstr_lin, zeros(1,numel(t)), t, [10 10 10 10]/3);
+y_lin_forc = y_lin - y_lin_nat;
+
 % - Visualization of the Simulation
 figure(2);
-subplot(2,2,1), plot(t, U_0+U, 'linewidth', 1.5), title("Input Signal")
-xlabel("Time (min)"), ylabel("Input Flow-rate (m^3/min)")
-grid()
+subplot(1,2,1), plot(t, U, 'k-', 'linewidth', 1.5), title("Input Signal")
+xlabel("Time (min)"), ylabel("u (m^3/min)")
+ylim([0, 5])
 
-subplot(2,2,2), p = plot(t, y); title("Non-Linear CSTR")
-p(1).LineWidth = 1.5; p(2).LineWidth = 1.5;
-p(3).LineStyle='--'; p(4).LineStyle='--';
-legend("C_A", "C_B", "C_C", "C_D") 
-xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-grid()
+% subplot(4,2,2), p = plot(t, y(1,:), 'linewidth', 1.5, 'color', cpal(6,:)); hold on; ylabel("x_1 (mol/l)"); title("State Response")
+% subplot(4,2,4), p = plot(t, y(2,:), 'linewidth', 1.5, 'color', cpal(8,:)); hold on; ylabel("x_2 (mol/l)")
+% subplot(4,2,6), p = plot(t, y(3,:), 'linewidth', 1.5, 'color', cpal(9,:)); hold on; ylabel("x_3 (mol/l)")
+% subplot(4,2,8), p = plot(t, y(4,:), 'linewidth', 1.5, 'color', cpal(10,:)); hold on; ylabel("x_4 (mol/l)")
+xlabel("Time (min)"), 
 
-subplot(2,2,4), plot(t, y_lin+X_0,'linewidth', 1.5); title("Linearized CSTR")
-legend("C_A", "C_B") 
-xlabel("Time (min)"), ylabel("Outflow Concentration (mol/l)")
-grid()
+subplot(1,2,2), plot(t, y_lin(:,1),'linewidth', 1.5, 'linestyle', '-', 'color', cpal(6,:)); hold on; ylabel("x_1 (mol/l)"); title("State Response")
+subplot(1,2,2), plot(t, y_lin_nat(:,1),'linewidth', 1.5, 'linestyle', '--', 'color', cpal(6,:)); hold on
+subplot(1,2,2), plot(t, y_lin_forc(:,1),'linewidth', 1.5, 'linestyle', ':', 'color', cpal(6,:)); 
+% subplot(4,2,4), plot(t, y_lin(:,2)+X_e(2),'linewidth', 1.5, 'linestyle', '--', 'color', cpal(8,:)); hold on
+% subplot(4,2,6), plot(t, y_lin(:,3)+X_e(3),'linewidth', 1.5, 'linestyle', '--', 'color', cpal(9,:)); hold on
+% subplot(4,2,8), plot(t, y_lin(:,4)+X_e(4),'linewidth', 1.5, 'linestyle', '--', 'color', cpal(10,:))
+xlabel("Time (min)"), 
 
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_lin_01', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/isoCSTR_sim_lin_99', '-dpdf', '-r300')
 
 %% Operation Points Visualization %%
 figure(3); 
