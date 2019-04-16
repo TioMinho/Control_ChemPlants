@@ -42,4 +42,4 @@ report/*
 
 # Images from the simulation folders #
 ######################################
-*/simulation/*.pdf
+simulation/*.pdf
