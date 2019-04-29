@@ -112,18 +112,18 @@ end
 %% SAVES THE MODEL %%
 newVars = setdiff(who, vars);
 
-exo_cstr.param         = struct('alpha', alpha, 'beta', beta, 'gamma', gamma, 'delta', delta, 'K10', K10, 'K20', K20, ...
+exo_cstr.param        = struct('alpha', alpha, 'beta', beta, 'gamma', gamma, 'delta', delta, 'K10', K10, 'K20', K20, ...
                                         'E1', E1, 'E2', E2, 'dH_AB', dH_AB, 'dH_BC', dH_BC, 'dH_AD', dH_AD, 'c_in', c_in, 'T_in', T_in);
-exo_cstr.model         = d_X;
-exo_cstr.sysVar         = sysVar;
-exo_cstr.oper            = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss, 1)*size(X_ss, 2));
-exo_cstr.ss_model    = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
-exo_cstr.poles           = lambda;
+exo_cstr.model        = d_X;
+exo_cstr.sysVar       = sysVar;
+exo_cstr.oper         = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss, 1)*size(X_ss, 2));
+exo_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D);
+exo_cstr.poles        = lambda;
 exo_cstr.modes        = modes;
-exo_cstr.trf_matrix    = e_At;
-exo_cstr.sizeX           = size(C, 1);
-exo_cstr.sizeU          = size(D, 2);
-exo_cstr.sizeY           = sum(sum(C, 2) ~= 0);
+exo_cstr.trf_matrix   = e_At;
+exo_cstr.sizeX        = size(C, 1);
+exo_cstr.sizeU        = size(D, 2);
+exo_cstr.sizeY        = sum(sum(C, 2) ~= 0);
 
 save('../data/exo_cstr_model.mat', 'exo_cstr')
 

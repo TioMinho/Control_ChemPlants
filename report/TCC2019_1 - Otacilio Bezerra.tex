@@ -33,7 +33,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -498,7 +498,7 @@ In addition to the State-Space representation, the linear assumption also benefi
 
 An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: computing the transfer function between each pair of input and output results in the matrix $\bm{G} \in \mathbb{C}^{n \times m}$.
 
-\begin{boxed-theorem}{(Passage from SS to IO)}
+\begin{boxed-theorem}{(Passage from SS to IO)} \label{th:SSToIO}
 	Consider a linear and time-invariant system in State-Space form with initial states $\bm{x}(0^-) \equiv 0$ and represented as:
 	\begin{align}
 	\begin{cases}
@@ -673,9 +673,9 @@ Once that a model is well-established, it is possible both to simulate the syste
 First of all, it is necessary so access some properties of the matrix $\bm{A}$, which describes the natural evolution of the states. 
 
 \begin{boxed-definition}{(State-Transition Matrix)} \label{def:stateTransM}
-	Consider a system in State-Space representation with matrix $\bm{A} \in \mathbb{R}^{n \times n}$. Its \textit{State-Transition Matrix}, $e^{\bm{A}t} \in \mathbb{R}^{n \times n}$ , is the converging series:
+	Consider a system in State-Space representation with matrix $\bm{A} \in \mathbb{R}^{n \times n}$. Its \textit{State-Transition Matrix}, $e^{\bm{A} t} \in \mathbb{R}^{n \times n}$ , is the converging series:
 \begin{equation}
-	e^{\bm{A}t} = \bm{I} + \bm{At} + \cfrac{\bm{A}^2 t^2}{2!} + \cfrac{\bm{A}^3 t^3}{3!} + \cdots = \sum_{k=0}^{\infty} \cfrac{A^k t^k}{k!}
+	e^{\bm{A} t} = \bm{I} + \bm{At} + \cfrac{\bm{A}^2 t^2}{2!} + \cfrac{\bm{A}^3 t^3}{3!} + \cdots = \sum_{k=0}^{\infty} \cfrac{A^k t^k}{k!}
 \end{equation} 
 \end{boxed-definition}
 
@@ -743,12 +743,12 @@ When discussing the response of a system, the focus is actually directed to the 
     \bm{x}(t) = \bm{x}_{\text{n}}(t) + \bm{x}_{\text{f}}(t) 
 \end{equation}
 
-\noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral term. This concept is illustrated in Fig. \ref{fig:linResp02} for a state of the model derived in Equation \eqref{eq:isoReact01} given an unitary step input. In this plot, the solid line represents the total response, whereas the dashed and dotted lines represents the natural and forced response, respectively. It is easy to verify that the decomposition of the total response is equal to the sum of those independent components.
+\noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral term. This concept is visualized in Fig. \ref{fig:linResp02} for the total response of the first two states of the model derived in Equation \eqref{eq:isoReact01}, given the operation points $\bm{x}_o = [6.19, 1.09]$ and $u_o = 3.03$, excited with a step input $u(t) = 3$, $t \in [0, 1.2]$. In this plot, the solid line represents the total response, whereas the dashed and dotted lines represents the natural and forced response, respectively. It is easy to verify that the decomposition of the total response is equal to the sum of those independent components.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/linResp02}
-	\caption{illustration of the total response decomposition for linear systems, based on the model from Equation \eqref{eq:isoReact01} given $\bm{x}_o = [6.19, 1.09, 0.60, 1.05]^T$ and $u_0 = 3.03$.}
+	\caption{simulation of the total response decomposition for the two first states of the model from \eqref{eq:isoReact01} shown separately (left) and in a single visualization (right) in which the steady-state point is indicated by a circle.}
 	\label{fig:linResp02}
 \end{figure}
 
@@ -779,10 +779,10 @@ The only problem remaining to fully characterize the dynamical response of a sys
 
 The proof of this expansion is somewhat extensive, but a detailed explanation can be found in \textbf{[seek reference]}. Basically, the expansion in Equation \eqref{eq:sylvester01} is a direct application of the Cayley-Hamilton theorem \textbf{[seek reference]} and the linear system in Equation \eqref{eq:sylvester02} is obtained through the Sylvester's formula \textbf{[seek reference]}.
 
-From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
+From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$, also known as the \textit{poles} of the system. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
 
-Consider, for the sake of illustration, the same reactor model from Equation \eqref{eq:isoReact01}, but considering only the first two states (since they are independent of the others). Let $\bm{x}_o = [6.19, 1.09]^T$ and $u_0 = 3.03$, just as before. The resulting matrix $\bm{A}$ and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\lambda = $:
-\begin{align}
+Consider, for the sake of illustration, the same reactor model from Equation \eqref{eq:isoReact01}, but considering only the first two states (since they are independent of the others). Let $\bm{x}_o = [6.19, 1.09]^T$ and $u_0 = 3.03$, just as before. The resulting matrix $\bm{A}$ and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
+\begin{align} \label{eq:stateRespEx01}
     \bm{A} = \begin{bmatrix} 
     	-5.93  &        0 \\
 	    0.83   &  -4.70 
@@ -792,74 +792,91 @@ Consider, for the sake of illustration, the same reactor model from Equation \eq
     \end{bmatrix}
 \end{align}
 
-A simulation in time, shown in Figure \textbf{!!!}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) \equiv 0,\ \forall t \in [t_0, t)$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
+A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) \equiv 0,\ \forall t \in [t_0, t)$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/stateTrans01}
+	\caption{simulation of the state-transition matrix $e^{\bm{A} t}$ in Equation \eqref{eq:stateRespEx01} for $t \in [0,2]$}
+	\label{fig:stateTrans01}
+\end{figure}
 
-Now, attention must be drawn to the case where the eigenvalues are not real, but complex and conjugate. 
+Now, attention must be drawn to the case where the eigenvalues are not real, but complex and conjugate. Despite that the Sylvester expansion is still defined as in Theorem \ref{th:sylvester01}, this case introduces a slightly different interpretation of the modes contributions to the natural response.
 
 \begin{boxed-theorem}{} \label{th:sylvester02}
     Consider the same matrix $\bm{A}$ defined in Theorem \ref{th:sylvester01}. Consider, now, that this matrix has two distinct eigenvalues $\lambda_c, \lambda_c' \in \mathbb{C}$ in the form $\lambda_c, \lambda_c' = \alpha \pm j \omega$. In this case, the linear system solved by the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ will have two equations:
-    \begin{align} \label{eq:sylvEq02}
+    \begin{align} \label{eq:sylvEq01}
     \begin{cases}
-        \beta_0 + \alpha \beta_1 + \alpha^{2} \beta_2 + ... + \alpha^{n-1} \beta_{n-1} &= e^{\alpha t} cos(\omega t) \\
-        0 + \omega \beta_1 + \omega^{2} \beta_2 + ... + \omega^{n-1} \beta_{n-1} &= e^{\alpha t} sin(\omega t)
+        \beta_0 + \alpha \beta_1 + \alpha^{2} \beta_2 + ... + \alpha^{n-1} \beta_{n-1} = e^{\alpha t} cos(\omega t) & \\
+        \hfill 0 + \omega \beta_1 + \omega^{2} \beta_2 + ... + \omega^{n-1} \beta_{n-1} = e^{\alpha t} sin(\omega t) &
     \end{cases}
     \end{align}
 \end{boxed-theorem}
 
 \begin{proof}
     Consider the matrix $\bm{A}$ with eigenvalues as specified and the Sylvester expansion as presented. In this case, there will be two equations in the system:
-    \begin{align} \label{eq:sylvEq01}
+    \begin{align} 
     \begin{cases}
-        \beta_0 + \lambda_c \beta_1 + \lambda_c^2  \beta_2 + ... + \lambda_c^{n-1} \beta_{n-1} &= e^{\lambda_c t} \\
-        \beta_0 + \lambda_c' \beta_1 + \lambda_c'^{2} \beta_2 + ... + \lambda_c'^{n-1} \beta_{n-1} &= e^{\lambda_c' t}
+        \beta_0 + \lambda_c \beta_1 + \lambda_c^2  \beta_2 + ... + \lambda_c^{n-1} \beta_{n-1} = e^{\lambda_c t} & \\
+        \beta_0 + \lambda_c' \beta_1 + (\lambda_c')^{2} \beta_2 + ... + (\lambda_c')^{n-1} \beta_{n-1} = e^{\lambda_c' t} &
     \end{cases}
     \end{align}
     
-    Since the eigenvalues are complex and conjugate, it has that $\lambda_c + \lambda'_c = 2 \mathbb{R}e[\lambda_c]$ and $\lambda_c - \lambda'_c = 2j \mathcal{I}m[\lambda_c]$. Moreover, the Euler identity $e^{\alpha \pm j \omega} = e^{\alpha t}(cos(\omega) \pm j sin(\omega))$ shows that $e^{\lambda} + e^{\lambda'} = 2 e^{\alpha t} cos(\omega t)$ and $e^{\lambda} - e^{\lambda'} = 2 e^{\alpha t} sin(\omega t)$. Finally, the first row of $\ref{eq:sylvEq01}$ is obtained by summing the two rows of $\eqref{eq:sylvEq02}$ and dividing by $2$ and the second row of $\eqref{eq:sylvEq01}$ is obtained by subtracting the first row by the second row of $\eqref{eq:sylvEq02}$ and dividing by $2j$. 
+    Since the eigenvalues are complex and conjugate, it has that $\lambda_c + \lambda'_c = 2 \mathbb{R}e[\lambda_c] = 2 \alpha$ and $\lambda_c - \lambda'_c = 2j \mathcal{I}m[\lambda_c] = 2j \omega$. Moreover, the Euler identity $e^{\alpha \pm j \omega} = e^{\alpha t}(cos(\omega) \pm j sin(\omega))$ shows that $e^{\lambda} + e^{\lambda'} = 2 e^{\alpha t} cos(\omega t)$ and $e^{\lambda} - e^{\lambda'} = 2 e^{\alpha t} sin(\omega t)$. In this case, summing the two rows and subtracting the first row by the second one results in:
+    \begin{align} 
+    \begin{cases}
+        \beta_0 + 2 \alpha \beta_1 + 2 \alpha^2  \beta_2 + ... + 2 \alpha^{n-1} \beta_{n-1} = 2 e^{\alpha t} cos(\omega t) & \\
+        0 + 2j \omega \beta_1 + 2j \omega^{2} \beta_2 + ... + 2j \omega^{n-1} \beta_{n-1} = 2j e^{\alpha t} sin(\omega t) &
+    \end{cases}
+    \end{align}
+    
+    Finally, dividing the first row by $2$ and the second row by $2j$ results in \eqref{eq:sylvEq01}.
 \end{proof}
 
-From the same reasons stated before, this result implies that the actual response of the system will have sinusoidal components that produces oscillations in the response. The modes associated with complex and conjugate eigenvalues are classified as \textit{pseudo-periodic}, since they are composed by an exponential growth (or decay) enveloping a sinusoidal function. Consider, again for the sake of illustration, the following system in SS representation:
-\begin{equation}
+From the same reasons stated before, this result implies that the actual response of the system will have sinusoidal components that produces oscillations in the response. The modes associated with complex and conjugate eigenvalues are classified as \textit{pseudo-periodic}, since they are composed by an exponential growth (or decay) enveloping a sinusoidal function. Consider, again for the sake of illustration, the following toy example:
+\begin{align} \label{eq:stateRespEx02}
     \bm{A} = \begin{bmatrix} 
-        \alpha & \alpha \\
-        \alpha & \alpha
+    	 -0.1  &  \hfill 0.5 \\
+	    -0.5   &  -0.1 
+    \end{bmatrix} && e^{\bm{A} t} = \begin{bmatrix} 
+    	e^{-0.1 t} cos(0.5t)  &    e^{-0.1 t} sin(0.5t) \\
+	    -e^{-0.1 t} sin(0.5t)  &  e^{-0.1 t} cos(0.5t)
     \end{bmatrix}
-\end{equation}
+\end{align}
 
-The eigenvalues of this system are $\bm{\lambda} = [1, 1]$. Solving the linear system defined in the Sylvester expansion, considering the equivalent form of Theorem \ref{th:sylvester02}, yields $\bm{\beta} = [1, 1]$. The resulting state-transition matrix is: 
-\begin{equation}
-    e^{\bm{A} t} = \begin{bmatrix} 
-        \alpha & \alpha \\
-        \alpha & \alpha
-    \end{bmatrix}
-\end{equation}
+The elements of the resulting state-transition matrix are simulated for an specific time-interval and shown in Fig. \ref{fig:stateTrans02}. It is possible to see, in this case, the pseudo-periodic behavior of the complex conjugate modes, where the dashed lines represents the exponential envelope. 
 
-The elements of the resulting state-transition matrix are simulated for an specific time-interval and shown in Figure \textbf{!!!}. It is possible to see, in this case, the pseudo-periodic behavior of the complex conjugate modes, where the dashed lines represents the exponential envelope. 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/stateTrans02}
+	\caption{simulation of the state-transition matrix $e^{\bm{A} t}$ in Equation \eqref{eq:stateRespEx02} for $t \in [0,50]$}
+	\label{fig:stateTrans02}
+\end{figure}
 
-[fig]
-
-The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately excluded. Now, the analysis focus the opposite case.  
-
-Consider, for instance, the state response for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below. Considering initial states $\bm{x}^{(1)}(t_0) \equiv \bm{x}^{(2)}(t_0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, $t \in [t_0, \infty)$, the time evolution of these states are given in \textbf{!!!}.
+The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately omitted. Now, the analysis focus the opposite case. Consider, for instance, the response of the first state for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below, which are more complete descriptions of the systems in \eqref{eq:stateRespEx01} and \eqref{eq:stateRespEx02}. Considering initial states $\bm{x}^{(1)}(t_0) \equiv \bm{x}^{(2)}(t_0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, $t \in [t_0, \infty)$, the time evolution of these states are given in Fig. \ref{fig:forcedResponse}, where the dashed line represents the steady-state value.
 \begin{equation}
 \begin{matrix}
     \bm{A}^{(1)} = \begin{bmatrix} 
-        \alpha 
-    \end{bmatrix} & b^{(1)} = \begin{bmatrix} \alpha \end{bmatrix} & & & \bm{A}^{(2)} = \begin{bmatrix} 
-        \alpha & \alpha \\
-        \alpha & \alpha
-    \end{bmatrix} & b^{(2)} = \begin{bmatrix} \alpha \\ \alpha \end{bmatrix}
+    	-5.93  &      0 \\
+	    \hfill 0.83   &  -4.70 
+    \end{bmatrix} & b^{(1)} = \begin{bmatrix} 3.81 \\ -1.09 \end{bmatrix} & & & \bm{A}^{(2)} = \begin{bmatrix} 
+    	 -0.1  &  \hfill 0.5 \\
+	    -0.5   &  -0.1 
+    \end{bmatrix} & b^{(2)} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}
 \end{matrix}
 \end{equation}
 
-[Fig]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/forcedResponse}
+	\caption{forced response of one state from two different systems.}
+	\label{fig:forcedResponse}
+\end{figure}
 
-Those systems are comprised by, basically, just one aperiodic and one pseudo-periodic mode, respectively. Therefore, it is possible to consider that those are characteristic response of the modes to a unitary step input. The forced response to an unitary step is the default evolution used in literature to characterize the behavior of modes (and ultimately, of systems) in respect to some specifications defined below \textbf{[seek reference]}.
+Since $\bm{A}^{(1)}$ is diagonal and $\bm{A}^{(2)}$ has a single pair of complex conjugate eigenvalues, it is possible to consider that those are respectively the characteristic responses of aperiodic and pseudo-periodic modes to a unitary step input. Since any signal can be decomposed by a sequence of step signals, the forced response to an unitary step is the default evolution used in literature to characterize the behavior of modes (and ultimately, of systems) in respect to some specifications of the transient response defined below \textbf{[seek reference]}.
 
 \begin{boxed-definition}{(Unit-Step Response Specifications)}
-	Given an aperiodic mode $e^{\lambda t}$ of the matrix $\bm{A}$ associated with the eigenvalue $\lambda \in \mathbb{R}$, its contribution to the response has a time constant ($\tau$) defined as
+	Given a mode $e^{\lambda t}$ associated with the eigenvalue $\lambda \in \mathbb{R}$, its contribution to the response has a time constant ($\tau$) defined as
 	\begin{equation}
 		\tau = - \cfrac{1}{\lambda}
 	\end{equation}	
@@ -873,33 +890,34 @@ Those systems are comprised by, basically, just one aperiodic and one pseudo-per
 	
 \end{boxed-definition}   
 
-The specifications just defined provides a quantitative way to describe the response of a system in terms of time and frequencies. The time constant, for instance, is a quantity that represents the time needed for the mode to lost $63\%$ of its initial value, since $e^{\lambda \tau} = e^{-1} = 0.37$. A greater value of a time constant indicates that the system is able to ``discharge" energy faster. The damping coefficient, by its turn, provides an information about the intensity of the peak in the pseudo-periodic responses, which is known as \textit{overshoot} (or \textit{undershoot} in the case that of a negative peak). From the perspective of control theory, these are some of the specifications used to define desirable transient responses to a controlled system.
+The specifications just defined provides a quantitative way to describe the response of a system in terms of time and frequencies. The time constant, for instance, is a quantity that represents the time needed for the mode to lost $63\%$ of its initial value, since $e^{\lambda \tau} = e^{-1} = 0.37$. A greater value of a time constant indicates that the system is able to ``discharge" energy faster. The damping coefficient, in turn, provides an information about the intensity of the peak in the pseudo-periodic responses, which is known as \textit{overshoot} (or \textit{undershoot} in the case that of a negative peak) and the natural frequency represents the oscillation of the response before reaching steady-state. From the perspective of control theory, these are some of the specifications used to define desirable transient responses to a controlled system.
 
-Notice that the response specifications are always functions of the real and imaginary parts of the discussed eigenvalues. This brings the possibility of a visualization in the complex plane to interpret how each eigenvalue contributes to the total response. A straightforward notion is that the closer an eigenvalue is to the imaginary axis, the faster is its contribution. Similarly, the furthest an eigenvalue is to the real axis, the more oscillatory is its contribution. Finally, a vector from the origin of the plane to a complex eigenvalue has a norm equal to the natural frequency ($\omega_n$) and the cosine of the angle formed with the imaginary axis is equal to the damping factor ($\zeta$). Finally, a simulation of the contributions from different eigenvalues are shown in \textbf{!!!!}.
+Notice that the response specifications are always functions of the real and imaginary parts of the discussed eigenvalues. This brings the possibility of a visualization in the complex plane to interpret how each eigenvalue contributes to the total response. A straightforward notion is that the closer an eigenvalue is to the imaginary axis, the faster is its contribution. Similarly, the furthest an eigenvalue is to the real axis, the more oscillatory is its contribution. Finally, a vector from the origin of the plane to a complex eigenvalue has a norm equal to the natural frequency ($\omega_n$) and the cosine of the angle formed with the imaginary axis is equal to the damping factor ($\zeta$). A simulation of the contributions from different eigenvalues are shown in Fig. \ref{fig:eigen01}.
 
-[fig] 
-
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter2/eigen01}
+	\caption{eigenvalues of a system and the forced response associated with its modes.}
+	\label{fig:eigen01}
+\end{figure}
 
 \section{Similarity Transformations}
 
 A state-space representation can be interpreted through a system of coordinates. A state, in this context, represents a vector as visualized through this reference. Under the assumption of a linear time-invariant system, there is an intuition that is possible to change the representation of the states by changing this system of coordinates through some linear transformation, obtaining a different model to the same system. This is the motivation for the discussion in this section.
 
-First of all, consider a brief reflection about the geometrical interpretation of a State-Space model for a physical system \textbf{[give attributions]}. Let a state-vector in an arbitrary time $t$ be $\bm{x}(t) = [1, 3]^T$, defined in the $\mathbb{R}^{2}$ space, as shown in Figure \textbf{!!!.a} in a Cartesian coordinate system. It is possible to associate to this vector an orthonormal basis $\bm{I} \in \mathbb{R}^2$, the 2-dimensional identity matrix, such that the vector $\bm{x}(t)$ observed through this basis is itself:
-\begin{equation}
-	\bm{I} \bm{x}(t) = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ 3 \end{bmatrix} = \begin{bmatrix} 1 \\ 3 \end{bmatrix} = \bm{x}(t)
-\end{equation}
-
-The representation of a vector with respect to a basis can be interpreted geometrically as the points where lines parallel to the components of the basis, drawn from this vector, intercepts the standard basis of the coordinate system. These parallel lines are the dashed lines shown in Figure \textbf{!!!}. In the case of the orthonormal basis, for instance, those lines intercept the axis in the same values that were attributed to the original vector.
-
-This concept provides the possibility to associate any other arbitrary basis to represent a state-vector and visualize the states through this perspective. When the basis is not orthogonal, a change in the state-vector with a direction parallel to a component of the basis, i.e., a change in only one element of this vector, produces a change in other directions if observed through the original orthonormal basis. This is an interesting result, since it raises the represent the interactions between two state variables through the basis reference, making it possible to observe mutual changes in those variables from a single direction. Figure \textbf{!!!.b} illustrates the vector $\bm{x}(t)$ as referenced through the basis $\bm{Q} = [\bm{q}_1, \bm{q}_2]^T$, for $\bm{q}_1 = [3, 1]^T$ and $\bm{q}_1 = [2, 2]^T$, given as: 
+First of all, consider a brief reflection about the geometrical interpretation of a State-Space model for a physical system \textbf{[reference]}. Let a state-vector in an arbitrary time $t$ be $\bm{x}(t) = [1, 3]^T$, defined in the $\mathbb{R}^{2}$ space, as shown in the left side of Fig. \ref{fig:similarity01} in a Cartesian coordinate system. It is possible to associate to this vector an orthonormal basis $\bm{I} \in \mathbb{R}^2$, the 2-dimensional identity matrix, such that the vector $\bm{x}(t)$ observed through this basis standard basis is equal to itself. This concept provides the possibility to associate any other arbitrary basis to represent a state-vector and visualize the states through this perspective. When the basis is not orthogonal, a change in the state-vector with a direction parallel to a component of the basis, i.e., a change in only one element of this vector, produces a change in other directions if observed through the original orthonormal basis. This is an interesting result, since it shows the interactions between two state variables through a basis, making it possible to observe mutual changes in those variables from a single direction. The right side of Fig. \ref{fig:similarity01} illustrates the vector $\bm{x}(t)$ as referenced through the basis $\bm{Q} = [\bm{q}_1, \bm{q}_2]^T$, for $\bm{q}_1 = [3, 1]^T$ and $\bm{q}_1 = [2, 2]^T$, given as: 
 \begin{equation}
 	\bm{x}(t) = \begin{bmatrix} 1 \\ 3 \end{bmatrix} = \begin{bmatrix} 3 & 2 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} -1 \\ 2 \end{bmatrix} = \bm{G}\bm{z}(t)
 \end{equation}
 
-[fig]
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{chapter2/similarity01}
+    \caption{visualization of a basis transformation applied to a vector.}
+    \label{fig:similarity01}
+\end{figure}
 
-
-In the State-Space formulation, the matrix $\bm{A}$ represents a linear function that maps state-vectors from $\mathbb{R}^{n}$ to itself. When applying a new basis to represent the state-vectors, it is intuitive that the mapping performed by this function also changes to still represent the same linear combination of the states. Hence it is necessary to formulate an equivalent model in those conditions.
+In the State-Space formulation, the matrix $\bm{A}$ represents a linear function that maps state-vectors from $\mathbb{R}^{n}$ to itself. When applying a new basis to represent the state-vectors, it is intuitive that the mapping performed by this function also changes so that it still represents the same linear combination of the states.
 
 \begin{boxed-theorem}{(Similarity Transformation)}
 	Consider a system in SS representation described by the matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ and a nonsingular transformation matrix $\bm{P} \in \mathbb{R}^{n \times n}$. An equivalent representation for the transformation $\bm{z}(t) = \bm{P} \bm{x}(t)$ is:
@@ -946,24 +964,18 @@ By this theorem is it clear that, after transforming the state-vector, the entir
 \end{boxed-theorem}
 
 \begin{proof}
-    The eigendecomposition problem is defined as:
-    \begin{equation}
-        \bm{A} \bm{v} = \bm{\lambda} \bm{v}
-    \end{equation}
-    
-    From the similarity transformation, $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ leads to $\bm{A} = \bm{P}^{-1} \tilde{\bm{A}} \bm{P}$. Substituting this in the eigendecomposition:
+    The eigendecomposition problem is defined as $\bm{A} \bm{v} = \bm{\lambda} \bm{v}$. From the similarity transformation, $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ leads to $\bm{A} = \bm{P}^{-1} \tilde{\bm{A}} \bm{P}$. Substituting this in the eigendecomposition:
     \begin{align}
     \begin{split}
         \bm{P}^{-1} \tilde{\bm{A}} \bm{P} \bm{v} & = \bm{\lambda} \bm{v} \\
-        \tilde{\bm{A}} \bm{P} \bm{v} & =  \bm{\lambda} \bm{P} \bm{v} \\
-        \tilde{\bm{A}} \tilde{\bm{v}} & =  \bm{\lambda} \tilde{\bm{v}}
+        \tilde{\bm{A}} \bm{P} \bm{v} & =  \bm{\lambda} \bm{P} \bm{v}
     \end{split}
     \end{align}
    
-    Concluding that the matrices $\bm{A}$ and $\tilde{\bm{A}}$ shares the same set of eigenvalues $\bm{\lambda}$.
+    Considering the transformed eigenvector $\tilde{\bm{v}} = \bm{P} \bm{v}$, it is clear that $\tilde{\bm{A}} \tilde{\bm{v}} = \bm{\lambda} \tilde{\bm{v}}$, implying that the matrices $\bm{A}$ and $\tilde{\bm{A}}$ shares the same set of eigenvalues $\bm{\lambda}$.
 \end{proof}
 
-It is clear from past results that the fact that both the matrices shares the same set of eigenvalues directly implies that they provide the same dynamical responses and, as will be shown later, the same general properties. Therefore, the similarity transformation consists in a method to produce new State-Spaces representations that emphasizes some geometrical perspective of the model, hopefully some perspective that helps analyze a specific property, without actually changing the relationship of the original model with the physical system.
+It is clear from past results that the fact that both the matrices shares the same set of eigenvalues directly implies that they provide the same dynamical responses and, as will be shown later, the same general properties. Therefore, the similarity transformation consists in a method to produce new State-Spaces representations that emphasizes some geometrical perspective of the model, hopefully in some perspective that helps analyze a specific property, without actually changing the relationship of the original model with the physical system.
 
 The use of similarity transformations can also benefits the computation of functions of the matrices of the State-Space representation, given that they impose a desirable structure to this matrix. With this motivation, a popular transformation that provides a new representation with computational advantages is the Similarity transformation.
 
@@ -1015,21 +1027,22 @@ The main result behind this criteria is that the natural response of a system sh
 	A system in State-Space form, represented by a matrix $\bm{A} \in \mathbb{R}^{n \times n}$ with eigenvalues $\bm{\lambda} \in \mathbb{R}^n$, is BIBO stable if and only if $\mathbb{R}e[\lambda_i] < 0,\ \forall i \in [1,2,...,n]$.
 \end{boxed-theorem}
 
-\begin{proof}
-	Left as an exercise
-\end{proof}
+A detailed proof of this theorem can be found in \textbf{[reference]}. First of all, note that this criteria depends only on the eigenvalues of matrix $\bm{A}$, so the stability property of a system is invariant to any similarity transformation, since $\bm{A}$ and any transformed matrix $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ shares the same eigenvalues. From the previous results it is also known that the real part of the eigenvalues, independent of their multiplicity or domain, appears as the arguments of the exponential functions that are the system modes. Therefore, an eigenvalue with a negative real part will produce a mode that is a exponential decay, as this theorem indicates. By the same argument, if the matrix $\bm{A}$ has at least one eigenvalue $\lambda_j = 0$ such that $\mathbb{R}e[\lambda_i] \leq 0,\ \forall i \in [1,2,...,n]$, then the mode associated with this eigenvalue is a constant and the natural response becomes bounded. This configuration is known as a marginally stable condition, in the BIBO perspective. The time response of a $2$-nd order system is shown Fig. \ref{fig:stability01} for three different poles configurations, given an unitary step.
 
-First of all, note that this criteria depends only on the eigenvalues of matrix $\bm{A}$, so the stability property of a system is invariant to any similarity transformation, since $\bm{A}$ and any transformed matrix $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ shares the same eigenvalues. From the previous results it is also known that the real part of the eigenvalues, independent of their multiplicity or domain, appears as the arguments of the exponential functions that are the system modes. Therefore, an eigenvalue with a negative real part will produce a mode that is a exponential decay, as this theorem indicates. By the same argument, if the matrix $\bm{A}$ has at least one eigenvalue $\lambda_j = 0$ such that $\mathbb{R}e[\lambda_i] \leq 0,\ \forall i \in [1,2,...,n]$, then the mode associated with this eigenvalue is a constant and the natural response becomes bounded. This configuration is known as a marginally stable condition, in the BIBO perspective. The time response of a $2$-nd order system is shown Figure \textbf{!!!} for three different poles configurations, given an unitary step.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{chapter2/stability01}
+    \caption{stability of forced response given the positions of the system poles.}
+    \label{fig:stability01}
+\end{figure} 
 
-[img] 
-
-Later chapters will discuss the possibility of stabilize an unstable system through a controller. There are, however, some restrictions to the possibility of controlling or not the states of a system, which includes the necessity of discussing \textit{controllability}. The controllability of a system states whether it is possible to calculate an input signal that drive the system to any arbitrary state, given some time restriction, or not. This property accounts exclusively for this possibility, in the sense that it does not account for the operational feasibility of actually applying this input signal into a physical system, since it may need more energy than an actuator can produce. 
+Later chapters will discuss the possibility of stabilize an unstable system through a controller. There are, however, some restrictions to the possibility of controlling or not the states of a system, which includes the necessity of discussing \textit{controllability}. The controllability of a system states whether it is possible to calculate an input signal that drive the system to any arbitrary state or not, given some time restriction. This property accounts exclusively for this possibility, in the sense that it does not account for the operational feasibility of actually applying this input signal into a physical system, since it may need more energy than an actuator can produce. 
 
 \begin{boxed-definition}{(Controllability)}
 	A system in State-Space form with matrices $(\bm{A}, \bm{B})$ is said to be controllable if, for any initial state $\bm{x}(t_0) = \bm{x}_0$ and terminal state $\bm{x}(T) = \bm{x}_T$, $T < \infty$, there exists an input signal $\bm{u}(t)$, $t \in [t_0, T]$, that can transfer $\bm{x}(t_0)$ to $\bm{x}(T)$. Otherwise, the system is said to be uncontrollable. 
 \end{boxed-definition}
 
-There are several methods to analyze the controllability of a system given a mathematical model and the definition above \textbf{[seek references]}. A popular criteria introduces the concept of a controllability matrix and has a nice geometrical interpretation.
+There are several methods to analyze the controllability of a system given a mathematical model and the definition above. A popular criteria introduces the concept of a controllability matrix and has a nice geometrical interpretation.
 
 \begin{boxed-theorem}{(Controllability in SS)}
 	Consider a system in linear State-Space form with matrices $(\bm{A}, \bm{B})$ and the controllability matrix $\bm{\mathcal{C}} \in \mathbb{R}^{n \times nr}$ defined as:
@@ -1039,10 +1052,6 @@ There are several methods to analyze the controllability of a system given a mat
 	
 	\noindent The system is controllable if and only if $\bm{\mathcal{C}}$ has full row rank.
 \end{boxed-theorem}   
-
-\begin{proof}
-	Left to the interested reader.
-\end{proof}
 
 An intuition behind this theorem is that the full row rank condition implies that $\mathcal{C}$ has $n$ linearly independent columns, therefore these columns can be used as a basis for what is known as the \textit{controllable subspace}. To better understand that, consider the following forced solution $\bm{x}_f(t)$ given by the Lagrange formula:
 \begin{equation}
@@ -1057,9 +1066,7 @@ From the Cayley-Hamilton theorem, shown in the Sylvester expansion at Theorem \r
 \end{split}
 \end{align}
 
-\noindent where $\bm{A}^i \bm{B}$ are the columns of the matrix $\bm{\mathcal{C}}$ and $\tilde{\beta}_i(\bm{u}, t)$ is a function that depends only on the input signal $\bm{u}(t)$ and time $t$. This result implies that the unforced response $\bm{x}_f(t)$ is a linear combination of the columns of $\bm{\mathcal{C}}$. If $\bm{\mathcal{C}}$ has $n$ linearly independent columns, than this linear combination spans the entire $n$-dimensional space, i.e., the state space, and any desirable state vector $\bm{x}*$ can be reached. If the column rank of $\bm{\mathcal{C}}$ is less than $n$, then only a subspace of smaller dimension can be reached through the forced response.
-
-\textbf{[Example]}
+\noindent where $\bm{A}^i \bm{B}$ are the columns of the matrix $\bm{\mathcal{C}}$ and $\tilde{\beta}_i(\bm{u}, t)$ is a function that depends only on the input signal $\bm{u}(t)$ and time $t$. This result implies that the unforced response $\bm{x}_f(t)$ is a linear combination given by the columns of $\bm{\mathcal{C}}$. If $\bm{\mathcal{C}}$ has $n$ linearly independent columns, than this linear combination spans the entire $n$-dimensional space, i.e., the entire state space, and thus any desirable state vector $\bm{x}^*$ can be reached. If the column rank of $\bm{\mathcal{C}}$ is less than $n$, then only a subspace of smaller dimension can be reached through the forced response.
 
 While the discussion on controllability concerns the possibility of driving a system to a desirable state through an actuator signal, there is also the necessity to discuss the possibility of determining the internal state of a system given the output signal $\bm{y}(t)$. This property, known as \textit{observability}, comes from the fact that any output of a system, related to the states through the matrix $\bm{C}$, may be a combination of states, and that some states may not even be present in the output signal. In conclusion, it is necessary to know if it is possible to reconstruct $\bm{x}(t)$ directly through $\bm{y}(t)$. 
 
@@ -1067,7 +1074,7 @@ While the discussion on controllability concerns the possibility of driving a sy
 	A system in State-Space form with matrices $(\bm{A}, \bm{C})$ is said to be observable if, given an input signal $\bm{u}(t)$ and output signal $\bm{y}(t)$, over the interval $t \in [t_0, T]$, it is possible to uniquely determine the value of the initial state $\bm{x}(t_0)$. Otherwise, the system is said to be unobservable.
 \end{boxed-definition}
 
-Similarly to the controllability property, there are several ways to analyze the observability of a system, given a mathematical model \textbf{[seek references]}. A popular criteria introduces the concept of a observability matrix.
+Similarly to the controllability property, there are several ways to analyze the observability of a system, given a mathematical model. A popular criteria introduces the concept of a observability matrix.
 
 \begin{boxed-theorem}{(Observability in SS)}
 	Consider a system in linear State-Space form with matrices $(\bm{A}, \bm{C})$ and the observability matrix $\bm{\mathcal{O}} \in \mathbb{R}^{nq \times n}$ defined as:
@@ -1078,19 +1085,45 @@ Similarly to the controllability property, there are several ways to analyze the
 	\noindent The system is observable if and only if $\bm{\mathcal{O}}$ has full column rank.
 \end{boxed-theorem}   
 
-\begin{proof}
-	Left to the interested reader.
-\end{proof}
+The interpretation of this theorem follows the same intuition of before: if the matrix $\bm{\mathcal{O}}$ has full column rank, then it can be used as a basis to span a subspace with the same dimension as the state-space. In fact, the proof of both theorems follows the same procedures and there is a direct relationship between controllability and observability, known as the Theorem of Duality \textbf{[seek reference]}.
 
-The interpretation of this theorem follows the same intuition of before: if the matrix $\bm{\mathcal{O}}$ has full column rank, then it can be used as a basis to span a subspace with the same dimension as the state-space. In fact, the two proofs are similar and there is a direct relationship between controllability and observability, known as the Theorem of Duality \textbf{[seek reference]}.
-
-\textbf{[Example]}
-
-The geometrical interpretations of both theorems states a practical solution for the cases where a system is uncontrollable or unobservable. In the first case, the solution would be to add specific actuators to the system, in the condition that they are linearly independent between themselves and the ones actually in operation. The same procedure can be done to solve the unobservable problem, but adding more sensors instead. Those procedures would change the matrices $\bm{B}$ and $\bm{C}$, without changing the system dynamics, and could ensure the necessary conditions in matrices $\bm{\mathcal{C}}$ and $\bm{\mathcal{O}}$. Of course, the implementation of such instrumentation may not be practical, due to technical or economical constraints.
+The concepts of controllability and observability just presented, together with the conditions to fulfill these properties, were first introduced by \textbf{[reference]}. The geometrical interpretations of both theorems may suggest a practical solution for the cases where a system is uncontrollable or unobservable. In the first case, the solution would be to add specific actuators to the system, in the condition that they are linearly independent between themselves and the ones actually in operation. The same procedure can be done to solve the unobservable problem, but adding more sensors instead. Those procedures would change the matrices $\bm{B}$ and $\bm{C}$, without changing the system dynamics, and could ensure the necessary conditions in matrices $\bm{\mathcal{C}}$ and $\bm{\mathcal{O}}$. Of course, the implementation of such instrumentation may not be practical, due to technical or economical constraints. Of course, if including these additional devices is not feasible, one can still control and observe a given subset of the state variables.
 
 \section{Frequency Response Analysis}
 
-Although the response of dynamical systems are naturally perceived in time, there are advantages of analyzing the models in a frequency domain perspective. 
+Although the response of dynamical systems are naturally perceived in time, there are advantages of analyzing the models in a frequency domain perspective. This analysis differs from a simple time domain analysis from the fact that, in a steady-state regime, the response of a linear system for a sinusoidal input is itself sinusoidal, with the same frequency but different amplitude and phase, as illustrated at Fig. \ref{fig:freq01}.
+
+\begin{figure}[ht] 
+	\centering
+	\begin{subfigure}{0.25\textwidth}	
+		\centering
+		$u(t) = M_i cos(\omega t + \phi_i)$\par\medskip
+		\includegraphics[scale=0.55]{chapter2/freq01_1}
+	\end{subfigure}
+	\begin{subfigure}{0.38\textwidth}	
+		\centering
+		\includegraphics[scale=0.6]{chapter2/freq01_2}
+	\end{subfigure}
+	\begin{subfigure}{0.25\textwidth}	
+		\centering
+		$y(t) = M_o cos(\omega t + \phi_o)$\par\medskip
+		\includegraphics[scale=0.55]{chapter2/freq01_3}
+	\end{subfigure}
+	
+	\caption{illustration of the steady-state response of LTI systems to sinusoidal inputs.}
+	\label{fig:freq01}
+\end{figure}
+
+A common representation is the phasor representation, where $M \angle \phi = M cos(\omega t + \phi)$. In the context of SISO Input-Output models, the response of the system can be summarized by a transfer function which is also a phasor:
+\begin{equation}
+    g(t) = \cfrac{y(t)}{u(t)} = \cfrac{M_o \angle \phi_o}{M_i \angle \phi_i} = M_g \angle \phi_g
+\end{equation}
+
+\noindent where $M_g = M_o / M_i$ and $\phi_g = \phi_o - \phi_i$. Notice that this formulation makes the time-dependance implicit in the system response, since it is periodic in this case. For this reason, the system response can be visualized as a function of frequency rather than a function of time, and the properties of the system can be accessed in this way. The two most popular techniques for frequency response analysis are Bode plots [reference] and Nyquist diagrams [referentce]. The first is a direct plot of $M_g(\omega)$ and $\phi_g(\omega)$ for several values of $\omega$, making $M_g(\omega) = 20 log \left| G(j\omega) \right|$ and $\phi_g(\omega) = \angle G(j\omega)$, where $G(j\omega)$ is a transfer function of a system evaluated for an input signal with exclusively oscillatory components. The Nyquist diagram, in the other hand, is a direct phasor visualization obtained by applying the Argument principle [reference] to a contour containing the entire right-hand side of the complex plane. Both visualizations are depicted in Fig. \ref{fig:freq02}, for a Transfer function obtained by applying the transformation of Theorem \ref{th:SSToIO} into the system from \eqref{eq:stateRespEx01}.
+
+[fig]
+
+The immediate advantage of these visualizations is that is not necessary to compute an entire simulation of this system, until it reaches steady-state, to be able to perform analysis, which is really critic for high-dimensional systems with slow time-constants. In addition to that, these visualizations (specially the Bode plot) can be easily sketched by hand with fairly accuracy, allowing for some understanding of the system without need for solving differential equations or the inverse Laplace transforms. For these reasons, frequency responses methods for analyzing systems were ubiquitous for many years in industry applications [reference], and some properties assessments, such as closed-loop stability, are still better understood under this formulation, as it will be shown in later chapters.
 
 % 3 - Controller Design
 % ---------------------------------------------------------------
