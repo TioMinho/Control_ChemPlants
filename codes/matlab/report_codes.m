@@ -407,23 +407,28 @@ x_o = y(1:2,end);
 
 % - State-space model selection
 A = iso_cstr.ss_model.A_l(x_o, 3.03);   B = iso_cstr.ss_model.B_l(x_o, 3.03);
-C = [1 0; 0 1]                          ;   D = [0; 0];
-
-iso_cstr_tf = tf(ss(A,B,C,D));
-
-% - Real simulation parameters
-t = (0:0.01:24.99)';
-U = ones(1,numel(t));
-
-% - Simulation of the Outputs
 
 % - Visualization of the Simulation
-figure(8);
+figure(10);
 subplot(1,2,1)
-bode(iso_cstr_tf)
+bodeplot(tf(ss(A, B, [1 0], 0))); hold on 
+lineHandle = findobj(gcf,'Type','line','-and','Color','b');
+set(lineHandle,'Color',cpal(8,:));
 
-subplot(1,2,2)
-nyquist(iso_cstr_tf)
+bodeplot(tf(ss(A, B, [0 1], 0)));
+lineHandle = findobj(gcf,'Type','line','-and','Color','b');
+set(lineHandle,'Color',cpal(4,:));
+grid()
+
+subplot(2,2,2)
+nyquistplot(tf(ss(A, B, [1 0], 0))), xlabel(""), xlim([-0.1, 0.75])
+lineHandle = findobj(gcf,'Type','line','-and','Color','b');
+set(lineHandle,'Color',cpal(8,:));
+
+subplot(2,2,4)
+nyquistplot(tf(ss(A, B, [0 1], 0))), title(""), xlim([-0.15, 0.025])
+lineHandle = findobj(gcf,'Type','line','-and','Color','b');
+set(lineHandle,'Color',cpal(4,:));
 
 % - Exporting the Visualization to an Image
 fig = gcf;
