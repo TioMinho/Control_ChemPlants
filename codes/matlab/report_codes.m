@@ -411,22 +411,22 @@ A = iso_cstr.ss_model.A_l(x_o, 3.03);   B = iso_cstr.ss_model.B_l(x_o, 3.03);
 % - Visualization of the Simulation
 figure(10);
 subplot(1,2,1)
-bodeplot(tf(ss(A, B, [1 0], 0))); hold on 
+bodeplot(tf(ss(A, B, [1 0], 0)), 'b-'); hold on 
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(8,:));
 
-bodeplot(tf(ss(A, B, [0 1], 0)));
+bodeplot(tf(ss(A, B, [0 1], 0)), 'b-');
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(4,:));
 grid()
 
 subplot(2,2,2)
-nyquistplot(tf(ss(A, B, [1 0], 0))), xlabel(""), xlim([-0.1, 0.75])
+nyquistplot(tf(ss(A, B, [1 0], 0)), 'b-'), xlabel(""), xlim([-0.1, 0.75])
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(8,:));
 
 subplot(2,2,4)
-nyquistplot(tf(ss(A, B, [0 1], 0))), title(""), xlim([-0.15, 0.025])
+nyquistplot(tf(ss(A, B, [0 1], 0)), 'b-'), title(""), xlim([-0.15, 0.025])
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(4,:));
 
