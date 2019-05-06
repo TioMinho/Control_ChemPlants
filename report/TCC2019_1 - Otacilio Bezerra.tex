@@ -7,13 +7,13 @@
 \usepackage[english]{babel}
 \usepackage[margin=1in,a4paper,pdftex]{geometry}
 \usepackage[protrusion=true,expansion=true]{microtype} 
-\usepackage{amsmath,amsfonts,amsthm,amssymb, bm}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots}
 \usepackage{rotating}
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=magenta]{hyperref}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=red]{hyperref}
 \usepackage[all]{hypcap}
 \usepackage{color, xcolor}
 \usepackage{listings}
-\usepackage[ruled]{algorithm2e}
+\usepackage[ruled,linesnumbered]{algorithm2e}
 \usepackage{cite}
 \usepackage{makecell}
 \usepackage[printwatermark]{xwatermark}
@@ -777,7 +777,7 @@ The only problem remaining to fully characterize the dynamical response of a sys
     \end{align*} 
 \end{boxed-theorem}
 
-The proof of this expansion is somewhat extensive, but a detailed discussion can be found in \cite{Chen:1998}. Basically, the expansion in Equation \eqref{eq:sylvester01} is a direct application of the Cayley-Hamilton theorem \cite{Atiyah:2018} and the linear system in Equation \eqref{eq:sylvester02} is a result of the the Sylvester's matrix theorem  \cite{Horn:2012}.
+The proof of this expansion is somewhat extensive, but a detailed discussion can be found in \cite{Chen:1998}. Basically, the expansion in Equation \eqref{eq:sylvester01} is a direct application of the Cayley-Hamilton theorem \cite{Atiyah:2018} and the linear system in Equation \eqref{eq:sylvester02} is a result of the Sylvester's matrix theorem  \cite{Horn:2012}.
 
 From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$, also known as the \textit{poles} of the system. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
 
@@ -853,8 +853,8 @@ The elements of the resulting state-transition matrix are simulated for a specif
 	\label{fig:stateTrans02}
 \end{figure}
 
-The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately omitted. Now, the analysis focus the opposite case. Consider, for instance, the response of the first state for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below, which are more complete descriptions of the systems in \eqref{eq:stateRespEx01} and \eqref{eq:stateRespEx02}. Considering initial states $\bm{x}^{(1)}(t_0) \equiv \bm{x}^{(2)}(t_0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, $t \in [t_0, \infty)$, the time evolution of these states are given in Fig. \ref{fig:forcedResponse}, where the dashed line represents the steady-state value.
-\begin{equation}
+The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately omitted. Now, the analysis focus the opposite case. Consider, for instance, the response of the first state for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below, which are more complete descriptions of the systems in \eqref{eq:stateRespEx01} and \eqref{eq:stateRespEx02}. Considering initial states $\bm{x}^{(1)}(0) \equiv \bm{x}^{(2)}(0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, for time $t \in [0, 60)$, the evolution of these states are shown in Fig. \ref{fig:forcedResponse}.
+\begin{equation} \label{eq:isoSys02}
 \begin{matrix}
     \bm{A}^{(1)} = \begin{bmatrix} 
     	-5.93  &      0 \\
@@ -869,13 +869,13 @@ The previous discussion on the modes of matrix $\bm{A}$ introduced the importanc
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/forcedResponse}
-	\caption{forced response of one state from two different systems.}
+	\caption{one-state forced response of the two systems from \eqref{eq:isoSys02}.}
 	\label{fig:forcedResponse}
 \end{figure}
 
 Since $\bm{A}^{(1)}$ is diagonal and $\bm{A}^{(2)}$ has a single pair of complex conjugate eigenvalues, it is possible to consider that those are respectively the characteristic responses of aperiodic and pseudo-periodic modes to an unitary step input. Since any signal can be decomposed by a sequence of step signals, the forced response to an unitary step is the default evolution used in literature to characterize the behavior of modes (and ultimately, of systems) in respect to some specifications of the transient response defined below.
 
-\begin{boxed-definition}{(Unit-Step Response Specifications)}
+\begin{boxed-definition}{(Unit-Step Response Specifications)} \label{def:responseParameters}
 	Given a mode $e^{\lambda t}$ associated with the eigenvalue $\lambda \in \mathbb{R}$, its contribution to the response has a time constant ($\tau$) defined as
 	\begin{equation}
 		\tau = - \cfrac{1}{\lambda}
@@ -897,7 +897,7 @@ Notice that the response specifications are always functions of the real and ima
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\textwidth]{chapter2/eigen01}
-	\caption{eigenvalues of a system and the forced response associated with its modes.}
+	\caption{eigenvalues of a system and the forced response associated with their modes.}
 	\label{fig:eigen01}
 \end{figure}
 
@@ -959,7 +959,7 @@ In the State-Space formulation, the matrix $\bm{A}$ represents a linear function
 
 By this theorem is it clear that, after transforming the state-vector, the entire dynamical model $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ changes. This would imply that the analysis of the original system, for its properties and time response, is not valid for the similar transformed system. However, as discussed before, these transformations accounts for the same system when observed through a different reference basis. Therefore, it is expected that the model presents the same analysis results, as demonstrated below.
 
-\begin{boxed-theorem}
+\begin{boxed-theorem}{} \label{th:simTrans01}
     Consider a system in State-Space form with matrix $\bm{A}$. Consider also a similarity transformation $\bm{z}(t) = \bm{P} \bm{x}(t)$ that results in a similar matrix $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$. In this case, $\bm{A}$ and $\tilde{\bm{A}}$ have the same set of eigenvalues.
 \end{boxed-theorem}
 
@@ -1032,7 +1032,7 @@ A detailed proof of this theorem can be found in Appendix A. First of all, note 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{chapter2/stability01}
-    \caption{stability of forced response given the positions of the system poles.}
+    \caption{stability of forced responses given the positions of the system poles.}
     \label{fig:stability01}
 \end{figure} 
 
@@ -1133,7 +1133,7 @@ A common representation is the phasor representation, where $M \angle \phi = M c
 	\label{fig:freq02}
 \end{figure}
 
-The immediate advantage of these visualizations is that is not necessary to compute an entire simulation of this system, until it reaches steady-state, to be able to perform analysis, which is really critic for high-dimensional systems with slow time-constants. In addition to that, these visualizations (specially the Bode plot) can be easily sketched by hand with fairly accuracy, allowing for some understanding of the system without need for solving differential equations or the inverse Laplace transforms. For these reasons, frequency responses methods for analyzing systems were ubiquitous for many years in industry applications [reference], and some properties assessments, such as closed-loop stability, are still better understood under this formulation, as it will be shown in later chapters.
+The immediate advantage of these visualizations is that is not necessary to compute an entire simulation of this system, until it reaches steady-state, to be able to perform analysis, which is really critic for high-dimensional systems with slow time-constants. In addition to that, these visualizations (specially the Bode plot) can be easily sketched by hand with fairly accuracy, allowing for some understanding of the system without need for solving differential equations or the inverse Laplace transforms. For these reasons, frequency responses methods for analyzing systems were ubiquitous for many years in industry applications, and some properties assessments, such as closed-loop stability, are still better understood under this formulation, as it will be shown in later chapters.
 
 % 3 - Controller Design
 % ---------------------------------------------------------------
@@ -1142,19 +1142,176 @@ The immediate advantage of these visualizations is that is not necessary to comp
 
 a
 
-\section{Control Architectures}
+\section{State Feedback Controllers}
 
-a
+In modern control theory, advances in computer performance and in the methods themselves have made the design of controllers using State-Space models feasible for real-world applications. This is usually desirable since, as shown in the latter chapter, these kind of models provides a practical solution to understand dynamical system response and properties, so it is natural to want a controller design technique that accounts for that representation. The most basic, yet most popular, feedback controller used in those settings is the \textit{Full-State Feedback Controller}, defined below. 
 
-\section{Full-State Feedback}
+\begin{boxed-definition}{Full-State Feedback}
+	Given a linear system in State-Space representation, the input signal $\bm{u}(t)$ is calculated through feedback of the states as application of the linear control law:
+	\begin{equation}
+		\bm{u(t)} = \pi(\bm{r}, \bm{x}, t) = \bm{r}(t) - \bm{K} \bm{x}(t)
+	\end{equation}
+	
+	\noindent where $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal that the system must follows and $\bm{K} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
+\end{boxed-definition}
 
-a
+The control law $\pi(.)$ is linear and time-invariant, which makes the analysis of the closed-loop system similar to the one used in open-loop configurations. A schematic of the closed-loop system is shown at Fig. \ref{fig:feedback01}. Of course, this is a choice of control law, and feedback controllers can also be defined using nonlinear or time-dependent functions. 
+
+[img]
+
+Notice that this new definition for the calculation of $\bm{u}(t)$ allows for the following closed-loop representation of the system:
+\begin{align}
+\begin{split}
+	\dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \left( \bm{r}(t) - \bm{K} \bm{x}(t) \right) \\
+	\dot{\bm{x}}(t) &= \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t) + \bm{B} \bm{r}(t)
+\end{split}
+\end{align}
+
+From this is clear that the inclusion of a feedback controller in the loop is equivalent to transform an open-loop system into a new system $(\bm{A}_{cl}, \bm{B})$, with $\bm{A}_{cl} = \bm{A} - \bm{B} \bm{K}$, whose manipulated variables is a reference signal $\bm{r}(t)$ but the controlled variables are still the same. Since $\bm{K}$ is an arbitrary matrix, it is possible to change the behavior of the closed-loop system, and consequently the controlled variables response, by designing this matrix. To understand better the capabilities of the state feedback, consider the following theorems.
+
+%\begin{boxed-theorem}
+%	Given any matrix $\bm{K} \in \mathbb{R}^{r \times n}$, the closed-loop system described by matrices $(\bm{A}-\bm{B}\bm{K}, \bm{B})$ is controllable if and only if the open-loop system $(\bm{A}, \bm{B})$ is controllable.
+%\end{boxed-theorem} 
+%
+%\begin{proof}
+%	From definition, the controllability matrix $\bm{\mathcal{C}}_{cl}$ of the closed-loop system is given by:
+%	\begin{equation}
+%		\bm{\mathcal{C}}_{cl} = \begin{bmatrix} \bm{B} & (\bm{A}-\bm{B}\bm{K})\bm{B} & (\bm{A}-\bm{B}\bm{K})^2 \bm{B} & \cdots & (\bm{A}-\bm{B}\bm{K})^{n-1} \bm{B} \end{bmatrix}
+%	\end{equation}
+%	
+%	It is possible to factorize this matrix as:
+%	\begin{equation}
+%		\bm{\mathcal{C}}_{cl} = \bm{\mathcal{C}} 
+%		\begin{bmatrix} \bm{I} & -\bm{K} \bm{B} & -\bm{K} (\bm{A} - \bm{B}\bm{K})\bm{B} & \cdots & -\bm{K} (\bm{A} - \bm{B}\bm{K})^{n-3}\bm{B} & -\bm{K} (\bm{A} - \bm{B}\bm{K})^{n-2}\bm{B} \\ 
+%		0 & \bm{I} & -\bm{K} \bm{B} & \cdots & -\bm{K} (\bm{A} - \bm{B}\bm{K})^{n-4}\bm{B} & -\bm{K} (\bm{A} - \bm{B}\bm{K})^{n-3}\bm{B} \\ 
+%		\vdots & \vdots & \vdots & \iddots & \vdots & \vdots \\
+%		0 & 0 & 0 & \cdots & -\bm{K} \bm{B} & -\bm{K} (\bm{A} - \bm{B}\bm{K})\bm{B} \\
+%		0 & 0 & 0 & \cdots & \bm{I} & -\bm{K} \bm{B} \\
+%		0 & 0 & 0 & \cdots & 0 & \bm{I} \end{bmatrix}
+%	\end{equation}
+%	
+%	Notice that the multiplication $\bm{K} \bm{B} \in \mathbb{R}^{1 \times r}$ and $\bm{I} \in \mathbb{R}^{r \times r}$. Since the rightmost matrix is upper-triangular, and has no zeros in the main diagonal, the rank of $\bm{\mathcal{C}}$ and $\bm{\mathcal{C}}_{cl}$ are equal. Therefore, if $\bm{\mathcal{C}}$ has full row rank, so has $\bm{\mathcal{C}}_{cl}$, proving the statement.
+%\end{proof}
+
+\begin{boxed-theorem}{(Controller Canonical Form)} \label{th:controlCanon}
+	If a SISO system in State-Space representation is controllable, then by applying the transformation $\bm{z}(t) = \bm{P}\bm{x}(t)$, for a matrix $\bm{P}$ calculated as the inverse of:
+	\begin{equation}
+		\bm{P}^{-1} = \bm{\mathcal{C}} \begin{bmatrix}
+		1 & \alpha_1 & \cdots  & \alpha_{n-1} \\
+		0 & 1 & \cdots & \alpha_{n-2} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots &1
+		\end{bmatrix}
+	\end{equation}
+	
+	\noindent where $[\alpha_1, \alpha_2, ..., \alpha_{n-1}]$ are the $n-1$ first coefficients of the characteristic polynomial $\Delta(s) = det(s\bm{I} - \bm{A})$, the resulting representation is in the \textit{controller canonical form} given as:
+	\begin{align}
+	\begin{cases}
+		\dot{\bm{z}}(t) = \begin{bmatrix}
+			-\alpha_1 & -\alpha_2 & \cdots & -\alpha_{n-1} & -\alpha_n \\
+			1 & 0 & \cdots & 0 & 0 \\
+			\vdots & \vdots & \ddots & \vdots & \vdots \\
+			0 & 0 & \cdots & 1 & 0 
+		\end{bmatrix} \bm{z}(t) + \begin{bmatrix}
+			1 \\ 0 \\ \vdots \\ 0
+		\end{bmatrix} u(t) \\
+		y(t) = \begin{bmatrix} \beta_1 & \beta_2 & \cdots & \beta_n \end{bmatrix} \bm{z}(t)
+	\end{cases}
+	\end{align}
+\end{boxed-theorem} 
+
+Details for the proof of this theorem can be found in \textbf{[reference]}. An equivalent result can be proved for MIMO systems \textbf{[reference]}, but the result is very verbose and does not highlight the main results for the state-feedback. Using the canonical form just presented, it is possible to discuss a strong result for the state feedback controller.
+
+\begin{boxed-theorem}{(Pole-Placement Method)} \label{th:polePlace}
+	If a system in State-Space representation is controllable, then by state feedback using a gain matrix $\bm{K} \in \mathbb{R}^{r \times n}$ the eigenvalues of $\bm{A}_{cl}=\bm{A}-\bm{B}\bm{K}$, the poles of the closed-loop system, can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
+\end{boxed-theorem} 
+
+\begin{proof}
+	Consider that the system is controllable. In this case, it can be converted to the controller canonical form of Theorem \ref{th:controlCanon}. Substituting $\bm{z}(t) = \bm{P} \bm{x}(t)$ results in the following control law for the state feedback:
+	\begin{equation}
+		u(t) = r(t) - \bm{K} \left( \bm{P}^{-1} \bm{z}(t) \right) = r(t) - \tilde{\bm{K}} \bm{z}(t)
+	\end{equation}
+	
+	Applying the state feedback, the transformed closed-loop is given by:
+	\begin{equation} \label{eq:fdbckContrCanon}
+	\tilde{\bm{A}}_{cl} = \bm{P} (\bm{A} - B \bm{K}) \bm{P}^{-1} = \bm{P} \bm{A} \bm{P}^{-1} - \bm{P} B \bm{K} \bm{P}^{-1} = \tilde{\bm{A}} - \tilde{B} \tilde{\bm{K}}
+	\end{equation}	 
+	
+	From Theorem \ref{th:simTrans01} it is known that $\bm{A}_{cl}$ and $\tilde{\bm{A}}_{cl}$ shares the same set of eigenvalues, and, therefore, the same characteristic equations. Consider this characteristic equation in the form:
+	\begin{equation}
+		\Delta(s) = det(s\bm{I} - \bm{A}) = s^n + \alpha_1 s^{n-1} + \alpha_2 s^{n-2} + \cdots + \alpha_{n-1} s + \alpha_n
+	\end{equation}
+	
+	Given a desired a set of coefficients $[\tilde{\alpha}_1, \tilde{\alpha}_2, ..., \tilde{\alpha}_n]$ of a characteristic polynomial whose roots are the desired closed-loop eigenvalues, define the transformed feedback gain matrix as:
+	\begin{equation}
+		\tilde{\bm{K}} = \begin{bmatrix} \tilde{\alpha}_1 - \alpha_1 & \tilde{\alpha}_2 - \alpha_2 & \cdots & \tilde{\alpha}_n - \alpha_n \end{bmatrix}
+	\end{equation}
+	
+	Plugging this in \eqref{eq:fdbckContrCanon}, it is easy to see that the resulting representation is:
+	\begin{align}
+	\begin{cases}
+		\dot{\bm{z}}(t) = \begin{bmatrix}
+			-\tilde{\alpha}_1 & -\tilde{\alpha}_2 & \cdots & -\tilde{\alpha}_{n-1} & -\tilde{\alpha}_n \\
+			1 & 0 & \cdots & 0 & 0 \\
+			\vdots & \vdots & \ddots & \vdots & \vdots \\
+			0 & 0 & \cdots & 1 & 0 
+		\end{bmatrix} \bm{z}(t) + \begin{bmatrix}
+			1 \\ 0 \\ \vdots \\ 0
+		\end{bmatrix} u(t) \\
+		y(t) = \begin{bmatrix} \beta_1 & \beta_2 & \cdots & \beta_n \end{bmatrix} \bm{z}(t)
+	\end{cases}
+	\end{align} 
+	
+	\noindent whose characteristic polynomial is now described by the designed coefficients to yield the desirable eigenvalues. Since $\tilde{\bm{A}}_{cl}$ and $\bm{A}_{cl}$ shares the same set of eigenvalues, it is concluded that it is possible to assign the system poles directly through matrix $\tilde{\bm{K}}$.
+\end{proof}
+
+Notice, from that procedure, that an "original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). This theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. This result is still preserved for MIMO systems, although the design of $\bm{K}$ is not so straightforward since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
+
+Using the parameters from Definition \ref{def:responseParameters}, the positions of the closed-loop system poles can be evaluated given desirable operations, and the matrix $\bm{K}$ can be hand-designed to meet these requirements. This method is known as the \textit{Pole-Placement method} for control synthesis. The algorithm below summarizes a simple procedure of designing an appropriate feedback gain matrix given desirable pole positions.
+
+\begin{algorithm}[ht]
+	\caption{Pole-Placement Method for SISO Systems}	
+	\SetAlgoLined
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	
+	\Input{state-space model $(\bm{A}, B)$ and a set of $n$ desired eigenvalues $\bm{\lambda}^*$.}
+	\Output{feedback gain matrix $\bm{K}$.}
+	\vskip0.25cm
+	
+	Calculate $[\alpha_1, \alpha_2, ..., \alpha_n]$ as the coefficients of the polynomial $\Delta(s) = det(s\bm{I} - \bm{A})$;
+	
+	Let $\bm{P}^{-1} = \begin{bmatrix} B & \bm{A} B & \bm{A}^2 B & \cdots & \bm{A}^{n-1} B \end{bmatrix} \begin{bmatrix}
+		1 & \alpha_1 & \cdots  & \alpha_{n-1} \\
+		0 & 1 & \cdots & \alpha_{n-2} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots &1
+		\end{bmatrix}$;
+	
+	Let $\bm{P} = \left( \bm{P}^{-1} \right)^{-1}$;
+	
+	Calculate $[\tilde{\alpha}_1, \tilde{\alpha}_2, ..., \tilde{\alpha}_n]$ as the coefficients of the polynomial $\Delta_{cl}(s) = \prod_{i=1}^n (s - \lambda^*_i)$;
+	
+	Let $\tilde{\bm{K}} = \begin{bmatrix} \alpha_1 - \tilde{\alpha}_1 & \alpha_2 - \tilde{\alpha}_2 & \cdots & \alpha_n - \tilde{\alpha}_n \end{bmatrix}$;
+	
+	Return $\bm{K} = \tilde{\bm{K}} \bm{P}$
+\end{algorithm} 
+
+Albeit being a simples formula, this method can be used in several applications to yield controllers capable of matching performance requisites. Of course, the designer must take into account that, besides the eigenvalue assignment allows for the whole complex plane, a careless choice of eigenvalues could result in unpractical controllers, with very aggressive or oscillatory input signals. For this reason, it is necessary some knowledge of the instruments limits before designing the matrix $\bm{K}$.
+
+[example]
+
+[fig]
 
 \section{Regulation and Reference Tracking}
 
 a
 
 \section{Deterministic State Observers}
+
+a
+
+\section{Frequency Domain Characteristics}
 
 a
 
