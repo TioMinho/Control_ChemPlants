@@ -7,7 +7,7 @@
 \usepackage[english]{babel}
 \usepackage[margin=1in,a4paper,pdftex]{geometry}
 \usepackage[protrusion=true,expansion=true]{microtype} 
-\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools}
 \usepackage{rotating}
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=red]{hyperref}
 \usepackage[all]{hypcap}
@@ -539,7 +539,7 @@ An indirect result of this is that the SS representation can be converted to the
 
 Despite of the discussion about the benefits of linear models, it is necessary to account for the fact that physical systems will present, in most situations, nonlinear behavior. For this reason, some effort must be done to develop a linear model that can describe the nonlinear behavior with certain accuracy, even if over some small region of the space. With this motivation, a technique for \textit{linearization} of a nonlinear model is detailed below.
 
-\begin{boxed-theorem}{(Linearization by Taylor Expansion)}
+\begin{boxed-theorem}{(Linearization by Taylor Expansion)} \label{th:linearization}
 	Consider a nonlinear time-invariant system:
 	\begin{equation} \label{eq:SSRepr03}
 	\begin{cases}
@@ -1023,7 +1023,7 @@ The first property to be discussed consists in the stability of a system. An ins
 
 The main result behind this criteria is that the natural response of a system should vanish as time evolves, i.e., $\bm{x}(t) \equiv 0$ as $t \to \infty$. This result is very intuitive from Theorem \ref{th:lagrangeForm}, since the vanishing of the natural response implies that $e^{\bm{A} t} \equiv 0$ as $t \to \infty$ and the forced response is expected to be bounded, if $\bm{u}(t)$ is bounded. Since the state-transition matrix is a linear combination of the modes, and the modes are exponential functions of the eigenvalues of the matrix $\bm{A}$, it is possible to determine a condition for stability in the light of these quantities.
 
-\begin{boxed-theorem}{(BIBO Stability in SS)}
+\begin{boxed-theorem}{(BIBO Stability in SS)} \label{th:BIBOStab}
 	A system in State-Space form, represented by a matrix $\bm{A} \in \mathbb{R}^{n \times n}$ with eigenvalues $\bm{\lambda} \in \mathbb{R}^n$, is BIBO stable if and only if $\mathbb{R}e[\lambda_i] < 0,\ \forall i \in [1,2,...,n]$.
 \end{boxed-theorem}
 
@@ -1140,7 +1140,7 @@ The immediate advantage of these visualizations is that is not necessary to comp
 \clearpage
 \chapter{Controller Design}
 
-a
+[assumed C = I]
 
 \section{State Feedback Controllers}
 
@@ -1248,7 +1248,7 @@ Details for the proof of this theorem can be found in \textbf{[reference]}. An e
 	\end{equation}
 	
 	Plugging this in \eqref{eq:fdbckContrCanon}, it is easy to see that the resulting representation is:
-	\begin{align}
+	\begin{align} \label{eq:SSFdbckControlCanon}
 	\begin{cases}
 		\dot{\bm{z}}(t) = \begin{bmatrix}
 			-\tilde{\alpha}_1 & -\tilde{\alpha}_2 & \cdots & -\tilde{\alpha}_{n-1} & -\tilde{\alpha}_n \\
@@ -1305,7 +1305,140 @@ Albeit being a simples formula, this method can be used in several applications 
 
 \section{Regulation and Reference Tracking}
 
-a
+When discussing controller synthesis it is also necessary to account for which objective this device is expected to fulfill. In this case, there are two main classifications of controllers based on the operation that they impose to the system: regulators and tracking (or servo) controllers. In the case of state-feedback, these two classes of controllers differs only by what type of reference signal $\bm{r}(t)$, for an operation in a time interval $t \in [t_0, t_f]$, the system is expected to follow. The following statements gives a formal definition of a controller for regulation:
+
+\begin{boxed-definition}{(Regulator)} \label{def:regulator}
+	If a state-feedback controller has to make a system follows the reference $\bm{r}(t) \equiv 0$, as $t \to \infty$, it is said to be a \textit{regulator}. In this case, the closed-loop state equation and equivalent solutions reduces to the following:
+		\begin{align}
+	\begin{matrix*}[l]
+	\textbf{State Equation:} \hfill & & & \textbf{Lagrange solution:} \hfill \\
+	\dot{\bm{x}}(t) = \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t)  & & &
+	\bm{x}(t) = e^{(\bm{A} - \bm{B} \bm{K}) t} \bm{x}(t_0) \hfill
+	\end{matrix*}
+	\end{align}
+\end{boxed-definition}
+
+Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are 	linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state operation point $\bm{x}_o$ and reject disturbances. For the sake of illustration, two regulators for the reactor system in \eqref{eq:isoSys02} are shown in Fig. \ref{fig:regulator01}, demonstrating how state-feedback can guarantee a specific constant production of chemical substances.
+
+[fig]
+
+In contrast, the control objective could be to follow a non-constant signal $\bm{r}(t)$, or to follow a constant signal different from the zero-state, giving rise to the tracking or servomechanism controllers. A more complete discussion is needed in such cases, since there is a possibility that state-feedback is not capable of actually performing this tracking. To understand this question, consider, for simplicity, that the system must follow a constant reference $\bm{r}(t) = a$. Consider, now, an Input-Output conversion of a closed-loop SISO State-Space model, which from \eqref{eq:SSFdbckControlCanon} directly results in the transfer function:
+\begin{equation}
+	G(s) = \cfrac{Y(s)}{R(s)} = \cfrac{\beta_1 s^{n-1} + \beta_2 s^{n-2} + \cdots + \beta_{n-1} s + \beta_n}{s^{n} + \tilde{\alpha}_1 s^{n-1} + \tilde{\alpha}_2 s^{n-2} + \cdots + \tilde{\alpha}_{n-1} s + \tilde{\alpha}_n}
+\end{equation}
+
+From that formulation it is clear that the response $Y(s) = G(s)R(s)$ will yield a perfect tracking if $G(s) = 1$. Moreover, if the system has to track asymptotically track this reference, this operation can be evaluated as time $t \to \infty$ or, equivalently, as the frequency $s \to 0$. Plugging this limit in the transfer function implies that a perfect tracking is always possible if $G(0) = \beta_n /  \tilde{\alpha}_n = 1$, which is not guaranteed a priori. A possible solution is to transform the reference with as $\tilde{r}(t) = F r(t)$, so that $Y(s) = G(s)\tilde{R}(s) = G(s) F R(s)$, resulting that:
+\begin{equation}
+	G(0) F = 1 \Rightarrow F = \cfrac{\tilde{\alpha}_n}{\beta_n}
+\end{equation}
+
+\noindent which allows for perfect asymptotically tracking in all cases but when $\beta_n = 0$. This same reasoning can easily be extended to MIMO systems (the gain $F$ turns into a matrix). In the case of non-constant references, the same intuition could still be used, but the analysis and design of $F$ becomes more complex \textbf{[reference]}. This, however, allows for the definition of tracking controllers.
+
+\begin{boxed-definition}{(Tracking Controllers)} \label{def:tracking}
+	If a state-feedback controller has to make a system track any step reference $\bm{r}(t) \neq \bm{0}$, as $t \to \infty$, it is said to be a \textit{tracking controller}. In this case, one has to apply the \textit{feedforward gain} $F$ to correct the reference as $\tilde{\bm{r}}(t) = \bm{F}\bm{r}(t)$, resulting in the following closed-loop state equation and equivalent solution:
+	\begin{align}
+	\begin{matrix*}[l]
+	\textbf{State Equation:} \hfill & & \textbf{Lagrange solution:} \hfill \\
+	\dot{\bm{x}}(t) = \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t) + \bm{B} \bm{F} \bm{r}(t)  & &
+	\bm{x}(t) = e^{(\bm{A} - \bm{B} \bm{K}) t} \bm{x}(t_0) + \int_{t_0}^{t} e^{(\bm{A} - \bm{B} \bm{K}) (t - \tau)} \bm{B} \bm{F} \bm{r}(\tau) d \tau \hfill
+	\end{matrix*}
+	\end{align}
+\end{boxed-definition}
+
+Despite being a feasible solution, there are still problems with this definition of tracking controllers. For instance, if the system is subject to a \textit{constant additive disturbance}, which as not anticipated in the model, the resulting operation will not yield a perfect tracking. The simulations in Fig. \ref{fig:tracking01} shows the three cases for a tracking controller given the feedforward correction of the reference.
+
+[fig]
+
+The problem of the previous formulation for a tracking controller is that it is not robust to actions that happens outside the model. A direct cause of this is the fact that the feedforward gain $\bm{F}$ does not benefits from the real-time corrective action of the state-feedback, but rather is calculated \textit{off-line} using the model properties. Therefore, a way to ensure a more robust operation could be to insert real-time information about the tracking error directly to the feedback corrective action. With this motivation, a new formulation of the tracking controller is given below.
+
+\begin{boxed-definition}{(Robust Tracking Controllers)} \label{def:robustTracking}
+	Given a State-space system and augmented state $\bm{x}_a(t)$ defined as:
+	\begin{equation}
+		\bm{x}_a(t) = \int_{0}^{t} \bm{r}(\tau) - \bm{C} \bm{x}(\tau) d\tau \Longrightarrow \dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)
+	\end{equation}
+	
+	A robust tracking (or servo) controller, defined by the gain $\tilde{\bm{K}} = \begin{bmatrix} \bm{K} & \bm{K}_a \end{bmatrix}$, is the one which operates on the following augmented version of the original system:
+	\begin{align} \label{eq:augmentedSystem}
+	\begin{cases}
+		\begin{bmatrix}
+			\dot{\bm{x}}(t) \\
+			\dot{\bm{x}}_a(t)
+		\end{bmatrix} &= \begin{bmatrix}
+			\bm{A} + \bm{B} \bm{K} & \bm{B} \bm{K}_a \\ - \bm{C} & \bm{0}
+		\end{bmatrix} \begin{bmatrix}
+			\bm{x}(t) \\
+			\bm{x}_a(t)
+		\end{bmatrix} + \begin{bmatrix}
+			\bm{0} \\
+			\bm{1}
+		\end{bmatrix} \bm{r}(t)
+		\\
+		\hfill \bm{y}(t) &= \begin{bmatrix}
+			\bm{C} & \bm{0}
+		\end{bmatrix} \begin{bmatrix}
+			\bm{x}(t) \\
+			\bm{x}_a(t)
+		\end{bmatrix}
+	\end{cases}
+	\end{align}
+	
+	or, equivalently:
+	\begin{align}
+	\begin{cases}
+		\tilde{\bm{x}}(t) = \tilde{\bm{A}} \tilde{\bm{x}}(t) + \tilde{\bm{B}} \tilde{\bm{r}}(t) \\
+		\bm{y}(t) = \tilde{\bm{C}} \tilde{\bm{x}}(t) \hfill
+	\end{cases}
+	\end{align}
+\end{boxed-definition}
+
+Notice that this formulation is a alternative to represent the tracking action of the controller, represented by the first row in the state-equation, as a simple regulation. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
+
+\begin{boxed-theorem}
+	If the system described by matrices $(\bm{A}, \bm{B})$ is controllable and its transfer functions $\bm{G}(s)$ has no zero at $s = 0$, then the eigenvalues of the augmented matrix $\tilde{\bm{A}}$ can be assigned arbitrary by the feedback gain $\tilde{\bm{K}}$.
+\end{boxed-theorem}
+
+\begin{proof}
+	Without loss of generality, consider a SISO controllable system. After the augmentation, the controllability matrix $\tilde{\bm{\mathcal{C}}}$ is calculated as:
+	\begin{align}
+	\begin{split}
+		\tilde{\bm{\mathcal{C}}} &= \begin{bmatrix}
+			B & \bm{A} B & \bm{A}^2 B & \bm{A}^3 B & \cdots & \bm{A}^{n-1} B \\
+			0 & -C B & -C \bm{A} B & -C \bm{A}^2 B & \cdots & -C \bm{A}^{n-2} B
+		\end{bmatrix} \\
+		&=
+			\begin{bmatrix}
+				1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
+				0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
+				0 & 0 & 1 & -\alpha_1  & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
+				0 & 0 & 0 & 1 &  \cdots & \Delta_4(\alpha_1,...,\alpha_n) \\
+				\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+				0 & 1 & -\beta_1 & -\beta\alpha_1 - \alpha_2  & \cdots & \Delta_n(\alpha_1,...,\alpha_n) \\
+			\end{bmatrix}
+	\end{split}
+	\end{align}
+	
+	\noindent where $\Delta_i(\alpha_1,...,\alpha_n)$ is a polynomial created to save space in this representation. By inspection of this matrix, it is possible to discover a pattern between the rows. Since elementary operations between the rows ${r_1, r_2, ..., r_n}$ doesn't change the matrix row rank, the last row of the matrix can be transformed as $r_n = r_n + r_{n-1}\beta_{n-2} + r_{n-2}\beta_{n-3} + \cdots + r_{2}\beta_{1}$. The result is the triangular matrix in the form:
+	\begin{align}
+	\begin{split}
+		\tilde{\bm{\mathcal{C}}} &= 
+			\begin{bmatrix}
+				1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
+				0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
+				0 & 0 & 1 & -\alpha_1  & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
+				0 & 0 & 0 & 1 &  \cdots & \Delta_4(\alpha_1,...,\alpha_n) \\
+				\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+				0 & 0 & 0 & 0  & \cdots & \beta_n \\
+			\end{bmatrix}
+	\end{split}
+	\end{align}
+	
+	Since $\bm{G}(s)$ has no zeros at $s = 0$, then $\beta_n \neq 0$, meaning that $\tilde{\bm{\mathcal{C}}}$ is nonsingular and, therefore has full row rank. This concludes that the augmented system $(\tilde{\bm{A}}, \tilde{\bm{B}})$ is controllable and, from Theorem \ref{th:polePlace}, the eigenvalues of $\tilde{\bm{A}}$ can be assigned anywhere in the complex plane.
+\end{proof}
+
+A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. Some simulations of closed-loop systems for tracking are shown in Fig. \ref{fig:tracking02} for a non-constant reference.
+
+[fig]
+
 
 \section{Deterministic State Observers}
 
