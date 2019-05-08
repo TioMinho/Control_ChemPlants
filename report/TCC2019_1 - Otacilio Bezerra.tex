@@ -117,7 +117,7 @@
 \setcounter{page}{1}
 \chapter{Introduction}
 
-This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactive Systems, therefore the discussion will follow the notation common to the literature of this field, and a "modern" approach to this theory is explored. 
+This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactive Systems, therefore the discussion will follow the notation common to the literature of this field, and a ``modern" approach to this theory is explored. 
 
 The sections are organized as follows: Section 1.1 provides general definitions for control systems engineering, Section 1.2 discuss chemical reactive systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
 
@@ -160,7 +160,7 @@ A chemical reaction, the transformation of a chemical substance into another, is
 
 In this equation, the compounds $A$ and $2 B$ forms the set of \textit{reactants}, $\mathbb{R}$, while $3 C$ and $D$ forms the set of \textit{products}, $\mathcal{P}$. The coefficients in such equations are the \textit{stoichiometric numbers}, providing an information about proportionality between the quantity of each substances in the reaction. 
 
-Usually the products can be directly used as reactants in another reaction, in which case they can also be referred as a intermediate product (or byproduct), and the equations can be appended in a "series" representation. In this case, each $k$-th intermediate product forms a set $\mathcal{I}_k$. In addition to a chain of series reactions, there is also the possibility of different reactions to occur in parallel, in the same system. The combination of these sets of reactants, byproducts, products and reactions are often referred as a \textit{chemical reaction network}, and the associated equation can be represented in general form as:
+Usually the products can be directly used as reactants in another reaction, in which case they can also be referred as a intermediate product (or byproduct), and the equations can be appended in a ``series" representation. In this case, each $k$-th intermediate product forms a set $\mathcal{I}_k$. In addition to a chain of series reactions, there is also the possibility of different reactions to occur in parallel, in the same system. The combination of these sets of reactants, byproducts, products and reactions are often referred as a \textit{chemical reaction network}, and the associated equation can be represented in general form as:
 \begin{equation} \label{eq:chemNetwork}
 \left\{ \begin{matrix}
     \mathbb{R}^{(1)}  & \longrightarrow & \mathcal{I}^{(1)}_1  &  \longrightarrow & \cdots & \longrightarrow & \mathcal{I}^{(1)}_{M_1} & \longrightarrow & \mathcal{P}^{(1)} \\
@@ -1265,7 +1265,7 @@ Details for the proof of this theorem can be found in \textbf{[reference]}. An e
 	\noindent whose characteristic polynomial is now described by the designed coefficients to yield the desirable eigenvalues. Since $\tilde{\bm{A}}_{cl}$ and $\bm{A}_{cl}$ shares the same set of eigenvalues, it is concluded that it is possible to assign the system poles directly through matrix $\tilde{\bm{K}}$.
 \end{proof}
 
-Notice, from that procedure, that an "original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). This theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. This result is still preserved for MIMO systems, although the design of $\bm{K}$ is not so straightforward since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
+Notice, from that procedure, that an ``original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). This theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. This result is still preserved for MIMO systems, although the design of $\bm{K}$ is not so straightforward since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
 
 Using the parameters from Definition \ref{def:responseParameters}, the positions of the closed-loop system poles can be evaluated given desirable operations, and the matrix $\bm{K}$ can be hand-designed to meet these requirements. This method is known as the \textit{Pole-Placement method} for control synthesis. The algorithm below summarizes a simple procedure of designing an appropriate feedback gain matrix given desirable pole positions.
 
@@ -1391,7 +1391,9 @@ The problem of the previous formulation for a tracking controller is that it is 
 	\end{align}
 \end{boxed-definition}
 
-Notice that this formulation is a alternative to represent the tracking action of the controller, represented by the first row in the state-equation, as a simple regulation. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
+[fig]
+
+Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking error until a time $t$, this formulation is usually characterized as imposing ``integral action" to the controller. The schematic at Fig. \ref{fig:tracking02} illustrates how an integrator can be included to the block diagram of the control loop. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
 
 \begin{boxed-theorem}
 	If the system described by matrices $(\bm{A}, \bm{B})$ is controllable and its transfer functions $\bm{G}(s)$ has no zero at $s = 0$, then the eigenvalues of the augmented matrix $\tilde{\bm{A}}$ can be assigned arbitrary by the feedback gain $\tilde{\bm{K}}$.
@@ -1435,14 +1437,55 @@ Notice that this formulation is a alternative to represent the tracking action o
 	Since $\bm{G}(s)$ has no zeros at $s = 0$, then $\beta_n \neq 0$, meaning that $\tilde{\bm{\mathcal{C}}}$ is nonsingular and, therefore has full row rank. This concludes that the augmented system $(\tilde{\bm{A}}, \tilde{\bm{B}})$ is controllable and, from Theorem \ref{th:polePlace}, the eigenvalues of $\tilde{\bm{A}}$ can be assigned anywhere in the complex plane.
 \end{proof}
 
-A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. Some simulations of closed-loop systems for tracking are shown in Fig. \ref{fig:tracking02} for a non-constant reference.
+A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. Some simulations of closed-loop systems for tracking are shown in Fig. \ref{fig:tracking03} for a non-constant reference.
 
 [fig]
 
 
 \section{Deterministic State Observers}
 
-a
+Until now, the state feedback was discussed in the perspective that the device has direct to the real value of all states of the system. This is assumption is actually unrealistic, since the states are only observed through the output signal $\bm{y}(t)$, that maps the states through the matrix $\bm{C}$, which itself is not assumed to be always equal to the identity matrix. In practice, this means that some states could not be measured, due to technical difficulties or economic reasons, or that the instrumentation available is not perfect, and the observations are prone to deviate from the real value. In reactor systems, for instance, is hard to measure the actual value of chemical compounds concentrations in small scales, and the measuring process itself could be very slow or simply unpractical in operational conditions \textbf{[reference]}. Since the state-vector is necessary for the state-feedback to compute the input to the system, this section discusses how to develop devices that can reconstruct information about the states from the observations of the available sensor.
+
+A device that generates a state-vector $\bm{x}(t)$ from the output signal $\bm{y}(t)$ is known as \textit{state observer}, or \textit{state estimator} in some cases. Amongst the several possible configurations, a very practical and popular one is the \textit{Luenberger observer}, which is defined below.
+
+\begin{boxed-definition}{(Luenberger Observer)} \label{def:luenberger}
+	Given a system in State-Space with output signal $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^p$ and a observer gain $\bm{L} \in \mathbb{R}^{n \times p}$, the estimated state-vector $\hat{\bm{x}}(t)$ is represented by the observer system:
+	\begin{equation}
+		\dot{\hat{\bm{x}}}(t) = \bm{A} \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{L} \left( \bm{y}(t) - \bm{C} \hat{\bm{x}}(t) \right)
+	\end{equation}
+	
+	\noindent or, equivalently:
+	\begin{equation} \label{eq:luenberger02}
+		\dot{\hat{\bm{x}}}(t) = \left( \bm{A} - \bm{L} \bm{C} \right) \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{L} \bm{y}(t)
+	\end{equation}
+\end{boxed-definition}
+
+The observer system works as a parallel system that is simulated alongside with the actual system, as illustrate in Fig. \ref{fig:luenberger01}. The expected result is that the observer yields $\hat{\bm{x}}(t) = \bm{x}(t)$, as time $t \to \infty$. Alternatively, it is possible to create a variable $\bm{e}(t) = \bm{x}(t) - \hat{\bm{x}}(t)$ such that, using \eqref{eq:luenberger02}:
+\begin{align}
+\begin{split}
+	\dot{\bm{e}} &= \bm{x} - \hat{\bm{x}} \\ 
+		&= \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) - \left( \left( \bm{A} - \bm{L} \bm{C} \right) \hat{\bm{x}} + \bm{B} \bm{u} + \bm{L} \bm{C} \bm{x} \right) \\
+		&= \left( \bm{A} - \bm{L} \bm{C} \right) \bm{x} - \left( \bm{A} - \bm{L} \bm{C} \right) \hat{\bm{x}} \\
+		&= \left( \bm{A} - \bm{L} \bm{C} \right) \left( \bm{x} - \hat{\bm{x}} \right) \\
+		&= \left( \bm{A} - \bm{L} \bm{C} \right) \bm{e}
+\end{split}
+\end{align}
+
+\noindent which implies that the observer asymptotically tracks the actual state-vector if $\bm{e}(t) = \bm{0}$ as $t \to \infty$. Analyzing the equation above, it is intuitive to notice that this result can be guaranteed if all the eigenvalues of matrix $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ have negative real parts. The following theorem relates this statement with the choice of a gain $\bm{L}$.
+
+[fig]
+
+\begin{boxed-theorem}
+	If a system in State-Space representation is observable, then by a Luenberger observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
+\end{boxed-theorem} 
+
+[proof by duality theorem]
+
+[commentary on similarities with regulator and limitations]
+
+[The Separation Principle]
+
+[Feedback from estimated states]
 
 \section{Frequency Domain Characteristics}
 
