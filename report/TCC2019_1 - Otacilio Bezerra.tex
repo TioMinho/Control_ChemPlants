@@ -1479,13 +1479,78 @@ The observer system works as a parallel system that is simulated alongside with 
 	If a system in State-Space representation is observable, then by a Luenberger observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
 \end{boxed-theorem} 
 
-[proof by duality theorem]
+\begin{proof}
+	Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design 	a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $K$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ establishes the theorem.
+\end{proof}
 
-[commentary on similarities with regulator and limitations]
+The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$, in this conditions, can be reconstructed by using a observer gain that guarantees that each eigenvalue of $\bm{A}_{obs}$ is on the right-half side of the complex plane. Some simulations of a Luenberger observer for different values of $\bm{L}$ are shown in Fig. \ref{fig:observer01}, considering a system in open-loop conditions.
 
-[The Separation Principle]
+[img]
 
-[Feedback from estimated states]
+As stated before, one of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector in order to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states.
+
+\begin{boxed-definition}{(Feedback from Estimated States)} \label{def:fdbckLuenberger}
+	Given a system in State-Space representation whose state-vector is reconstructed from a Luenberger observer of gain $\bm{L} \in \mathbb{R}^{n \times p}$ and input signal is calculated through state-feedback with gain $\bm{K} \in \mathbb{R}^{n \times r}$, its time evolution can be represented through the model:
+	\begin{align} \label{eq:fdbckLuenberger01}
+	\begin{cases}
+		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) - \bm{B} \bm{K} \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) \\
+		\dot{\hat{\bm{x}}}(t) = \left(\bm{A} - \bm{L} \bm{C} - \bm{B} \bm{K} \right) \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) + \bm{L} \bm{y}(t) 
+	\end{cases}
+	\end{align}
+\end{boxed-definition} 
+
+A schematic for this formulation of feedback from estimated states is shown Fig. \ref{fig:observer02}. In fact, this schematic summarizes several different control architectures that includes both feedback action and state estimation, and it will be the reference whenever this work mentions physical control loops and instrumentation.
+
+[fig]
+
+Notice, now, that the formulation just defined imposes that the dynamics of the estimated state $\hat{\bm{x}}(t)$ is dependent both in $\bm{K}$ and $\bm{L}$, which are arbitrary matrices chosen by the control designer. This leads to the possible conclusion that the choice of $\bm{K}$ is now restricted by the effect that it will produce in the choice of $\bm{L}$, which is not true. The following theorem, known as the Separation Principle \textbf{[reference]}, states that design of these two gains are independent.
+
+\begin{boxed-theorem}{(Separation Principle)} \label{th:separationPrinciple}
+	Given a system in State-Space with a Luenberger observer of gain $\bm{L}$ and state-feedback controller of gain $\bm{K}$, the closed-loop eigenvalues contributions of $(\bm{A} - \bm{B}\bm{K})$ are independent from those of $(\bm{A} - \bm{L}\bm{C})$.
+\end{boxed-theorem}
+
+\begin{proof}
+	Consider a feedback from estimated states as defined in \eqref{eq:fdbckLuenberger01}. That controller-estimator system can be rewritten as a single state equation:
+	\begin{equation}
+	\begin{bmatrix} \dot{\mathbf{x}} \\ \dot{\hat{\mathbf{x}}}	\end{bmatrix}
+	=
+	\underbrace{\begin{bmatrix}
+		\mathbf{A} & - \mathbf{B} \mathbf{K} \\
+		\mathbf{L} \mathbf{C} & \mathbf{A} - \mathbf{L} \mathbf{C} - \mathbf{B} \mathbf{K}
+	\end{bmatrix}}_{\tilde{\mathbf{A}}} \begin{bmatrix} \mathbf{x} \\ \hat{\mathbf{x}} \end{bmatrix}
+	+
+	\underbrace{\begin{bmatrix}	\mathbf{B} \\ \mathbf{B} \end{bmatrix}}_{\tilde{\mathbf{B}}} \mathbf{r}
+\end{equation} 
+
+Consider, now, the following similarity transformation $\bm{z}(t) = \bm{P} \bm{x}(t)$:
+\begin{equation}
+	\underbrace{\begin{bmatrix}
+		\mathbf{I} & 0 \\ \mathbf{I} & -\mathbf{I}
+	\end{bmatrix}}_{\mathbf{P}} \begin{bmatrix}
+		\mathbf{x} \\ \hat{\mathbf{x}}
+	\end{bmatrix} = \begin{bmatrix}
+		\mathbf{x} \\ \mathbf{x} - \hat{\mathbf{x}}
+	\end{bmatrix} = \begin{bmatrix}
+		\mathbf{x} \\ \mathbf{e}
+	\end{bmatrix} 
+\end{equation}
+
+Since $\bm{P} = \bm{P}^{-1}$, and this is a valid similarity transformation that does not alters the system eigenvalues, the equivalent system for state $\bm{z}(t)$ is obtained as:
+\begin{equation}
+	\begin{bmatrix} \dot{\mathbf{x}} \\ \dot{\mathbf{e}}	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		\mathbf{A} - \mathbf{B} \mathbf{K} & - \mathbf{B} \mathbf{K} \\
+		0 & \mathbf{A} - \mathbf{L} \mathbf{C}
+	\end{bmatrix} \begin{bmatrix} \mathbf{x} \\ \mathbf{e} \end{bmatrix}
+	+
+	\begin{bmatrix}	\mathbf{B} \\ 0 \end{bmatrix} \mathbf{r}
+\end{equation} \vskip0.2cm
+
+Since the matrix obtained is block triangular, it is possible to conclude that the system in such configuration has eigenvalues that are contributions from the eigenvalues of $\left( \mathbf{A} - \mathbf{B} \mathbf{K} \right)$ and $\left( \mathbf{A} - \mathbf{L} \mathbf{C} \right)$ separately.
+\end{proof}
+
+The Separation Principle is a nice results that further motivates the topology of Fig. \ref{fig:observer02}, since it explicitly states that the design of the controller and the state observer can be done separately. Thus, any structure that obeys the state feedback formulation can be used as a controller and the same is valid for the observer device. In the next chapter, this result will be explored to motivate the use of more advanced control and state estimation techniques without having to redefine the analytical tools and intuitions built for traditional state-feedback controllers from pole-placement methods.
 
 \section{Frequency Domain Characteristics}
 
