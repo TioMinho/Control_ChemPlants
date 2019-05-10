@@ -593,7 +593,7 @@ Despite of the discussion about the benefits of linear models, it is necessary t
 	\begin{align}
 	\begin{cases}
 		\hfill \cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o}  \Delta \bm{u}(t) + \text{high order terms} \\ \\
-		\mathbf{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o}  \Delta \bm{u}(t) + \text{high order terms} \\
+		\bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{y}_o, \bm{u}_o}  \Delta \bm{u}(t) + \text{high order terms} \\
 	\end{cases}
 	\end{align}
 	
@@ -1512,49 +1512,84 @@ Notice, now, that the formulation just defined imposes that the dynamics of the 
 \begin{proof}
 	Consider a feedback from estimated states as defined in \eqref{eq:fdbckLuenberger01}. That controller-estimator system can be rewritten as a single state equation:
 	\begin{equation}
-	\begin{bmatrix} \dot{\mathbf{x}} \\ \dot{\hat{\mathbf{x}}}	\end{bmatrix}
+	\begin{bmatrix} \dot{\bm{x}} \\ \dot{\hat{\bm{x}}}	\end{bmatrix}
 	=
 	\underbrace{\begin{bmatrix}
-		\mathbf{A} & - \mathbf{B} \mathbf{K} \\
-		\mathbf{L} \mathbf{C} & \mathbf{A} - \mathbf{L} \mathbf{C} - \mathbf{B} \mathbf{K}
-	\end{bmatrix}}_{\tilde{\mathbf{A}}} \begin{bmatrix} \mathbf{x} \\ \hat{\mathbf{x}} \end{bmatrix}
+		\bm{A} & - \bm{B} \bm{K} \\
+		\bm{L} \bm{C} & \bm{A} - \bm{L} \bm{C} - \bm{B} \bm{K}
+	\end{bmatrix}}_{\tilde{\bm{A}}} \begin{bmatrix} \bm{x} \\ \hat{\bm{x}} \end{bmatrix}
 	+
-	\underbrace{\begin{bmatrix}	\mathbf{B} \\ \mathbf{B} \end{bmatrix}}_{\tilde{\mathbf{B}}} \mathbf{r}
+	\underbrace{\begin{bmatrix}	\bm{B} \\ \bm{B} \end{bmatrix}}_{\tilde{\bm{B}}} \bm{r}
 \end{equation} 
 
 Consider, now, the following similarity transformation $\bm{z}(t) = \bm{P} \bm{x}(t)$:
 \begin{equation}
 	\underbrace{\begin{bmatrix}
-		\mathbf{I} & 0 \\ \mathbf{I} & -\mathbf{I}
-	\end{bmatrix}}_{\mathbf{P}} \begin{bmatrix}
-		\mathbf{x} \\ \hat{\mathbf{x}}
+		\bm{I} & 0 \\ \bm{I} & -\bm{I}
+	\end{bmatrix}}_{\bm{P}} \begin{bmatrix}
+		\bm{x} \\ \hat{\bm{x}}
 	\end{bmatrix} = \begin{bmatrix}
-		\mathbf{x} \\ \mathbf{x} - \hat{\mathbf{x}}
+		\bm{x} \\ \bm{x} - \hat{\bm{x}}
 	\end{bmatrix} = \begin{bmatrix}
-		\mathbf{x} \\ \mathbf{e}
+		\bm{x} \\ \bm{e}
 	\end{bmatrix} 
 \end{equation}
 
 Since $\bm{P} = \bm{P}^{-1}$, and this is a valid similarity transformation that does not alters the system eigenvalues, the equivalent system for state $\bm{z}(t)$ is obtained as:
 \begin{equation}
-	\begin{bmatrix} \dot{\mathbf{x}} \\ \dot{\mathbf{e}}	\end{bmatrix}
+	\begin{bmatrix} \dot{\bm{x}} \\ \dot{\bm{e}}	\end{bmatrix}
 	=
 	\begin{bmatrix}
-		\mathbf{A} - \mathbf{B} \mathbf{K} & - \mathbf{B} \mathbf{K} \\
-		0 & \mathbf{A} - \mathbf{L} \mathbf{C}
-	\end{bmatrix} \begin{bmatrix} \mathbf{x} \\ \mathbf{e} \end{bmatrix}
+		\bm{A} - \bm{B} \bm{K} & - \bm{B} \bm{K} \\
+		\bm{0} & \bm{A} - \bm{L} \bm{C}
+	\end{bmatrix} \begin{bmatrix} \bm{x} \\ \bm{e} \end{bmatrix}
 	+
-	\begin{bmatrix}	\mathbf{B} \\ 0 \end{bmatrix} \mathbf{r}
+	\begin{bmatrix}	\bm{B} \\ \bm{0} \end{bmatrix} \bm{r}
 \end{equation} \vskip0.2cm
 
-Since the matrix obtained is block triangular, it is possible to conclude that the system in such configuration has eigenvalues that are contributions from the eigenvalues of $\left( \mathbf{A} - \mathbf{B} \mathbf{K} \right)$ and $\left( \mathbf{A} - \mathbf{L} \mathbf{C} \right)$ separately.
+Since the matrix obtained is block triangular, it is possible to conclude that the system in such configuration has eigenvalues that are contributions from the eigenvalues of $\left( \bm{A} - \bm{B} \bm{K} \right)$ and $\left( \bm{A} - \bm{L} \bm{C} \right)$ separately.
 \end{proof}
 
 The Separation Principle is a nice results that further motivates the topology of Fig. \ref{fig:observer02}, since it explicitly states that the design of the controller and the state observer can be done separately. Thus, any structure that obeys the state feedback formulation can be used as a controller and the same is valid for the observer device. In the next chapter, this result will be explored to motivate the use of more advanced control and state estimation techniques without having to redefine the analytical tools and intuitions built for traditional state-feedback controllers from pole-placement methods.
 
-\section{Frequency Domain Characteristics}
+\section{Properties of State-Feedback Controllers}
 
-a
+The last section introduces the first considerations into applying state-feedback in real-world systems, given limitations on the instruments and uncertainty on the environment. Basically, a mathematical analysis of such closed-loop controllers allows for a full characterization of the system behavior, but the real system will exhibit a different response due to these limitations and, essentially, due to possible external disturbances. Therefore, it is desirable to anticipate these variations and discuss the properties of the closed-loop system in the sense of robustness and stability margins. Since this goal requires that the system response is evaluated in as general as possible context, the discussion in this section relies on frequency response analysis, which consider a broader class of input signals: sinusoids of any frequency. Consider the representation of closed-loop systems shown in Fig. \ref{fig:properties01}, which consists of a simplified version of Fig. \ref{fig:feedback01} in the Laplace frequency domain considering only the state response.
+
+[fig - tickz]
+
+Using block diagram algebra and Theorem \ref{th:SSToIO}, it is possible to associate a forward-path transfer function $\bm{G}_{f}(s)$ given as \textbf{[reference]}:
+\begin{equation} \label{eq:fdbckForwardTrnsfer}
+	\bm{G}_{f}(s) =  \bm{K}^{T} \left(s \bm{I} - \bm{A} \right)^{-1} B 
+\end{equation}
+
+Now, it is possible to characterize the properties of this quantity which relates the state-feedback gain $\bm{K}$ with the system disturbance $\bm{D}_x(s)$ and sensor disturbance $\bm{D}_e(s)$. To facilitate the definitions and discussion, the results are shown for single-state single-input systems, so $\bm{G}_f(s)$ is a scalar function, where the extension for $n > 1$ states is intuitive in most cases. The first property to be discussed is that of sensitivity \textbf{[reference]}. 
+
+\begin{boxed-definition}{(Sensitivity)} \label{def:sensitivity}
+	Consider a SISO system with state-feedback controller of gain $\bm{K}$ whose forward transfer function $\bm{G}_{f}(s)$ is given by \eqref{eq:fdbckForwardTrnsfer}. The \textit{sensitivity} function of this controlled system, denoted by the matrix $\bm{S}$, is defined as the transfer function from the system disturbances $\bm{D}_x(s)$ to the system total response, and it is equated as:
+	\begin{equation}
+		\bm{S}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} = \cfrac{1}{1+G_f(s)}
+	\end{equation}
+	
+	Additionally, the \textit{complementary sensitivity} function, denoted by the matrix $\bm{T}$, is defined as the transfer function from the reference to the state response, and it is equated as:
+	\begin{equation}
+		\bm{T}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} \bm{G}_f(s) = \cfrac{G_f(s)}{1+G_f(s)}
+	\end{equation}
+\end{boxed-definition}
+
+This quantity states an important trade-off that has to be made when the feedback gain $\bm{K}$ is applied to a system subject to disturbances. To understand this, notice that:
+\begin{equation}
+	\bm{S} + \bm{T} = I
+\end{equation}
+
+Since both these quantities are transfer functions, a value of either one that is equal to the identity implies a perfect operation. Moreover, those values are directly affect by the increase or decrease of $\bm{K}$. This leads to the following observations:
+
+\begin{enumerate}
+	\item a
+	\item b
+	\item c
+	\item d
+\end{enumerate}
 
 % 4 - Optimal Control
 % ---------------------------------------------------------------
