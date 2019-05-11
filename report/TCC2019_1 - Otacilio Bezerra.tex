@@ -33,7 +33,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1138,9 +1138,9 @@ The immediate advantage of these visualizations is that is not necessary to comp
 % 3 - Controller Design
 % ---------------------------------------------------------------
 \clearpage
-\chapter{Controller Design}
+\chapter{Controller Synthesis}
 
-[assumed C = I]
+This chapter discusses the general results and properties for the design of dynamical controllers, focusing on feedback architectures. The devices are motivated and formulated using the State-Space model for dynamical systems, so the feedback is performed on the state response rather than the system output. For this reason, the results in this section focus on these equations, where the output equations is made implicit.
 
 \section{State Feedback Controllers}
 
@@ -1563,44 +1563,107 @@ Using block diagram algebra and Theorem \ref{th:SSToIO}, it is possible to assoc
 	\bm{G}_{f}(s) =  \bm{K}^{T} \left(s \bm{I} - \bm{A} \right)^{-1} B 
 \end{equation}
 
-Now, it is possible to characterize the properties of this quantity which relates the state-feedback gain $\bm{K}$ with the system disturbance $\bm{D}_x(s)$ and sensor disturbance $\bm{D}_e(s)$. To facilitate the definitions and discussion, the results are shown for single-state single-input systems, so $\bm{G}_f(s)$ is a scalar function, where the extension for $n > 1$ states is intuitive in most cases. The first property to be discussed is that of sensitivity \textbf{[reference]}. 
+Now, it is possible to characterize the properties of this quantity which relates the state-feedback gain $\bm{K}$ with the system disturbance $\bm{D}_x(s)$ and sensor disturbance $\bm{D}_e(s)$. To facilitate the definitions and discussion, the results are shown for single-state single-input systems, so $\bm{G}_f(s)$ is a scalar function, where the extension for $n > 1$ states is intuitive in most cases. The first property to be discussed, then, considers the stability of closed-loop feedback controllers. Consider the following closed-loop stability criterion from a Bode plot visualization.
 
-\begin{boxed-definition}{(Sensitivity)} \label{def:sensitivity}
-	Consider a SISO system with state-feedback controller of gain $\bm{K}$ whose forward transfer function $\bm{G}_{f}(s)$ is given by \eqref{eq:fdbckForwardTrnsfer}. The \textit{sensitivity} function of this controlled system, denoted by the matrix $\bm{S}$, is defined as the transfer function from the system disturbances $\bm{D}_x(s)$ to the system total response, and it is equated as:
-	\begin{equation}
-		\bm{S}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} = \cfrac{1}{1+G_f(s)}
-	\end{equation}
-	
-	Additionally, the \textit{complementary sensitivity} function, denoted by the matrix $\bm{T}$, is defined as the transfer function from the reference to the state response, and it is equated as:
-	\begin{equation}
-		\bm{T}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} \bm{G}_f(s) = \cfrac{G_f(s)}{1+G_f(s)}
-	\end{equation}
+\begin{boxed-theorem}{(Bode stability criterion)}
+    Consider a feedback system whose closed-loop transfer function is defined, assuming perfect measuring sensors, as:
+    \begin{equation}
+        T(s) = \cfrac{K G(s)}{1 + K G(s)}
+    \end{equation}
+    
+    The closed-loop system is said to be stable if $\| G(j \omega_{pc}) \leq 0 \|$, where $\omega_{pc}$ is the \textit{phase crossover frequency} obtained such that $\angle G(j \omega_{pc}) = -180º$.
+\end{boxed-theorem}
+
+Additionally, it is possible to define a stability criterion through a Nyquist diagram of the closed-loop system.
+
+\begin{boxed-theorem}{(Nyquist criterion)}
+    Consider a system with feedforward transfer function as defined in \eqref{eq:fdbckForwardTrnsfer}. Now, let $P$ and $Z$ be respectively the number of poles of $G_{f}(s)$ and zeros of $1 + G_{f}(s)$ that are in the right-half plane. In this case, the Nyquist contour shall clockwise encircle the point $s = -1$ a number of times $N$ such that $N = Z - P$.
+\end{boxed-theorem}
+
+A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}, but their graphical nature allows for a easy understand of how disturbances can affect the stability of state-feedback systems. Consider, for instance, the Bode plot shown in Fig. \ref{fig:properties02} of a SISO version (excluding the second state) of the closed-loop system in Fig. \ref{fig:regulator01}, but submitted to a constant disturbance of $D_x = ?$. It is possible to see that the disturbance alone can produce a closed-loop unstable system. 
+
+[fig]
+
+Of course, not all disturbances observed in real operations are strong enough to bring any reasonable stable controller to an unstable condition. However, depending on the choice of the gain $\bm{K}$, some controllers can be more prone to these undesired problems than others. This motivates the discussion on stability margins.
+
+\begin{boxed-definition}{(Stability Margins)}
+    Given a closed-loop system with transfer function $T(s)$, the \textit{Gain Margin} ($GM$) is defined as a factor of how much a gain can be increased before the system becomes unstable, and is equated as:
+    \begin{equation}
+        GM = \cfrac{1}{|T(j \omega_{pc})|}
+    \end{equation}
+    
+    \noindent where $\omega_{pc}$ is the phase crossover frequency such that $\angle T(j\omega_{pc}) = -180º$ (or when a Nyquist diagram crosses the point $s = -1$). In addition, the \textit{Phase Margin} ($PM$) is defined as how much phase lag can be added to $T(s)$ the system becomes unstable, and is equated as:
+    \begin{equation}
+        PM = \angle T(j \omega_{gc})
+    \end{equation}
+    
+    \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $\|T(j\omega_{gc})\| = 0 dB$. 
 \end{boxed-definition}
 
-This quantity states an important trade-off that has to be made when the feedback gain $\bm{K}$ is applied to a system subject to disturbances. To understand this, notice that:
-\begin{equation}
-	\bm{S} + \bm{T} = I
-\end{equation}
+An illustration of these definitions in both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Since high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
 
-Since both these quantities are transfer functions, a value of either one that is equal to the identity implies a perfect operation. Moreover, those values are directly affect by the increase or decrease of $\bm{K}$. This leads to the following observations:
+% The first property to be discussed is that of sensitivity \textbf{[reference]}. 
 
-\begin{enumerate}
-	\item a
-	\item b
-	\item c
-	\item d
-\end{enumerate}
+% \begin{boxed-definition}{(Sensitivity)} \label{def:sensitivity}
+% 	Consider a SISO system with state-feedback controller of gain $\bm{K}$ whose forward transfer function $\bm{G}_{f}(s)$ is given by \eqref{eq:fdbckForwardTrnsfer}. The \textit{sensitivity} function of this controlled system, denoted by the matrix $\bm{S}$, is defined as the transfer function from the system disturbances $\bm{D}_x(s)$ to the system total response, and it is equated as:
+% 	\begin{equation}
+% 		\bm{S}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} = \cfrac{1}{1+G_f(s)}
+% 	\end{equation}
+	
+% 	Additionally, the \textit{complementary sensitivity} function, denoted by the matrix $\bm{T}$, is defined as the transfer function from the reference to the state response, and it is equated as:
+% 	\begin{equation}
+% 		\bm{T}(s) = \left( \bm{I} + \bm{G}_f(s) \right)^{-1} \bm{G}_f(s) = \cfrac{G_f(s)}{1+G_f(s)}
+% 	\end{equation}
+% \end{boxed-definition}
 
-% 4 - Optimal Control
+% This quantity states an important trade-off that has to be made when the feedback gain $\bm{K}$ is applied to a system subject to disturbances. To understand this, notice that:
+% \begin{equation}
+% 	\bm{S} + \bm{T} = I
+% \end{equation}
+
+% Since both these quantities are transfer functions, a value of either one that is equal to the identity implies a perfect operation. Moreover, those values are directly affect by the increase or decrease of $\bm{K}$. This leads to the following observations:
+
+% \begin{enumerate}
+% 	\item a
+% 	\item b
+% 	\item c
+% 	\item d
+% \end{enumerate}
+
+% 4 - Optimal Control and Estimation
 % ---------------------------------------------------------------
 \clearpage
-\chapter{Optimal Control}
+\chapter{Optimal Control and Estimation}
 
 a
 
 \section{General Formulation}
 
-a
+The last chapter introduced the notion of controller synthesis as an engineering procedure to be done ``by hand" from a designer with some knowledge about the system and the control environment. This approach, despite being very popular and practical, introduces some design issues that make it difficult to generalize a controller to different systems within a same class or, more clearly, to MIMO configurations. Thus, a more general and automatic procedure to control synthesis is desirable.
+
+With this motivation, the concept of \textit{Optimal Control} \textbf{[references]} was introduced as an alternative strategy for controlling dynamical systems that determines the necessary action by optimizing a cost function (or maximizing a reward function). Usually, these formulations are data-driven methods that autonomously produces optimal input signals given a desired objective and restrictions, and can be easily generalized to different systems.
+
+\begin{boxed-definition}{(Optimal Control)} \label{def:optimalControl}
+Given a system in State-Space formulation, with state-vector signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $u(t) \in \mathbb{R}^r$, for any time $t$, is calculated by an optimal control through an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ as:
+    \begin{equation}
+        \bm{u}(t) = \pi^*(\bm{x}, \bm{r}, t) = \min_{\bm{u}} J(\bm{x}, \bm{r}, t)
+    \end{equation}
+    
+\noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
+\end{boxed-definition}
+
+First of all, note that this optimization can be converted to maximizing a function $\bm{V}$ by making $\bm{V} = -\bm{J}$, so this document will only refers to optimization as minimizing some cost function. Basically, the problem of finding an optimal control law, or optimal control policy, $pi^8(.)$ cares both for the choice of the cost function $J$ and for what optimization technique will be used to determine the value of $u(t)$ that achieve this minimum. This problem differs from standard optimization problems in data science because not only the data is usually obtained online from the system, but it is dependent through time and the very own variable used in the optimization influences this dependence. Thus, the solutions are usually obtained through Calculus of Variations \textbf{[reference]} or, as is the approach used in this work, through Dynamic Programming \textbf{[reference]}.
+
+To facilitate the discussion and analysis of optimal controllers, consider a subclass of these controllers (that is still very general) defined below by a specific choice of functional for the cost function.
+
+\begin{boxed-definition}{(Finite-Horizon Optimal Controllers)} \label{def:finiteHorizonOC}
+    Consider a controller setup as in Definition \ref{def:optimalControl}. A \textit{Finite-Horizon Optimal Controller} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
+    \begin{equation}
+        J = \int_{t_0}^T l(\bm{x}, \bm{r}, \tau) d \tau + l_T(\bm{x}, \bm{r}, T)
+    \end{equation}
+    
+    \noindent where $l(.), l_T(.) : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ are, respectively, the trajectory and terminal \textit{loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
+\end{boxed-definition}
 
 \section{Linear Quadratic Regulator (LQR)}
 
