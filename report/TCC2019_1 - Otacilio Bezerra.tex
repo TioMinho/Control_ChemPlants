@@ -33,7 +33,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1370,7 +1370,7 @@ The problem of the previous formulation for a tracking controller is that it is 
 			\bm{x}_a(t)
 		\end{bmatrix} + \begin{bmatrix}
 			\bm{0} \\
-			\bm{1}
+			\bm{I}
 		\end{bmatrix} \bm{r}(t)
 		\\
 		\hfill \bm{y}(t) &= \begin{bmatrix}
@@ -1678,8 +1678,8 @@ Now, the discussion turns to how to solve this general problem. In this work, th
 
 \begin{boxed-theorem}{(Hamilton-Jacobi equation)} \label{th:hamiltonJacobi}
 	Consider a finite-horizon cost function in the form of Definition \ref{def:finiteHorizonOC}, for a system described by the state-equation $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$. Consider also that the loss $l(.)$ and state function $\bm{f}$ are smooth on their parameters. Then, minimizing any functional in the form of $J$ is equivalent to minimize the solution of the \textit{Hamilton-Jacobi equation}, which is given by the partial differential equation:
-	\begin{equation}
-		\cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l(\bm{x}, \bm{u}, t) + \cfrac{\partial V^*}{\partial x} \bm{f}(\bm{x}, \bm{u}, t)  \right]
+	\begin{equation} \label{eq:HJEquation}
+		\cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l(\bm{x}, \bm{u}, t) + \left[ \cfrac{\partial V^*}{\partial x} \right]^T \bm{f}(\bm{x}, \bm{u}, t)  \right]
 	\end{equation}
 	
 	\noindent and the boundary condition:
@@ -1700,7 +1700,7 @@ Now, the discussion turns to how to solve this general problem. In this work, th
 	\end{equation}
 	
 	Now, consider any $t \in [t_0, T]$ and $t_r \in [t, T]$. Since the original control action $\bm{u}(t), \cdots, \bm{u}(T)$ can be obtained through the concatenation of $\bm{u}(t), \cdots, \bm{u}(t_r)$ and $\bm{u}(t_r), \cdots, \bm{u}(T)$, the optimal cost in this interval can be represented in the recursive form:
-	\begin{equation}
+	\begin{equation} \label{eq:HJERecursive}
 	\begin{split}
 	V^*(\bm{x}, t) &= \min_{\bm{u}(t), \cdots, \bm{u}(T)} \left[ \int_{t}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \\
 		&= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \min_{\bm{u}(t_r), \cdots, \bm{u}(T)} \left[ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + \int_{t_r}^{T} l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \right\} \\
@@ -1713,30 +1713,215 @@ Now, the discussion turns to how to solve this general problem. In this work, th
 	\begin{equation}
 	\begin{split}
 		V^*(\bm{x}, t) = \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} & \biggl\{ \delta t l(\bm{x}, \bm{u}, t + \delta t) \biggr. \\ 
-		& \left. + V^*(\bm{x}, t) + \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \cfrac{d \bm{x}(t)}{dt} \delta t + \cfrac{\partial V^*(\bm{x}, t)}{\partial t} \delta t + O(\delta t)^2  \right\}
+		& \left. + V^*(\bm{x}, t) + \left[ \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \right]^T \cfrac{d \bm{x}(t)}{dt} \delta t + \cfrac{\partial V^*(\bm{x}, t)}{\partial t} \delta t + O(\delta t)^2  \right\}
 	\end{split}
 	\end{equation}
 	
 \noindent where $O(\delta t)^2$ denotes the high order terms. Since the terms $V^*(\bm{x}, t)$ and $(\partial V^*/\partial t) \delta t$ does not depend on $\bm{u}(t)$, they can be taken out of the minimization. Rearranging the terms and substituting $d \bm{x} / dt = \bm{f}(\bm{x}, \bm{u}, t)$ results in:
 	\begin{equation}
-		\cfrac{\partial V^*}{\partial t}(\bm{x}, t) =  - \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} \left\{ l(\bm{x}, \bm{u}, t + \delta t)  + \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \bm{f}(\bm{x}, \bm{u}, t) + O(\delta t)^2  \right\}
+		\cfrac{\partial V^*}{\partial t}(\bm{x}, t) =  - \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} \left\{ l(\bm{x}, \bm{u}, t + \delta t)  + \left[ \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \right]^T \bm{f}(\bm{x}, \bm{u}, t) + O(\delta t)^2  \right\}
 	\end{equation}
 	
 	Finally, making $\delta t \to 0$ results in:
 	\begin{equation}
-		\cfrac{\partial V^*}{\partial t} =  - \min_{\bm{u}(t)} \left\{ l(\bm{x}, \bm{u}, t)  + \cfrac{\partial V^*}{\partial \bm{x}} \bm{f}(\bm{x}, \bm{u}, t) \right\}
+		\cfrac{\partial V^*}{\partial t} =  - \min_{\bm{u}(t)} \left\{ l(\bm{x}, \bm{u}, t)  + \left[ \cfrac{\partial V^*}{\partial \bm{x}} \right]^T \bm{f}(\bm{x}, \bm{u}, t) \right\}
 	\end{equation}
 	
 	To establish the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
 \end{proof}
 
-[Comments on that the optimal control only depends on the instant, and on the Principle of Optimality]
+The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition in $t = T$ to the beginning of the horizon at $t = t_0$. This is a result from the fact that an optimal action $u(t)$ depends on the loss function $l(.)$ at time $t$ and on the optimal cost $V^*(.)$ for a time immediately after that (for instance, $t+\delta t$), but the last action $u(T)$ depends only on $l_f(.)$ since it no longer affects the system inside the control horizon. The recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman equation. A illustration of this principle is shown in Fig. \ref{fig:generalOC01}
 
-[Motivation for LQR]
+[fig]
+
 
 \section{Linear Quadratic Regulator (LQR)}
 
-a
+The last section introduced a general condition for solving a finite-horizon optimal control problem. Developing an analytical solution of that condition for any arbitrary loss function $l(.)$ and state-equation $\bm{f}(.)$ is usually intractable. However, there is a choice of loss function that, under a linear system, allows for a nice closed-form solution to the Hamilton-Jacobi-Bellman equation. This defines the popular class of optimal controllers known as the Linear Quadratic Regulators.
+
+\begin{boxed-definition}{(Linear Quadratic Regulator)} \label{def:lqr}
+	Given a linear State-Space system in the form:
+	\begin{align}
+	\begin{cases}
+		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) \\
+		\bm{y}(t) = \bm{C} \bm{x}(t) + \bm{D} \bm{u}(t)
+	\end{cases}
+	\end{align}
+	
+	A \textit{Linear Quadratic Regulator} (LQR) for this system is an optimal controller defined by the quadratic cost function:
+	\begin{equation}
+		J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^{T} \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} \right) dt + \bm{x}^T(T) \bm{Q}_f \bm{x}(T)
+	\end{equation}
+	
+	\noindent where is assumed that $\bm{Q},\bm{Q}_f  \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
+\end{boxed-definition}
+
+The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. In a engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. In a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is nice since quadratic optimization problems are widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
+
+\begin{boxed-theorem}{} \label{th:costQuadraForm}
+	Consider a continuous cost function $V : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ given as the LQR cost function defined in Definition \ref{def:lqr} for a linear system. Then the optimal cost $V^*(\bm{x}, t)$ has the quadratic form:
+	\begin{equation}
+		V^*(\bm{x}, t) = \bm{x}^T(t) \bm{P}(t) \bm{x}(t)
+	\end{equation}
+	
+\noindent for any (possibly symmetric) matrix $\bm{P}(t)$ of appropriate dimensions. More precisely, the optimal cost $V^*(\bm{x}, t)$ satisfies the necessary and sufficient conditions for a quadratic function given as, for any $\lambda \in \mathbb{R}$:
+	\begin{align} 
+		V^*(\lambda \bm{x}, t) &= \lambda^2 V^*(\bm{x}, t) \label{eq:costQuadraForm021} \\ 
+		V^*(\bm{x}_1 , t) + V^*(\bm{x}_2 , t) &= \cfrac{1}{2} \left( V^*(\bm{x}_1 + \bm{x}_2 , t) + V^*(\bm{x}_1 - \bm{x}_2 , t) \right) \label{eq:costQuadraForm022}
+	\end{align}
+\end{boxed-theorem}
+
+\begin{proof}
+	Since $V^*(\bm{x}, t)$ is the minimum value of $V(\bm{x}, \bm{u}^*, t)$ given an optimal input $\bm{u}^*(t)$ for $t \in [t, T]$, then any deviance $\lambda \in \mathbb{R}$ in this parameter will produce a greater value of the cost. Thus, a direct result from this and the fact that $V(\bm{x}, \bm{u}, t)$ is a quadratic function of $\bm{x}(t)$ and $\bm{u}(t)$ is:
+	\begin{equation}
+		V^*(\bm{x}, t) \leq V(\lambda \bm{x}, \lambda \bm{u}^*, t) = \lambda^2 V^*(\bm{x}, t) \leq \lambda^2 V(\bm{x}, \lambda^{-1} \bm{u}^*, t) = V^*(\bm{x}, t)
+	\end{equation}
+	
+	\noindent or, simply:
+	\begin{equation}
+		V^*(\bm{x}, t) \leq \lambda^2 V^*(\bm{x}, t) \leq V^*(\bm{x}, t)
+	\end{equation}
+	
+	\noindent which implies $V^*(\bm{x}, t) = \lambda^2 V^*(\bm{x}, t)$ and establishes \eqref{eq:costQuadraForm021}. Similarly:
+	\begin{align}
+	\begin{split}
+		V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t) &= \cfrac{1}{4} \left( V^*(2 \bm{x}_1, t) + V^*(2 \bm{x}_2, t) \right) \\
+			& \leq \cfrac{1}{4} \left( V(2 \bm{x}_1, \bm{u}_{x_1+x_2}^* + \bm{u}_{x_1-x_2}^*, t) + V(2 \bm{x}_2, \bm{u}_{x_1+x_2}^* - \bm{u}_{x_1-x_2}^*, t) \right) \\
+			& = \cfrac{1}{2} \left( V(\bm{x}_1 + \bm{x}_2, \bm{u}_{x_1+x_2}^*, t) + V(\bm{x}_1 - \bm{x}_2, \bm{u}_{x_1-x_2}^*, t) \right) \\
+			& = \cfrac{1}{2} \left( V^*(\bm{x}_1 + \bm{x}_2, t) + V^*(\bm{x}_1 - \bm{x}_2, t) \right) \\
+			& \leq V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t)
+	\end{split}
+	\end{align}
+	
+	\noindent which implies $V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t) = (1/2) \left( V^*(\bm{x}_1 + \bm{x}_2, t) + V^*(\bm{x}_1 - \bm{x}_2, t) \right)$ and establishes \eqref{eq:costQuadraForm022}. Therefore, the optimal cost function has a quadratic form $V^*(\bm{x}, t) = \bm{x}^T(t) \bm{P}(t) \bm{x}(t)$.
+\end{proof}
+
+Notice that only the fact that the LQR cost function is quadratic directly implies that the optimal cost is also quadratic. Therefore, it is possible to define the optimal action $\bm{u}^*(t)$ that produced this optimal cost by evaluating a relationship between it and the matrix $\bm{P}$. Since the quadratic cost just evaluated is defined for a finite-horizon optimal controller, it has to obey the condition imposed by the Hamilton-Jacobi equation, and the optimal controller can be solved as shown in the following theorem.
+
+\begin{boxed-theorem}{(LQR Control Action)} \label{th:LQRAction}
+	Given a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, the optimal action produced by this optimal controller at any time $t \in [t, T]$ is given by:
+	\begin{equation}
+		\bm{u}^*(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t) \bm{x}(t)
+	\end{equation}
+	
+	\noindent where $\bm{P}(t)$ is the solution of the matrix algebraic Riccati equation:
+	\begin{equation}
+		-\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
+	\end{equation}
+	
+	\noindent with terminal condition $\bm{P}(T) = \bm{Q}_f$.
+\end{boxed-theorem}
+
+\begin{proof}
+	Consider the Hamilton-Jacobi equation from \eqref{eq:HJEquation} restated below for a quadratic loss function $l(\bm{x}, \bm{u}, t$ and a linear system with state equation $\bm{f}(t)$ as given by Definition \ref{def:lqr}:
+	\begin{equation}
+	\begin{split}
+		\cfrac{\partial (\bm{x}^T \bm{P} \bm{x})}{\partial t} &=  - \min_{\bm{u}(t)} \left\{ \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + \left[ \cfrac{\partial (\bm{x}^T \bm{P} \bm{x})}{\partial \bm{x}} \right]^T \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) \right\} \\
+		\bm{x}^T \dot{\bm{P}} \bm{x} &= - \min_{\bm{u}(t)} \left\{ \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) \right\}
+	\end{split}
+	\end{equation}
+	
+	\noindent where, without loss of generalization, $\bm{P}(t)$ was assumed to be symmetric. Because of the quadratic nature, it is possible to calculate the minimum of the right-hand side of the equation by taking the derivative with respect to the control action and evaluate it for zero:
+	\begin{equation}
+	\begin{split}
+		0 &= \cfrac{\partial}{\partial \bm{u}(t)} \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) \right) \\
+		0 &= 2 \bm{u}^T(t) \bm{R} + (2 \bm{x}^T(t) \bm{P}(t)) \bm{B} \\
+		\bm{u}(t) &= - \bm{R}^{-1}  \bm{B}^T \bm{P}(t) \bm{x}(t)
+	\end{split}
+	\end{equation}
+	
+	To solve for $\bm{P}$ first note that the following identity can be found by completing the squares:
+	\begin{equation}
+	\begin{split}
+		\bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) = & (u + \bm{R}^{-1} \bm{B}^T \bm{P} x)^T \bm{R} (u + \bm{R}^{-1} \bm{B}^T \bm{P} x) \\ & + \bm{x}^T (\bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}) \bm{x}
+	\end{split}
+	\end{equation}
+	
+	Thus, plugging this identity and substituting the optimal control action results in the matrix Riccati equation:
+	\begin{equation}
+	\begin{split}
+	\bm{x}^T \dot{\bm{P}} \bm{x} &= \bm{x}^T (\bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}) \bm{x} \\
+	\dot{\bm{P}} &= \bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}
+	\end{split}
+	\end{equation}
+	
+	Finally, the terminal condition is direct from the fact that $V^*(\bm{x}, T) = \bm{x}^T(T) \bm{Q}_f \bm{x}(T)$.
+\end{proof}
+
+A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the controller action can be calculated in real-time. Several others optimal controllers may pose performance improvements, but usually depends on iterative optimization procedures, that can be hard to compute in high-dimensional systems (or even in critical low-dimensional systems). Furthermore, the time complexity of the LQR control action computation is governed by the solution of the algebraic Riccati equation which can be done very efficiently \textbf{[reference]}.
+
+Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to a linear system in State-Space representation results in the following state-equation:
+\begin{equation}
+\begin{split}
+	\dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \left( -\bm{R}^{-1} \bm{B}^T \bm{P}(t) \bm{x}(t) \right) \\
+		& = \left( \bm{A} - \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) \right) \bm{x}(t) \\
+		& = \left( \bm{A} - \bm{B} \bm{K}(t) \right) \bm{x}(t)
+\end{split}
+\end{equation}
+
+This formulation indicates that the Linear Quadratic Regulator solution follows the exact same form of a standard state-feedback regulator, represented by the linear but time-variant state-feedback gain $\bm{K}(t) = \bm{R}^{-1} \bm{B}^T \bm{P}(t)$. Therefore, the past results of state-feedback regulators are directly applied to the operation of this class of optimal controllers. Notice, also, that both the computation of $\bm{K}(t)$ and $\bm{P}(t)$ does not explicitly depends on $\bm{x}(t)$, meaning that, for a specific control horizon, they can be calculated off-line and then provided to the controller actuator for the on-line operation. For this reason, despite being a closed-loop controller with corrective action, the LQR can be considered a open-loop optimizer, since the optimization solution itself does not depend on the state signal.
+
+Now, as discussed in the previous chapter, the class of regulation controllers are broad but still restricted to a zero-state reference signal. To expand the range of application for the optimal controller just derived, it is possible to introduce integral action to the feedback, just as in the previous case.
+
+\begin{boxed-definition}{(Linear Quadratic Servo)} \label{def:lqr}
+	Given a linear State-Space system represented by matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$, augmented with state $\dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)$:
+	\begin{align} 
+	\begin{cases}
+		\begin{bmatrix}
+			\dot{\bm{x}}(t) \\
+			\dot{\bm{x}}_a(t)
+		\end{bmatrix} &= \underbrace{\begin{bmatrix}
+			\bm{A}  & \bm{0} \\ - \bm{C} & \bm{0}
+		\end{bmatrix}}_{\tilde{\bm{A}}} \underbrace{\begin{bmatrix}
+			\bm{x}(t) \\
+			\bm{x}_a(t)
+		\end{bmatrix}}_{\tilde{\bm{x}}(t)} + \underbrace{\begin{bmatrix}
+			\bm{B} \\
+			\bm{0}
+		\end{bmatrix}}_{\tilde{\bm{B}}} \bm{u}(t) + \begin{bmatrix}
+			\bm{0} \\
+			\bm{I}
+		\end{bmatrix} \bm{r}(t)
+		\\
+		\hfill \bm{y}(t) &= \begin{bmatrix}
+			\bm{C} & \bm{0}
+		\end{bmatrix} \begin{bmatrix}
+			\bm{x}(t) \\
+			\bm{x}_a(t)
+		\end{bmatrix}
+	\end{cases}
+	\end{align}
+	
+	A \textit{Linear Quadratic Servo} (LQ-Servo) for this system is an optimal controller defined by the quadratic cost function:
+	\begin{equation}
+		J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^{T} \left( \tilde{\bm{x}}^T \tilde{\bm{Q}} \tilde{\bm{x}} + \bm{u}^T \bm{R} \bm{u} \right) dt +\tilde{\bm{x}} \tilde{\bm{Q}}_f \tilde{\bm{x}}(T)
+	\end{equation}
+	
+	\noindent where is assumed that $\tilde{\bm{Q}}, \tilde{\bm{Q}}_f \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
+\end{boxed-definition}
+
+As before, the integral action basically turns the tracking problem into a regulation problem. In this case, the optimal controller will try to optimize a zero-state for $\bm{x}_a(t)$, producing the reference tracking. The new $p$ diagonal entries of the augmented matrix $\tilde{\bm{Q}}$ can be interpreted as weights penalizing the state deviance from the reference signal. The solution for this controller is the same as the one derived in Theorem \ref{th:LQRAction}, but making $\bm{A} = \tilde{\bm{A}}$ and $\bm{B} = \tilde{\bm{B}}$, and the resulting control action can be equated as:
+\begin{equation}
+	\bm{u}(t) = \tilde{\bm{K}}(t)\tilde{\bm{x}}(t) = \begin{bmatrix} \bm{K}(t) & \bm{K}_a(t) \end{bmatrix} \begin{bmatrix} \bm{x}(t) \\ \bm{x}_a(t) \end{bmatrix}
+\end{equation}
+
+To finish the section, it is also worth mentioning the fact that, for the LQR cost function, it is possible to determine an optimal controller for an infinite-horizon operation, that is, when $T \to \infty$. The fact that the control horizon is now infinite results in a stationary state-feedback gain $\bm{K}$, as stated below.
+
+\begin{boxed-theorem}{(Infinite-Horizon LQR)} \label{th:infiniteLQR}
+	Consider a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, but with $T = \infty$. The optimal control action produced by this optimal controller at any time $t \in [t_0, \infty]$ is given by:
+	\begin{equation}
+		\bm{u}^*(t) = - \bm{K} \bm{x}(t) = - \bm{R}^{-1} \bm{B}^T \bm{P} \bm{x}(t)
+	\end{equation}
+	
+	\noindent where $\bm{K} = \bm{R}^{-1} \bm{B}^T \bm{P}$ and $\bm{P}(t)$ is the solution of the matrix algebraic Riccati equation:
+	\begin{equation}
+		0 = \bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}
+	\end{equation}
+\end{boxed-theorem}
+
+A detailed proof of this result can be found in \textbf{[reference]}. The possibility for an infinite-horizon LQR is desirable in the sense that it doesn't restrict the operation to a fixed time interval, however, as will be shown later, the resulting optimal controller suffers from a low performance when compared to finite-time horizon controllers.
+
+\textbf{[examples + figs?]}
 
 \section{Optimal State Estimators}
 
@@ -1746,8 +1931,9 @@ a
 
 a
 
-\section{Robustness and Stability Analysis}
+\section{Stability and Robustness Analysis}
 
+In the last chapter, the poles of the feedback controlled system where directly assigned from the pole-placement method. In this chapter, however, the controllers were results of optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented.
 
 % 5 - Methodology
 % ---------------------------------------------------------------
