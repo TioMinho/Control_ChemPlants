@@ -33,7 +33,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1652,18 +1652,87 @@ Given a system in State-Space formulation, with state-vector signal $\bm{x} : \m
 \noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
 \end{boxed-definition}
 
-First of all, note that this optimization can be converted to maximizing a function $\bm{V}$ by making $\bm{V} = -\bm{J}$, so this document will only refers to optimization as minimizing some cost function. Basically, the problem of finding an optimal control law, or optimal control policy, $pi^8(.)$ cares both for the choice of the cost function $J$ and for what optimization technique will be used to determine the value of $u(t)$ that achieve this minimum. This problem differs from standard optimization problems in data science because not only the data is usually obtained online from the system, but it is dependent through time and the very own variable used in the optimization influences this dependence. Thus, the solutions are usually obtained through Calculus of Variations \textbf{[reference]} or, as is the approach used in this work, through Dynamic Programming \textbf{[reference]}.
+First of all, note that this optimization can be converted to maximizing a function $\bm{V}$ by making $\bm{V} = -\bm{J}$, so this document will only refers to optimization as minimizing some cost function. Basically, the problem of finding an optimal control law, or optimal control policy, $pi^*(.)$ cares both for the choice of the cost function $J$ and for what optimization technique will be used to determine the value of $u(t)$ that achieve this minimum. This problem differs from standard optimization problems in data science because not only the data is usually obtained online from the system, but it is dependent through time and constrained by the dynamics of the model and optimal policy action. Thus, the solutions for this optimization are usually obtained through Calculus of Variations \textbf{[reference]} or, as is the approach used in this work, through Dynamic Programming \textbf{[reference]}.
 
 To facilitate the discussion and analysis of optimal controllers, consider a subclass of these controllers (that is still very general) defined below by a specific choice of functional for the cost function.
 
-\begin{boxed-definition}{(Finite-Horizon Optimal Controllers)} \label{def:finiteHorizonOC}
-    Consider a controller setup as in Definition \ref{def:optimalControl}. A \textit{Finite-Horizon Optimal Controller} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
+\begin{boxed-definition}{(Finite-Horizon Optimal Regulators)} \label{def:finiteHorizonOC}
+    Consider a controller setup as in Definition \ref{def:optimalControl}. A \textit{Finite-Horizon Optimal Regulators} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
     \begin{equation}
-        J = \int_{t_0}^T l(\bm{x}, \bm{r}, \tau) d \tau + l_T(\bm{x}, \bm{r}, T)
+        J = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T)
     \end{equation}
     
-    \noindent where $l(.), l_T(.) : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ are, respectively, the trajectory and terminal \textit{loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
+    \noindent where $l(.) : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ and $l_f(.) : \mathbb{R}^{n} \rightarrow \mathbb{R}$ are, respectively, the trajectory and terminal \textit{loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
 \end{boxed-definition}
+
+This formulation presents a notion of, basically, optimize for an trajectory $P^* = [\bm{x}(t_0), \cdots, \bm{x}(T)]$ which is optimal given the loss functions, and then find the control input that can achieve this trajectory. As will be shown later, this is a very feasible strategy for controllable linear systems. In a optimization notation, this problem can also be presented as the following \textit{program}: 
+\begin{align}
+\begin{matrix*}[l]
+	\textbf{minimize} & \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T) \\
+	\hfill \textbf{s.t.} & \dot{\bm{x}}(t) = \bm{f}(\bm{x}, \bm{u}, t)  \\
+				& \bm{u}(t) = \pi(\bm{x}(t_0), \cdots, \bm{x}(t))
+\end{matrix*}
+\end{align}
+
+Now, the discussion turns to how to solve this general problem. In this work, the solution for the optimal control will follow the same dynamic programming formulation as in \textbf{[reference]}. The first necessary effort, then, is to define an important partial differential equation known as the Hamilton-Jacobi equation.
+
+\begin{boxed-theorem}{(Hamilton-Jacobi equation)} \label{th:hamiltonJacobi}
+	Consider a finite-horizon cost function in the form of Definition \ref{def:finiteHorizonOC}, for a system described by the state-equation $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$. Consider also that the loss $l(.)$ and state function $\bm{f}$ are smooth on their parameters. Then, minimizing any functional in the form of $J$ is equivalent to minimize the solution of the \textit{Hamilton-Jacobi equation}, which is given by the partial differential equation:
+	\begin{equation}
+		\cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l(\bm{x}, \bm{u}, t) + \cfrac{\partial V^*}{\partial x} \bm{f}(\bm{x}, \bm{u}, t)  \right]
+	\end{equation}
+	
+	\noindent and the boundary condition:
+	\begin{equation}
+		V^*(\bm{x}, T) = l_f(\bm{x}(T))
+	\end{equation}
+\end{boxed-theorem}
+
+\begin{proof}
+	First of all, consider the restatement of the cost functional as the function $V(.)$:
+	\begin{equation}
+		V(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T))
+	\end{equation}
+	
+	Minimizing this cost functional over control inputs $\bm{u}(t_0), \cdots, \bm{u}(T)$ consists in evaluating the optimal cost:
+	\begin{equation}
+		V^*(\bm{x}, t_0) = \min_{\bm{u}(t_0), \cdots, \bm{u}(T)} \left[ \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right]
+	\end{equation}
+	
+	Now, consider any $t \in [t_0, T]$ and $t_r \in [t, T]$. Since the original control action $\bm{u}(t), \cdots, \bm{u}(T)$ can be obtained through the concatenation of $\bm{u}(t), \cdots, \bm{u}(t_r)$ and $\bm{u}(t_r), \cdots, \bm{u}(T)$, the optimal cost in this interval can be represented in the recursive form:
+	\begin{equation}
+	\begin{split}
+	V^*(\bm{x}, t) &= \min_{\bm{u}(t), \cdots, \bm{u}(T)} \left[ \int_{t}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \\
+		&= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \min_{\bm{u}(t_r), \cdots, \bm{u}(T)} \left[ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + \int_{t_r}^{T} l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \right\} \\
+		&= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + \min_{\bm{u}(t_r), \cdots, \bm{u}(T)} \left[ \int_{t_r}^{T} l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \right\} \\
+		&= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + V^*(\bm{x}, t_r) \right\}
+	\end{split}
+	\end{equation}
+	
+	Without loss of generalization, let $t_r = t + \delta t$, where $\delta t$ is a small number. Since $l(.)$ is a smooth function, the right-hand side of the recursive form above can be expanded by a Taylor series expansion:
+	\begin{equation}
+	\begin{split}
+		V^*(\bm{x}, t) = \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} & \biggl\{ \delta t l(\bm{x}, \bm{u}, t + \delta t) \biggr. \\ 
+		& \left. + V^*(\bm{x}, t) + \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \cfrac{d \bm{x}(t)}{dt} \delta t + \cfrac{\partial V^*(\bm{x}, t)}{\partial t} \delta t + O(\delta t)^2  \right\}
+	\end{split}
+	\end{equation}
+	
+\noindent where $O(\delta t)^2$ denotes the high order terms. Since the terms $V^*(\bm{x}, t)$ and $(\partial V^*/\partial t) \delta t$ does not depend on $\bm{u}(t)$, they can be taken out of the minimization. Rearranging the terms and substituting $d \bm{x} / dt = \bm{f}(\bm{x}, \bm{u}, t)$ results in:
+	\begin{equation}
+		\cfrac{\partial V^*}{\partial t}(\bm{x}, t) =  - \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} \left\{ l(\bm{x}, \bm{u}, t + \delta t)  + \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \bm{f}(\bm{x}, \bm{u}, t) + O(\delta t)^2  \right\}
+	\end{equation}
+	
+	Finally, making $\delta t \to 0$ results in:
+	\begin{equation}
+		\cfrac{\partial V^*}{\partial t} =  - \min_{\bm{u}(t)} \left\{ l(\bm{x}, \bm{u}, t)  + \cfrac{\partial V^*}{\partial \bm{x}} \bm{f}(\bm{x}, \bm{u}, t) \right\}
+	\end{equation}
+	
+	To establish the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
+\end{proof}
+
+[Comments on that the optimal control only depends on the instant, and on the Principle of Optimality]
+
+[Motivation for LQR]
 
 \section{Linear Quadratic Regulator (LQR)}
 
