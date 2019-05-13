@@ -1925,23 +1925,167 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 \section{Optimal State Estimators}
 
-As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of a observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, for the estimation nature of the problem, deals with statistical properties of the dynamical system and its observations.
+As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of a observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
 
-First of all, consider a system perturbed by disturbances in the state-response and in the sensor measuring, respectively $\bm{w}$ and $\bm{v}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w} \sim \mathcal{N}(0, \bm{Q}_k)$ and $\bm{v} \sim \mathcal{N}(0, \bm{R}_k)$ where $\bm{Q}_k$ and $\bm{R}_k$ are covariances matrices of appropriate sizes, the it is possible to motivate a stochastic formulation of the linear State-Space model.
+First of all, consider a system perturbed by disturbances in the state-response and in the sensor measuring, respectively $\bm{w}$ and $\bm{v}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w} \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v} \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, the it is possible to motivate a stochastic formulation of the linear State-Space model.
 
 [fig]
 
-\begin{boxed-definition}{(Stochastic State-Space)} \label{def:stochSS}
-	Given a process noise $\bm{w} \sim \mathcal{N}(\bm{0}, \bm{Q}_k)$ with covariance $\bm{Q}_k \in \mathbb{R}^{n \times n}$ and sensor noise $\bm{v} \sim \mathcal{N}(\bm{0}, \bm{R}_k)$ with covariance $\bm{R}_k \in \mathbb{R}^{p \times p}$, the stochastic version of a State-Space model is given by the noisy equations:
+\begin{boxed-definition}{(Stochastic Discrete State-Space)} \label{def:stochSS}
+	Given an additive process noise $\bm{w} \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive sensor noise $\bm{v} \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic version of a discrete-time State-Space model is given by the equations:
 	\begin{align}
 	\begin{cases}
-		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) & \\
-		\bm{y}(t) = \bm{C} \bm{x}(t) + \bm{v}(t) &
+		\hfill \bm{x}_{k+1} &= \bm{A}_d \bm{x}_k + \bm{B}_d \bm{u}_k + \bm{w}_k \\
+		\hfill \bm{y}_k &= \bm{C}_d \bm{x}_k + \bm{v}_k 
 	\end{cases}
 	\end{align}
 \end{boxed-definition}
 
-[Comments on the Guassian-Markov Process, Hidden Markov Model and filtering problem]
+The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases and results for continuous-time systems will be addressed. 
+
+A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}$ and $\bm{v}$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises are Gaussian, both variables $\bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\mu_{y_k}, \Sigma_{y_k})$ are Gaussians, since this distribution is closed to linear operations \textbf{[reference]}. For this reason, a state and output trajectory over a discrete time interval is a collection of random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
+
+\begin{boxed-definition}{(Gaussian Process)} \label{def:gaussianProcess}
+	Given a Gaussian process defined as a time-series collection of random variables between a discrete time interval:
+	\begin{equation}
+		\bm{X} = \left\{ \bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k}) ; k \in [0, K] \right\}
+	\end{equation}
+	
+	If this data is obtained from a causal system, the joint probability of the random variables is modeled as:
+	\begin{equation}
+		p(\bm{X}) = p(\bm{x}_0, \bm{x}_1, \cdots, \bm{x}_K) = \prod_{k=0}^K p(\bm{x}_k | \bm{x}_{k-1}, \cdots, \bm{x}_1, \bm{x}_0)
+	\end{equation}
+\end{boxed-definition}
+
+Using this definition, the dynamic response $bm{x}_{k+1}$ of a system for a time instant $k+1$, given its trajectory until the actual state $bm{x}_{k}$, is given by the conditional probability $p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0)$. One can assume, however, that an actual state stores enough information from the past states to unequivocally determine the state response, so that the conditional probability can be restated as:
+\begin{equation}
+	p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0) =  p(\bm{x}_{k+1} | \bm{x}_{k})
+\end{equation}
+
+This assumption is known as the \textit{Markov property}, and a process that exhibits this property is known as a Markov process \textbf{[reference]}. With this formulation, is always possible to marginalize the probability distribution of a single random variable $\bm{x}_{k+1}$ given a probability distribution over the initial state $\bm{x}_0$, which are related through the discrete Chapman-Kolmogorov equation:
+\begin{equation}
+	p(\bm{x}_{k+1}) =  p(\bm{x}_{k+1} | \bm{x}_{k}) p(\bm{x}_{k} | \bm{x}_{k-1}) \cdots p(\bm{x}_{1} | \bm{x}_{0})p(\bm{x}_0) = p(\bm{x}_0) \prod_{i=0}^k p(\bm{x}_{i+1} | \bm{x}_{i})
+\end{equation}
+
+
+Combining this assumption with Definition \ref{def:gaussianProcess}, in order to describe a Gaussian-Markov Process, and using the model from Definition \ref{def:stochSS} it is possible to completely define a stochastic dynamical system in respect to the random variables probabilities.
+
+\begin{boxed-definition}{(Hidden Markov Model)} \label{def:HMM}
+	Given a stochastic State-Space model as in Definition \ref{def:stochSS}, and assuming the Markov property, a \textit{Hidden Markov Model} for this dynamical system at a time instant $k$ is defined through the two distributions:
+	\begin{align}
+	\begin{cases}
+		\textbf{Transition Distribution: } & p(\bm{x}_{k} | \bm{x}_{k-1}) \\
+		\hfill \textbf{Emission Distribution: } & p(\bm{y}_{k} | \bm{x}_{k})
+	\end{cases}
+	\end{align}
+	
+	Furthermore, since the noises $\bm{w}_k$ and $\bm{v}_k$ are white Gaussian noises, these distributions are modeled as the Normal conditional distributions:
+	\begin{align}
+	\begin{cases}
+		p(\bm{x}_{k} | \bm{x}_{k-1}) &= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
+		\hfill p(\bm{y}_{k} | \bm{x}_{k}) &= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf})
+	\end{cases}
+	\end{align}
+\end{boxed-definition}
+
+A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ at each time instance is a latent variable whose actual value is not known, but can be observed through the emission variable $\bm{y}_k$. This raises the problem of state estimation as a common inference problem in engineering applications known as the \textit{filtering}, which consists on infer the actual value of $\bm{x}_k$ given the entire history of observations $\bm{y}_0, \cdots, \bm{y}_k$ until the present time. Thus, the actual state can be obtained through the distribution:
+\begin{equation}
+	p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0)
+\end{equation}
+
+\noindent from where a representative value, such as the expected value $\mathbb{E}\left[ p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0) \right]$ can be selected as the information used by the controller to determine an action.
+
+[fig]
+
+There are several approaches to solve the filtering and other related problems in statistical state estimation \textbf{[reference-Sarkka]}, but the most popular method has been the Kalman filter \textbf{[reference]} which is discussed below for a discrete-time system.
+
+\begin{boxed-theorem}{(Kalman Filter)} \label{th:kalmanFilter}
+	Given a Hidden Markov Model as in Definition \ref{def:HMM} and initial state distribution $\bm{x}_0 \sim \mathcal{N}(\bm{m}_0, \bm{P}_0)$, the filtering distribution can be solved in closed-form as:
+	\begin{equation}
+		p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0)  = \mathcal{N}(\hat{\bm{x}}_k, \bm{P}_k)
+	\end{equation}	 
+	
+	\noindent where the mean $\bm{m}_k$ and covariance $\bm{P}_k$ are recursively computed through the prediction and update steps below:
+	\begin{align}
+	\begin{matrix*}[l]
+	\textbf{Predict Step:} & & & \textbf{Update Step:} \\ \\
+	\hat{\bm{x}}_k^- = \bm{A} \hat{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1} & & & \bm{K}_k = \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1} \\
+	\bm{P}_k^- = \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q_{kf}} & & & \hat{\bm{x}}_k = \hat{\bm{x}}_k^- + \bm{K}_k(\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-)\ \\
+	& & & \bm{P}_k = \bm{P}_k^- - \bm{K}_k (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T) \bm{K}_k^T
+	\end{matrix*}	
+	\end{align}
+\end{boxed-theorem}
+
+\begin{proof}
+	Consider the transition and emission distributions given as:
+	\begin{align}
+	\begin{cases}
+		p(\bm{x}_{k} | \bm{x}_{k-1}) &= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
+		\hfill p(\bm{y}_{k} | \bm{x}_{k}) &= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf})
+	\end{cases}
+	\end{align}
+	
+	Consider, now, the joint distribution of $\left( \bm{x}_{k-1}, \bm{x}_k \right)$ conditioned on measurement history $\left( \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1} \right)$. Since the joint and condition distributions between two Gaussians distributions are themselves Gaussian, this density can be expressed as:
+	\begin{align}
+	\begin{split}
+		p(\bm{x}_k, \bm{x}_{k-1} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) &= p(\bm{x}_k | \bm{x}_{k-1}) p(\bm{x}_{k-1} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) \\
+		&= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1}+\bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \mathcal{N}(\bm{x}_{k-1} | \hat{\bm{x}}_{k-1}, \bm{P}_{k-1}) \\
+		&= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k-1} \\ \bm{x}_{k} \end{bmatrix}	 \right| \left.	\begin{bmatrix} \hat{\bm{x}}_{k-1} \\ \bm{A}\bm{x}_{k-1}+\bm{B}\bm{u}_{k-1} \end{bmatrix}, \begin{bmatrix} \bm{P}_{k-1} & \bm{P}_{k-1} \bm{A}^T  \\ \bm{A} \bm{P}_{k-1} & \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf} \end{bmatrix}	\right)
+	\end{split}
+	\end{align}
+	
+	Marginalizing the joint distribution, it is possible to obtain the distribution of $\bm{x}_k$ conditioned in the measurement history as:
+	\begin{equation}
+		p(\bm{x}_k | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}( \underbrace{\bm{A} \bm{x}_{k-1} + \bm{B} \bm{u}_{k-1}}_{\hat{\bm{x}}_k^-}, \underbrace{\bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf}}_{\bm{P}_k^-} )
+	\end{equation}
+	
+	\noindent which completes the \textit{prediction step} of the Kalman filter. For the update step, consider the joint distribution between $(\bm{x}_k, \bm{y}_k)$, the actual state and actual measurement:
+	\begin{align}
+	\begin{split}
+		p(\bm{x}_k, \bm{y}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) &= p(\bm{y}_k | \bm{x}_{k}) p(\bm{x}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) \\
+		&= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf}) \mathcal{N}(\bm{x}_{k} | \hat{\bm{x}}_{k}^-, \bm{P}_{k}^-) \\
+		&= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k} \\ \bm{y}_{k} \end{bmatrix}	 \right| \left.	\begin{bmatrix} \hat{\bm{x}}_{k}^- \\ \bm{C}\hat{\bm{x}}_{k}^- \end{bmatrix}, \begin{bmatrix} \bm{P}_{k}^- & \bm{P}_{k}^- \bm{C}^T  \\ \bm{C} \bm{P}_{k}^- & \bm{C} \bm{P}_{k}^- \bm{C}^T + \bm{R}_{kf} \end{bmatrix}	\right)
+	\end{split}
+	\end{align}
+	
+	Therefor, the filtering distribution can be obtained as:
+	\begin{align}
+		p(\bm{x}_k | \bm{y}_k, \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}(\bm{x}_k | \hat{\bm{x}}_k, \bm{P}_k)
+	\end{align}
+
+	\noindent where $\hat{\bm{x}}_k$ and $\bm{P}_k$ are the computations of the update step, given as:
+	\begin{align}
+	\begin{cases}
+		\hat{\bm{x}}_k &= \hat{\bm{x}}_k^- + \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1}(\bm{y}_k - \bm{C}\bm{x}_k) \\
+		\bm{P}_k &= \bm{P}_k^- - \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1} \bm{C} \bm{P}_k^-
+	\end{cases}
+	\end{align}
+	
+	Finally, making $\bm{K}_k = \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1}$ establishes the theorem.
+\end{proof}
+
+Notice that the Kalman filter solution implies that ``open-loop" estimation of the system, $\hat{\bm{x}}_k^-$, can be corrected by the equation:
+\begin{equation}
+	\hat{\bm{x}}_k =\hat{\bm{x}}_k^- + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-)
+\end{equation}
+
+\noindent which, by expanding $\hat{\bm{x}}_k^-$, results in a similar state-equation expression for a system with a deterministic observer as defined earlier, but for a time-varying gain $\bm{K}_k$:
+\begin{equation}
+\begin{split}
+	\hat{\bm{x}}_k &= \bm{A} \hat{\bm{x}}_k^- + \bm{B} \bm{u}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-) \\
+	&= \left( \bm{A} - \bm{K}_k \bm{C} \right) \hat{\bm{x}}_k^- + \bm{B} \bm{u}_k + \bm{K}_k \bm{y}_k
+\end{split}
+\end{equation}
+
+Notice that, despite the similarity with Luenberger observers, the Kalman gain has the advantage that the gain matrix $\bm{K}_k$ is not resulting from a designer procedure but rather from solving an inference problem which only additional information needed are the covariances $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ which can be assumed or estimated. In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for minimizing the expectation of the error between the measurements and actual state response, given as:
+\begin{equation}
+	\bm{J} = \mathbb{E}\left[ (\bm{x}_k - \hat{\bm{x}}_k)^T(\bm{x}_k - \hat{\bm{x}}_k) \right]
+\end{equation}
+
+Since this method minimizes some cost function, it is indeed an optimal estimator. In fact, the Kalman filter can be formulated through an optimal control formulation, which enables for the development of a continuous-time version of this estimator, as shown below.
+
+\begin{boxed-theorem}{(Kalman-Bucy Filter)} \label{th:kalmanBucy}
+\end{boxed-theorem}
 
 \section{Linear Quadratic Gaussian (LQG)}
 
