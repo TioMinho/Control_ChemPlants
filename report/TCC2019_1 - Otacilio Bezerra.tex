@@ -33,7 +33,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1925,7 +1925,23 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 \section{Optimal State Estimators}
 
-a
+As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of a observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, for the estimation nature of the problem, deals with statistical properties of the dynamical system and its observations.
+
+First of all, consider a system perturbed by disturbances in the state-response and in the sensor measuring, respectively $\bm{w}$ and $\bm{v}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w} \sim \mathcal{N}(0, \bm{Q}_k)$ and $\bm{v} \sim \mathcal{N}(0, \bm{R}_k)$ where $\bm{Q}_k$ and $\bm{R}_k$ are covariances matrices of appropriate sizes, the it is possible to motivate a stochastic formulation of the linear State-Space model.
+
+[fig]
+
+\begin{boxed-definition}{(Stochastic State-Space)} \label{def:stochSS}
+	Given a process noise $\bm{w} \sim \mathcal{N}(\bm{0}, \bm{Q}_k)$ with covariance $\bm{Q}_k \in \mathbb{R}^{n \times n}$ and sensor noise $\bm{v} \sim \mathcal{N}(\bm{0}, \bm{R}_k)$ with covariance $\bm{R}_k \in \mathbb{R}^{p \times p}$, the stochastic version of a State-Space model is given by the noisy equations:
+	\begin{align}
+	\begin{cases}
+		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) & \\
+		\bm{y}(t) = \bm{C} \bm{x}(t) + \bm{v}(t) &
+	\end{cases}
+	\end{align}
+\end{boxed-definition}
+
+[Comments on the Guassian-Markov Process, Hidden Markov Model and filtering problem]
 
 \section{Linear Quadratic Gaussian (LQG)}
 
