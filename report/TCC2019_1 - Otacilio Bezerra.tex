@@ -18,6 +18,7 @@
 \usepackage{makecell}
 \usepackage[printwatermark]{xwatermark}
 \usepackage{subcaption}
+\usepackage{siunitx}
 
 \usepackage{framed}
 \definecolor{shadecolor}{rgb}{0.94,0.94,0.96}
@@ -33,7 +34,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1017,7 +1018,7 @@ When moving from a discussion of the models in the perspective of dynamical syst
 
 The first property to be discussed consists in the stability of a system. An instable system, as the name suggests, is a system whose response does not converge to a specific value and rather oscillates or grows unbounded. In physical scenarios, unstable systems are problematic, since their response to external stimuli can result in dangerous situations to itself and, maybe, to the environment around it. Because of this, determining the stability of a system is a crucial procedure into analyzing a system that will be controlled. Under the several quantitative methods to determine if a system is indeed stable, given a mathematical model, a popular and practical one is the Bounded-Input Bounded-Output (BIBO) stability criteria.
 
-\begin{boxed-definition}{(BIBO Stability)}
+\begin{boxed-definition}{(BIBO Stability)} \label{def:BIBOStab}
 	A dynamical system is defined as BIBO stable if every bounded input stimuli $| \bm{u}(t) | \leq \epsilon < \infty$ produces in it a bounded output response $| \bm{y}(t) | \leq \delta < \infty$.
 \end{boxed-definition}
 
@@ -1635,7 +1636,7 @@ An illustration of these definitions in both Bode plots and Nyquist diagrams is 
 \clearpage
 \chapter{Optimal Control and Estimation}
 
-a
+This chapter introduces the vast field of optimal control and optimal estimation of dynamical systems. The developments are focused in optimize a cost function that produces an optimal state trajectory, and the control actions that causes it, given some conditions. The chapter starts by discussing a general formulation of the optimal control problem and then specializing this formulation to a case of a linear system with quadratic cost functions. After that, the dual optimal state estimation problem is discussed and a result that merges the optimal control with the optimal estimator is presented. Finally, the main stability and robustness properties of the controllers derived in this chapter are accessed.
 
 \section{General Formulation}
 
@@ -1804,7 +1805,7 @@ Notice that only the fact that the LQR cost function is quadratic directly impli
 		\bm{u}^*(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t) \bm{x}(t)
 	\end{equation}
 	
-	\noindent where $\bm{P}(t)$ is the solution of the matrix algebraic Riccati equation:
+	\noindent where $\bm{P}(t)$ is the solution of the matrix Riccati differential equation:
 	\begin{equation}
 		-\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
 	\end{equation}
@@ -1848,7 +1849,7 @@ Notice that only the fact that the LQR cost function is quadratic directly impli
 	Finally, the terminal condition is direct from the fact that $V^*(\bm{x}, T) = \bm{x}^T(T) \bm{Q}_f \bm{x}(T)$.
 \end{proof}
 
-A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the controller action can be calculated in real-time. Several others optimal controllers may pose performance improvements, but usually depends on iterative optimization procedures, that can be hard to compute in high-dimensional systems (or even in critical low-dimensional systems). Furthermore, the time complexity of the LQR control action computation is governed by the solution of the algebraic Riccati equation which can be done very efficiently \textbf{[reference]}.
+A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the controller action can be calculated in real-time. Several others optimal controllers may pose performance improvements, but usually depends on iterative optimization procedures, that can be hard to compute in high-dimensional systems (or even in critical low-dimensional systems). Furthermore, the time complexity of the LQR control action computation is governed by the solution of the Riccati differential equation which can be done very efficiently \textbf{[reference]}.
 
 Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to a linear system in State-Space representation results in the following state-equation:
 \begin{equation}
@@ -1941,7 +1942,7 @@ First of all, consider a system perturbed by disturbances in the state-response 
 	\end{align}
 \end{boxed-definition}
 
-The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases and results for continuous-time systems will be addressed. 
+With this formulation, the noises can actually represent both the effect of external disturbances that are not modeled and the uncertainty about the model validity itself. This is important since the dynamical models, even those developed by the first-principle methodology, are not guaranteed to be the absolute true representation of a dynamical system or process. The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases and results for continuous-time systems will be addressed. 
 
 A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}$ and $\bm{v}$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises are Gaussian, both variables $\bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\mu_{y_k}, \Sigma_{y_k})$ are Gaussians, since this distribution is closed to linear operations \textbf{[reference]}. For this reason, a state and output trajectory over a discrete time interval is a collection of random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
 
@@ -2009,9 +2010,9 @@ There are several approaches to solve the filtering and other related problems i
 	\begin{align}
 	\begin{matrix*}[l]
 	\textbf{Predict Step:} & & & \textbf{Update Step:} \\ \\
-	\hat{\bm{x}}_k^- = \bm{A} \hat{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1} & & & \bm{K}_k = \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1} \\
-	\bm{P}_k^- = \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q_{kf}} & & & \hat{\bm{x}}_k = \hat{\bm{x}}_k^- + \bm{K}_k(\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-)\ \\
-	& & & \bm{P}_k = \bm{P}_k^- - \bm{K}_k (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T) \bm{K}_k^T
+	\hat{\bar{\bm{x}}}_k = \bm{A} \hat{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1} & & & \bm{K}_k = \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1} \\
+	\bar{\bm{P}}_k = \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q_{kf}} & & & \hat{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bm{K}_k(\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k)\ \\
+	& & & \bm{P}_k = \bar{\bm{P}}_k - \bm{K}_k (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T) \bm{K}_k^T
 	\end{matrix*}	
 	\end{align}
 \end{boxed-theorem}
@@ -2036,15 +2037,15 @@ There are several approaches to solve the filtering and other related problems i
 	
 	Marginalizing the joint distribution, it is possible to obtain the distribution of $\bm{x}_k$ conditioned in the measurement history as:
 	\begin{equation}
-		p(\bm{x}_k | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}( \underbrace{\bm{A} \bm{x}_{k-1} + \bm{B} \bm{u}_{k-1}}_{\hat{\bm{x}}_k^-}, \underbrace{\bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf}}_{\bm{P}_k^-} )
+		p(\bm{x}_k | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}( \underbrace{\bm{A} \bm{x}_{k-1} + \bm{B} \bm{u}_{k-1}}_{\hat{\bar{\bm{x}}}_k}, \underbrace{\bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf}}_{\bar{\bm{P}}_k} )
 	\end{equation}
 	
 	\noindent which completes the \textit{prediction step} of the Kalman filter. For the update step, consider the joint distribution between $(\bm{x}_k, \bm{y}_k)$, the actual state and actual measurement:
 	\begin{align}
 	\begin{split}
 		p(\bm{x}_k, \bm{y}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) &= p(\bm{y}_k | \bm{x}_{k}) p(\bm{x}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) \\
-		&= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf}) \mathcal{N}(\bm{x}_{k} | \hat{\bm{x}}_{k}^-, \bm{P}_{k}^-) \\
-		&= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k} \\ \bm{y}_{k} \end{bmatrix}	 \right| \left.	\begin{bmatrix} \hat{\bm{x}}_{k}^- \\ \bm{C}\hat{\bm{x}}_{k}^- \end{bmatrix}, \begin{bmatrix} \bm{P}_{k}^- & \bm{P}_{k}^- \bm{C}^T  \\ \bm{C} \bm{P}_{k}^- & \bm{C} \bm{P}_{k}^- \bm{C}^T + \bm{R}_{kf} \end{bmatrix}	\right)
+		&= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf}) \mathcal{N}(\bm{x}_{k} | \bar{\hat{\bm{x}}}_k, \bar{\bm{P}}_k) \\
+		&= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k} \\ \bm{y}_{k} \end{bmatrix}	 \right| \left.	\begin{bmatrix} \bar{\hat{\bm{x}}}_k \\ \bm{C}\bar{\hat{\bm{x}}}_k \end{bmatrix}, \begin{bmatrix} \bar{\bm{P}}_k & \bar{\bm{P}}_k \bm{C}^T  \\ \bm{C} \bar{\bm{P}}_k & \bm{C} \bar{\bm{P}}_k \bm{C}^T + \bm{R}_{kf} \end{bmatrix}	\right)
 	\end{split}
 	\end{align}
 	
@@ -2056,44 +2057,121 @@ There are several approaches to solve the filtering and other related problems i
 	\noindent where $\hat{\bm{x}}_k$ and $\bm{P}_k$ are the computations of the update step, given as:
 	\begin{align}
 	\begin{cases}
-		\hat{\bm{x}}_k &= \hat{\bm{x}}_k^- + \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1}(\bm{y}_k - \bm{C}\bm{x}_k) \\
-		\bm{P}_k &= \bm{P}_k^- - \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1} \bm{C} \bm{P}_k^-
+		\hat{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1}(\bm{y}_k - \bm{C}\bm{x}_k) \\
+		\bm{P}_k = \bar{\bm{P}}_k - \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1} \bm{C} \bar{\bm{P}}_k
 	\end{cases}
 	\end{align}
 	
-	Finally, making $\bm{K}_k = \bm{P}_k^- \bm{C}^T (\bm{R}_{kf} + \bm{C} \bm{P}_k^- \bm{C}^T)^{-1}$ establishes the theorem.
+	Finally, making $\bm{K}_k = \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1}$ establishes the theorem.
 \end{proof}
 
-Notice that the Kalman filter solution implies that ``open-loop" estimation of the system, $\hat{\bm{x}}_k^-$, can be corrected by the equation:
+Notice that the Kalman filter solution implies that an ``open-loop" estimation of the system, $\hat{\bar{\bm{x}}}_k$, can be corrected by the equation:
 \begin{equation}
-	\hat{\bm{x}}_k =\hat{\bm{x}}_k^- + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-)
+	\hat{\bm{x}}_k =\hat{\bar{\bm{x}}}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k)
 \end{equation}
 
-\noindent which, by expanding $\hat{\bm{x}}_k^-$, results in a similar state-equation expression for a system with a deterministic observer as defined earlier, but for a time-varying gain $\bm{K}_k$:
+\noindent which, by expanding $\hat{\bar{\bm{x}}}_k$, results in a similar state-equation expression for a system with a deterministic observer as defined earlier, but for a time-varying gain $\bm{K}_k$:
 \begin{equation}
 \begin{split}
-	\hat{\bm{x}}_k &= \bm{A} \hat{\bm{x}}_k^- + \bm{B} \bm{u}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bm{x}}_k^-) \\
-	&= \left( \bm{A} - \bm{K}_k \bm{C} \right) \hat{\bm{x}}_k^- + \bm{B} \bm{u}_k + \bm{K}_k \bm{y}_k
+	\hat{\bm{x}}_k &= \bm{A} \hat{\bar{\bm{x}}}_k + \bm{B} \bm{u}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k) \\
+	&= \left( \bm{A} - \bm{K}_k \bm{C} \right) \hat{\bar{\bm{x}}}_k + \bm{B} \bm{u}_k + \bm{K}_k \bm{y}_k
 \end{split}
 \end{equation}
 
-Notice that, despite the similarity with Luenberger observers, the Kalman gain has the advantage that the gain matrix $\bm{K}_k$ is not resulting from a designer procedure but rather from solving an inference problem which only additional information needed are the covariances $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ which can be assumed or estimated. In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for minimizing the expectation of the error between the measurements and actual state response, given as:
+Notice that, despite the similarity with Luenberger observers, the Kalman gain has the advantage that the gain matrix $\bm{K}_k$ is not resulting from a designer procedure but rather from solving an inference problem whose only additional information needed are the covariances $\bm{Q}_{kf}$ and $\bm{R}_{kf}$, which can be assumed or estimated. In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for minimizing the expectation of the error between the measurements and actual state response, given as:
 \begin{equation}
-	\bm{J} = \mathbb{E}\left[ (\bm{x}_k - \hat{\bm{x}}_k)^T(\bm{x}_k - \hat{\bm{x}}_k) \right]
+	\bm{J} = \mathbb{E}\left[ (\bm{x}_k - \hat{\bm{x}}_k)(\bm{x}_k - \hat{\bm{x}}_k)^T \right]
 \end{equation}
 
-Since this method minimizes some cost function, it is indeed an optimal estimator. In fact, the Kalman filter can be formulated through an optimal control formulation, which enables for the development of a continuous-time version of this estimator, as shown below.
+Since this method minimizes some cost function, it is indeed an optimal estimator. In fact, the Kalman filter can be formulated through an optimal control formulation, which motivates the development of a continuous-time version of this estimator, as shown below.
 
 \begin{boxed-theorem}{(Kalman-Bucy Filter)} \label{th:kalmanBucy}
+	Consider a continuous-time State-Space linear system subject to additive process noise $\bm{w} \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and sensor noise $\bm{v} \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, where the covariances $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$  and $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$ represents the \emph{power spectral density} of the noises.	In this case, for an estimated state $\hat{\bm{x}}(t)$ at time $t$, the error covariance:
+	\begin{equation}
+		\bm{J}(\bm{x}, \hat{\bm{x}}, t) = \mathbb{E}\left\{ [\bm{x}(t) - \hat{\bm{x}}(t)][\bm{x}(t) - \hat{\bm{x}}(t)]^T \right\}
+	\end{equation}
+	
+	\noindent is minimized by $\hat{\bm{x}}(t)$ obtained through the system:
+	\begin{equation}
+		\dot{\hat{\bm{x}}}(t) = \bm{A} \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{K}_{e}(t) \left( \bm{y}(t) - \bm{C} \hat{\bm{x}}(t) \right)
+	\end{equation}
+	
+	\noindent where $\bm{K}_e(t) = \bm{P}_e(t)\bm{C}\bm{R}^{-1}$, being $\bm{P}_e(t)$ the solution of the Riccati differential matrix equation:
+	\begin{equation}
+		\dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}\bm{R}^{-1} \bm{C}^T \bm{P}_e(t) + \bm{Q}
+	\end{equation}
+	
+	\noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
 \end{boxed-theorem}
+
+A detailed proof of this theorem can be found in the import paper \textbf{[reference]}. The formulation of an optimal state estimator, then, follows a very similar structure of a optimal controller, evidencing the duality between controllers and observers. Notice that, similarly to the LQR, the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves a Riccati differential equation. Notice, however, that these filters are not defined from a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. It is worth to mention, however, that it is possible to derive a estimator considering $t_0 \to \infty$ which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
 
 \section{Linear Quadratic Gaussian (LQG)}
 
-a
+This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and a estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}
+
+[fig]
+
+The control configuration that connects a optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
+
+\begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
+	Given a system in State-Space representation whose estimated state-vector $\hat{\bm{x}}(t)$ is reconstructed from a Kalman-Bucy filter and whose input signal is calculated through a finite-horizon Linear Quadratic Regulator, its time evolution for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, can be represented through the model:
+	\begin{align} \label{eq:lqg01}
+	\begin{cases}
+		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) - \bm{B} \bm{K}(t) \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) \\
+		\dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) + \bm{K}_e(t) \bm{y}(t) 
+	\end{cases}
+	\end{align}
+	
+	\noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solves the Riccati differential equations:
+	\begin{align}
+	\begin{cases}
+		-\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
+		\phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}\bm{R}^{-1} \bm{C}^T \bm{P}_e(t) + \bm{Q}
+	\end{cases}
+	\end{align}
+	
+	\noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$.
+\end{boxed-definition}
+
+Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \ in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
 
 \section{Stability and Robustness Analysis}
 
-In the last chapter, the poles of the feedback controlled system where directly assigned from the pole-placement method. In this chapter, however, the controllers were results of optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented.
+In the last chapter, the poles of the feedback controlled system where directly assigned from the pole-placement method. In this chapter, however, the controllers were results of optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented. 
+
+First of all, the stability of the closed-loop system via Linear Quadratic Regulator is discussed. One might conclude that, since this controller is obtained from a optimization process, the resulting controller can not be unstable. Consider, however, the popular counter-intuition: consider a scalar system $\dot{x}(t) = x(t) + u(t)$, with $R = 1$ and $Q = 0$, such that its associated LQR cost function is:
+\begin{equation}
+	J(x,u,t_0) = \int_{t_0}^{\infty} u^2(t) dt
+\end{equation}
+
+\noindent In this case, the optimal control action is always $u(t) = 0$, for $t \in [t_0, \infty]$. However, this control action results in the system $\dot{x}(t) = x(t)$ which is clearly BIBO unstable. Therefore, there are conditions in whether the optimization process results in a stable or unstable closed-loop system, as shown by the following theorem.
+
+\begin{boxed-theorem}{(LQR Stability)} \label{th:lqrStab}
+	Consider the infinite-horizon Linear Quadratic Regulator as defined in Theorem \ref{th:infiniteLQR}. If the system is observable, then the closed-loop matrix $\bm{A}_{cl} = (\bm{A} - \bm{B}\bm{K}) = (\bm{A} - \bm{B}\bm{R}^{-1}\bm{B}^T\bm{P})$ is BIBO stable.
+\end{boxed-theorem}
+
+\begin{proof}
+	Consider, without loss of generalization, that $\bm{Q} = \bm{C}^T \bm{C}$, which is still positive definite. In this case $\bm{C} = \bm{Q}^{1/2}$, which is nonsingular and the observability assumption holds. Furthermore, consider the LQR cost function given an optimal input trajectory $\bm{u}^* : \mathbb{R} \rightarrow \mathbb{R}^r$:
+	\begin{equation} \label{eq:lqrStab01}
+	J(\bm{x},\bm{u}^*,t_0) = \int_{t_0}^{\infty} \left( \bm{x}^T (\bm{C}^T \bm{C}) \bm{x} + (\bm{u}^*)^T \bm{R} \bm{u}^* \right) dt = \int_{t_0}^{\infty} \left( \bm{y}^T \bm{y} + (\bm{u}^*)^T \bm{R} \bm{u}^* \right) dt
+\end{equation}
+
+The optimal output trajectory resulting from this control action is given by $\bm{y}^*(t) = \bm{C} \bm{x}^*(t)$, where $\bm{x}^*(t)$ is the correspondent optimal state trajectory. Since $\bm{u}^*(t)$ was obtained by solving the algebraic Riccati equation on Theorem \ref{th:infiniteLQR}, a well-known result is that the optimal cost function is bounded:
+\begin{equation}
+	\bm{V}^*(\bm{x}, t_0) \leq \bm{x}^T(t_0) \bm{P} \bm{x}(t_0)
+\end{equation}
+
+\noindent and, therefore, \eqref{eq:lqrStab01} must also be bounded. This is only possible if $\bm{y}^*(t) \to 0$ and $\bm{u}^*(t) \to 0$ as $t \to \infty$, which, since the system is observable, directly implies $\bm{x}^*(t) \to 0$ as $t \to \infty$, concluding that the system is BIBO stable.
+\end{proof}
+
+Notice that, in contrast to the Pole-Placement method where the stability must be explicitly determined by the designer, the LQR controller can guarantee a stable closed-loop system directly by the observability property, even when the open-loop system is unstable. Since the BIBO stability (Definition \ref{def:BIBOStab}) discusses the magnitude of a system response as $t \to \infty$, the results are derived for infinite-horizon LQR. Despite of this, it is also possible to interpret some notion of stable response for finite-horizon LQR, since the cost function is always bounded by the optimal cost as conditioned by the Hamilton-Jacobi equation.
+
+Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01} for several LQR gains. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin, and the angle that the closest permissible point of a unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
+
+[fig]
+
+Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have a extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that a optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian has no guaranteed margins.
 
 % 5 - Methodology
 % ---------------------------------------------------------------
