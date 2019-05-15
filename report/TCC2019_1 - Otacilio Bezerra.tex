@@ -19,9 +19,14 @@
 \usepackage[printwatermark]{xwatermark}
 \usepackage{subcaption}
 \usepackage{siunitx}
+\usepackage{tikz}
 
 \usepackage{framed}
 \definecolor{shadecolor}{rgb}{0.94,0.94,0.96}
+\definecolor{myYellow}{rgb}{1,0.65,0}
+\definecolor{myRed}{rgb}{0.84, 0.18, 0.13}
+\definecolor{myGreen}{rgb}{0, 0.53, 0.27}
+\definecolor{myBlue}{rgb}{0, 0.34, 0.91}
 
 \numberwithin{figure}{chapter}
 \numberwithin{equation}{chapter}
@@ -34,7 +39,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -49,6 +54,19 @@
     basicstyle=\footnotesize \ttfamily,breaklines=true,
     escapeinside={\%*}{*)}
 }
+
+% --------------------------------------------------------------------
+% Tikz Macros
+% --------------------------------------------------------------------
+\usetikzlibrary{shapes,arrows, backgrounds, positioning, fit}
+
+\tikzstyle{sectionBlock} = [draw, fill=blue!20, rectangle, minimum height=3em, minimum width=3em]
+\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=3em, minimum width=3em]
+\tikzstyle{sum} = [draw, fill=white, circle, node distance=1cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+
 
 % --------------------------------------------------------------------
 % Definitions
@@ -1156,17 +1174,49 @@ In modern control theory, advances in computer performance and in the methods th
 	\noindent where $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal that the system must follows and $\bm{K} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
 \end{boxed-definition}
 
-The control law $\pi(.)$ is linear and time-invariant, which makes the analysis of the closed-loop system similar to the one used in open-loop configurations. A schematic of the closed-loop system is shown at Fig. \ref{fig:feedback01}. Of course, this is a choice of control law, and feedback controllers can also be defined using nonlinear or time-dependent functions. 
-
-[img]
-
-Notice that this new definition for the calculation of $\bm{u}(t)$ allows for the following closed-loop representation of the system:
+The control law $\pi(.)$ is linear and time-invariant, which makes the analysis of the closed-loop system similar to the one used in open-loop configurations. A schematic of the closed-loop system is shown at Fig. \ref{fig:feedback01}. Of course, this is a choice of control law, and feedback controllers can also be defined using nonlinear or time-dependent functions. Notice that this new definition for the calculation of $\bm{u}(t)$ allows for the following closed-loop representation of the system:
 \begin{align}
 \begin{split}
 	\dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \left( \bm{r}(t) - \bm{K} \bm{x}(t) \right) \\
 	\dot{\bm{x}}(t) &= \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t) + \bm{B} \bm{r}(t)
 \end{split}
 \end{align}
+
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [sum, right of=input, node distance=4em] (fbckSum) {};
+	    \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
+	    \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+	    \node [block, right of=stateSum, node distance=4em] (integral) {$\int	$};
+	    \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+		\node [output, right of=outputMatrix] (output) {};
+		\node [block, below of=integral] (stateMatrix) {$\bm{A}$};
+		\node [block, below of=stateSum, node distance=10em, label={below:Controller}] (fbckGain) {$\bm{K}$};
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= myBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, myBlue!90]above left:Open-Loop System}] {};
+		\end{scope}		
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (fbckSum);
+	    \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
+	    \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+	    \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
+	    \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
+	    \draw [->] (outputMatrix) -- node[pos=0.6]{$\bm{y}$} (output);
+	    \draw [->] (bk1) |- (stateMatrix);
+	    \draw [->] (bk2) |- (fbckGain);
+	    \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+	    \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a state-feedback closed-loop system.}
+	\label{fig:feedback01}
+\end{figure}
 
 From this is clear that the inclusion of a feedback controller in the loop is equivalent to transform an open-loop system into a new system $(\bm{A}_{cl}, \bm{B})$, with $\bm{A}_{cl} = \bm{A} - \bm{B} \bm{K}$, whose manipulated variables is a reference signal $\bm{r}(t)$ but the controlled variables are still the same. Since $\bm{K}$ is an arbitrary matrix, it is possible to change the behavior of the closed-loop system, and consequently the controlled variables response, by designing this matrix. To understand better the capabilities of the state feedback, consider the following theorems.
 
@@ -1392,7 +1442,52 @@ The problem of the previous formulation for a tracking controller is that it is 
 	\end{align}
 \end{boxed-definition}
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [sum, right of=input, node distance=4em] (intFbckSum) {};
+	    \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
+	    \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
+	    \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
+	    \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
+	    \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+	    \node [block, right of=stateSum, node distance=4em] (integral) {$\int	$};
+	    \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+		\node [output, right of=outputMatrix] (output) {};
+		\node [block, below of=integral] (stateMatrix) {$\bm{A}$};
+		\node [block, below of=stateSum, node distance=10em, label={below:Controller}] (fbckGain) {$\bm{K}$};
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= myBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, myBlue!90]above left:Open-Loop System}] {};
+		\end{scope}		
+		
+		\begin{scope}[on background layer]
+			\node [fit=(integralAction) (intActGain), fill= myGreen!10, rounded corners, inner sep=.4cm, label={[xshift=4.3em, myGreen!90]above left:Integral Action}] {};
+		\end{scope}	
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
+	    \draw [->] (intFbckSum) -- (integralAction);
+	    \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
+	    \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);
+	    \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
+	    \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+	    \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
+	    \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
+	    \draw [->] (outputMatrix) -- node[name=bk3,pos=0.5]{} node[pos=0.6]{$\bm{y}$} (output);
+	    \draw [->] (bk1) |- (stateMatrix);
+	    \draw [->] (bk2) |- (fbckGain);
+	    \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+	    \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
+	    \draw [->] (bk3) -- ++(0, -14em) -| node[pos=0.97]{$-$} (intFbckSum);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a state-feedback closed-loop system with integral action.}
+	\label{fig:tracking02}
+\end{figure}
 
 Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking error until a time $t$, this formulation is usually characterized as imposing ``integral action" to the controller. The schematic at Fig. \ref{fig:tracking02} illustrates how an integrator can be included to the block diagram of the control loop. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
 
@@ -1474,7 +1569,49 @@ The observer system works as a parallel system that is simulated alongside with 
 
 \noindent which implies that the observer asymptotically tracks the actual state-vector if $\bm{e}(t) = \bm{0}$ as $t \to \infty$. Analyzing the equation above, it is intuitive to notice that this result can be guaranteed if all the eigenvalues of matrix $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ have negative real parts. The following theorem relates this statement with the choice of a gain $\bm{L}$.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input](input) {};
+	    \node [block, right of=input, minimum height=4em, node distance=18em, fill=myBlue!20] (openLoopSystem) {Open-Loop System};
+		\node [output, right of=openLoopSystem, node distance=18em] (output) {};
+
+		\node [block, below of=openLoopSystem, node distance=6em] (integralLU) {$\int	$};		
+		\node [sum, left of=integralLU, node distance=4em] (stateSumLU1) {};				
+		\node [sum, left of=stateSumLU1, node distance=3em] (stateSumLU2) {};		
+		\node [block, left of=stateSumLU2, node distance=4em] (inputMatrixLU) {$\bm{B}$};
+	    \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {$\bm{C}$};
+		\node [block, below of=integralLU] (stateMatrixLU) {$\bm{A}$};
+		\node [block, below of=stateMatrixLU] (luenbergerGain) {$\bm{L}$};		
+		\node [sum, right of=outputMatrixLU, node distance=4em] (fbckOutput) {};	
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrixLU) (luenbergerGain) (fbckOutput), fill= myRed!10, rounded corners, inner sep=.4cm, label={[xshift=-4em, myRed!90]below right:Luenberger Observer}] {};
+		\end{scope}	
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1]{$\bm{u}$} node[name=bk1,pos=0.25]{} (openLoopSystem);
+	    \draw [->] (openLoopSystem) -- node[name=bk2,pos=0.75]{} node[pos=0.9]{$\bm{y}$}  (output);
+	    
+	    \draw [->] (bk1) |-  (inputMatrixLU);
+	    \draw [->] (bk2) |- node[pos=0.8]{$+$}  (fbckOutput);
+	    
+	    \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU2);
+	    \draw [->] (stateSumLU2) -- node[pos=0.8]{$+$} (stateSumLU1);
+	    \draw [->] (stateSumLU1) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
+	    \draw [->] (integralLU) -- node[name=bk1,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
+	    \draw [->] (outputMatrixLU) -- node[pos=0.8]{$-$} (fbckOutput);
+	    \draw [->] (bk1) |- (stateMatrixLU);
+	    \draw [->] (fbckOutput) |- (luenbergerGain);
+	    \draw [->] (stateMatrixLU) -| node[pos=0.95]{$+$} (stateSumLU1);
+	    \draw [->] (luenbergerGain) -| node[pos=0.95]{$+$} (stateSumLU2);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a State-Space system with Luenberger observer.}
+	\label{fig:luenberger01}
+\end{figure}
 
 \begin{boxed-theorem}
 	If a system in State-Space representation is observable, then by a Luenberger observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
@@ -1488,21 +1625,89 @@ The procedure stated in this proof presents the similarities between closed-loop
 
 [img]
 
-As stated before, one of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector in order to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states.
+As stated before, one of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector in order to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
 
 \begin{boxed-definition}{(Feedback from Estimated States)} \label{def:fdbckLuenberger}
 	Given a system in State-Space representation whose state-vector is reconstructed from a Luenberger observer of gain $\bm{L} \in \mathbb{R}^{n \times p}$ and input signal is calculated through state-feedback with gain $\bm{K} \in \mathbb{R}^{n \times r}$, its time evolution can be represented through the model:
 	\begin{align} \label{eq:fdbckLuenberger01}
 	\begin{cases}
 		\dot{\bm{x}}(t) = \bm{A} \bm{x}(t) - \bm{B} \bm{K} \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) \\
-		\dot{\hat{\bm{x}}}(t) = \left(\bm{A} - \bm{L} \bm{C} - \bm{B} \bm{K} \right) \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) + \bm{L} \bm{y}(t) 
+		\dot{\hat{\bm{x}}}(t) = \left(\bm{A} - \bm{L} \bm{C} - \bm{B} \bm{K} \right) \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) + \bm{L} \bm{C} \bm{x}(t) 
 	\end{cases}
 	\end{align}
 \end{boxed-definition} 
 
-A schematic for this formulation of feedback from estimated states is shown Fig. \ref{fig:observer02}. In fact, this schematic summarizes several different control architectures that includes both feedback action and state estimation, and it will be the reference whenever this work mentions physical control loops and instrumentation.
+A schematic for this formulation of feedback from estimated states is shown Fig. \ref{fig:observer02}, including the possibility for integral action. In fact, this schematic summarizes several different control architectures that includes both feedback action and state estimation, and it will be a reference whenever this work mentions physical control loops and instrumentation.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [sum, right of=input, node distance=4em] (intFbckSum) {};
+	    \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
+	    \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
+	    \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
+	    \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
+	    \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+	    \node [block, right of=stateSum, node distance=4em] (integral) {$\int	$};
+	    \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+		\node [output, right of=outputMatrix] (output) {};
+		\node [block, below of=integral] (stateMatrix) {$\bm{A}$};
+		
+		\node [block, below of=stateMatrix, node distance=6em] (integralLU) {$\int	$};		
+		\node [sum, left of=integralLU, node distance=4em] (stateSumLU1) {};				
+		\node [sum, left of=stateSumLU1, node distance=3em] (stateSumLU2) {};		
+		\node [block, left of=stateSumLU2, node distance=4em] (inputMatrixLU) {$\bm{B}$};
+	    \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {$\bm{C}$};
+		\node [block, below of=integralLU] (stateMatrixLU) {$\bm{A}$};
+		\node [block, below of=stateMatrixLU] (luenbergerGain) {$\bm{L}$};		
+		\node [sum, right of=outputMatrixLU, node distance=4em] (fbckOutput) {};
+		
+		\node [block, below of=luenbergerGain, label={below:Controller}] (fbckGain) {$\bm{K}$};		
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= myBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, myBlue!90]above left:Open-Loop System}] {};
+		\end{scope}		
+		
+		\begin{scope}[on background layer]
+			\node [fit=(integralAction) (intActGain), fill= myGreen!10, rounded corners, inner sep=.4cm, label={[xshift=4.3em, myGreen!90]above left:Integral Action}] {};
+		\end{scope}	
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
+	    \draw [->] (intFbckSum) -- (integralAction);
+	    \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
+	    \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);
+	    \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
+	    \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+	    \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
+	    \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
+	    \draw [->] (outputMatrix) -- node[name=bk3,pos=0.5]{} node[pos=0.6]{$\bm{y}$} (output);
+	    \draw [->] (bk1) |- (stateMatrix);
+	    \draw [->] (bk2) |- (fbckGain);
+	    \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+	    \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
+	    \draw [->] (bk3) -- ++(0, -14em) -| node[pos=0.97]{$-$} (intFbckSum);
+	    
+%	    \draw [->] (bk1) |-  (inputMatrixLU);
+%	    \draw [->] (bk2) |- node[pos=0.8]{$+$}  (fbckOutput);
+	    
+	    \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU2);
+	    \draw [->] (stateSumLU2) -- node[pos=0.8]{$+$} (stateSumLU1);
+	    \draw [->] (stateSumLU1) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
+	    \draw [->] (integralLU) -- node[name=bk1,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
+	    \draw [->] (outputMatrixLU) -- node[pos=0.8]{$-$} (fbckOutput);
+	    \draw [->] (bk1) |- (stateMatrixLU);
+	    \draw [->] (fbckOutput) |- (luenbergerGain);
+	    \draw [->] (stateMatrixLU) -| node[pos=0.95]{$+$} (stateSumLU1);
+	    \draw [->] (luenbergerGain) -| node[pos=0.95]{$+$} (stateSumLU2);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a state-feedback closed-loop system with integral action.}
+	\label{fig:observer02}
+\end{figure}
 
 Notice, now, that the formulation just defined imposes that the dynamics of the estimated state $\hat{\bm{x}}(t)$ is dependent both in $\bm{K}$ and $\bm{L}$, which are arbitrary matrices chosen by the control designer. This leads to the possible conclusion that the choice of $\bm{K}$ is now restricted by the effect that it will produce in the choice of $\bm{L}$, which is not true. The following theorem, known as the Separation Principle \textbf{[reference]}, states that design of these two gains are independent.
 
