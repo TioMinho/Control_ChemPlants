@@ -58,7 +58,7 @@
 % --------------------------------------------------------------------
 % Tikz Macros
 % --------------------------------------------------------------------
-\usetikzlibrary{shapes,arrows, backgrounds, positioning, fit}
+\usetikzlibrary{shapes,arrows, backgrounds, positioning, fit, decorations}
 
 \tikzstyle{sectionBlock} = [draw, fill=blue!20, rectangle, minimum height=3em, minimum width=3em]
 \tikzstyle{block} = [draw, fill=white, rectangle, minimum height=3em, minimum width=3em]
@@ -66,7 +66,8 @@
 \tikzstyle{input} = [coordinate]
 \tikzstyle{output} = [coordinate]
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-
+\tikzstyle{mcInput} = [draw, rectangle, line width=0.5mm, minimum width=2em, minimum height=2em, fill=black!10]
+\tikzstyle{mcCircle} = [draw, circle, line width=0.5mm, minimum width=2em, minimum height=2em, fill=white]
 
 % --------------------------------------------------------------------
 % Definitions
@@ -1350,10 +1351,6 @@ Using the parameters from Definition \ref{def:responseParameters}, the positions
 
 Albeit being a simples formula, this method can be used in several applications to yield controllers capable of matching performance requisites. Of course, the designer must take into account that, besides the eigenvalue assignment allows for the whole complex plane, a careless choice of eigenvalues could result in unpractical controllers, with very aggressive or oscillatory input signals. For this reason, it is necessary some knowledge of the instruments limits before designing the matrix $\bm{K}$.
 
-[example]
-
-[fig]
-
 \section{Regulation and Reference Tracking}
 
 When discussing controller synthesis it is also necessary to account for which objective this device is expected to fulfill. In this case, there are two main classifications of controllers based on the operation that they impose to the system: regulators and tracking (or servo) controllers. In the case of state-feedback, these two classes of controllers differs only by what type of reference signal $\bm{r}(t)$, for an operation in a time interval $t \in [t_0, t_f]$, the system is expected to follow. The following statements gives a formal definition of a controller for regulation:
@@ -1709,7 +1706,7 @@ A schematic for this formulation of feedback from estimated states is shown Fig.
    	    \draw [->] (bk4) |- (fbckGain);
 	\end{tikzpicture} 
 	}
-	\caption{block diagram of a state-feedback closed-loop system with integral action.}
+	\caption{block diagram of a state-feedback closed-loop system with integral action and Luenberger observer.}
 	\label{fig:observer02}
 \end{figure}
 
@@ -1766,14 +1763,47 @@ The Separation Principle is a nice results that further motivates the topology o
 
 The last section introduces the first considerations into applying state-feedback in real-world systems, given limitations on the instruments and uncertainty on the environment. Basically, a mathematical analysis of such closed-loop controllers allows for a full characterization of the system behavior, but the real system will exhibit a different response due to these limitations and, essentially, due to possible external disturbances. Therefore, it is desirable to anticipate these variations and discuss the properties of the closed-loop system in the sense of robustness and stability margins. Since this goal requires that the system response is evaluated in as general as possible context, the discussion in this section relies on frequency response analysis, which consider a broader class of input signals: sinusoids of any frequency. Consider the representation of closed-loop systems shown in Fig. \ref{fig:properties01}, which consists of a simplified version of Fig. \ref{fig:feedback01} in the Laplace frequency domain considering only the state response.
 
-[fig - tickz]
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input](input) {};
+	    \node [sum, right of=input](fbckSum) {};
+	    \node [block, right of=fbckSum, node distance=8em, minimum width=5em, fill=myBlue!20, label={below:Open-Loop System}] (openLoopSystem) {$\bm{G}(s)$};
+	    \node [block, node distance=8em, right of=openLoopSystem, label={below:Controller}] (fbckGain) {$K^T$};
+	    \node [sum,  right of=fbckGain, node distance=4em](distXSum) {};
+		\node [input, above of=distXSum, node distance=3em](distX) {};	    
+		\node [text width=1em, above of=distX, node distance=1em] {$\bm{D}_x$};	    
+		\node [output, node distance=4em, right of=distXSum] (output) {};
+		\draw [->] (distXSum) -- node[name=bk1, pos=0.4]{} node[pos=0.8]{}  (output);
+		\node [sum, node distance=4em, below of=bk1](distESum) {};
+		\node [input, right of=distESum, node distance=3em](distE) {};
+		\node [text width=1em, right of=distE, node distance=1em] {$\bm{D}_k$};
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- (fbckSum);
+	    \draw [->] (fbckSum) -- node[pos=0.75]{$\bm{U}$}  (openLoopSystem);
+		\draw [->] (openLoopSystem) -- node[pos=0.25]{$\bm{X}$} (fbckGain);
+		\draw [->] (fbckGain) -- node[pos=0.8]{$+$}  (distXSum);
+		\draw [->] (bk1) -- node[pos=0.8]{$+$}  (distESum);
+		\draw [->] (distESum) |- ++(0,-3em) -| node[pos=0.95]{$-$} (fbckSum);	    
+		
+		\draw [->] (distX) -- node[pos=0.85]{$+$} (distXSum);	    
+		\draw [->] (distE) -- node[pos=0.85]{$+$} (distESum);	    
+	    
+	\end{tikzpicture} 
+	}
+	\caption{simplified block diagram of a perturbed state-feedback closed-loop.}
+	\label{fig:properties01}
+\end{figure}
 
 Using block diagram algebra and Theorem \ref{th:SSToIO}, it is possible to associate a forward-path transfer function $\bm{G}_{f}(s)$ given as \textbf{[reference]}:
 \begin{equation} \label{eq:fdbckForwardTrnsfer}
-	\bm{G}_{f}(s) =  \bm{K}^{T} \left(s \bm{I} - \bm{A} \right)^{-1} B 
+	\bm{G}_{f}(s) = -\bm{K}^T G(s) =  -\bm{K}^{T} \left(s \bm{I} - \bm{A} \right)^{-1} B 
 \end{equation}
 
-Now, it is possible to characterize the properties of this quantity which relates the state-feedback gain $\bm{K}$ with the system disturbance $\bm{D}_x(s)$ and sensor disturbance $\bm{D}_e(s)$. To facilitate the definitions and discussion, the results are shown for single-state single-input systems, so $\bm{G}_f(s)$ is a scalar function, where the extension for $n > 1$ states is intuitive in most cases. The first property to be discussed, then, considers the stability of closed-loop feedback controllers. Consider the following closed-loop stability criterion from a Bode plot visualization.
+Now, it is possible to characterize the properties of this quantity which relates the state-feedback gain $\bm{K}$ with the system disturbance $\bm{D}_x(s)$ and gain disturbance $\bm{D}_k(s)$. To facilitate the definitions and discussion, the results are shown for single-state single-input systems, so $\bm{G}_f(s)$ is a scalar function, where the extension for $n > 1$ states is intuitive in most cases. The first property to be discussed, then, considers the stability of closed-loop feedback controllers. Consider the following closed-loop stability criterion from a Bode plot visualization.
 
 \begin{boxed-theorem}{(Bode stability criterion)}
     Consider a feedback system whose closed-loop transfer function is defined, assuming perfect measuring sensors, as:
@@ -1781,7 +1811,7 @@ Now, it is possible to characterize the properties of this quantity which relate
         T(s) = \cfrac{K G(s)}{1 + K G(s)}
     \end{equation}
     
-    The closed-loop system is said to be stable if $\| G(j \omega_{pc}) \leq 0 \|$, where $\omega_{pc}$ is the \textit{phase crossover frequency} obtained such that $\angle G(j \omega_{pc}) = -180º$.
+    The closed-loop system is said to be stable if $| G(j \omega_{pc}) | \leq 0 $, where $\omega_{pc}$ is the \textit{phase crossover frequency} obtained such that $\angle G(j \omega_{pc}) = -180º$.
 \end{boxed-theorem}
 
 Additionally, it is possible to define a stability criterion through a Nyquist diagram of the closed-loop system.
@@ -1790,7 +1820,7 @@ Additionally, it is possible to define a stability criterion through a Nyquist d
     Consider a system with feedforward transfer function as defined in \eqref{eq:fdbckForwardTrnsfer}. Now, let $P$ and $Z$ be respectively the number of poles of $G_{f}(s)$ and zeros of $1 + G_{f}(s)$ that are in the right-half plane. In this case, the Nyquist contour shall clockwise encircle the point $s = -1$ a number of times $N$ such that $N = Z - P$.
 \end{boxed-theorem}
 
-A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}, but their graphical nature allows for a easy understand of how disturbances can affect the stability of state-feedback systems. Consider, for instance, the Bode plot shown in Fig. \ref{fig:properties02} of a SISO version (excluding the second state) of the closed-loop system in Fig. \ref{fig:regulator01}, but submitted to a constant disturbance of $D_x = ?$. It is possible to see that the disturbance alone can produce a closed-loop unstable system. 
+A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}, but their graphical nature allows for an easy understand of how disturbances can affect the stability of state-feedback systems. Consider, for instance, the Bode plot shown in Fig. \ref{fig:properties02} of a SISO version (excluding the second state) of the closed-loop system in Fig. \ref{fig:regulator01}, but submitted to a constant disturbance of $D_x = ?$. It is possible to see that the disturbance alone can produce a closed-loop unstable system. 
 
 [fig]
 
@@ -1807,7 +1837,7 @@ Of course, not all disturbances observed in real operations are strong enough to
         PM = \angle T(j \omega_{gc})
     \end{equation}
     
-    \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $\|T(j\omega_{gc})\| = 0 dB$. 
+    \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $| T(j\omega_{gc}) | = 0 dB$. 
 \end{boxed-definition}
 
 An illustration of these definitions in both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Since high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
@@ -1942,8 +1972,18 @@ Now, the discussion turns to how to solve this general problem. In this work, th
 
 The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition in $t = T$ to the beginning of the horizon at $t = t_0$. This is a result from the fact that an optimal action $u(t)$ depends on the loss function $l(.)$ at time $t$ and on the optimal cost $V^*(.)$ for a time immediately after that (for instance, $t+\delta t$), but the last action $u(T)$ depends only on $l_f(.)$ since it no longer affects the system inside the control horizon. The recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman equation. A illustration of this principle is shown in Fig. \ref{fig:generalOC01}
 
-[fig]
-
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=1.75cm,>=latex', scale=0.2]
+		\node [mcCircle] (x0) {$x_0$};
+		
+		\node [mcCircle] (x0) {$x_0$};
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a stochastic discrete State-Space system.}
+	\label{fig:generalOC01}
+\end{figure}
 
 \section{Linear Quadratic Regulator (LQR)}
 
@@ -2139,7 +2179,46 @@ As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary
 
 First of all, consider a system perturbed by disturbances in the state-response and in the sensor measuring, respectively $\bm{w}$ and $\bm{v}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w} \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v} \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, the it is possible to motivate a stochastic formulation of the linear State-Space model.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [block, right of=input] (inputMatrix) {$\bm{B}$};
+	    \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+	    \node [block, right of=stateSum, node distance=6em] (integral) {$\bm{z}^{-1}$};
+	    \node [sum, right of=integral, node distance=4em] (wSum) {};
+	    \node [input, above of=wSum, node distance=4em] (wInput) {};
+	    \node [text width=1em, above of=wInput, node distance=1em] (wText) {$w_k$};
+	    \node [block, right of=wSum, node distance=6em] (outputMatrix) {$\bm{C}$};
+	    \node [sum, right of=outputMatrix, node distance=4em] (vSum) {};
+	    \node [input, above of=vSum, node distance=4em] (vInput) {};
+	    \node [text width=1em, above of=vInput, node distance=1em] (vText) {$v_k$};
+		\node [output, right of=vSum] (output) {};
+		\node [block, below of=integral] (stateMatrix) {$\bm{A}$};
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrix) (stateMatrix) (vSum), fill= myBlue!10, rounded corners, inner sep=.4cm, label={[xshift=0em, myBlue!90]above left:Open-Loop System}] {};
+		\end{scope}		
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{u}_k$} (inputMatrix);
+	    \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+	    \draw [->] (stateSum) -- node[pos=0.5]{$\bm{x}_{k+1}$} (integral);
+	    \draw [->] (integral) --  node[pos=0.8]{$+$} (wSum);
+	    \draw [->] (wInput) -- node[pos=0.8]{$+$} (wSum);
+	    \draw [->] (wSum) -- node[name=bk1,pos=0.5]{$\bm{x}_{k}$} (outputMatrix);
+	    \draw [->] (outputMatrix) -- node[pos=0.8]{$+$} (vSum);
+	    \draw [->] (vInput) -- node[pos=0.8]{$+$} (vSum);
+	    \draw [->] (vSum) -- node[pos=0.8]{$\bm{y}_k$} (output);
+	    \draw [->] (bk1) |- (stateMatrix);
+	    \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a stochastic discrete State-Space system.}
+	\label{fig:optSE01}
+\end{figure}
 
 \begin{boxed-definition}{(Stochastic Discrete State-Space)} \label{def:stochSS}
 	Given an additive process noise $\bm{w} \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive sensor noise $\bm{v} \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic version of a discrete-time State-Space model is given by the equations:
@@ -2184,7 +2263,7 @@ Combining this assumption with Definition \ref{def:gaussianProcess}, in order to
 	Given a stochastic State-Space model as in Definition \ref{def:stochSS}, and assuming the Markov property, a \textit{Hidden Markov Model} for this dynamical system at a time instant $k$ is defined through the two distributions:
 	\begin{align}
 	\begin{cases}
-		\textbf{Transition Distribution: } & p(\bm{x}_{k} | \bm{x}_{k-1}) \\
+		\textbf{Transition Distribution: } & p(\bm{x}_{k} | \bm{x}_{k-1}, \bm{u}_{k-1}) \\
 		\hfill \textbf{Emission Distribution: } & p(\bm{y}_{k} | \bm{x}_{k})
 	\end{cases}
 	\end{align}
@@ -2198,21 +2277,65 @@ Combining this assumption with Definition \ref{def:gaussianProcess}, in order to
 	\end{align}
 \end{boxed-definition}
 
-A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ at each time instance is a latent variable whose actual value is not known, but can be observed through the emission variable $\bm{y}_k$. This raises the problem of state estimation as a common inference problem in engineering applications known as the \textit{filtering}, which consists on infer the actual value of $\bm{x}_k$ given the entire history of observations $\bm{y}_0, \cdots, \bm{y}_k$ until the present time. Thus, the actual state can be obtained through the distribution:
+A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ at each time instance is a latent variable whose actual value is not known, but can be observed through the emission variable $\bm{y}_k$. This raises the problem of state estimation as a common inference problem in engineering applications known as the \textit{filtering}, which consists on infer the actual value of $\bm{x}_k$ given the entire history of observations $\bm{y}_0, \cdots, \bm{y}_k$ and control actions $\bm{u}_0, \cdots, \bm{u}_k$. Thus, the actual state can be obtained through the distribution:
 \begin{equation}
-	p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0)
+	p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k-1}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \bm{u}_{k-2}, \cdots, \bm{u}_0)
 \end{equation}
 
-\noindent from where a representative value, such as the expected value $\mathbb{E}\left[ p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0) \right]$ can be selected as the information used by the controller to determine an action.
+\noindent from where a representative value, such as the expected value $\mathbb{E}\left[ p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0) \right]$ can be selected as the value used by the controller to determine an action.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{!}{!}{
+	\begin{tikzpicture}[auto, node distance=1.75cm,>=latex', scale=0.2]
+	    % Nodes
+		\node [mcInput] (u0) {$u_0$};
+		\node [mcCircle, below of=u0] (x0) {$x_0$};
+		\node [mcCircle, below of=x0] (y0) {$y_0$};
+		
+		\node [mcInput, right of=u0] (u1) {$u_1$};
+		\node [mcCircle, below of=u1] (x1) {$x_1$};
+		\node [mcCircle, below of=x1] (y1) {$y_1$};
+		
+		\node [text width=2em, right of=x1] (cdots1) {$\cdots$};	
+		
+		\node [mcCircle, right of=cdots1] (xi) {$x_i$};		
+		\node [mcInput, above of=xi] (ui) {$u_i$};
+		\node [mcCircle, below of=xi] (yi) {$y_i$};
+		
+		\node [text width=2em, right of=xi] (cdots2) {$\cdots$};
+		
+		\node [mcCircle, right of=cdots2] (xk) {$x_k$};
+		\node [mcCircle, below of=xk] (yk) {$y_k$};
+	    
+	    % Lines
+	    \draw [->] (u0) -- (x1);
+	    \draw [->] (u1) -- (cdots1);
+	    \draw [->] (ui) -- (cdots2);
+	    
+	    \draw [->] (x0) -- (x1);
+	    \draw [->] (x1) -- (cdots1);
+	    \draw [->] (cdots1) -- (xi);
+	    \draw [->] (xi) -- (cdots2);
+	    \draw [->] (cdots2) -- (xk);
+	    
+	    \draw [->] (x0) -- (y0);
+	    \draw [->] (x1) -- (y1);
+	    \draw [->] (xi) -- (yi);
+	    \draw [->] (xk) -- (yk);
+	    
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a stochastic discrete State-Space system.}
+	\label{fig:HMM01}
+\end{figure}
 
 There are several approaches to solve the filtering and other related problems in statistical state estimation \textbf{[reference-Sarkka]}, but the most popular method has been the Kalman filter \textbf{[reference]} which is discussed below for a discrete-time system.
 
 \begin{boxed-theorem}{(Kalman Filter)} \label{th:kalmanFilter}
 	Given a Hidden Markov Model as in Definition \ref{def:HMM} and initial state distribution $\bm{x}_0 \sim \mathcal{N}(\bm{m}_0, \bm{P}_0)$, the filtering distribution can be solved in closed-form as:
 	\begin{equation}
-		p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k_1}, \cdots, \bm{y}_0)  = \mathcal{N}(\hat{\bm{x}}_k, \bm{P}_k)
+		p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0)  = \mathcal{N}(\hat{\bm{x}}_k, \bm{P}_k)
 	\end{equation}	 
 	
 	\noindent where the mean $\bm{m}_k$ and covariance $\bm{P}_k$ are recursively computed through the prediction and update steps below:
