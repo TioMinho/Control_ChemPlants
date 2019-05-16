@@ -1645,27 +1645,28 @@ A schematic for this formulation of feedback from estimated states is shown Fig.
 	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
 	    % We start by placing the blocks
 	    \node [input, name=input] {};
-	    \node [sum, right of=input, node distance=4em] (intFbckSum) {};
+	    \node [sum, right of=input, node distance=3em] (intFbckSum) {};
 	    \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
 	    \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
 	    \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
-	    \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
+	    \node [block, right of=fbckSum, node distance=6em] (inputMatrix) {$\bm{B}$};
 	    \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
 	    \node [block, right of=stateSum, node distance=4em] (integral) {$\int	$};
 	    \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
-		\node [output, right of=outputMatrix] (output) {};
+		\node [output, right of=outputMatrix, node distance=7em] (output) {};
 		\node [block, below of=integral] (stateMatrix) {$\bm{A}$};
 		
-		\node [block, below of=stateMatrix, node distance=6em] (integralLU) {$\int	$};		
-		\node [sum, left of=integralLU, node distance=4em] (stateSumLU1) {};				
-		\node [sum, left of=stateSumLU1, node distance=3em] (stateSumLU2) {};		
-		\node [block, left of=stateSumLU2, node distance=4em] (inputMatrixLU) {$\bm{B}$};
+		\node [block, below of=stateMatrix, node distance=12.5em] (integralLU) {$\int$};		
+		\node [sum, left of=integralLU, node distance=4em] (stateSumLU) {};				
+		\node [block, left of=stateSumLU, node distance=4em] (inputMatrixLU) {$\bm{B}$};
 	    \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {$\bm{C}$};
 		\node [block, below of=integralLU] (stateMatrixLU) {$\bm{A}$};
-		\node [block, below of=stateMatrixLU] (luenbergerGain) {$\bm{L}$};		
-		\node [sum, right of=outputMatrixLU, node distance=4em] (fbckOutput) {};
+		\node [block, above of=integralLU] (luenbergerGain) {$\bm{L}$};		
 		
-		\node [block, below of=luenbergerGain, label={below:Controller}] (fbckGain) {$\bm{K}$};		
+		\draw [->] (outputMatrix) -- node[name=bk3,pos=0.33]{} node[name=bk5,pos=0.8]{} node[pos=0.9]{$\bm{y}$} (output);
+		\node [sum, anchor=base] (fbckOutput) at (bk3.base |- luenbergerGain) {};
+		
+		\node [block, below of=stateSumLU, node distance=11em, label={below:Controller}] (fbckGain) {$\bm{K}$};		
 		
 		\begin{scope}[on background layer]
 			\node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= myBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, myBlue!90]above left:Open-Loop System}] {};
@@ -1675,34 +1676,37 @@ A schematic for this formulation of feedback from estimated states is shown Fig.
 			\node [fit=(integralAction) (intActGain), fill= myGreen!10, rounded corners, inner sep=.4cm, label={[xshift=4.3em, myGreen!90]above left:Integral Action}] {};
 		\end{scope}	
 		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrixLU) (luenbergerGain) (stateMatrixLU) (fbckOutput), fill= myRed!10, rounded corners, inner sep=.4cm, label={[xshift=5.8em, myRed!90]above left:Luenberger Observer}] {};
+		\end{scope}	
+		
 		% Once the nodes are placed, connecting them is easy. 	    
 	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
 	    \draw [->] (intFbckSum) -- (integralAction);
 	    \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
 	    \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);
-	    \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
+	    \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} node[name=bku1, pos=0.5]{} (inputMatrix);
 	    \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
 	    \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
 	    \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
-	    \draw [->] (outputMatrix) -- node[name=bk3,pos=0.5]{} node[pos=0.6]{$\bm{y}$} (output);
 	    \draw [->] (bk1) |- (stateMatrix);
-	    \draw [->] (bk2) |- (fbckGain);
 	    \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
-	    \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
-	    \draw [->] (bk3) -- ++(0, -14em) -| node[pos=0.97]{$-$} (intFbckSum);
+	    \draw [->] (fbckGain) -| node[pos=0.98]{$-$} (fbckSum);
+	    \draw [->] (bk5) |- ++(0, -33em) -| node[pos=0.98]{$-$} (intFbckSum);
 	    
-%	    \draw [->] (bk1) |-  (inputMatrixLU);
-%	    \draw [->] (bk2) |- node[pos=0.8]{$+$}  (fbckOutput);
 	    
-	    \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU2);
-	    \draw [->] (stateSumLU2) -- node[pos=0.8]{$+$} (stateSumLU1);
-	    \draw [->] (stateSumLU1) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
-	    \draw [->] (integralLU) -- node[name=bk1,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
-	    \draw [->] (outputMatrixLU) -- node[pos=0.8]{$-$} (fbckOutput);
-	    \draw [->] (bk1) |- (stateMatrixLU);
-	    \draw [->] (fbckOutput) |- (luenbergerGain);
-	    \draw [->] (stateMatrixLU) -| node[pos=0.95]{$+$} (stateSumLU1);
-	    \draw [->] (luenbergerGain) -| node[pos=0.95]{$+$} (stateSumLU2);
+	    \draw [->] (bku1) |- (inputMatrixLU);
+	    \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU);
+	    \draw [->] (stateSumLU) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
+	    \draw [->] (integralLU) -- node[name=bk4,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
+	    \draw [->] (outputMatrixLU) -| node[pos=0.95]{$-$} (fbckOutput);
+	    \draw [->] (bk4) |- (stateMatrixLU);
+	    \draw [->] (fbckOutput) -- (luenbergerGain);
+	    \draw [->] (stateMatrixLU) -| node[pos=0.95]{$+$} (stateSumLU);
+	    \draw [->] (luenbergerGain) -| node[pos=0.95]{$+$} (stateSumLU);
+	    \draw [->] (bk3) -- node[pos=0.95]{$+$} (fbckOutput);
+	    
+   	    \draw [->] (bk4) |- (fbckGain);
 	\end{tikzpicture} 
 	}
 	\caption{block diagram of a state-feedback closed-loop system with integral action.}
