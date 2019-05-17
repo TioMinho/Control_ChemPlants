@@ -1366,9 +1366,25 @@ When discussing controller synthesis it is also necessary to account for which o
 	\end{align}
 \end{boxed-definition}
 
-Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are 	linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state operation point $\bm{x}_o$ and reject disturbances. For the sake of illustration, two regulators for the reactor system in \eqref{eq:isoSys02} are shown in Fig. \ref{fig:regulator01}, demonstrating how state-feedback can guarantee a specific constant production of chemical substances.
+Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are 	linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state operation point $\bm{x}_o$ and reject disturbances. For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
+\begin{equation}
+\begin{matrix}
+	\bm{A} = \begin{bmatrix} 
+    	-5.93  &      0 \\
+	    \hfill 0.83   &  -4.70 
+    \end{bmatrix} & b = \begin{bmatrix} 3.81 \\ -1.09 \end{bmatrix}
+\end{matrix}    
+\end{equation}
 
-[fig]
+
+Since this system was obtained by the linearized model in \eqref{eq:isoReact01} for $\bm{x}_o = [6.19, 1.09]^T$ and $u_o = 3.03$, the regulator will impose the zero-state $\Delta \bm{x} = \bm{0}$ which actually means imposing $\bm{x}(t) = [6.19, 1.09]^T$ as $t \to \infty$. A simulation is shown in Fig. \ref{fig:regulator01} for three different regulators, considering initial state $\delta \bm{x}(t) = \bm{0} - \bm{x}_o$ and vertically correcting the response and input signal by $\bm{x}_o$ and $\bm{u}_o$, respectively.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{chapter3/report_ch3_1}
+	\caption{a}
+	\label{fig:regulator01}
+\end{figure}
 
 In contrast, the control objective could be to follow a non-constant signal $\bm{r}(t)$, or to follow a constant signal different from the zero-state, giving rise to the tracking or servomechanism controllers. A more complete discussion is needed in such cases, since there is a possibility that state-feedback is not capable of actually performing this tracking. To understand this question, consider, for simplicity, that the system must follow a constant reference $\bm{r}(t) = a$. Consider, now, an Input-Output conversion of a closed-loop SISO State-Space model, which from \eqref{eq:SSFdbckControlCanon} directly results in the transfer function:
 \begin{equation}
@@ -2561,7 +2577,7 @@ First of all, the stability of the closed-loop system via Linear Quadratic Regul
 
 \noindent In this case, the optimal control action is always $u(t) = 0$, for $t \in [t_0, \infty]$. However, this control action results in the system $\dot{x}(t) = x(t)$ which is clearly BIBO unstable. Therefore, there are conditions in whether the optimization process results in a stable or unstable closed-loop system, as shown by the following theorem.
 
-\begin{boxed-theorem}{(LQR Stability)} \label{th:lqrStab}
+\begin{boxed-theorem}{(LQR Assymptoptic Stability)} \label{th:lqrStab}
 	Consider the infinite-horizon Linear Quadratic Regulator as defined in Theorem \ref{th:infiniteLQR}. If the system is observable, then the closed-loop matrix $\bm{A}_{cl} = (\bm{A} - \bm{B}\bm{K}) = (\bm{A} - \bm{B}\bm{R}^{-1}\bm{B}^T\bm{P})$ is BIBO stable.
 \end{boxed-theorem}
 

@@ -3,9 +3,9 @@
 % 
 % Author: Otacilio Bezerra Leite Neto
 %
-%   report_codes.m
-%       This script contains the codes used to generate the images displayed in the report 
-%       for the monograph. (Diagrams and Illustrations are not included)
+%   report_ch2_codes.m
+%       This script contains the codes used to generate the images displayed in the 
+%       Chapter2 2for the monograph on report/ (Diagrams and Illustrations are not included)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Preamble %%
@@ -75,7 +75,7 @@ subplot(4,2,8); xlabel("Time (min)")
 % - Exporting the Visualization to an Image
 % fig = gcf;
 % fig.PaperPositionMode = 'auto';
-% print('-bestfit', 'isothermal_cstr/simulation/report_1', '-dpdf', '-r300')
+% print('-bestfit', 'isothermal_cstr/simulation/report_ch2_1', '-dpdf', '-r300')
 
 %% Figure 2.4 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -134,7 +134,7 @@ grid
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_2', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_2', '-dpdf', '-r300')
 
 %% Figure 2.5 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -166,7 +166,7 @@ end
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_3', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_3', '-dpdf', '-r300')
 
 %% Figure 2.6 %%
 % - Real simulation parameters
@@ -196,7 +196,7 @@ end
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_4', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_4', '-dpdf', '-r300')
 
 %% Figure 2.5 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -235,7 +235,7 @@ xlabel("Time"), ylabel("x^{(2)}_1(t)")
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_5', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_5', '-dpdf', '-r300')
 
 %% Figure 2.6 %%
 % - Real simulation parameters
@@ -282,7 +282,7 @@ ylim([0, 0.6]);
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_6', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_6', '-dpdf', '-r300')
 
 %% Figure 2.7 %%
 
@@ -324,7 +324,7 @@ set(gca, 'XTickLabel', [])
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_7', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_7', '-dpdf', '-r300')
 
 %% Figure 2.8 %%
 % - Real simulation parameters
@@ -368,7 +368,7 @@ ylim([-12 12])
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_8', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_8', '-dpdf', '-r300')
 
 %% Figure 2.9 %%
 % - Real simulation parameters
@@ -388,7 +388,7 @@ set(gca, 'YTickLabel', [])
 set(gca, 'XTickLabel', [])
 
 fig = gca;
-print('isothermal_cstr/simulation/report_9_1', '-dpng', '-r300')
+print('isothermal_cstr/simulation/report_ch2_9_1', '-dpng', '-r300')
 
 figure;
 plot(t, y1, 'linewidth', 1.5, 'color', cpal(8,:), 'linestyle', '--'); hold on
@@ -398,7 +398,7 @@ set(gca, 'YTickLabel', [])
 set(gca, 'XTickLabel', [])
 
 fig = gca;
-print('isothermal_cstr/simulation/report_9_2', '-dpng', '-r300')
+print('isothermal_cstr/simulation/report_ch2_9_2', '-dpng', '-r300')
 
 %% Figure 2.10 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -433,4 +433,4 @@ set(lineHandle,'Color',cpal(4,:));
 % - Exporting the Visualization to an Image
 fig = gcf;
 fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_10', '-dpdf', '-r300')
+print('-bestfit', 'isothermal_cstr/simulation/report_ch2_10', '-dpdf', '-r300')
