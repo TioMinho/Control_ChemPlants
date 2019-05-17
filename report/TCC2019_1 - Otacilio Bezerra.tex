@@ -58,7 +58,7 @@
 % --------------------------------------------------------------------
 % Tikz Macros
 % --------------------------------------------------------------------
-\usetikzlibrary{shapes,arrows, backgrounds, positioning, fit, decorations}
+\usetikzlibrary{shapes,arrows, backgrounds, positioning, fit, decorations.pathmorphing}
 
 \tikzstyle{sectionBlock} = [draw, fill=blue!20, rectangle, minimum height=3em, minimum width=3em]
 \tikzstyle{block} = [draw, fill=white, rectangle, minimum height=3em, minimum width=3em]
@@ -1976,12 +1976,31 @@ The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can
 	\centering
 	\resizebox{!}{!}{
 	\begin{tikzpicture}[auto, node distance=1.75cm,>=latex', scale=0.2]
+		% Nodes
 		\node [mcCircle] (x0) {$x_0$};
 		
-		\node [mcCircle] (x0) {$x_0$};
+		\node [mcCircle, right of=x0, node distance=8em] (x12) {};
+		\node [mcCircle, above of=x12] (x11) {};
+		\node [mcCircle, below of=x12] (x13) {};
+		
+		\node [mcCircle, right of=x12, node distance=12em] (xT) {$x_T$};
+		
+		% Scopes
+		\begin{scope}[on background layer]
+			\node [fit=(x11) (x13), fill= black!10, rounded corners, inner sep=.4cm, label={[xshift=0em, black!90]above:$x_1$}] {};
+		\end{scope}			
+		
+		% Lines
+		\draw [->, color=myRed!80, line width=.75mm] (x0) -- node[pos=0.7]{$70$} (x11);
+		\draw [->] (x0) -- node[pos=0.6]{$40$} (x12);
+		\draw [->] (x0) -- node[pos=0.45]{$130$} (x13);
+		
+		\draw [->, color=myRed!80, line width=.75mm, decorate, decoration={snake,amplitude=1.5mm, segment length=8mm}] (x11) -- node[pos=0.3]{$220$} (xT);
+		\draw [->, decorate, decoration={snake,amplitude=1.5mm, segment length=8mm}] (x12) -- node[pos=0.4]{$270$} (xT);
+		\draw [->, decorate, decoration={snake,amplitude=1.5mm, segment length=8mm}] (x13) -- node[pos=0.53]{$190$} (xT);
 	\end{tikzpicture} 
 	}
-	\caption{block diagram of a stochastic discrete State-Space system.}
+	\caption{an illustration of the Bellman's Principle of Optimality. Each column represents a discrete time instance and each node represents a possible discrete state. The solid edge represents the loss and transition of a action, whereas the curves represents the optimal cost value to the terminal state. The optimal path is shown in red.}
 	\label{fig:generalOC01}
 \end{figure}
 
@@ -2326,7 +2345,7 @@ A Hidden-Markov Model is a statistical interpretation of dynamical system that i
 	    
 	\end{tikzpicture} 
 	}
-	\caption{block diagram of a stochastic discrete State-Space system.}
+	\caption{a Hidden Markov Model for a discrete-time system, where the shaded boxes indicates that the inputs are not random variables.}
 	\label{fig:HMM01}
 \end{figure}
 
@@ -2440,11 +2459,74 @@ A detailed proof of this theorem can be found in the import paper \textbf{[refer
 
 \section{Linear Quadratic Gaussian (LQG)}
 
-This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and a estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}
+This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and a estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. In this illustration, the open-loop system can represent either a mathematical model (possibly non-linear and time-varying) being simulated or a physical system whose output is only measured through some sensor device. 
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [sum, right of=input, node distance=3em] (intFbckSum) {};
+	    \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
+	    \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
+	    \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
 
-The control configuration that connects a optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
+	    \node [block, fill=myBlue!20, minimum height=4em, right of=fbckSum, node distance=14em] (openloopSystem) {Open-Loop System};    
+		\node [output, right of=outputMatrix, node distance=23em] (output) {};
+		
+		\node [block, below of=openloopSystem, node distance=12.5em] (integralLU) {$\int$};		
+		\node [sum, left of=integralLU, node distance=4em] (stateSumLU) {};				
+		\node [block, left of=stateSumLU, node distance=4em] (inputMatrixLU) {$\bm{B}$};
+	    \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {$\bm{C}$};
+		\node [block, below of=integralLU] (stateMatrixLU) {$\bm{A}$};
+		\node [block, above of=integralLU] (kalmanGain) {$\bm{K}_e$};		
+		
+		\draw [->] (openloopSystem) -- node[name=bk3,pos=0.5]{} node[name=bk5,pos=0.75]{} node[pos=0.9]{$\bm{y}$} (output);
+		\node [sum, anchor=base] (fbckOutput) at (bk3.base |- kalmanGain) {};
+		
+		\node [block, below of=stateSumLU, node distance=11em, label={below:LQR Controller}] (fbckGain) {$\bm{K}$};		
+		
+		
+		\begin{scope}[on background layer]
+			\node [fit=(integralAction) (intActGain), fill= myGreen!10, rounded corners, inner sep=.4cm, label={[xshift=4.3em, myGreen!90]above left:Integral Action}] {};
+		\end{scope}	
+		
+		\begin{scope}[on background layer]
+			\node [fit=(inputMatrixLU) (kalmanGain) (stateMatrixLU) (fbckOutput), fill= myRed!10, rounded corners, inner sep=.4cm, label={[xshift=5.8em, myRed!90]above left:Kalman-Bucy Filter}] {};
+		\end{scope}	
+		
+		% Once the nodes are placed, connecting them is easy. 	    
+	    \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
+	    \draw [->] (intFbckSum) -- (integralAction);
+	    \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
+	    \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);	    
+	    \draw [->] (fbckSum) -- node[pos=0.2]{$\bm{u}$} node[name=bku1, pos=0.2]{} (openloopSystem);
+	    
+
+	    \draw [->] (fbckGain) -| node[pos=0.98]{$-$} (fbckSum);
+	    \draw [->] (bk5) |- ++(0, -28em) -| node[pos=0.98]{$-$} (intFbckSum);
+	    
+	    
+	    \draw [->] (bku1) |- (inputMatrixLU);
+	    \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU);
+	    \draw [->] (stateSumLU) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
+	    \draw [->] (integralLU) -- node[name=bk4,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
+	    \draw [->] (outputMatrixLU) -| node[pos=0.95]{$-$} (fbckOutput);
+	    \draw [->] (bk4) |- (stateMatrixLU);
+	    \draw [->] (fbckOutput) -- (kalmanGain);
+	    \draw [->] (stateMatrixLU) -| node[pos=0.95]{$+$} (stateSumLU);
+	    \draw [->] (kalmanGain) -| node[pos=0.95]{$+$} (stateSumLU);
+	    \draw [->] (bk3) -- node[pos=0.95]{$+$} (fbckOutput);
+	    
+   	    \draw [->] (bk4) |- (fbckGain);
+	\end{tikzpicture} 
+	}
+	\caption{block diagram of a Linear Quadratic Gaussian control configuration.}
+	\label{fig:lqg01}
+\end{figure}
+
+The control configuration that connects a optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
 
 \begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
 	Given a system in State-Space representation whose estimated state-vector $\hat{\bm{x}}(t)$ is reconstructed from a Kalman-Bucy filter and whose input signal is calculated through a finite-horizon Linear Quadratic Regulator, its time evolution for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, can be represented through the model:
@@ -2466,7 +2548,7 @@ The control configuration that connects a optimal control action of a Linear Qua
 	\noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$.
 \end{boxed-definition}
 
-Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \ in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
+Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
 
 \section{Stability and Robustness Analysis}
 
