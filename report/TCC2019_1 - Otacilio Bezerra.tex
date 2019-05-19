@@ -22,11 +22,11 @@
 \usepackage{tikz}
 
 \usepackage{framed}
-\definecolor{shadecolor}{rgb}{0.94,0.94,0.96}
 \definecolor{myYellow}{rgb}{1,0.65,0}
 \definecolor{myRed}{rgb}{0.84, 0.18, 0.13}
 \definecolor{myGreen}{rgb}{0, 0.53, 0.27}
 \definecolor{myBlue}{rgb}{0, 0.34, 0.91}
+\colorlet{shadecolor}{myBlue!7}
 
 \numberwithin{figure}{chapter}
 \numberwithin{equation}{chapter}
@@ -237,10 +237,10 @@ This chapter discusses the mathematical models for dynamical systems and their u
 
 A dynamical system is a physical system whose states evolves with time. For this reason, one can represent a dynamical system using the \textit{first principles} from physics itself, and formulate the evolution in time by calculating the rate of change of the states in respect to time. Thus, dynamical models can be equated using differential equations with time derivatives. 
 
-A straightforward procedure to model a system consists in identify the variables of interest and relate them using conservation laws, such as conservation of mass, conservation of energy or conservation of momentum. The resulting differential equations are in the form:
+A straightforward procedure to model a system consists of identifying the variables of interest and relate them using conservation laws, such as conservation of mass, conservation of energy or conservation of momentum. The resulting differential equations are in the form:
 \begin{equation} \label{eq:massCons01}
     \begin{pmatrix}
-        \text{Rate of} \\ \text{Accumulation}
+        \text{Rate of} \\ \text{Mass/Energy/Momentum} \\ \text{Accumulation}
     \end{pmatrix} = \begin{pmatrix}
         \text{Mass/Energy/Momentum} \\ \text{entering the System}
     \end{pmatrix} - \begin{pmatrix}
@@ -391,7 +391,7 @@ In the case of this model, the rate of changes in the chemical concentrations de
 The last section presented the foundation for modeling a dynamical system using first principles from physics. Although it was a well-defined formulation, the resulting models are not guaranteed to be practical in a mathematical sense. This is to due to the fact that the differential equations, as evidenced in Equation \eqref{eq:exoModel1}, are usually nonlinear functions of the variables of interest, and the analysis of such functions are quite more challenging. In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations.
 
 \begin{boxed-definition}{(Input-Output Representation)} \label{def:IORepr01}
-    An Input-Output (IO) representation of a dynamical system with $p \geq 1$ output variables, represented by $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u}(t) : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is the system of differential equations:
+    An Input-Output (IO) representation of a dynamical system with $p \geq 1$ output variables, represented by $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is the system of differential equations:
     \begin{equation} \label{eq:IERepr01}
     \begin{cases}
         h_1 \left( y_1, \dot{y_1}, ..., y_1^{(n_1)}, u_1, \dot{u}_1, ..., u^{(m_{11})}_1, u_2, \dot{u}_2, ..., u^{(m_{12})}_2, ..., u_r, \dot{u}_r, ..., u^{(m_{1r})}_r, t   \right) = 0 & \\
@@ -421,7 +421,7 @@ An input-output representation is a simple model that describes the entire syste
 This model presents a cause-and-effect interpretation of the system where the direct relationship between the input and output signal, and its derivatives, are equated as if the system was a processing unit. In practice, the input signals $\bm{u}(t)$ are the manipulated variables of the system, where the output signals $\bm{y}(t)$ are the observations of the controlled variables. This representation brings an easy visualization on how a desired system behavior can be achieved by applying a specific input signal, posing as a practical framework for designing controllers. 
 
 \begin{boxed-definition}{(State-Space Representation)} \label{th:SSRepr01}
-    A State-Space (SS) representation of a system with $n \geq 1$ states variables, represented by $\bm{x}(t) : \mathbb{R} \rightarrow \mathbb{R}^{n}$, for $p \geq 1$ output variables, represented by $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u}(t) : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is given by the systems of state and output equations:
+    A State-Space (SS) representation of a system with $n \geq 1$ states variables, represented by $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, for $p \geq 1$ output variables, represented by $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is given by the systems of state and output equations:
     \begin{align} \label{eq:SSRepr01}
     \begin{split}
     \textbf{State Equations:}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  \hfill & \textbf{ Output Equations:} \hfill \\
@@ -507,7 +507,7 @@ This formulation has the advantages that the time response of the system can be 
 In addition to the State-Space representation, the linear assumption also benefits Input-Output representations. One major analytical tool that can be used in these cases is to transform this model to a frequency domain, using a linear transform operator, in order to simplify the solution for the differential equations. The most popular choice of transformation is the \textit{Laplace transform}, $\mathcal{L}\{ h(t) \}$, which converts functions in time to functions in complex frequencies. Using the properties of this operator, differential equations are converted to simple algebraic equations.
 
 \begin{boxed-theorem}{(Transfer Function)} \label{th:transFun01}
-    Given a linear model for a SISO system, with initial conditions $\bm{y}(0^-) \equiv \bm{u}(0^-) \equiv 0$, in the Input-Output formulation:
+    Given a linear model for a SISO system, with initial conditions $\bm{y}(0^-) = \bm{u}(0^-) = \bm{0}$, in the Input-Output formulation:
     \begin{equation}
     \begin{split}
         \alpha_n \cfrac{d^n y(t)}{dt^n} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) &= \beta_m \cfrac{d^m u(t)}{dt^m} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t)
@@ -523,7 +523,7 @@ In addition to the State-Space representation, the linear assumption also benefi
 An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: just compute the transfer function between each pair of input and output, leading to the matrix $\bm{G} \in \mathbb{C}^{n \times m}$.
 
 \begin{boxed-theorem}{(Passage from SS to IO)} \label{th:SSToIO}
-    Consider a linear and time-invariant system in State-Space form with initial states $\bm{x}(0^-) \equiv 0$ and represented as:
+    Consider a linear and time-invariant system in State-Space form with initial states $\bm{x}(0^-) = \bm{0}$ and represented as:
     \begin{align}
     \begin{cases}
         \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{u}(t) \\
@@ -596,7 +596,7 @@ Despite of the discussion about the benefits of linear models, it is necessary t
 \end{boxed-theorem}
 
 \begin{proof}
-    Consider a system represented by state equations $\bm{f}(\cdot)$ and output equations $\bm{g}(\cdot)$, with steady-state operation points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$. Now, consider a very small perturbation $\Delta u(t)$ in the input signal around these operation points. This perturbation will result in small changes in the state and output variables:
+    Consider a system represented by state equations $\bm{f}(\cdot)$ and output equations $\bm{g}(\cdot)$, with steady-state points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$. Now, consider a very small perturbation $\Delta u(t)$ in the input signal around these operation points. This perturbation will result in small changes in the state and output variables:
     \begin{align}
     \begin{matrix}
         \bm{x}(t) = \bm{x}_o + \Delta \bm{x}(t); & &
@@ -657,7 +657,7 @@ Consider $\bm{x} = [\rho_A, \rho_B, \rho_C, \rho_D]^T$ and $u = q$, and consider
 \end{cases}
 .\end{align}
 
- To select steady-state operation points $\bm{x}_o$ and $\bm{u}_o$, it is necessary to find values for $\bm{x}(t)$ and $u(t)$ that satisfies the system $\dot{\bm{x}}(t) = \bm{0}$. This can be done by analytical formulas, in some cases, by numerical methods or by simply simulating the nonlinear system and measuring these quantities when the states displays zero variation. Finally, the linear matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ are obtained by deriving each one of these equations in respect to each state and input, resulting:
+ To select steady-state points $\bm{x}_o$ and $\bm{u}_o$, it is necessary to find values for $\bm{x}(t)$ and $u(t)$ that satisfies the system $\dot{\bm{x}}(t) = \bm{0}$. This can be done by analytical formulas, in some cases, by numerical methods or by simply simulating the nonlinear system and measuring these quantities when the states displays zero variation. Finally, the linear matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ are obtained by deriving each one of these equations in respect to each state and input, resulting:
 \begin{align}   \label{eq:isoReact01}
 \left\{ \begin{matrix*}[l]
     \bm{A} = \begin{bmatrix}
@@ -816,7 +816,7 @@ Consider, for the sake of illustration, the same reactor model from Equation \eq
     \end{bmatrix}
 .\end{align}
 
-A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) \equiv 0,\ t \in [t_0, t]$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
+A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) = \bm{0},\ t \in [t_0, t]$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
 
 \begin{figure}[ht]
     \centering
@@ -877,7 +877,7 @@ The elements of the resulting state-transition matrix are simulated for a specif
     \label{fig:stateTrans02}
 \end{figure}
 
-The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately omitted. Now, the analysis focus the opposite case. Consider, for instance, the response of the first state for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below, which are more complete descriptions of the systems in \eqref{eq:stateRespEx01} and \eqref{eq:stateRespEx02}. Considering initial states $\bm{x}^{(1)}(0) \equiv \bm{x}^{(2)}(0) \equiv 0$ and the input signals $\bm{u}^{(1)}(t) \equiv \bm{u}^{(2)}(t) \equiv 1$, for time $t \in [0, 60)$, the evolution of these states are shown in Fig. \ref{fig:forcedResponse}.
+The previous discussion on the modes of matrix $\bm{A}$ introduced the importance of the eigenvalues of this matrix in analyzing the system response. The analysis, however, was focused on the natural response $\bm{x}_n(t)$, whereas the forced response $\bm{x}_f(t)$ was deliberately omitted. Now, the analysis focus the opposite case. Consider, for instance, the response of the first state for the two systems described by the matrices $(\bm{A}^{(1)}, b^{(1)})$ and $(\bm{A}^{(2)}, b^{(2)})$ given below, which are more complete descriptions of the systems in \eqref{eq:stateRespEx01} and \eqref{eq:stateRespEx02}. Considering initial states $\bm{x}^{(1)}(0) = \bm{x}^{(2)}(0) = \bm{0}$ and the input signals $\bm{u}^{(1)}(t) = \bm{u}^{(2)}(t) = \bm{1}$, for time $t \in [0, 60)$, the evolution of these states are shown in Fig. \ref{fig:forcedResponse}.
 \begin{equation} \label{eq:isoSys02}
 \begin{matrix}
     \bm{A}^{(1)} = \begin{bmatrix} 
@@ -1045,7 +1045,7 @@ The first property to be discussed consists in the stability of a system. An ins
     A dynamical system is defined as BIBO stable if every bounded input stimuli $| \bm{u}(t) | \leq \epsilon < \infty$ produces in it a bounded output response $| \bm{y}(t) | \leq \delta < \infty$.
 \end{boxed-definition}
 
-The main result behind this criteria is that the natural response of a system should vanish as time evolves, i.e., $\bm{x}(t) \equiv 0$ as $t \to \infty$. This result is very intuitive from Theorem \ref{th:lagrangeForm}, since the vanishing of the natural response implies that $e^{\bm{A} t} \equiv 0$ as $t \to \infty$ and the forced response is expected to be bounded, if $\bm{u}(t)$ is bounded. Since the state-transition matrix is a linear combination of the modes, and the modes are exponential functions of the eigenvalues of the matrix $\bm{A}$, it is possible to determine a condition for stability in the light of these quantities.
+The main result behind this criteria is that the natural response of a system should vanish as time evolves, i.e., $\bm{x}(t) = \bm{0}$ as $t \to \infty$. This result is very intuitive from Theorem \ref{th:lagrangeForm}, since the vanishing of the natural response implies that $e^{\bm{A} t} = \bm{0}$ as $t \to \infty$ and the forced response is expected to be bounded, if $\bm{u}(t)$ is bounded. Since the state-transition matrix is a linear combination of the modes, and the modes are exponential functions of the eigenvalues of the matrix $\bm{A}$, it is possible to determine a condition for stability in the light of these quantities.
 
 \begin{boxed-theorem}{(BIBO Stability in SS)} \label{th:BIBOStab}
     A system in State-Space form, represented by a matrix $\bm{A} \in \mathbb{R}^{n \times n}$ with eigenvalues $\bm{\lambda} \in \mathbb{R}^n$, is BIBO stable if and only if $\mathbb{R}e[\lambda_i] < 0,\ \forall i \in [1,2,...,n]$.
@@ -1360,7 +1360,7 @@ Albeit being a simples formula, this method can be used in several applications 
 When discussing controller synthesis it is also necessary to account for which objective this device is expected to fulfill. In this case, there are two main classifications of controllers based on the operation that they impose to the system: regulators and tracking (or servo) controllers. In the case of state-feedback, these two classes of controllers differs only by what type of reference signal $\bm{r}(t)$, for an operation in a time interval $t \in [t_0, t_f]$, the system is expected to follow. The following statements gives a formal definition of a controller for regulation:
 
 \begin{boxed-definition}{(Regulator)} \label{def:regulator}
-    If a state-feedback controller has to make a system follows the reference $\bm{r}(t) \equiv 0$, as $t \to \infty$, it is said to be a \textit{regulator}. In this case, the closed-loop state equation and equivalent solutions reduces to the following:
+    If a state-feedback controller has to make a system follows the reference $\bm{r}(t) = \bm{0}$, as $t \to \infty$, it is said to be a \textit{regulator}. In this case, the closed-loop state equation and equivalent solutions reduces to the following:
         \begin{align}
     \begin{matrix*}[l]
     \textbf{State Equation:} \hfill & & & \textbf{Lagrange solution:} \hfill \\
@@ -1370,7 +1370,7 @@ When discussing controller synthesis it is also necessary to account for which o
     .\end{align}
 \end{boxed-definition}
 
-Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are   linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state operation point $\bm{x}_o$ and reject disturbances. For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
+Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are   linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state point $\bm{x}_o$ and reject disturbances. For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
 \begin{equation}
 \begin{matrix}
     \bm{A} = \begin{bmatrix} 
@@ -2088,7 +2088,7 @@ The LQR optimal controller was first introduced in \textbf{[reference]} and has 
 Notice that only the fact that the LQR cost function is quadratic directly implies that the optimal cost is also quadratic. Therefore, it is possible to define the optimal action $\bm{u}^*(t)$ that produced this optimal cost by evaluating a relationship between it and the matrix $\bm{P}$. Since the quadratic cost just evaluated is defined for a finite-horizon optimal controller, it has to obey the condition imposed by the Hamilton-Jacobi equation, and the optimal controller can be solved as shown in the following theorem.
 
 \begin{boxed-theorem}{(LQR Control Action)} \label{th:LQRAction}
-    Given a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, the optimal action produced by this optimal controller at any time $t \in [t, T]$ is given by:
+    Given a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, the optimal action produced by this optimal controller at any time $t \in [t_0, T]$ is given by:
     \begin{equation}
         \bm{u}^*(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t) \bm{x}(t)
     ,\end{equation}
@@ -2300,8 +2300,8 @@ Combining this assumption with Definition \ref{def:gaussianProcess}, in order to
     Given a stochastic State-Space model as in Definition \ref{def:stochSS}, and assuming the Markov property, a \textit{Hidden Markov Model} for this dynamical system at a time instant $k$ is defined through the two distributions:
     \begin{align}
     \begin{cases}
-        \textbf{Transition Distribution: } & p(\bm{x}_{k} | \bm{x}_{k-1}, \bm{u}_{k-1}) \\
-        \hfill \textbf{Emission Distribution: } & p(\bm{y}_{k} | \bm{x}_{k})
+        p(\bm{x}_{k} | \bm{x}_{k-1}, \bm{u}_{k-1}) & \text{(Transition Distribution)} \\
+        p(\bm{y}_{k} | \bm{x}_{k}) & \text{(Emission Distribution)}
     \end{cases}
     .\end{align}
     
@@ -2491,7 +2491,7 @@ This chapter presented formulation for controllers and state estimators that are
         \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
 
         \node [block, fill=myBlue!20, minimum height=4em, right of=fbckSum, node distance=14em] (openloopSystem) {Open-Loop System};    
-        \node [output, right of=outputMatrix, node distance=23em] (output) {};
+        \node [output, right of=outputMatrix, node distance=25em] (output) {};
         
         \node [block, below of=openloopSystem, node distance=12.5em] (integralLU) {$\int$};     
         \node [sum, left of=integralLU, node distance=4em] (stateSumLU) {};             
@@ -2605,21 +2605,139 @@ Now, the discussion turns to the robustness properties of these optimal controll
 
 Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have a extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that a optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian has no guaranteed margins.
 
-% 5 - Methodology
+% 5 - Receding Horizon Optimal Control
+% ---------------------------------------------------------------
+\clearpage
+\chapter{Receding Horizon Optimal Control}
+
+The previous chapter introduced the concept of finite-horizon optimal control, presenting the Linear Quadratic Regulator as a solution to the condition imposed by the Hamilton-Jacobi equation. Despite being a popular solution with nice properties, there are some downsides of the LQR standard formulation. This chapter explores a optimal controller formulation based on a receding horizon control strategy. In the first section the motivation and definition of the moving horizon strategy are stated. The second sections explores the possibility of combining the receding horizon strategy with an iterative linearization procedure to yield an optimal operation in respect to the nonlinear system itself.
+
+\section{Optimization in Moving Horizons}
+
+A major disadvantage of the standard finite-horizon optimal controller is that the time in which the system will operate becomes restricted to the time horizon used for the optimization. This might becomes a problem in the case that the system is interrupted or subjected to strong disturbances, given that corrective action would require time and the desired state could not be achieved in the given horizon. Similarly, the restricted time horizon is also problematic in the case that the system should track a non-constant reference signal, since it also has be assumed of fixed length for the optimization to account for the entire signal. 
+
+A possible solution to this issue is to perform a Receding Horizon Control (RHC) strategy \textbf{[references]}. In the context of optimal control, a receding horizon controller is also known in literature as the \textit{Model-Predictive Controller} \textbf{[references]}, although this name is usually associated with constrained optimization procedures. The strategy is defined as follows:
+
+\begin{boxed-definition}{(Receding-Horizon Control)} \label{def:recedingHorizon}
+	Considers a linear system in State-Space form and a control horizon of size $T \in \mathbb{R}^+$. The \textit{Receding-Horizon Control} strategy for an optimal controller of this system is represented as:
+	\begin{equation}
+        \dot{\bm{x}}(t) = \left( \bm{A} - \bm{B} \bm{K}(t) \right) \bm{x}(t)
+    ,\end{equation} 
+    
+	\noindent where $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t)$ represents the optimal gain from the LQR cost function (Definition \ref{def:lqr}) for an iterative time interval $[t, t+T]$, and $\bm{P}(t)$ which solves the the Riccati differential equation:
+    \begin{equation}
+        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
+    ,\end{equation}
+    
+    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
+\end{boxed-definition}
+
+[optimization notation]
+
+This definition basically states that the optimization to be performed is similar to the standard case, but, since the time horizon is now a moving window of size $T$, the gain matrices $\bm{K} : \mathbb{R} \rightarrow \mathbb{R}^{r \times n}$ changes together with time. This is a consequence for the fact the the Ricatti differential equation has to be solved backwards in time for each new horizon at each new time instance. Of course, this means that for each which time interval that is optimized, only the first action is actually applied to the system. The Fig. \ref{fig:rhc01} illustrates this control strategy.
+
+[fig]
+
+From the Separation Principle, it is always possible to increment this approach by introducing a optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
+
+\textbf{[properties?]}
+
+\section{Linear Parameter-Varying Models}
+
+The optimal controllers discussed so far suffers from a performance disadvantage when regarding the control of nonlinear systems. As shown in Theorem \ref{th:linearization}, a nonlinear system can be approximated by a linear model around a specific steady-state point. The problem, however, is that the optimization accounts for a nominal linear system that, in the case of a linearized model, will not represent the real dynamics of the nonlinear system as its states deviates from the steady-state value used. For this reason, the LQR solution will not provide an optimal solution in the light of the real system.
+
+In this section, a solution to the nonlinear problematic is presented through an iterative linearization process, where the full dynamics are approximated by a series of linear models obtained for each time instance. This approach is referred in literature as Linear Switched Systems \textbf{[references]}. Before any further discussion, first consider the following definition.
+
+\begin{boxed-definition}{(Linear Parameter-Varying System)} \label{def:lpv}
+	A \textit{Linear Parameter-Varying} (LPV) State-Space representation describing a system with state vector $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, output vector $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$ and input vector $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$ is given by the system of equations: 
+    \begin{align} \label{eq:SSRepr04}
+    \begin{cases}
+        \dot{\bm{x}}(t) = \bm{A}(\bm{\theta}(t)) \bm{x}(t) + \bm{B}(\bm{\theta}(t)) \bm{u}(t) & \\
+        \bm{y}(t) = \bm{C}(\bm{\theta}(t)) \bm{x}(t) + \bm{D}(\bm{\theta}(t)) \bm{u}(t) &
+    \end{cases}
+    ,\end{align}
+
+    \noindent where $\bm{A}(\cdot) \in \mathbb{R}^{n \times n}$, $\bm{B}(\cdot) \in \mathbb{R}^{n \times r}$, $\bm{C}(\cdot) \in \mathbb{R}^{p \times n}$ and $\bm{D}(\cdot) \in \mathbb{R}^{p \times r}$ are appropriate functions of the parameter function $\bm{\theta} : \mathbb{R} \rightarrow \mathbb{R}^{z}$. 
+\end{boxed-definition}
+
+The LPV State-Space model is a linear realization of a system that can change with time through the result of a function $\bm{\theta}(\cdot)$. The first discussions on this representation for dynamical models were motivated from the Gain Scheduling control method \textbf{[references]}, where it serves as an linear embedding of the nonlinear model. From Theorem \ref{th:linearization} it is clear that a possible formulation for such a model is given by: 
+\begin{equation}
+\begin{cases}
+        \Delta \dot{\bm{x}}(t)) =\left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o,  \bm{u}_o}  \Delta \bm{u}(t) \\ \\
+        \hfill \bm{y}(t) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{u}(t) \\
+\end{cases}
+,\end{equation}
+
+\noindent in which case it is possible to set $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t-\delta t), \bm{u}(t-\delta t) \end{bmatrix}^T$ and denote the Jacobians as:
+\begin{align} \label{eq:lpvJacobians}
+\begin{matrix*}[l]
+        \bm{A}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; & \bm{B}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; \\ \\ \bm{C}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} ; & \bm{D}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} 
+\end{matrix*}
+\end{align}
+
+The formulation in \eqref{eq:lpvJacobians} might not be a perfect linearization of the system, since the values $\bm{x}(t)$ and $\bm{u}(t)$ are not constrained to yield $\bm{f}(\bm{x}(t), \bm{u}(t))$, i.e., they may be non-stationary points of the system. In the case that $\delta t > 0$, these matrices functions represents a causal switching law for linear systems \textbf{[reference]}, and the LPV system tends to a nonlinear system as $\delta t \to 0$. For some families of state and input trajectories it is possible to guarantee stability and other asymptotic system properties \textbf{[reference]}, which are heavily based on Lyapunov's theory \textbf{[reference]}. 
+
+Consider the linearization Jacobians stated in \eqref{eq:isoReact01}. In the case that only the two first states are modelled, a LPV formulation for that system is given as:
+\begin{align}   \label{eq:isoReactLPV}
+\left\{ \begin{matrix*}[l]
+    \Delta \dot{\bm{x}}(t) = \begin{bmatrix}
+        -\theta^{(1)} - K_{AB} - 2K_{AC} \bm{\theta}^{(2)}_1 & 0 \\ K_{AB} & - \theta^{(1)} - K_{BC} 
+    \end{bmatrix} \Delta \bm{x}(t) +  \begin{bmatrix}
+        \rho_{in}^{(A)} - \bm{\theta}^{(2)}_1 \\ - \bm{\theta}^{(2)}_2
+    \end{bmatrix} \Delta u(t) \\ \\
+    \phantom{\Delta} \bm{y}(t) = \begin{bmatrix}
+        1 & 0  \\ 0 & 1 
+    \end{bmatrix} \Delta \bm{x}(t) + \begin{bmatrix}
+        0 \\ 0 
+    \end{bmatrix} \Delta u(t)
+\end{matrix*} \right.
+,\end{align}
+
+\noindent where $\theta^{(1)} = u(t-\delta t)$ and $\bm{\theta}^{(2)} = \bm{x}(t-\delta t)$. Notice that the matrix $\bm{A}(\cdot)$ in this case should always result in a stable system, since the variables in the diagonal are constrained to be positive, given their physical meaning. A simulation is shown in Fig. \ref{fig:lpvSim01} for this system, given a sequence of different amplitude steps as inputs, to visualize how well this system response can approximate the nonlinear response.
+
+[fig]
+
+\section{Receding Horizon Control for Switched Systems}
+
+Combining the receding horizon strategy together with the linear switching approach, it is possible to develop a method to controlling nonlinear systems by optimizing over a series of linearized systems. The receding horizon, in this case, becomes a necessity since the optimization has to be repeated every time that the matrices $\bm{A}(\cdot)$ and $\bm{B}(\cdot)$ changes. A formal definition of such controller is given below.
+
+\begin{boxed-definition}{(RHC for LPV Systems)} \label{def:recedingHorizon}
+	Considers a linear parameter-varying system in State-Space form, a control horizon of size $T \in \mathbb{R}^+$ and a switching time distance $\delta t$. The receding horizon control strategy for an optimal controller of this switched system is represented as:
+	\begin{equation}
+        \dot{\bm{x}}(t) = \left( \bm{A}(\bm{\theta}(t)) - \bm{B}(\bm{\theta}(t)) \bm{K}(t) \right) \bm{x}(t)
+    ,\end{equation} 
+    
+	\noindent where $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t - \delta t), \bm{u}(t - \delta t) \end{bmatrix}$ is the parameter function and $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t)$ represents the optimal gain for an iterative time interval $[t, t+T]$, given $\bm{P}(t)$ which solves the the Riccati differential equation:
+    \begin{equation}
+        -\dot{\bm{P}}(t) = \bm{A}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{P}(t) \bm{A}(\bm{\theta}(t)) - \bm{P}(t) \bm{B}(\bm{\theta}(t)) \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{Q}
+    ,\end{equation}
+    
+    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
+\end{boxed-definition}
+
+A simulation of controlling the system from \eqref{eq:isoReactLPV} is shown at Fig. \ref{fig:rhcLPV01}, demonstrating the quality of this approach to directly control the nonlinear system. For this configuration, the transient characteristics of the response can then be tuned by the design of $\bm{Q}$, $\bm{R}$ and the time parameters $\bm{T}$ and $\delta t$. 
+
+[fig]
+
+As stated earlier, it is also possible to apply this approach to stochastic systems, which are modelled as the nominal State-Space models perturbed by white Gaussian noise. The main difference is that the switching is done through the estimated states, making the approximation to the nonlinear response dependent on the estimator capabilities. A simulation of such configuration is shown in Fig. \ref{fig:rhcLPV02}. Notice how the action of noise made the closed-loop system exhibits some pseudo-periodic behavior, while still being able to follow the reference signal.
+
+[fig]
+
+% 6 - Methodology
 % ---------------------------------------------------------------
 \clearpage
 \chapter{Methodology}
 
 a
 
-% 6 - Results and Discussion
+% 7 - Results and Discussion
 % ---------------------------------------------------------------
 \clearpage
 \chapter{Results and Discussion}
 
 a
 
-% 7 - Conclusion
+% 8 - Conclusion
 % ---------------------------------------------------------------
 \clearpage
 \chapter{Conclusion}
