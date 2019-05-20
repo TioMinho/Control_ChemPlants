@@ -19,7 +19,7 @@
 \usepackage[printwatermark]{xwatermark}
 \usepackage{subcaption}
 \usepackage{siunitx}
-\usepackage{tikz}
+\usepackage{tikz, pgfplots}
 
 \usepackage{framed}
 \definecolor{myYellow}{rgb}{1,0.65,0}
@@ -47,6 +47,8 @@
 
 \usepackage{graphicx}
 \graphicspath{ {imgs/} }
+
+\newbox{\bigpicturebox}
 
 \lstset{
     backgroundcolor=\color[rgb]{0.86,0.88,0.93},
@@ -739,7 +741,7 @@ The proof is direct from Definition \ref{def:stateTransM}, and a detailed discus
     \begin{equation} \label{eq:lagrTH02}
     \begin{split}
         \cfrac{d(e^{-\bm{A} t} \bm{x}(t))}{dt} &= e^{-\bm{A} t} \bm{B} \bm{u}(t) \\
-        \left. e^{-\bm{A} t} \bm{x}(t) \right|^{t}_{t_0}  &= \int_{t_0}^{t} e^{-\bm{A} t} \bm{B} \bm{u}(t) dt \\
+        \left. e^{-\bm{A} t} \bm{x}(t) \right|^{t}_{t_0}  &= \int_{t_0}^{t} e^{-\bm{A} \tau} \bm{B} \bm{u}(\tau) d\tau \\
         e^{-\bm{A} t} \bm{x}(t) - e^{-\bm{A} t_0} \bm{x}(t_0)  &= \int_{t_0}^{t} e^{-\bm{A} \tau} \bm{B} \bm{u}(\tau) d\tau
     \end{split}
     .\end{equation}
@@ -1371,7 +1373,7 @@ When discussing controller synthesis it is also necessary to account for which o
 \end{boxed-definition}
 
 Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are   linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state point $\bm{x}_o$ and reject disturbances. For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
-\begin{equation}
+\begin{equation} \label{eq:isoSys02Rep}
 \begin{matrix}
     \bm{A} = \begin{bmatrix} 
         -5.93  &      0 \\
@@ -1383,10 +1385,10 @@ Of course, if the feedback gain matrix impose that all poles of the system are i
 
 Since this system was obtained by the linearized model in \eqref{eq:isoReact01} for $\bm{x}_o = [6.19, 1.09]^T$ and $u_o = 3.03$, the regulator will impose the zero-state $\Delta \bm{x} = \bm{0}$ which actually means imposing $\bm{x}(t) = [6.19, 1.09]^T$ as $t \to \infty$. A simulation is shown in Fig. \ref{fig:regulator01} for three different regulators, considering initial state $\delta \bm{x}(t) = \bm{0} - \bm{x}_o$ and vertically correcting the response and input signal by $\bm{x}_o$ and $\bm{u}_o$, respectively.
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{chapter3/report_ch3_1}
-    \caption{A}
+    \caption{Simulation of three closed-loop systems showing the input signal (left) and state responses (right) for gains $K_1 = [-0.99, 1.22]$, $K_2 = [0.78, 0.55]$ and $K_3 = [0.81, 5.20]$. The reference signal is indicated by the black dashed line.}
     \label{fig:regulator01}
 \end{figure}
 
@@ -1413,9 +1415,7 @@ From that formulation it is clear that the response $Y(s) = G(s)R(s)$ will yield
     .\end{align}
 \end{boxed-definition}
 
-Despite being a feasible solution, there are still problems with this definition of tracking controllers. For instance, if the system is subject to a \textit{constant additive disturbance}, which as not anticipated in the model, the resulting operation will not yield a perfect tracking. The simulations in Fig. \ref{fig:tracking01} shows the three cases for a tracking controller given the feedforward correction of the reference.
-
-[fig]
+Despite being a feasible solution, there are still problems with this definition of tracking controllers. For instance, if the system is subject to a \textit{constant additive disturbance}, which as not anticipated in the model, the resulting operation will not yield a perfect tracking. 
 
 The problem of the previous formulation for a tracking controller is that it is not robust to actions that happens outside the model. A direct cause of this is the fact that the feedforward gain $\bm{F}$ does not benefits from the real-time corrective action of the state-feedback, but rather is calculated \textit{off-line} using the model properties. Therefore, a way to ensure a more robust operation could be to insert real-time information about the tracking error directly to the feedback corrective action. With this motivation, a new formulation of the tracking controller is given below.
 
@@ -1432,7 +1432,7 @@ The problem of the previous formulation for a tracking controller is that it is 
             \dot{\bm{x}}(t) \\
             \dot{\bm{x}}_a(t)
         \end{bmatrix} &= \begin{bmatrix}
-            \bm{A} + \bm{B} \bm{K} & \bm{B} \bm{K}_a \\ - \bm{C} & \bm{0}
+            \bm{A} - \bm{B} \bm{K} & -\bm{B} \bm{K}_a \\ - \bm{C} & \bm{0}
         \end{bmatrix} \begin{bmatrix}
             \bm{x}(t) \\
             \bm{x}_a(t)
@@ -1508,12 +1508,12 @@ The problem of the previous formulation for a tracking controller is that it is 
 
 Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking error until a time $t$, this formulation is usually characterized as imposing ``integral action" to the controller. The schematic at Fig. \ref{fig:tracking02} illustrates how an integrator can be included to the block diagram of the control loop. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
 
-\begin{boxed-theorem}
-    If the system described by matrices $(\bm{A}, \bm{B})$ is controllable and its transfer functions $\bm{G}(s)$ has no zero at $s = 0$, then the eigenvalues of the augmented matrix $\tilde{\bm{A}}$ can be assigned arbitrary by the feedback gain $\tilde{\bm{K}}$.
+\begin{boxed-theorem}{} \label{th:augmentedCtrb}
+    If the SISO system described by $(\bm{A}, B)$ is controllable and its transfer function $G(s)$ has no zero at $s = 0$, then the eigenvalues of the augmented matrix $\tilde{\bm{A}}$ can be assigned arbitrary by the feedback gain $\tilde{\bm{K}}$.
 \end{boxed-theorem}
 
 \begin{proof}
-    Without loss of generality, consider a SISO controllable system. After the augmentation, the controllability matrix $\tilde{\bm{\mathcal{C}}}$ is calculated as:
+    Consider a SISO controllable system. After the augmentation, the controllability matrix $\tilde{\bm{\mathcal{C}}}$ is calculated as:
     \begin{align}
     \begin{split}
         \tilde{\bm{\mathcal{C}}} &= \begin{bmatrix}
@@ -1550,9 +1550,16 @@ Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking e
     Since $\bm{G}(s)$ has no zeros at $s = 0$, then $\beta_n \neq 0$, meaning that $\tilde{\bm{\mathcal{C}}}$ is nonsingular and, therefore has full row rank. This concludes that the augmented system $(\tilde{\bm{A}}, \tilde{\bm{B}})$ is controllable and, from Theorem \ref{th:polePlace}, the eigenvalues of $\tilde{\bm{A}}$ can be assigned anywhere in the complex plane.
 \end{proof}
 
-A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. Some simulations of closed-loop systems for tracking are shown in Fig. \ref{fig:tracking03} for a non-constant reference.
+This result does not scale naturally to MIMO systems, but the main intuition is the same. Basically, if the augmented matrices are controllable, the robust tracking can be achieved by the same formulation. A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. 
 
-[fig]
+For the sake of illustration, consider the same system used in \eqref{eq:isoSys02Rep}. Unfortunately, the augmented version of this \textit{single-input multiple-output} (SIMO) formulation is not controllable. However, the SISO version obtained by letting $C = \begin{bmatrix} 0, 1 \end{bmatrix}$ obeys Theorem \ref{th:augmentedCtrb}, so a robust tracking controller can be designed by state-feedback. Some simulations of closed-loop systems for this system to track are shown in Fig. \ref{fig:tracking03} for a non-constant reference consisting of a sequence of step signals.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{chapter3/report_ch3_2}
+    \caption{Simulation of three closed-loop systems showing the input signal (left) and state response (right) for augmented gains $\tilde{K}_1 = [-0.99, 1.22, -25]$, $\tilde{K}_2 = [0.78, 0.55, -25]$ and $\tilde{K}_3 = [0.81, 5.20, -50]$. The reference signal is indicated by the black dashed line.}
+    \label{fig:tracking03}
+\end{figure}
 
 
 \section{Deterministic State Observers}
@@ -1638,11 +1645,9 @@ The observer system works as a parallel system that is simulated alongside with 
     Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design     a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $K$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ establishes the theorem.
 \end{proof}
 
-The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$, in this conditions, can be reconstructed by using a observer gain that guarantees that each eigenvalue of $\bm{A}_{obs}$ is on the right-half side of the complex plane. Some simulations of a Luenberger observer for different values of $\bm{L}$ are shown in Fig. \ref{fig:observer01}, considering a system in open-loop conditions.
+The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using a observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
 
-[img]
-
-As stated before, one of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector in order to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
+One of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector, thus being able to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
 
 \begin{boxed-definition}{(Feedback from Estimated States)} \label{def:fdbckLuenberger}
     Given a system in State-Space representation whose state-vector is reconstructed from a Luenberger observer of gain $\bm{L} \in \mathbb{R}^{n \times p}$ and input signal is calculated through state-feedback with gain $\bm{K} \in \mathbb{R}^{n \times r}$, its time evolution can be represented through the model:
@@ -1840,11 +1845,9 @@ Additionally, it is possible to define a stability criterion through a Nyquist d
     Consider a system with feedforward transfer function as defined in \eqref{eq:fdbckForwardTrnsfer}. Now, let $P$ and $Z$ be respectively the number of poles of $G_{f}(s)$ and zeros of $1 + G_{f}(s)$ that are in the right-half plane. In this case, the Nyquist contour shall clockwise encircle the point $s = -1$ a number of times $N$ such that $N = Z - P$.
 \end{boxed-theorem}
 
-A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}, but their graphical nature allows for an easy understand of how disturbances can affect the stability of state-feedback systems. Consider, for instance, the Bode plot shown in Fig. \ref{fig:properties02} of a SISO version (excluding the second state) of the closed-loop system in Fig. \ref{fig:regulator01}, but submitted to a constant disturbance of $D_x = ?$. It is possible to see that the disturbance alone can produce a closed-loop unstable system. 
+A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}. However, their graphical nature allows for an easy understanding of how disturbances can affect the stability of state-feedback systems. For instance, a system subject to a sinusoidal disturbance of constant magnitude, but with the same frequency as the natural frequency of the system, will show a response with higher magnitude for the phase crossover frequency than the one visualized in the Bode plot. This phenomenon is widely known in Physics as ``resonance". Therefore, the influence of disturbances can inflict instability to a stable system.
 
-[fig]
-
-Of course, not all disturbances observed in real operations are strong enough to bring any reasonable stable controller to an unstable condition. However, depending on the choice of the gain $\bm{K}$, some controllers can be more prone to these undesired problems than others. This motivates the discussion on stability margins.
+Of course, not all disturbances observed in real operations are strong enough to bring any reasonable stable controller to an unstable condition. However, depending on the choice of the gain $\bm{K}$, some closed-loop systems can be more prone to these undesired problems than others. This motivates the discussion on stability margins.
 
 \begin{boxed-definition}{(Stability Margins)}
     Given a closed-loop system with transfer function $T(s)$, the \textit{Gain Margin} ($GM$) is defined as a factor of how much a gain can be increased before the system becomes unstable, and is equated as:
@@ -1860,7 +1863,42 @@ Of course, not all disturbances observed in real operations are strong enough to
     \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $| T(j\omega_{gc}) | = 0 dB$. 
 \end{boxed-definition}
 
-An illustration of these definitions in both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Since high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
+A graphical representation of these margins, for both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the one from last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Despite the fact that high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
+
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{.48\textwidth}
+	\begin{tikzpicture}
+		\node (image) {\includegraphics[width=1\textwidth]{chapter3/report_ch3_3_1}};
+		\node (Wgc) at (-.8,0.5) {\small $\omega_{gc}$};
+		\node (Wpc) at (.6,-0.5) {\small $\omega_{pc}$};		
+		
+		\node (GM) at (1.5,2.2) {\small $GM$};
+	    \draw [-latex, ultra thick, black] (GM) -- (0.3,2.2);
+		
+		\node (PM) at (-1.6,-1.9) {\small $PM$};	    
+	    \draw [-latex, ultra thick, black] (PM) -- (-0.5,-1.9);
+	\end{tikzpicture}
+	\end{minipage}%
+	\hfill
+	\begin{minipage}[t]{0.48\textwidth}
+	\begin{tikzpicture}
+		\node (img) {\includegraphics[width=1\textwidth]{chapter3/report_ch3_3_2}};
+		\node (Wpc) at (2.4,0.5) {\small $\omega_{pc}$};
+		\node (Wgc) at (-1.9,-2.1) {\small $\omega_{gc}$};		
+		
+		\node (GM) at (3.15,1.6) {\small $\cfrac{1}{GM}$};
+		\draw [-latex, <->] (2.775,1) -- (3.55,1);
+		\draw [-latex, -, dashed] (2.72,0.3) -- (2.72,1.1);
+	    		
+		\node (PM) at (-0.4, -0.5) {\small $PM$};	  
+		\draw [-latex, <->] (0.5,-1.15) to[bend left] (0,0.2);  
+	\end{tikzpicture}
+	\end{minipage}%	
+    
+    \caption{Stability margins visualizations given Bode plots (left) and Nyquist diagrams (right) of closed-loop dynamical systems.}
+    \label{fig:properties03}
+\end{figure}
 
 % The first property to be discussed is that of sensitivity \textbf{[reference]}. 
 
@@ -2208,7 +2246,7 @@ To finish the section, it is also worth mentioning the fact that, for the LQR co
     .\end{equation}
 \end{boxed-theorem}
 
-A detailed proof of this result can be found in \textbf{[reference]}. The possibility for an infinite-horizon LQR is desirable in the sense that it doesn't restrict the operation to a fixed time interval, however, as will be shown later, the resulting optimal controller suffers from a low performance when compared to finite-time horizon controllers.
+A detailed proof of this result can be found in \textbf{[reference]}. The possibility for an infinite-horizon LQR is desirable in the sense that it doesn't restrict the operation to a fixed time interval, however, the resulting optimal controller suffers from a worst performance when compared to finite-time horizon controllers.
 
 \textbf{[examples + figs?]}
 
@@ -2467,7 +2505,7 @@ Since this method minimizes some cost function, it is indeed an optimal estimato
     
     \noindent where $\bm{K}_e(t) = \bm{P}_e(t)\bm{C}\bm{R}^{-1}$, being $\bm{P}_e(t)$ the solution of the Riccati differential matrix equation:
     \begin{equation}
-        \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}\bm{R}^{-1} \bm{C}^T \bm{P}_e(t) + \bm{Q}
+        \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}
     ,\end{equation}
     
     \noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
@@ -2559,7 +2597,7 @@ The control configuration that connects a optimal control action of a Linear Qua
     \begin{align}
     \begin{cases}
         -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
-        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}\bm{R}^{-1} \bm{C}^T \bm{P}_e(t) + \bm{Q}
+        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}
     \end{cases}
     \end{align}
     
@@ -2882,3 +2920,34 @@ a
 %   \caption{Caption of the table.}
 %   \label{table:nameTable} 
 % \end{table} \vskip0.25cm
+
+%\begin{figure}
+%    \centering
+%    \begin{minipage}[t][6cm][t]{.48\textwidth}
+%	\begin{tikzpicture}
+%	  \begin{axis}[enlargelimits=false, scale only axis, axis on top, width=0.8\textwidth,
+%	  	xlabel={$u$ unemployment}, ylabel={$\pi$ inflation}]]
+%		\addplot graphics [xmin=0,xmax=96,ymin=0,ymax=96] {chapter3/report_ch3_1_1};
+%	  \end{axis}
+%	 \end{tikzpicture}
+%	\end{minipage}%
+%	\hfill
+%	\begin{minipage}[t][6cm][t]{0.48\textwidth}
+%	\begin{tikzpicture}
+%	  \begin{axis}[enlargelimits=false, scale only axis, axis on top, width=0.8\textwidth,
+%	  	ylabel={$\pi$ inflation}]]
+%		\addplot graphics [xmin=0,xmax=96,ymin=0,ymax=96] {chapter3/report_ch3_1_2};
+%	  \end{axis}
+%	\end{tikzpicture}%
+%	\vspace{.6ex}
+%	\begin{tikzpicture}
+%		\begin{axis}[enlargelimits=false, scale only axis, axis on top, width=0.8\textwidth,
+%	  	xlabel={$u$ unemployment}, ylabel={$\pi$ inflation}]]
+%		\addplot graphics [xmin=0,xmax=96,ymin=0,ymax=96] {chapter3/report_ch3_1_3};
+%		\end{axis}
+%	\end{tikzpicture}
+%	\end{minipage}%	
+%    
+%    \caption{A}
+%    \label{fig:regulator01}
+%\end{figure}

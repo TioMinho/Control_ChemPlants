@@ -81,6 +81,98 @@ subplot(2,2,2), ylabel("x_1 = (\Delta x_1 + x_{o1}) (mol/l)")
 subplot(2,2,4), ylim([-inf, x_o(2)+1]), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (s)")
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'report_codes/figs/report_ch3_1', '-dpdf', '-r300')
+figname = "report_codes\figs\report_ch3_1";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+%% Figure 3.4 %%
+% - Simulation of the Nonlinear plat to obtain steady-state values
+u_o = 3.03;
+[~, y] = simulate(iso_cstr.sysVar, (0:.1:4)', ones(1,41)*u_o, [0 0 0 0]);
+x_o = y(1:2,end);
+
+% - State-space model selection
+A = iso_cstr.ss_model.A_l(x_o, 3.03);     B = iso_cstr.ss_model.B_l(x_o, 3.03);
+C = [0, 1];                               D = 0;
+
+ny = size(C,1); nu = size(B,2); nx = size(A,1);
+
+% - Real simulation parameters
+t = (0:0.01:11.99)'; T = numel(t);
+r = [ones(1,T/4)*x_o(2) ones(1,T/4)*x_o(2)-2 ones(1,T/4)*x_o(2)+2 ones(1,T/4)*x_o(2)-4];
+
+% - Closed-Loop Tracking Systems
+K = {[place(A,B,[-4, -1.5]), -25]; [place(A,B,[-8, -5]), -25]; [place(A,B,[-4+3j, -4-3j]), -50]};
+A_cl = {[A+B*K{1}(1:nx) B*K{1}(nx+1:end); -C zeros(ny)], ...
+        [A+B*K{2}(1:nx) B*K{2}(nx+1:end); -C zeros(ny)], ...
+        [A+B*K{3}(1:nx) B*K{3}(nx+1:end); -C zeros(ny)]};
+      
+B_cl = [zeros(nx, ny); eye(ny)];
+C_i = [C, zeros(ny, ny)];
+D_i = zeros(ny, ny);
+
+% - Closed-Loop Systems
+ia_sys = {ss(A_cl{1}, B_cl, eye(nx+ny), D_i), ... 
+          ss(A_cl{2}, B_cl, eye(nx+ny), D_i), ...
+          ss(A_cl{3}, B_cl, eye(nx+ny), D_i)};
+
+% - Perform the simulation
+Delta_x = [lsim(ia_sys{1}, r, t, -[x_o; r(1)+x_o(2)]), ...
+           lsim(ia_sys{2}, r, t, -[x_o; r(1)+x_o(2)]), ...
+           lsim(ia_sys{3}, r, t, -[x_o; r(1)+x_o(2)])];
+
+% - Visualization of the Simulation
+figure(1);
+subplot(1,2,2), plot(t, r+x_o(1), 'k--'), hold on
+
+for i = 1:3
+    subplot(1,2,1)
+    plot(t, (r - K{i}*Delta_x(:, 3*i-2:3*i)')+ u_o, 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    
+    subplot(1,2,2)
+    plot(t, Delta_x(:,3*i-1)+x_o(1), 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+end
+
+subplot(1,2,1), ylabel("u = (\Delta u + u_{o})"), xlabel("Time (s)"), legend(["K_1", "K_2", "K_3"])
+subplot(1,2,2), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (s)")
+
+% - Exporting the Visualization to an Image
+figname = "report_codes\figs\report_ch3_2";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+%% Figure 3.6 %%
+% - Equivalent Input-Output System and Closed-Loop representation
+G = tf([.5 1.5],[1 2.5  1.5 0]);
+T = feedback(2*G,1);
+
+% - Calculate the Bode Plot Margins
+margin(T)
+grid("off")
+
+lineHandle = findobj(gcf,'Type','line','-and','Color',[0 0.4470 0.7410]);
+set(lineHandle, "linewidth", 1.5);
+title("")
+
+% - Exporting the Visualization to an Image
+figname = "report_codes\figs\report_ch3_3_1";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+% - Calculate the Bode Plot Margins
+nyquist(T)
+grid("off")
+
+lineHandle = findobj(gcf,'Type','line','-and','Color',[0 0.4470 0.7410]);
+set(lineHandle, "linewidth", 1.5);
+title("")
+
+% - Exporting the Visualization to an Image
+figname = "report_codes\figs\report_ch3_3_2";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+

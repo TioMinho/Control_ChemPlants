@@ -36,7 +36,7 @@ U_ss = linspace(0, 20, 200);
 Y_ss = cB_ss(U_ss);
 
 % Getting the Operating Space
-I = find(Y_ss > 2/3 * max(Y_ss));
+I = find(Y_ss >= 2/3 * max(Y_ss));
 U_ss = U_ss(I)';
 X_ss = [cA_ss(U_ss) cB_ss(U_ss)];
 

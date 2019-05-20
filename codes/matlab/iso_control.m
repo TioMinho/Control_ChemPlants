@@ -70,7 +70,7 @@ R = diag([200]);
 L = [0 ; 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r(2,:), X_0, 'lqri', Q, R, 'inf', L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r(2,:), X_0, 'lqr', Q, R, 'inf', L, w, z);
 mts1 = metrics(yout, r, t)
 
 % - Visualization of the Simulation

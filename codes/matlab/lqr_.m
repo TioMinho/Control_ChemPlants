@@ -1,17 +1,15 @@
 function [ K, P ] = lqr_( A, B, Q, R, N )
 %LQR_FH_SIM Simulates the system with a Discrete-Time Finite-Horizon LQR Controller 
 %   Detailed explanation goes here    
-    if(N ~= 'inf')
-        P = zeros(size(Q, 1), size(Q, 2), N); P(:,:,N) = Q;
-        K = zeros(N-1, size(A,1));
+    Q_f = reshape(Q, size(A));
+    [~, P] = ode45(@(t,P) mRiccati(t, P, A, B, Q, R), fliplr(N), Q_f);
 
-        for i = N:-1:2
-            P(:, :, i-1) = Q + A' * P(:, :, i) * A - A' * P(:, :, i) * B * pinv(R + B' * P(:, :, i) * B) * B' * P(:, :, i) * A;
-            K(i-1, :) = pinv(R + B' * P(:,:,i) * B) * B' * P(:,:,i) * A;
-        end
+    [m, n] = size(P);
+    P = mat2cell(P, ones(m,1), n);
+    fh_reshape = @(p) reshape(p, size(A));
+    fh_getK    = @(p) pinv(R) * B' * p;
 
-    elseif(N == 'inf')
-        [K, P, ~] = lqr(A, B, Q, R);
-    end
-    
+    P = cellfun(fh_reshape, P, 'UniformOutput', false);
+    K = cellfun(fh_getK, P, 'UniformOutput', false);
+
 end
