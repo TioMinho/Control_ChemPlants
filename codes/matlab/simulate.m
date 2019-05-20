@@ -184,14 +184,13 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmp(type, 'lqgi'))
-            % Estimate the covariances for the process and measurement noises
+            % Augments the state auxiliary vector in time and updates the initial conditions
+            x_hat = zeros(nx+ny, numel(t));
+            x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
+
             Q_k = cov(w);
             R_k = cov(z);
             
-            % Augments the state auxiliary vector in time and updates the initial conditions
-            x_hat = zeros(nx+ny, numel(t));
-            x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe)];
-
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny); 
                   -C, zeros(ny)];
@@ -204,27 +203,35 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             K = lqr_(A_i, B_i, Q, R, 0:deltaT:N);
 
             % Generates and augments the Kalman observer state-space
-            Ke = kalmanBucy(A, C, Q_k, R_k, 0:deltaT:N); 
+            Ke = kalmanBucy(A, C, Q_k, R_k, 0:deltaT:N);
             
+            % Define the closed-loop matrices
+            B_cl = [zeros(nx, ny); eye(ny)];
+
             % == Simulation for each timestep (i) on time signal (t) ==
-            for i = 1:numel(t)-1
+           for i = 1:numel(t)-1
                 % Calculates the input signal
-                u(:,i) = - K{i}*x_hat(:, i);
-
-                % Defines the closed-loop matrix for this instant
-                A_cl = [A-B*K{i}(1:nx)-Ke{i}*C   -B*K{i}(nx+1:end); zeros(ny, nx) zeros(ny)];
-                B_cl = [zeros(nx,ny)  Ke{i};    eye(ny, nu)  -eye(ny)];
-
+                u(:,i) = - K{i} * x_hat(:, i);
+                
                 % Simulates the real physical plant using the non-linear model
                 [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
                 x(:, i+1) = y_aux(end, :) + z(i+1, :);
+                
+                % Define the closed-loop matrices
+                A_cl = [A-B*K{i}(1:nx)-Ke{i}*C  -B*K{i}(nx+1:end); 
+                                -C                zeros(ny)];
+                Ke_i = [Ke{i}; zeros(ny)];
+                            
+                % Simulates the linear model using the Lagrange formula
+                %       x_k = e^{A_i (t - t_0)} x_0 + \int{ e^{A_i (t - \tau)} B_i u_\tau + F_i r_\tau + L_i ( Y_\tau - C_i x_\tau ) }
+                n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);
+                f_resp = 0;
+                for j =1:i+1
+                    f_resp = f_resp + deltaT * expm( A_cl * (t(i+1) - t(j)) ) * (B_cl * r(:,j) +  Ke_i *(C *  (x(:,j) - xe))  ) ;
+                end
 
-                % Simulates the linear model
-                sys = ss(A_cl, B_cl, C_i, D_i);
-                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)], t(i:i+1), x_hat(:,i));
-                x_hat(:, i+1) = aux(end, :);
-
-            end
+                x_hat(:, i+1) = n_resp + f_resp;
+           end
             
         % == SWITCHING MODE LINEAR QUADRATIC REGULATOR CONTROLLER ==,
         elseif(strcmp(type, 'switch-lqr'))

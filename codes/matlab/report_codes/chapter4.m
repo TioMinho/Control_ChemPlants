@@ -41,16 +41,16 @@ run isothermal_cstr/iso_model.m
 % Linear Model Index
 idx = 25;
 % Time
-t = (0:0.01:15.99)'; T = numel(t);
+t = (0:0.05:15.95)'; T = numel(t);
 % Initial Conditions
 ue = iso_cstr.oper.U(idx,:); xe = iso_cstr.oper.X(idx,:);
 
 % Reference Signal
-r = [ones(1,T)*xe(2)+2];
+r = [ones(1,T/4)*xe(2) ones(1,3*T/4)*xe(2)-2];
 
 % Disturbance signal
-w = randn(T, 2) .* [0.5 0.05];            % Process Noise
-z = randn(T, 1) .* 0.1;      % Measurement Noise
+w = randn(T, 2) .* 0.01;      % Process Noise
+z = randn(T, 1) .* 0.01;      % Measurement Noise
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
@@ -58,14 +58,16 @@ C = iso_cstr.ss_model.C;        D = iso_cstr.ss_model.D;
 
 iso_cstr.ss_model.C = [0 1];
 iso_cstr.ss_model.D = [0];
-iso_cstr.sizeY = 1;
+iso_cstr.sizeY      =  1 ;
 
 % Controller and Observer
-Q = diag([10, 10, 1000]);
+Q = diag([2, 2, 1e4]);
 R = 50;
 
+L = [0; 0];
+
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, xe, 'lqgi', Q, R, T, L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, xe, 'lqgi',Q, R, T, L, w, z);
 
 % - Visualization of the Simulation
 figure(1);
