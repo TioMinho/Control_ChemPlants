@@ -46,11 +46,11 @@ t = (0:0.05:15.95)'; T = numel(t);
 ue = iso_cstr.oper.U(idx,:); xe = iso_cstr.oper.X(idx,:);
 
 % Reference Signal
-r = [ones(1,T/4)*xe(2) ones(1,3*T/4)*xe(2)-2];
+r = [ones(1,T/4)*xe(2) ones(1,T/4)*xe(2)-2 ones(1,T/4)*xe(2)+1 ones(1,T/4)*xe(2)-1];
 
 % Disturbance signal
-w = randn(T, 2) .* 0.01;      % Process Noise
-z = randn(T, 1) .* 0.01;      % Measurement Noise
+w = randn(T, 2) .* 0.03;      % Process Noise
+z = randn(T, 1) .* 0.1;      % Measurement Noise
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
@@ -61,13 +61,13 @@ iso_cstr.ss_model.D = [0];
 iso_cstr.sizeY      =  1 ;
 
 % Controller and Observer
-Q = diag([2, 2, 1e4]);
-R = 50;
+Q = diag([30, 30]);
+R = 10;
 
 L = [0; 0];
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, xe, 'lqgi',Q, R, T, L, w, z);
+[~, yout, xout, uout] = simulate(iso_cstr, idx, t, r, xe, 'switch-lqr', Q, R, 100, L, w, z);
 
 % - Visualization of the Simulation
 figure(1);
@@ -77,11 +77,11 @@ xlabel("Time (min)"), ylabel("u = \Delta u + u_o")
 
 subplot(2,2,2)
 plot(t, xout(1,:), 'linewidth', 1, 'linestyle', '--', 'color', cpal(2,:)); hold on;
-plot(t, yout(1,:)+xe(1), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on;
+plot(t, yout(1,:), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on;
 ylabel("Outflow Concentration - C_a (mol/l)")
 
 subplot(2,2,4), 
 plot(t, r, 'linestyle', '--', 'color', 'black'); hold on;
 plot(t, xout(2,:), 'linewidth', 1, 'linestyle', '--', 'color', cpal(2,:)); hold on;
-plot(t, yout(2,:)+xe(2), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on; 
+plot(t, yout(2,:), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(2,:)); hold on; 
 xlabel("Time (min)"), ylabel("Outflow Concentration - C_b (mol/l)")

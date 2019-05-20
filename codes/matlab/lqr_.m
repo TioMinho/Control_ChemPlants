@@ -1,5 +1,5 @@
 function [ K, P ] = lqr_( A, B, Q, R, N )
-%LQR_FH_SIM Simulates the system with a Discrete-Time Finite-Horizon LQR Controller 
+%LQR_
 %   Detailed explanation goes here    
     Q_f = reshape(Q, size(A));
     [~, P] = ode45(@(t,P) mRiccati(t, P, A, B, Q, R), fliplr(N), Q_f);

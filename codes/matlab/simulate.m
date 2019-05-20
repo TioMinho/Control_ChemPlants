@@ -94,11 +94,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Defines the closed-loop matrix for this instant
                 A_cl = (A - B * K{i});
-                
-                % Simulates the real physical plant using the non-linear model
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                x(:, i+1) = y_aux(end, :) + z(i+1, :);
-
+            
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
                 sys = ss(A_cl, zeros(nx), C, D);
@@ -137,11 +133,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Defines the closed-loop matrix for this instant
                 A_cl = [A-B*K{i}(1:nx) -B*K{i}(nx+1:end); -C zeros(ny)];
-                
-                % Simulates the real physical plant using the non-linear model
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                x(:, i+1) = y_aux(end, :) + z(i+1, :);
-
+            
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(nx+ny), D_i);
                 aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
@@ -151,6 +143,9 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmp(type, 'lqg'))
+            % Generates the actual model for the plant
+            realSys = ss(A, B, eye(nx), D_i);
+            
             % Estimate the covariances for the process and measurement noises
             Q_k = cov(w);
             R_k = cov(z);
@@ -170,9 +165,9 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 A_cl = (A - B*K{i} - Ke{i}*C);
                 B_cl = [zeros(nx,ny) Ke{i}];
                 
-                % Simulates the real physical plant using the non-linear model
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                x(:, i+1) = y_aux(end, :) + z(i+1, :);
+                % Simulates the real disturbed plant
+                aux = lsim(realSys, u(:,i:i+1)+w(i,:), t(i:i+1), x(:,i));
+                x(:, i+1) = aux(end, :) + z(i+1,:);
 
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
@@ -184,6 +179,9 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmp(type, 'lqgi'))
+            % Generates the actual model for the plant
+            realSys = ss(A, B, eye(nx), D_i);
+            
             % Augments the state auxiliary vector in time and updates the initial conditions
             x_hat = zeros(nx+ny, numel(t));
             x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
@@ -213,21 +211,20 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 % Calculates the input signal
                 u(:,i) = - K{i} * x_hat(:, i);
                 
-                % Simulates the real physical plant using the non-linear model
-                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                x(:, i+1) = y_aux(end, :) + z(i+1, :);
-                
                 % Define the closed-loop matrices
                 A_cl = [A-B*K{i}(1:nx)-Ke{i}*C  -B*K{i}(nx+1:end); 
                                 -C                zeros(ny)];
-                Ke_i = [Ke{i}; zeros(ny)];
+                B_cl = [Ke{i} zeros(nx, ny); zeros(ny), eye(ny)];
+                
+                % Simulates the real disturbed plant
+                aux = lsim(realSys, u(:,i:i+1)+w(i,:), t(i:i+1), x(:,i));
+                x(:, i+1) = aux(end, :) + z(i+1,:);
                             
-                % Simulates the linear model using the Lagrange formula
-                %       x_k = e^{A_i (t - t_0)} x_0 + \int{ e^{A_i (t - \tau)} B_i u_\tau + F_i r_\tau + L_i ( Y_\tau - C_i x_\tau ) }
+                % Simulates the linear model
                 n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);
                 f_resp = 0;
                 for j =1:i+1
-                    f_resp = f_resp + deltaT * expm( A_cl * (t(i+1) - t(j)) ) * (B_cl * r(:,j) +  Ke_i *(C *  (x(:,j) - xe))  ) ;
+                    f_resp = f_resp + deltaT * expm( A_cl * (t(i+1) - t(j)) ) * ( B_cl * [C*(x(:,j)-xe); r(:,j)] ) ;
                 end
 
                 x_hat(:, i+1) = n_resp + f_resp;
@@ -243,89 +240,45 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             A = zeros(nx, nx, numel(t));
             B = zeros(nx, nu, numel(t));
             
-            A(:,:,1) = model.ss_model.A(idx);
-            B(:,:,1) = model.ss_model.B(idx);
+            A(:,:,1) = model.ss_model.A_l(xe, ue);
+            B(:,:,1) = model.ss_model.B_l(xe, ue);
             
             % Unormalize the reference signal
-            r = r + C * xe;
-            
-            % Case for the Finite-Horizon Discrete-Time
-            if(N ~= 'inf') 
-                % == Simulation for each timestep (i) on time signal (t) ==
-                for i = 1:numel(t)-1
-                    % Defines the discrete matrices associated to state-space matrices
-                    ss_d = c2d(ss(A(:,:,i), B(:,:,i), C, D), deltaT);
-                    A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D; 
+            r = r + C*xe_t(:,1);
 
-                    % Calculate the finite-horizon LQR gain matrix
-                    K = lqr_(A_d, B_d, Q, R, N); 
-                
-                    % Calculates the input signal (if still on control horizon)
-                    if(i < N)
-                        u(:,i) = K(i,:) * ( (r(:,i) - C*xe(:,i)) - C_d * x_hat(:, i) );
-                    end
+            % == Simulation for each timestep (i) on time signal (t) ==
+            for i = 1:numel(t)-1
+                % Defines the discrete matrices associated to state-space matrices
+                ss_d = c2d(ss(A(:,:,i), B(:,:,i), C, D), deltaT);
+                A_d = ss_d.A; B_d = ss_d.B;
 
-                    % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue(:,i) + w(i, :), y_aux(end, :), 100);
-                    x(:, i+1) = y_aux(end, :) + z(i+1, :);
+                % Calculate the finite-horizon LQR gain matrix
+                K = lqrd_(A_d, B_d, Q, R, N); 
 
-                    % Simulates the linear model using the discrete differences equation
-                    %       x_{k+1} = A x_k + B u_k + L ( Y_k - C x_k )
-                    x_hat(:, i+1) = A_d  * x_hat(:, i) + B_d * u(:, i) + L * ( x(:, i) - C_d*(x_hat(:, i) + xe(:,i)) );
-                    
-                    % Switch the linear model and updates the previous state
-                    xe(:,i+1) = xe(:,i) + x_hat(:, i+1);
-                    ue(:,i+1) = (model.param.K1 * xe(1,i+1) - model.param.K2 * xe(2,i+1)) / xe(2,i+1);
-                    
-                    A(:,:,i+1) = model.ss_model.A_l(xe(:,i+1), ue(:,i+1));
-                    B(:,:,i+1) = model.ss_model.B_l(xe(:,i+1), ue(:,i+1));
+                % Calculates the input signal (if still on control horizon)
+                if(i < N)
+                    u(:,i) = (r(:,i) - C*xe_t(:,i)) - K{1}*x_hat(:, i) ;
                 end
-                
-            % Case for the Infinite-Horizon Continuous-Time
-            else
-                % == Simulation for each timestep (i) on time signal (t) ==
-                for i = 1:numel(t)-1
-                    % Calculate the LQR gain matrix
-                    K = lqr_(A(:,:,i), B(:,:,i), Q, R, N);  
 
-                    % Define the closed-loop matrices
-                    A_cl = (A(:,:,i) - B(:,:,i) * K);
-                    B_cl = (B(:,:,i) * K);
-                    
-                    % Calculates the input signal
-                    u(:,i) = K * ( (r(:,i) - C*xe) - C * x_hat(:, i) );
+                % Simulates the real physical plant using the non-linear model
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue_t(:,i), y_aux(end, :), 100);
+                x(:, i+1) = y_aux(end, :);
 
-                    % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                    x(:, i+1) = y_aux(end, :) + z(i+1, :);
+                % Simulates the linear model using the discrete differences equation
+                %       x_{k+1} = A x_k + B u_k 
+                x_hat(:, i+1) = (A_d - B_d*K{1}) * x_hat(:, i) + B_d*(r(:,i) - C*xe_t(:,i));
 
-                    % Simulates the linear model using the Lagrange
-                    % formulas
-                    %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
-                    n_resp = expm( A(:,:,i) * (t(i+1) - t(1)) ) * x_hat(:, 1);
-                    f_resp = 0;
-                    for j =1:i
-                        f_resp = f_resp + deltaT * expm( A(:,:,j) * (t(i+1) - t(j)) ) * ( B(:,:,j) * u(:, j) + L *(x(:, j) - C * (x_hat(:, j) + xe)) );
-                    end
-                    f_resp = f_resp + deltaT * ( B(:,:,j) * u(:, j) + L *(x(:, j) - C * (x_hat(:, j) + xe)) );
+                % Switch the linear model and updates the previous state
+                xe_t(:,i+1) = xe_t(:,i) + x_hat(:, i+1);
+                ue_t(:,i+1) = (model.param.K1 * xe_t(1,i+1) - model.param.K2 * xe_t(2,i+1)) / xe_t(2,i+1);
 
-                    x_hat(:, i+1) = n_resp + f_resp;
-                    
-                    % Switch the linear model and updates the previous state
-                    x_hat(:, i) = x_hat(:, i) + xe;
-                    u(:, i) = u(:, i) + ue;
-                    
-                    xe = xe + x_hat(:, i+1);
-                    ue = (model.param.K1 * xe(1) - model.param.K2 * xe(2)) / xe(2);
-                    
-                    A(:,:,i+1) = model.ss_model.A_l(xe, ue);
-                    B(:,:,i+1) = model.ss_model.B_l(xe, ue);
-                end
+                A(:,:,i+1) = model.ss_model.A_l(xe_t(:,i+1), ue_t(:,i+1));
+                B(:,:,i+1) = model.ss_model.B_l(xe_t(:,i+1), ue_t(:,i+1));
             end
             
-        % Updates the last state
-        x_hat = x_hat + xe;
-        u = u + ue;
+            % Updates the last state
+            x_hat = x_hat + xe;
+            u = u + ue;
         
         % == SWITCHING MODE LINEAR QUADRATIC GAUSSIAN CONTROLLER ==,
         elseif(strcmp(type, 'switch-lqg'))
@@ -333,98 +286,44 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             xe_t = zeros(nx, numel(t)); xe_t(:, 1) = xe;
             ue_t = zeros(nu, numel(t)); ue_t(:, 1) = ue;
             
-            % Estimate the covariances for the process and measurement noises
-            Q_k = cov(w);
-            R_k = cov((C * z')');
-            P_k = zeros(2);
-            
             % Unormalize the reference signal
             r = r + C * xe;
             
-            % Case for the Finite-Horizon Discrete-Time
-            if(N ~= 'inf') 
-                % == Simulation for each timestep (i) on time signal (t) ==
-                for i = 1:numel(t)-1
-                    % Defines the discrete state-space matrices
-                    ss_d = c2d(ss(A, B, C, D), deltaT);
-                    A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;         
+            % == Simulation for each timestep (i) on time signal (t) ==
+            for i = 1:numel(t)-1
+                % Defines the discrete state-space matrices
+                ss_d = c2d(ss(A, B, C, D), deltaT);
+                A_d = ss_d.A; B_d = ss_d.B; C_d = ss_d.C; D_d = ss_d.D;         
 
-                    K = lqr_(A_d, B_d, Q, R, N);
-                    
-                    % Calculates the input signal (if still on control horizon)
-                    if(i <= N)
-                        u(:,i) = K(i, :) * (C_d * (r(:,i) - xe(:,i)) - C_d * x_hat(:, i) );
-                    end
+                K = lqr_(A_d, B_d, Q, R, N);
 
-                    % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue(:,i) + w(i, :), y_aux(end, :), 100);
-                    x(:, i+1) = y_aux(end, :) + z(i+1, :);
-                    
-                    % Kalman Filter's Prediction
-                    x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i);
-                    P_k = A_d * P_k * A_d' + Q_k;
-                    
-                    % Kalman Filter's Update
-                    S_k = C_d * P_k * C_d' + R_k;
-                    K_k = P_k * C_d' / S_k;
-                    err = C_d * x(:,i+1) - C_d * (x_hat(:, i+1) + xe(:,i));
-                    
-                    x_hat(:, i+1) = x_hat(:, i+1) + K_k * err;
-                    P_k = P_k - K_k * S_k * K_k';
-                    
-                    % Switch the linear model and updates the previous state
-                    xe(:,i+1) = xe(:,i) + x_hat(:, i+1);
-                    ue(:,i+1) = (model.param.K1 * xe(1,i+1) - model.param.K2 * xe(2,i+1)) / xe(2, i+1);
-                    
-                    A = model.ss_model.A_l(xe(:,i+1), ue(:,i+1));
-                    B = model.ss_model.B_l(xe(:,i+1), ue(:,i+1));
+                % Calculates the input signal (if still on control horizon)
+                if(i <= N)
+                    u(:,i) = K(i, :) * (C_d * (r(:,i) - xe_t(:,i)) - C_d * x_hat(:, i) );
                 end
-                
-            % Case for the Infinite-Horizon Continuous-Time
-            else
-                % Augments the state auxiliary vector in time and updates the initial conditions
-                x_hat = zeros(nx+ny, numel(t));
-                x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
-            
-                % Augment the state and input matrices
-                A_i = [A, zeros(nx, ny); 
-                          -C, zeros(ny)];
-                B_i = [B; 
-                           zeros(ny, nu)];
-                C_i = [C, zeros(ny, ny)];
-                D_i = D;
-                
-                % Calculate the LQRI gain matrix
-                K = lqr_(A_i, B_i, Q, R, N);
-                
-                % Generates and augments the Kalman observer state-space
-                [~, M] = kalman(ss(A, B, C, D), Q_k, R_k); 
-                L_i = [M; zeros(ny)];
-                
-                % Define the closed-loop matrices
-                A_cl = A_i - B_i * K - L_i * C_i;
-                B_cl = [zeros(nx, ny); eye(ny)];
-                
-                % == Simulation for each timestep (i) on time signal (t) ==
-               for i = 1:numel(t)-1
-                    % Calculates the input signal
-                    u(:,i) = - K * x_hat(:, i);
 
-                    % Simulates the real physical plant using the non-linear model
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue + w(i, :), y_aux(end, :), 100);
-                    x(:, i+1) = y_aux(end, :) + z(i+1, :);
+                % Simulates the real physical plant using the non-linear model
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue(:,i) + w(i, :), y_aux(end, :), 100);
+                x(:, i+1) = y_aux(end, :) + z(i+1, :);
 
-                    % Simulates the linear model using the Lagrange formula
-                    %       x_k = e^{A_i (t - t_0)} x_0 + \int{ e^{A_i (t - \tau)} B_i u_\tau + F_i r_\tau + L_i ( Y_\tau - C_i x_\tau ) }
-                    n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);
-                    f_resp = 0;
-                    for j =1:i+1
-                        f_resp = f_resp + deltaT * expm( A_cl * (t(i+1) - t(j)) ) * (B_cl * r(:,j) +  L_i *(C *  (x(:,j) - xe))  ) ;
-                    end
-                    
-                    x_hat(:, i+1) = n_resp + f_resp;
-                    
-                end
+                % Kalman Filter's Prediction
+                x_hat(:, i+1) = A_d*x_hat(:, i) + B_d*u(:,i);
+                P_k = A_d * P_k * A_d' + Q_k;
+
+                % Kalman Filter's Update
+                S_k = C_d * P_k * C_d' + R_k;
+                K_k = P_k * C_d' / S_k;
+                err = C_d * x(:,i+1) - C_d * (x_hat(:, i+1) + xe(:,i));
+
+                x_hat(:, i+1) = x_hat(:, i+1) + K_k * err;
+                P_k = P_k - K_k * S_k * K_k';
+
+                % Switch the linear model and updates the previous state
+                xe(:,i+1) = xe(:,i) + x_hat(:, i+1);
+                ue(:,i+1) = (model.param.K1 * xe(1,i+1) - model.param.K2 * xe(2,i+1)) / xe(2, i+1);
+
+                A = model.ss_model.A_l(xe(:,i+1), ue(:,i+1));
+                B = model.ss_model.B_l(xe(:,i+1), ue(:,i+1));
             end
             
             % Updates the last state
