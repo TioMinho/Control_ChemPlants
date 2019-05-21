@@ -7,7 +7,7 @@
 \usepackage[english]{babel}
 \usepackage[margin=1in,a4paper,pdftex]{geometry}
 \usepackage[protrusion=true,expansion=true]{microtype} 
-\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools,bigints}
 \usepackage{rotating}
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=red]{hyperref}
 \usepackage[all]{hypcap}
@@ -2190,7 +2190,7 @@ This formulation indicates that the Linear Quadratic Regulator solution follows 
 
 Now, as discussed in the previous chapter, the class of regulation controllers are broad but still restricted to a zero-state reference signal. To expand the range of application for the optimal controller just derived, it is possible to introduce integral action to the feedback, just as in the previous case.
 
-\begin{boxed-definition}{(Linear Quadratic Servo)} \label{def:lqr}
+\begin{boxed-definition}{(Linear Quadratic Servo)} \label{def:lqServo}
     Given a linear State-Space system represented by matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$, augmented with state $\dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)$:
     \begin{align} 
     \begin{cases}
@@ -2252,7 +2252,18 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of a observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
 
-First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \bm{R} \rightarrow \bm{R}^{n}$ and $\bm{v} : \bm{R} \rightarrow \bm{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w}_k \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, the it is possible to motivate a stochastic formulation of the linear State-Space model.
+First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \bm{R} \rightarrow \bm{R}^{n}$ and $\bm{v} : \bm{R} \rightarrow \bm{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w}_k \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, then it is possible to motivate a stochastic formulation of the linear State-Space model.
+
+\begin{boxed-definition}{(Stochastic Discrete State-Space)} \label{def:stochSS}
+    Given an additive process noise $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive measurement noise $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic version of a discrete-time State-Space model is given by the equations:
+    \begin{align}
+    \begin{cases}
+        \hfill \bm{x}_{k+1} &= \bm{A}_d \bm{x}_k + \bm{B}_d \bm{u}_k + \bm{w}_k \\
+        \hfill \bm{y}_k &= \bm{C}_d \bm{x}_k + \bm{v}_k 
+    \end{cases}
+    .\end{align}
+\end{boxed-definition}
+
 
 \begin{figure}[ht]
     \centering
@@ -2293,19 +2304,9 @@ First of all, consider a system perturbed by disturbances in the state-response 
     \label{fig:optSE01}
 \end{figure}
 
-\begin{boxed-definition}{(Stochastic Discrete State-Space)} \label{def:stochSS}
-    Given an additive process noise $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive measurement noise $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic version of a discrete-time State-Space model is given by the equations:
-    \begin{align}
-    \begin{cases}
-        \hfill \bm{x}_{k+1} &= \bm{A}_d \bm{x}_k + \bm{B}_d \bm{u}_k + \bm{w}_k \\
-        \hfill \bm{y}_k &= \bm{C}_d \bm{x}_k + \bm{v}_k 
-    \end{cases}
-    .\end{align}
-\end{boxed-definition}
+With this formulation, the noises can actually represent both the effect of external disturbances and the uncertainty about the model accuracy in respect to the physical system. This is important since the dynamical models, even those developed by the first-principle methodology, are not guaranteed to be the absolute true representation of a dynamical system or process. The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases, and results for continuous-time systems will be addressed. 
 
-With this formulation, the noises can actually represent both the effect of external disturbances that are not modeled and the uncertainty about the model validity itself. This is important since the dynamical models, even those developed by the first-principle methodology, are not guaranteed to be the absolute true representation of a dynamical system or process. The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases and results for continuous-time systems will be addressed. 
-
-A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises are Gaussian, both variables $\bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\mu_{y_k}, \Sigma_{y_k})$ are Gaussians, since this distribution is closed to linear operations \textbf{[reference]}. For this reason, a state and output trajectory over a discrete time interval is a collection of random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
+A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises are Gaussian, both variables $\bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\mu_{y_k}, \Sigma_{y_k})$ are Gaussian, since this distribution is closed to linear operations \textbf{[reference]}. For this reason, a state and output trajectory over a discrete time interval is a collection of random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
 
 \begin{boxed-definition}{(Gaussian Process)} \label{def:gaussianProcess}
     Given a Gaussian process defined as a time-series collection of random variables between a discrete time interval:
@@ -2503,13 +2504,13 @@ Since this method minimizes some cost function, it is indeed an optimal estimato
     
     \noindent where $\bm{K}_e(t) = \bm{P}_e(t)\bm{C}\bm{R}^{-1}$, being $\bm{P}_e(t)$ the solution of the Riccati differential matrix equation:
     \begin{equation}
-        \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}
+        \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
     ,\end{equation}
     
     \noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
 \end{boxed-theorem}
 
-A detailed proof of this theorem can be found in the import paper \textbf{[reference]}. The formulation of an optimal state estimator, then, follows a very similar structure of a optimal controller, evidencing the duality between controllers and observers. Notice that, similarly to the LQR, the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves a Riccati differential equation. Notice, however, that these filters are not defined from a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. It is worth to mention, however, that it is possible to derive a estimator considering $t_0 \to \infty$ which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
+A detailed proof of this theorem can be found in \textbf{[reference]}. The formulation of an optimal state estimator further emphasizes the duality between controllers and observers. Notice that the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves the exact same Riccati differential equation as the one in Theorem \ref{th:LQRAction}, but forward in time for matrices $\bm{A}^T$ and $\bm{C}^T$ instead of $\bm{A}$ and $\bm{B}$. Notice, however, that these filters are not limited to a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. Another direct result of the duality is that is possible to derive a estimator considering $t_0 \to -\infty$, which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
 
 \section{Linear Quadratic Gaussian (LQG)}
 
@@ -2583,19 +2584,24 @@ This chapter presented formulation for controllers and state estimators that are
 The control configuration that connects a optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
 
 \begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
-    Given a system in State-Space representation whose estimated state-vector $\hat{\bm{x}}(t)$ is reconstructed from a Kalman-Bucy filter and whose input signal is calculated through a finite-horizon Linear Quadratic Regulator, its time evolution for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, can be represented through the model:
-    \begin{align} \label{eq:lqg01}
+    Consider a stochastic system in State-Space representation:
+	\begin{align}
     \begin{cases}
-        \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) - \bm{B} \bm{K}(t) \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) \\
-        \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{B} \bm{r}(t) + \bm{K}_e(t) \bm{y}(t) 
+        \hfill \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) \\
+        \hfill \bm{y}(t) &= \bm{C} \bm{x}(t) + \bm{v}(t)
     \end{cases}
+    ,\end{align}
+    
+     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is reconstructed from a Kalman-Bucy filter and whose input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
+    \begin{align} \label{eq:lqg01}
+        \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{K}_e(t) \bm{y}(t) 
     ,\end{align}
     
     \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solves the Riccati differential equations:
     \begin{align}
     \begin{cases}
         -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
-        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}
+        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
     \end{cases}
     \end{align}
     
@@ -2603,6 +2609,45 @@ The control configuration that connects a optimal control action of a Linear Qua
 \end{boxed-definition}
 
 Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
+
+The LQG controller can also be used for tracking non-constant references, given that the system can be augmented while maintaining controllability. The augmented system is used to calculate the controller gains $\bm{K}(t)$ using Definition \ref{def:lqServo}, while the estimator gains $\bm{K}_e(t)$ are optimized through the original system. Given that it can optimally solve both the regulator and tracking problems, while still accounting for uncertainty in the system, the Linear Quadratic Gaussian poses as a high performing multi-purpose controller. The resulting augmented system can be represented by the closed-loop state equation:
+\begin{align}
+\begin{cases}
+        \begin{bmatrix}
+            \dot{\hat{\bm{x}}}(t) \\
+            \dot{\hat{\bm{x}}}_a(t)
+        \end{bmatrix} &= \begin{bmatrix}
+            \bm{A} - \bm{B} \bm{K}(t) - \bm{K}_e(t) \bm{C} & -\bm{B} \bm{K}_a(t) \\ - \bm{C} & \bm{0}
+        \end{bmatrix} \begin{bmatrix}
+            \hat{\bm{x}}(t) \\
+            \hat{\bm{x}}_a(t)
+        \end{bmatrix} + \begin{bmatrix}
+            \bm{K}_e(t) & \bm{0}  \\
+            \bm{0} & \bm{I} 
+        \end{bmatrix} \begin{bmatrix}
+	        \bm{y}(t) \\ \bm{r}(t)
+        \end{bmatrix} \\
+        \hfill \bm{y}(t) &= \begin{bmatrix}
+            \bm{C} & \bm{0}
+        \end{bmatrix} \begin{bmatrix}
+            \bm{x}(t) \\
+            \bm{x}_a(t)
+        \end{bmatrix}
+    \end{cases}
+.\end{align}
+
+For the sake of illustration, consider the same system as controlled in \eqref{eq:isoSys02Rep}. Consider, now, that it is perturbed by noises $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, with covariances:
+\begin{equation}
+	\begin{matrix}
+		\bm{Q}_{kf} = \begin{bmatrix}
+			a & a \\ a & a
+		\end{bmatrix} & \bm{R}_{kf} = a
+	\end{matrix}
+.\end{equation}
+
+\noindent A set of LQG controllers for tracking are obtained by augmenting the system and solving the controller Ricatti differential equation for weights $\bm{Q} = \alpha \bm{I}$ and $\bm{R} = \beta$ for different positive values of $\alpha$ and $\beta$, and terminal $\bm{P}(T) = \bm{Q}$. The estimator is solved forward in time for initial condition $\bm{P}_e(t_0) = \bm{Q}_{kf}$. The resulting simulations are shown in Fig. \ref{fig:lqg02}, demonstrating how the controller was able to reject the noise from the observations and still achieve robust tracking.
+
+[fig]
 
 \section{Stability and Robustness Analysis}
 
@@ -2668,7 +2713,16 @@ A possible solution to this issue is to perform a Receding Horizon Control (RHC)
     \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
 \end{boxed-definition}
 
-[optimization notation]
+In the optimization community, this problem is also popular in the following notation, where the moving horizon becomes explicit:
+\begin{align}
+\begin{matrix*}[l]
+    \textbf{minimize} & {\displaystyle \int_{t}^{t+T}  \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} \right) d\tau } \\
+    \hfill \textbf{s.t.} & \left. \begin{matrix*}[l] 
+    	\dot{\bm{x}}(\tau) = \bm{A}\bm{x}(\tau) + \bm{B}\bm{u}(\tau)  \\ 
+    	\bm{u}(\tau) = \pi(\bm{x}(t), \cdots, \bm{x}(\tau))
+    \end{matrix*} \right\} \forall \tau \in [t, t+T]
+\end{matrix*}
+.\end{align}
 
 This definition basically states that the optimization to be performed is similar to the standard case, but, since the time horizon is now a moving window of size $T$, the gain matrices $\bm{K} : \mathbb{R} \rightarrow \mathbb{R}^{r \times n}$ changes together with time. This is a consequence for the fact the the Ricatti differential equation has to be solved backwards in time for each new horizon at each new time instance. Of course, this means that for each which time interval that is optimized, only the first action is actually applied to the system. The Fig. \ref{fig:rhc01} illustrates this control strategy.
 
