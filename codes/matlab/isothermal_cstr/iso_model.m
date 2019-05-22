@@ -94,9 +94,9 @@ iso_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D, 'A_l', A_l, '
 iso_cstr.poles        = lambda;
 iso_cstr.modes        = modes;
 iso_cstr.trf_matrix   = e_At;
-iso_cstr.sizeX        = size(C, 1);
+iso_cstr.sizeX        = size(C, 2);
 iso_cstr.sizeU        = size(D, 2);
-iso_cstr.sizeY        = sum(sum(C, 2) ~= 0);
+iso_cstr.sizeY        = size(C, 1);
 
 save('../data/iso_cstr_model.mat', 'iso_cstr')
 

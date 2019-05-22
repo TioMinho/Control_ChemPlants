@@ -31,7 +31,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
         a = 'TODO: nonlinear model control';
       
-        case num2cell(10:1:12)
+        case num2cell(9:1:11)
         %   @param model     The non-linear ODEs representing the system model.
         %   @param idx       The index position of the linear state-space model to use.
         %   @param t         The initial conditions of the simulation.
@@ -45,29 +45,29 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         %   @param w         The matrix of additive disturbance in the nonlinear model.
         
         % == Saving function parameter as variables ==
-        model = varargin{1}; idx = varargin{2}; t = varargin{3}; r = varargin{4}; X_0 = varargin{5}; 
-        type = varargin{6}; Q = varargin{7}; R = varargin{8}; N = varargin{9}; L = varargin{10};
+        model = varargin{1}; oper = varargin{2}; t = varargin{3}; r = varargin{4}; X_0 = varargin{5}; 
+        type = varargin{6}; Q = varargin{7}; R = varargin{8}; N = varargin{9};
       
-        if(length(varargin) >= 11)
-            w = varargin{11};
-            z = varargin{12};
+        if(length(varargin) >= 10)
+            w = varargin{10};
+            z = varargin{11};
         else
-            w = zeros(numel(t), size(model.sizeU, 1));
-            z = zeros(numel(t), size(model.sizeY, 1));
+            w = zeros(numel(t), model.sizeX);
+            z = zeros(numel(t), model.sizeY);
         end
         
         % == Retrives the correspondent State-Space matrices for the model selected index ==
-        A = model.ss_model.A(idx);  B = model.ss_model.B(idx); 
-        C = model.ss_model.C;       D = model.ss_model.D;
+        A = model.ss_model.A_l(oper.xe, oper.ue);  B = model.ss_model.B_l(oper.xe, oper.ue); 
+        C = model.ss_model.C;                      D = model.ss_model.D;
         
         % == Auxiliary variables for the simulation ==
-        deltaT = t(2) - t(1);   % Size of the time step
+        deltaT = t(2) - t(1); % Size of the time step
         nx = model.sizeX;     % Dimension of the states
-        nu = model.sizeU;    % Dimension of the inputs
+        nu = model.sizeU;     % Dimension of the inputs
         ny = model.sizeY;     % Dimension of the outputs
         
-        ue = model.oper.U(idx,:)';       % Input operation values for the linear model
-        xe = model.oper.X(idx,:)';        % State operation values for the linear model
+        ue = oper.ue;       % Input operation values for the linear model
+        xe = oper.xe;       % State operation values for the linear model
         
         % Simulation variables
         u        = zeros(nu, numel(t)); 
@@ -78,14 +78,14 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         r = r - C * xe;
         
         % Initial States
-        x(:,1)     = X_0' + z(1, :)'; 
+        x(:,1)     = X_0' + w(1, :)'; 
         x_hat(:,1) = X_0' - xe;
         y_aux      = X_0;
         
         % == LINEAR QUADRATIC REGULATOR ==
         if(strcmp(type, 'lqr'))
             % Calculate the LQR gain matrices
-            K = lqr_(A, B, Q, R, 0:deltaT:N);  
+            K = lqr_(A, B, Q, R, 0:deltaT:N); 
 
             % == Simulation for each timestep (i) on time signal (t) ==
             for i = 1:numel(t)-1
@@ -97,7 +97,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
-                sys = ss(A_cl, zeros(nx), C, D);
+                sys = ss(A_cl, zeros(nx,nu), eye(nx), zeros(nx,nu));
                 aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
@@ -117,9 +117,6 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             C_i = [C, zeros(ny, ny)];
             D_i = D;
             
-            % Augments the Luenberger matrix
-            L_i = [L; zeros(ny)];
-
             % Calculate the LQRI gain matrix
             K = lqr_(A_i, B_i, Q, R, 0:deltaT:N);
 
@@ -132,10 +129,10 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 u(:,i) = - K{i} * x_hat(:, i);
 
                 % Defines the closed-loop matrix for this instant
-                A_cl = [A-B*K{i}(1:nx) -B*K{i}(nx+1:end); -C zeros(ny)];
+                A_cl = [A-B*K{i}(:,1:nx) -B*K{i}(:,nx+1:end); -C zeros(ny)];
             
                 % Simulates the linear model
-                sys = ss(A_cl, B_cl, eye(nx+ny), D_i);
+                sys = ss(A_cl, B_cl, eye(nx+ny), zeros(nx+ny,nu));
                 aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
@@ -171,7 +168,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
-                sys = ss(A_cl, B_cl, C, D);
+                sys = ss(A_cl, B_cl, eye(nx), D);
                 aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)], t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
@@ -180,7 +177,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmp(type, 'lqgi'))
             % Generates the actual model for the plant
-            realSys = ss(A, B, eye(nx), D_i);
+            realSys = ss(A, B, eye(nx), D);
             
             % Augments the state auxiliary vector in time and updates the initial conditions
             x_hat = zeros(nx+ny, numel(t));
@@ -217,8 +214,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 B_cl = [Ke{i} zeros(nx, ny); zeros(ny), eye(ny)];
                 
                 % Simulates the real disturbed plant
-                aux = lsim(realSys, u(:,i:i+1)+w(i,:), t(i:i+1), x(:,i));
-                x(:, i+1) = aux(end, :) + z(i+1,:);
+                aux = lsim(realSys, u(:,i:i+1), t(i:i+1), x(:,i));
+                x(:, i+1) = aux(end, :) + w(i+1,:) + z(i+1,:);
                             
                 % Simulates the linear model
                 n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);

@@ -1855,12 +1855,12 @@ Of course, not all disturbances observed in real operations are strong enough to
         GM = \cfrac{1}{|T(j \omega_{pc})|}
     ,\end{equation}
     
-    \noindent where $\omega_{pc}$ is the phase crossover frequency such that $\angle T(j\omega_{pc}) = -180º$ (or when a Nyquist diagram crosses the point $s = -1$). In addition, the \textit{Phase Margin} ($PM$) is defined as how much phase lag can be added to $T(s)$ the system becomes unstable, and is equated as:
+    \noindent where $\omega_{pc}$ is the phase crossover frequency such that $\angle T(j\omega_{pc}) = -180º$ (or the point where a Nyquist diagram crosses the real axis for $-1 < s < 0$). In addition, the \textit{Phase Margin} ($PM$) is defined as how much phase lag can be added to $T(s)$ the system becomes unstable, and is equated as:
     \begin{equation}
         PM = \angle T(j \omega_{gc})
     ,\end{equation}
     
-    \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $| T(j\omega_{gc}) | = 0 dB$. 
+    \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $| T(j\omega_{gc}) | = 0 dB$ (or the angle when a Nyquist diagram crosses the unit circle centered at $s = 0$). 
 \end{boxed-definition}
 
 A graphical representation of these margins, for both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the one from last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Despite the fact that high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
@@ -1884,12 +1884,13 @@ A graphical representation of these margins, for both Bode plots and Nyquist dia
 	\begin{minipage}[t]{0.48\textwidth}
 	\begin{tikzpicture}
 		\node (img) {\includegraphics[width=1\textwidth]{chapter3/report_ch3_3_2}};
-		\node (Wpc) at (2.4,0.5) {\small $\omega_{pc}$};
+		\node (Wpc) at (3.1,0.5) {\small $\omega_{pc}$};
 		\node (Wgc) at (-1.9,-2.1) {\small $\omega_{gc}$};		
 		
-		\node (GM) at (3.15,1.6) {\small $\cfrac{1}{GM}$};
-		\draw [-latex, <->] (2.775,1) -- (3.55,1);
+		\node (GM) at (1.2,1.4) {\small $1 - \cfrac{1}{GM}$};
+		\draw [-latex, <->] (-2.05,0.8) -- (2.65,0.8);
 		\draw [-latex, -, dashed] (2.72,0.3) -- (2.72,1.1);
+		\draw [-latex, -, dashed] (-2.12,0.3) -- (-2.12,1.1);
 	    		
 		\node (PM) at (-0.4, -0.5) {\small $PM$};	  
 		\draw [-latex, <->] (0.5,-1.15) to[bend left] (0,0.2);  
@@ -2640,14 +2641,20 @@ For the sake of illustration, consider the same system as controlled in \eqref{e
 \begin{equation}
 	\begin{matrix}
 		\bm{Q}_{kf} = \begin{bmatrix}
-			a & a \\ a & a
-		\end{bmatrix} & \bm{R}_{kf} = a
+			0.2741  &  0.0036 \\
+		    0.0036  &  0.0024
+		\end{bmatrix} & \bm{R}_{kf} = 0.233
 	\end{matrix}
 .\end{equation}
 
-\noindent A set of LQG controllers for tracking are obtained by augmenting the system and solving the controller Ricatti differential equation for weights $\bm{Q} = \alpha \bm{I}$ and $\bm{R} = \beta$ for different positive values of $\alpha$ and $\beta$, and terminal $\bm{P}(T) = \bm{Q}$. The estimator is solved forward in time for initial condition $\bm{P}_e(t_0) = \bm{Q}_{kf}$. The resulting simulations are shown in Fig. \ref{fig:lqg02}, demonstrating how the controller was able to reject the noise from the observations and still achieve robust tracking.
+\noindent A pair of LQG controllers for tracking are obtained by augmenting the system and solving the controller Ricatti differential equation for weights in the form $\bm{Q} = diag(\alpha_1, \alpha_2, \alpha_3)$ and $\bm{R} = \beta$, for terminal weight $\bm{P}(T) = \bm{Q}$. The estimator is solved forward in time for initial condition $\bm{P}_e(t_0) = \bm{Q}_{kf}$. The resulting simulations are shown in Fig. \ref{fig:lqg02}, demonstrating how the controller can be more or less aggressive given the choice of weighting matrices.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter4/report_ch4_1}
+	\caption{Simulation of the LQG controllers showing the input signal (up) and correspondent state response (down). The markers denotes the observations from the real system. The control on the left was solved for $\bm{Q}^{(1)} = \text{diag}(20, 20, 5000)$ and $\bm{R}^{(1)} = 75$, and the controller on the right was solved for $\bm{Q}^{(2)} = \text{diag}(1, 1, 10000)$ and $\bm{R}^{(2)} = 20$.}
+	\label{fig:lqg02}
+\end{figure}
 
 \section{Stability and Robustness Analysis}
 
@@ -2680,11 +2687,16 @@ The optimal output trajectory resulting from this control action is given by $\b
 
 Notice that, in contrast to the Pole-Placement method where the stability must be explicitly determined by the designer, the LQR controller can guarantee a stable closed-loop system directly by the observability property, even when the open-loop system is unstable. Since the BIBO stability (Definition \ref{def:BIBOStab}) discusses the magnitude of a system response as $t \to \infty$, the results are derived for infinite-horizon LQR. Despite of this, it is also possible to interpret some notion of stable response for finite-horizon LQR, since the cost function is always bounded by the optimal cost as conditioned by the Hamilton-Jacobi equation.
 
-Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01} for several LQR gains. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin, and the angle that the closest permissible point of a unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
+Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of a unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.65]{chapter4/report_ch4_2}
+	\caption{Nyquist diagram of a single state system with a open-loop unstable pole but that is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.}
+	\label{fig:lqrProperties01}
+\end{figure}
 
-Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have a extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that a optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian has no guaranteed margins.
+Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
 
 % 5 - Receding Horizon Optimal Control
 % ---------------------------------------------------------------
@@ -2726,7 +2738,12 @@ In the optimization community, this problem is also popular in the following not
 
 This definition basically states that the optimization to be performed is similar to the standard case, but, since the time horizon is now a moving window of size $T$, the gain matrices $\bm{K} : \mathbb{R} \rightarrow \mathbb{R}^{r \times n}$ changes together with time. This is a consequence for the fact the the Ricatti differential equation has to be solved backwards in time for each new horizon at each new time instance. Of course, this means that for each which time interval that is optimized, only the first action is actually applied to the system. The Fig. \ref{fig:rhc01} illustrates this control strategy.
 
-[fig]
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{chapter5/recedingHorizon}
+	\caption{Illustration of the Receding Horizon Control strategy.}
+	\label{fig:rhc01}
+\end{figure}
 
 From the Separation Principle, it is always possible to increment this approach by introducing a optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
 
@@ -2783,7 +2800,7 @@ Consider the linearization Jacobians stated in \eqref{eq:isoReact01}. In the cas
 \end{matrix*} \right.
 ,\end{align}
 
-\noindent where $\theta^{(1)} = u(t-\delta t)$ and $\bm{\theta}^{(2)} = \bm{x}(t-\delta t)$. Notice that the matrix $\bm{A}(\cdot)$ in this case should always result in a stable system, since the variables in the diagonal are constrained to be positive, given their physical meaning. A simulation is shown in Fig. \ref{fig:lpvSim01} for this system, given a sequence of different amplitude steps as inputs, to visualize how well this system response can approximate the nonlinear response.
+\noindent where $\theta^{(1)} = u(t-\delta t)$ and $\bm{\theta}^{(2)} = \bm{x}(t-\delta t)$. Notice that the matrix $\bm{A}(\cdot)$ in this case should always result in a stable system, since the variables in the diagonal are constrained to be positive, given their physical meaning. A simulation is shown in Fig. \ref{fig:lpvSim01} for this system, given a sequence of different amplitude steps as inputs, to visualize how well this system response can approxima	te the nonlinear response.
 
 [fig]
 
@@ -2818,7 +2835,9 @@ As stated earlier, it is also possible to apply this approach to stochastic syst
 \clearpage
 \chapter{Methodology}
 
-a
+This chapter details the methodology used in order to attest the discussion presented until now. The experiments were performed in a simulated environment, using the MATLAB software \textbf{[reference]} as the framework to compute such simulations. The results obtained are presented and discussed in the next chapter.   
+
+
 
 % 7 - Results and Discussion
 % ---------------------------------------------------------------
