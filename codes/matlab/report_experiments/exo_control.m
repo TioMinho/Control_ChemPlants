@@ -36,54 +36,104 @@ cpal = [209 17 65;    % 1 - Metro Red
 %% Model Loading %%
 run exothermal_cstr/exo_model.m
 
-xe = [1.235 0.9 134.14 128.95]'; ue = [18.83 -4495.7]';
-oper.xe = xe;
-oper.ue = ue;
-
-%% Figure 4.5 %%
-% - Simulation Parameters
-% Linear Model Index
-idx = 13;
-% Time
-t = (0:0.5:19.5)'; T = numel(t);
-
-% Reference Signal
-r = [ones(2,T/4).*[xe(2); xe(3)]  ones(2,T/4).*[xe(2); xe(3)].*[1.1 1]' ones(2,T/4).*[xe(2); xe(3)].*[0.9 1]' ones(2,T/4).*[xe(2); xe(3)]];
-
-% Linear Model
-A = exo_cstr.ss_model.A_l(xe, ue);   B = exo_cstr.ss_model.B_l(xe, ue);
-C = exo_cstr.ss_model.C;             D = exo_cstr.ss_model.D;
+xe = reshape(exo_cstr.oper.X(13,13,:), [1 4]); ue = exo_cstr.oper.U(13, :);
+oper.xe = xe';
+oper.ue = ue';
 
 exo_cstr.ss_model.C = [0 1 0 0; 0 0 1 0];
 exo_cstr.ss_model.D = [0 0; 0 0];
 exo_cstr.sizeY      =  2 ;
 
+%% Figure 4.5 %%
+% - Simulation Parameters
+% Time
+t = (0:0.1:0.5)'; T = numel(t);
+
+% Reference Signal
+r = [ones(2,T).*[xe(2); xe(3)], ...
+     ones(2,T).*[xe(2); xe(3)].*[1.1;1.01], ...
+     ones(2,T).*[xe(2); xe(3)].*[0.9;0.99], ...
+     ones(2,T).*[xe(2); xe(3)]];
+
+% Disturbance signal
+w = randn(T, 4) .* [.01 .01 .01 .01];      % Process Noise
+z = randn(T, 2) .* [.01 .01];      % Measurement Noise
+
+% Linear Model
+A = exo_cstr.ss_model.A_l(xe, ue);   B = exo_cstr.ss_model.B_l(xe, ue);
+C = exo_cstr.ss_model.C;             D = exo_cstr.ss_model.D;
+
 % Controller and Observer
-Q = diag([5, 5, 5, 5, 1e12, 1e5]);
-R = diag([1 1]);
+Q = diag([25, 25, 1, 1, 10, 10]);
+R = diag([10 25]);
 
 % - Simulation of the Outputs
-[~, yout, xout, uout] = simulate(exo_cstr, oper, t, r, xe', 'lqri', Q, R, numel(t));
-xout = xout + xe;
-yout = yout + xe;
-uout = uout + ue;
+try
+    [~, yout, xout, uout] = simulate(exo_cstr, oper, t, r, xe, 'lqgi', Q, R, numel(t), w, z);
 
-% - Visualization of the Simulation
-figure(1);
-subplot(2,2,1)
-plot(t, uout(1,:), 'linewidth', 1.5, 'color', cpal(8,:));
-subplot(2,2,3)
-plot(t, uout(2,:), 'linewidth', 1.5, 'color', cpal(8,:));
+    % Exports the Visualization to a PDF
+    exo_sim.t = t; exo_sim.oper = oper; exo_sim.r = r; exo_sim.xe = xe;
+    exo_sim.type = 'lqri'; exo_sim.Q = Q; exo_sim.R = R; 
+    exo_sim.xout = xout; exo_sim.yout = yout; exo_sim.uout = uout;
+   
+    timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
+    save("data/simulations/exoSim_"+char(timeNow), 'exo_sim')
 
-subplot(2,2,2) 
-plot(t, r(1,:), 'linestyle', '--', 'color', 'black'); hold on;
-plot(t, yout(2,:), 'linewidth', 1.5, 'marker', 'o', 'linestyle', 'none', 'color', cpal(8,:)); hold on;     
-xlabel("Time (min)")
+    xout = xout + xe';
+    yout = yout + xe';
+    uout = uout + ue';
 
-subplot(2,2,4) 
-plot(t, r(2,:), 'linestyle', '--', 'color', 'black'); hold on;
-plot(t, yout(3,:), 'linewidth', 1.5, 'marker', 'o', 'linestyle', 'none', 'color', cpal(8,:)); hold on;     
-xlabel("Time (min)")
+    % - Visualization of the Simulation
+    figure(1);
+    subplot(2,2,1)
+    plot(t, uout(1,:), 'linewidth', 1.5, 'color', cpal(8,:));
+    subplot(2,2,3)
+    plot(t, uout(2,:), 'linewidth', 1.5, 'color', cpal(8,:));
 
-subplot(2,2,1), ylabel("u = \Delta u + u_o")
-subplot(2,2,3), ylabel("x_2 = \Delta x_2 + x_{o2} (mol/l)")
+    subplot(2,2,2) 
+    plot(t, r(1,:), 'linestyle', '--', 'color', 'black'); hold on;
+    plot(t, yout(2,:), 'linewidth', 1.5, 'color', cpal(8,:)); hold on;     
+    xlabel("Time (min)")
+
+    subplot(2,2,4) 
+    plot(t, r(2,:), 'linestyle', '--', 'color', 'black'); hold on;
+    plot(t, yout(3,:), 'linewidth', 1.5, 'color', cpal(8,:)); hold on;     
+    xlabel("Time (min)")
+
+    subplot(2,2,1), ylabel("u_1 = \Delta u_1 + u_{1o}")
+    subplot(2,2,3), ylabel("u_2 = \Delta u_2 + u_{2o}")
+    subplot(2,2,2), ylabel("x_1 = \Delta x_1 + x_{o1} (mol/L)")
+    subplot(2,2,4), ylabel("x_2 = \Delta x_2 + x_{o2} (^o C)")
+
+catch err
+    fprintf("Erro!\n");
+    rethrow(err)
+    
+end
+
+%% !!!!!!!!!! AUTOMATIC EXPERIMENT MODE !!!!!!!!!!
+run report_experiments/experiment_parameters.m
+
+for i=1:n_experiments
+    % - Simulation of the Outputs
+    try
+        [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param{i}.t, exp_param{i}.r, ...
+                                         exp_param{i}.x_0, exp_param{i}.type, exp_param{i}.Q, ... 
+                                         exp_param{i}.R, numel(exp_param{i}.t), exp_param{i}.w, exp_param{i}.z);
+
+        % Exports the Visualization to a PDF
+        xout = xout + xe';
+        yout = yout + xe';
+        uout = uout + ue';
+        
+        exp_param{i}.xout = xout; exp_param{i}.yout = yout; exp_param{i}.uout = uout;
+
+        timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
+        save("data/simulations/exoSim_"+char(timeNow), 'exp_param')
+        
+    catch err
+        fprintf("Erro!\n");
+        rethrow(err)
+
+    end
+end

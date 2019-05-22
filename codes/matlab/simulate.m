@@ -132,7 +132,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 A_cl = [A-B*K{i}(:,1:nx) -B*K{i}(:,nx+1:end); -C zeros(ny)];
             
                 % Simulates the linear model
-                sys = ss(A_cl, B_cl, eye(nx+ny), zeros(nx+ny,nu));
+                sys = ss(A_cl, B_cl, eye(nx+ny), zeros(nx+ny,ny));
                 aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
@@ -141,7 +141,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmp(type, 'lqg'))
             % Generates the actual model for the plant
-            realSys = ss(A, B, eye(nx), D_i);
+            realSys = ss(A, B, eye(size(A)), zeros(size(A,1), size(B,2)) );
             
             % Estimate the covariances for the process and measurement noises
             Q_k = cov(w);
@@ -163,12 +163,12 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 B_cl = [zeros(nx,ny) Ke{i}];
                 
                 % Simulates the real disturbed plant
-                aux = lsim(realSys, u(:,i:i+1)+w(i,:), t(i:i+1), x(:,i));
-                x(:, i+1) = aux(end, :) + z(i+1,:);
+                aux = lsim(realSys, u(:,i:i+1), t(i:i+1), x(:,i));
+                x(:, i+1) = aux(end, :) + w(i+1,:) + z(i+1,:)*C;
 
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
-                sys = ss(A_cl, B_cl, eye(nx), D);
+                sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
                 aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)], t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
@@ -177,7 +177,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmp(type, 'lqgi'))
             % Generates the actual model for the plant
-            realSys = ss(A, B, eye(nx), D);
+            realSys = ss(A, B, eye(size(A)), zeros(size(B)) );
             
             % Augments the state auxiliary vector in time and updates the initial conditions
             x_hat = zeros(nx+ny, numel(t));
@@ -209,13 +209,13 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 u(:,i) = - K{i} * x_hat(:, i);
                 
                 % Define the closed-loop matrices
-                A_cl = [A-B*K{i}(1:nx)-Ke{i}*C  -B*K{i}(nx+1:end); 
+                A_cl = [A-B*K{i}(:,1:nx)-Ke{i}*C  -B*K{i}(:,nx+1:end); 
                                 -C                zeros(ny)];
                 B_cl = [Ke{i} zeros(nx, ny); zeros(ny), eye(ny)];
                 
                 % Simulates the real disturbed plant
                 aux = lsim(realSys, u(:,i:i+1), t(i:i+1), x(:,i));
-                x(:, i+1) = aux(end, :) + w(i+1,:) + z(i+1,:);
+                x(:, i+1) = aux(end, :) + w(i+1,:) + z(i+1,:)*C;
                             
                 % Simulates the linear model
                 n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);

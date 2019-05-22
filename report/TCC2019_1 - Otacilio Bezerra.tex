@@ -39,7 +39,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -2692,7 +2692,7 @@ Now, the discussion turns to the robustness properties of these optimal controll
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.65]{chapter4/report_ch4_2}
-	\caption{Nyquist diagram of a single state system with a open-loop unstable pole but that is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.}
+	\caption{Nyquist diagram of a single state system with a open-loop unstable pole but which is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.}
 	\label{fig:lqrProperties01}
 \end{figure}
 
@@ -2837,7 +2837,29 @@ As stated earlier, it is also possible to apply this approach to stochastic syst
 
 This chapter details the methodology used in order to attest the discussion presented until now. The experiments were performed in a simulated environment, using the MATLAB software \textbf{[reference]} as the framework to compute such simulations. The results obtained are presented and discussed in the next chapter.   
 
+\section{Non-Isothermal Continuous Stirred Tank}
 
+The chemical reactor used for the experiments was the non-isothermal Continuous Stirred Tank (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of systems that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is proposed as a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control. This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactor. The reaction scheme follows the same Van de Vusse scheme explored throughout this report:
+\begin{align}
+\left\{\ \begin{matrix*}[l]
+	\overbrace{\textbf{C}_5 \textbf{H}_6}^{A} & \overset{K_1(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_7 \textbf{OH}}^{B} & \overset{K_2(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_8 (\textbf{OH})_2}^{C} \\ 
+	\overbrace{2 \textbf{C}_5 \textbf{H}_6}^{2A} & \overset{K_3(T)}{\longrightarrow} & \overbrace{\textbf{C}_10 \textbf{H}_12}^{D}
+\end{matrix*} \right.
+.\end{align}
+
+Since the reaction is non-isothermal, the kinetics rates $[K_1(T), K_2(T), K_3(T)]$ are function of the temperature, and they are assumed to follow the Arrhenius equation \eqref{eq:arrhenius1}. In order to control the temperature, to yield a better control of the chemical reactions and guarantee some safety constraints to the system, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology1}.
+
+[fig]
+
+A nonlinear dynamical model, which was obtained from the first principles approach, is proposed to represent the evolution of each state:
+\begin{align}
+\begin{cases}
+	\dot{\rho_A} = q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\
+	\dot{\rho_B} = - q - \rho_B + \left( K_1(T) \rho_A \right) - \left( K_2(T) \rho_B \right) \\
+	\dot{T} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX} \\
+	\dot{T_C} = \gamma Q + \beta (T - T_C) 
+\end{cases}
+,\end{align}
 
 % 7 - Results and Discussion
 % ---------------------------------------------------------------

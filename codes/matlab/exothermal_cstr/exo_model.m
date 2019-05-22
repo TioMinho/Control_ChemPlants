@@ -35,23 +35,23 @@ sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_
 
 %% OPERATING POINTS %%
 % Stationary Space Numerical Calculation
-% U_ss = [linspace(5/60, 35/60, 25)' linspace(-8.5/60, 0, 25)'];
+% U_ss = [linspace(5, 35, 25)' linspace(-8500, 0, 25)'];
 % X_ss = zeros(25,25,4);
 % prev = [0 0 0 0];
 % for i = 1:1:25
 %     for j = 1:1:25
-%         F = @(X) [-K1(X(3))*X(1) - K2(X(3))*X(1)^2 + (c_in - X(1)) * U_ss(i,1);
-%                    K1(X(3))*(X(1) - X(2)) - X(2)*U_ss(i,1);
-%                    h(X(1),X(2),X(3)) + alpha*(X(4) - X(3)) + (T_in - X(3))* U_ss(i,1);
-%                    beta*(X(3) - X(4)) + gamma*U_ss(j,2)];      
+%         F = @(X) d_X(0, [U_ss(i,1) U_ss(j,2)], X);      
 %         
 %         X_ss(i,j,:) = fsolve(F, prev);
 %         prev = X_ss(i,j,:);
 %     end
 % end
+% lStruct.X_ss = X_ss;
+% lStruct.U_ss = U_ss;
+% save("../data/exoCSTR_opPoints.mat", 'lStruct')
 
 % Operating Space
-lStruct = load('../data/exoCSTR_opPoints.mat');
+load('../data/exoCSTR_opPoints.mat');
 U_ss = lStruct.U_ss;
 X_ss = lStruct.X_ss;
 numOp = 25*25;
