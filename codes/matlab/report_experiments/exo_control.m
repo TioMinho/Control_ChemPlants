@@ -112,28 +112,83 @@ catch err
 end
 
 %% !!!!!!!!!! AUTOMATIC EXPERIMENT MODE !!!!!!!!!!
-run report_experiments/experiment_parameters.m
-
-for i=1:n_experiments
+while(true)
     % - Simulation of the Outputs
     try
-        [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param{i}.t, exp_param{i}.r, ...
-                                         exp_param{i}.x_0, exp_param{i}.type, exp_param{i}.Q, ... 
-                                         exp_param{i}.R, numel(exp_param{i}.t), exp_param{i}.w, exp_param{i}.z);
+        exp_param = generateRandomExperiment(xe);
+        [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param.t, exp_param.r, ...
+                                         exp_param.x_0, exp_param.type, exp_param.Q, ... 
+                                         exp_param.R, numel(exp_param.t), exp_param.w, exp_param.z);
 
         % Exports the Visualization to a PDF
-        xout = xout + xe';
-        yout = yout + xe';
-        uout = uout + ue';
+        exp_param.xout = xout + xe';
+        exp_param.yout = yout + xe';
+        exp_param.uout = uout + ue';
         
-        exp_param{i}.xout = xout; exp_param{i}.yout = yout; exp_param{i}.uout = uout;
-
         timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
-        save("data/simulations/exoSim_"+char(timeNow), 'exp_param')
+        simulation = exp_param;
+        save("data/simulations/exoSim_"+char(timeNow), 'simulation')
         
     catch err
         fprintf("Erro!\n");
-        rethrow(err)
+        disp(getReport(err,'extended'));
 
     end
+end
+
+%%
+% - Visualization of the Simulation
+folder = dir("data/simulations/");
+files = {folder.name}; files = files(3:end);
+for name = files
+    clear exp_param exo_sim simulation
+    load("data/simulations/"+name)
+    
+    if(exist("exp_param", "var"))
+        for i = 68:-1:1
+            if(size(exp_param{i}.xout,1) > 0)
+                simulation = exp_param{i};
+                save("data/simulations/"+name, 'simulation')
+                break
+            end
+        end
+    elseif(exist("exo_sim", "var"))
+        simulation = exo_sim;
+        save("data/simulations/"+name, 'simulation')
+    end
+
+    simulation
+    
+    figure(2);
+    subplot(2,2,1)
+    plot(simulation.t, simulation.uout(1,:), 'linewidth', 1.5, 'color', cpal(8,:));
+    subplot(2,2,3)
+    plot(simulation.t, simulation.uout(2,:), 'linewidth', 1.5, 'color', cpal(8,:));
+
+    subplot(2,2,2) 
+    if(size(simulation.r,1) > 0), plot(simulation.t, simulation.r(1,:), 'linestyle', '--', 'color', 'black'); hold on;
+    end
+    if(strcmp(simulation.type, 'lqg') || strcmp(simulation.type, 'lqgi'))
+        s = scatter(simulation.t, simulation.xout(2,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+        alpha(0.5)
+    end
+    plot(simulation.t, simulation.yout(2,:), 'linewidth', 1.5, 'color', cpal(8,:)); hold on;     
+    xlabel("Time (min)")
+
+    subplot(2,2,4) 
+    if(size(simulation.r,1) > 1), plot(simulation.t, simulation.r(2,:), 'linestyle', '--', 'color', 'black'); hold on;
+    end
+    if(strcmp(simulation.type, 'lqg') || strcmp(simulation.type, 'lqgi'))
+        s = scatter(simulation.t, simulation.xout(3,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+        alpha(0.5)
+    end
+    plot(simulation.t, simulation.yout(3,:), 'linewidth', 1.5, 'color', cpal(8,:)); hold on;     
+    xlabel("Time (min)")
+
+    subplot(2,2,1), ylabel("u_1 = \Delta u_1 + u_{1o}"), hold off
+    subplot(2,2,3), ylabel("u_2 = \Delta u_2 + u_{2o}"), hold off
+    subplot(2,2,2), ylabel("x_1 = \Delta x_1 + x_{o1} (mol/L)"), hold off
+    subplot(2,2,4), ylabel("x_2 = \Delta x_2 + x_{o2} (^o C)"), hold off
+    
+    pause
 end
