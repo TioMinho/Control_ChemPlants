@@ -39,7 +39,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -2839,7 +2839,7 @@ This chapter details the methodology used in order to attest the discussion pres
 
 \section{Non-Isothermal Continuous Stirred Tank}
 
-The chemical reactor used for the experiments was the non-isothermal Continuous Stirred Tank (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of systems that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is proposed as a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control. This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactor. The reaction scheme follows the same Van de Vusse scheme explored throughout this report:
+The chemical reactor used for the experiments was the non-isothermal Continuous Stirred Tank (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of systems that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactor. The reaction scheme follows the same Van de Vusse scheme explored throughout this report:
 \begin{align}
 \left\{\ \begin{matrix*}[l]
 	\overbrace{\textbf{C}_5 \textbf{H}_6}^{A} & \overset{K_1(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_7 \textbf{OH}}^{B} & \overset{K_2(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_8 (\textbf{OH})_2}^{C} \\ 
@@ -2847,20 +2847,87 @@ The chemical reactor used for the experiments was the non-isothermal Continuous 
 \end{matrix*} \right.
 .\end{align}
 
-Since the reaction is non-isothermal, the kinetics rates $[K_1(T), K_2(T), K_3(T)]$ are function of the temperature, and they are assumed to follow the Arrhenius equation \eqref{eq:arrhenius1}. In order to control the temperature, to yield a better control of the chemical reactions and guarantee some safety constraints to the system, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology1}.
+Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and $K_3(T)$ are function of the temperature, and they are assumed to follow the Arrhenius equation from \eqref{eq:arrhenius1}. In order to control the temperature, ensuring some safety constraints to the process, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$, $\rho_B$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology01}. 
 
-[fig]
+\begin{figure}[ht] \centering
+	\includegraphics[scale=0.75]{chapter6/exoCSTR}
+	\caption{The non-isothermal continuous stirred tank reactor proposed.}
+	\label{fig:methodology01}
+\end{figure}
 
-A nonlinear dynamical model, which was obtained from the first principles approach, is proposed to represent the evolution of each state:
-%\begin{align}
-%\begin{cases}
-%	\dot{\rho_A} = q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\
-%	\dot{\rho_B} = - q - \rho_B + \left( K_1(T) \rho_A \right) - \left( K_2(T) \rho_B \right) \\
-%	\dot{T} = q(T_{in} - T) + \cfrac{k_W A_r}{\} (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX} \\
-%	\dot{T_C} = \gamma Q + \beta (T - T_C) 
-%\end{cases}
-%,\end{align}
-%?
+A nonlinear dynamical model, which was obtained from the first principles approach, is proposed to represent the evolution of the important states:
+\begin{align}
+\begin{cases}
+	\hfill \dot{\rho_A} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\
+	\hfill \dot{\rho_B} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\
+	\hfill \dot{T} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\
+	\hfill \dot{T_C} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
+\end{cases}
+.\end{align}
+
+The meaning and value of each parameter is shown in Table \ref{table:exo_parameters}. Additionally, the real system has some constraints in respect to the manipulated variables, namely:
+\begin{equation}
+\begin{matrix}
+	5 hr^{-1} \leq F \leq 35 h^{-1}; & -8500 \cfrac{kJ}{h} \leq Q \leq 0 \cfrac{kJ}{h}
+\end{matrix}
+.\end{equation}
+
+\begin{table}[ht]
+  \centering
+	\begin{tabular}{l | c | c l }
+	\textbf{System Variable} & \textbf{Symbol} & \textbf{Value} & \textbf{Unit} \\
+	\hline
+	Inflow concentration of $A$ & $\rho^{(A)}_{in}$ 	& $5.1$		& $\text{mol}/l$ \\
+	Inflow liquid temperature & $T_{in}$ 	& $130$		& $º C$ \\
+	Nominal kinetic rate for $A \rightarrow B$ & $K_{10}$	& $(1.287)\times 10^{10}$	& $h^{-1}$ \\
+	Nominal kinetic rate for $B \rightarrow D$ & $K_{20}$	& $(1.287)\times 10^{10}$	& $h^{-1}$ \\
+	Nominal kinetic rate for $2A \rightarrow D$ & $K_{30}$	& $(9.043)\times 10^{9}$	& $l\  \text{mol}^{-1} h $ \\
+	Activation energy for $A \rightarrow B$ & $E_{1}/R$	& $9758.3$	& - \\
+	Activation energy for $B \rightarrow C$ & $E_{2}/R$	& $9758.3$	& - \\
+	Activation energy for $2A \rightarrow D$ & $E_{3}/R$	& $8560.0$	& - \\
+	Enthalpy for $A \rightarrow B$ & $\Delta H_{AB}$	& $4.2$	& $kJ/mol$ \\
+	Enthalpy for $B \rightarrow C$ & $\Delta H_{BC}$	& $-11.0$	& $kJ/mol$ \\
+	Enthalpy for $2A \rightarrow D$ & $\Delta H_{AD}$	& $-41.85$	& $kJ/mol$ \\
+	Total density of the reactor solution & $\varrho$ & $(0.9342)\times 10^{-4}$ & $kg/l$ \\
+	Heat capacity of the solution & $C_p$ & $3.01$ & $kJ\ kg^{-1} K$ \\
+	Heat capacity of the coolant & $C_{pK}$ & $2.0$ & $kJ\ kg^{-1} K^{-1}$ \\
+	Surface area of the tank reactor & $A_R$ & $0.215$ & $m^2$ \\
+	Volume of the tank reactor & $V_R$ & $10.01$ & $m^3$ \\
+	Coolant mass & $m_K$ & $5.0$ & $kg$ \\
+	Heat transfer coefficient & $k_W$ & $4032.0$ & $kJ\ h^{-1} m^2 K$ \\
+  \end{tabular} 
+  \caption{Model parameters and variable nomenclature.}
+  \label{table:exo_parameters} 
+\end{table} \vskip0.25cm
+
+
+\section{Simulation}
+
+The process and all the control structures were simulated using the MATLAB software. In the first part of the experiments, the process was analyzed in respect to the following characteristics and properties of its dynamical models:
+\begin{enumerate}
+	\item Nonlinear model natural and forced response simulation;
+	\item Linearized State-Space model structure and response simulation;
+	\item Analysis of the response in time domain;
+	\item Assessment of the stability, controllability and observability properties;
+\end{enumerate}
+
+In respect to the control, the second part of the experiments focused on the design of controllers using the optimal control techniques. The controllers were developed and analyzed in the same order that they were presented in this document:
+\begin{enumerate}
+	\item Linear Quadratic Regulator, assuming a nonzero initial state and perfect measurement of the states;
+	\item Linear Quadratic Regulator with Integral Action, for a non-constant reference signals and assuming perfect measurement of the states;
+	\item Linear Quadratic Gaussian, assuming a nonzero initial state and reconstruction of the state-vector through observations from a stochastic linear system;
+	\item Linear Quadratic Gaussian with Integral Action, for a non-constant reference and assuming a reconstruction of the state-vector through observations from a stochastic linear system;
+\end{enumerate}
+
+The simulation results are mainly analyzed through graphical visualizations of the data obtained. The experiments were focused on validating the modeling and control procedures for the system presented, instead of comparing and ranking the controllers based on the most performing one. For the sake of completeness, however, some metrics are used to evaluate each controller performance and relate them to the visualizations. The metrics used were the \textit{Integral of Squared Error} (ISE), \textit{Integral of Absolute Error} (IAE), \textit{Integral of Time-Weighted Squared Error} (ITSE) and \textit{Integral of Time-Weighted Absolute Error} (ITAE), which are given as:
+\begin{align}
+\begin{matrix*}[l] \displaystyle
+	\text{IAE} = \displaystyle\int_{t_0}^{T} | \bm{r}(\tau) - \bm{y}(\tau) | d\tau; & & \text{ITAE} = \displaystyle\int_{t_0}^{T} \tau | \bm{r}(\tau) - \bm{y}(\tau) | d\tau;\\ \\
+	\text{ISE} = \displaystyle\int_{t_0}^{T} \left[ \bm{r}(\tau) - \bm{y}(\tau) \right]^2 d\tau; & & \text{ITSE} = \displaystyle\int_{t_0}^{T} \tau \left[ \bm{r}(\tau) - \bm{y}(\tau) \right]^2 d\tau.
+\end{matrix*}
+\end{align}
+
+
 % 7 - Results and Discussion
 % ---------------------------------------------------------------
 \clearpage
