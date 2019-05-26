@@ -17,9 +17,7 @@ function exp_param = generateRandomExperiment(xe)
         Qi = Qi_values(randperm(numel(Qi_values), 2));
         Q = diag([Q_values(randperm(numel(Q_values), 4)) 10^Qi(1) 10^Qi(2)]);
     
-        t_values = 0.99:2:23.99;
-        t_f = t_values(randperm(numel(t_values), 1)); 
-        t = 0:0.01:t_f'; T = numel(t);
+        t = 0:0.1:23.9; T = numel(t);
         
         idx = randperm(size(r_values_track, 2), 4);
         rr = r_values_track;
@@ -28,13 +26,7 @@ function exp_param = generateRandomExperiment(xe)
     else
         Q = diag(Q_values(randperm(numel(Q_values), 4)));
         
-        t_values = 0.99:1:3.99;
-        t_f = t_values(randperm(numel(t_values), 1)); 
-        t = 0:0.01:t_f'; T = numel(t);
-        
-        t_values = 0.1:0.1:0.9;
-        t_f = t_values(randperm(numel(t_values), 1)); 
-        t = 0:0.01:t_f'; T = numel(t);
+        t = 0:0.0025:0.5975; T = numel(t);
         r = ones(2,T).*[xe(2); xe(3)];
         
         idx = randperm(size(x0_values,2), 4);

@@ -31,7 +31,7 @@ cpal = [209 17 65;    % 1 - Metro Red
        ]/255;  
 
 %% %%%%%%%%%%%%
-%  ISOTHERMAL CSTR 
+%  EXOTHERMAL CSTR 
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
 run exothermal_cstr/exo_model.m

@@ -10,25 +10,26 @@
 fprintf('%s\n', "Loading the Exothermal CSTR model...")
 vars = who;
 %% MODEL PARAMETERS %%
-alpha = 30.7977; beta = 8649.45; gamma = 0.1; delta = 0.3556;
+varrho = 0.9342; C_p = 3.01; C_pK = 2; A_R = 0.215;
+V_R = 10.01; m_K = 5; k_W = 4032;
 K10 = 1.287e12; K20 = 9.043e9;
 E1 = 9758.3; E2 = 8560;
 dH_AB = 4.2; dH_BC = -11; dH_AD = -41.85;
-c_in = 5.1; T_in = 130;
+c_in = 5.1; T_in = 130.0;
 
 %% REACTION AUXILIARY EQUATIONS %%
-K1 = @(T)         K10 * exp( -E1 / (T + 273.15) );
-K2 = @(T)         K20 * exp( -E2 / (T + 273.15) );
-h  = @(cA, cB, T) -delta * (K1(T)*(cA * dH_AB + cB * dH_BC) + K2(T) * cA^2 * dH_AD);
+K1 = @(T)          K10 * exp( -E1 / (T + 273.15) );
+K2 = @(T)          K20 * exp( -E2 / (T + 273.15) );
+h  = @(cA, cB, T) (K1(T)*(cA * dH_AB + cB * dH_BC) + K2(T) * cA^2 * dH_AD);
 
 %% SYSTEM DYNAMICS %%
-d_cA = @(t,U,X) - K1(X(3)) * X(1) - K2(X(3)) * X(1)^2 + (c_in - X(1)) * U(1);
-d_cB = @(t,U,X)   K1(X(3)) * (X(1) - X(2)) - X(2) * U(1);
-d_cC = @(t,U,X)   K1(X(3)) * X(2) - X(5) * U(1);
-d_cD = @(t,U,X)   1/2 * K2(X(3)) * X(1)^2 - X(6) * U(1);
+d_cA = @(t,U,X)     U(1)*(c_in - X(1)) - K1(X(3)) * X(1) - K2(X(3)) * X(1)^2;
+d_cB = @(t,U,X)   - U(1)*X(2)          + K1(X(3)) * (X(1) - X(2));
+d_cC = @(t,U,X)   - U(1)*X(5)          + K1(X(3)) * X(2) ;
+d_cD = @(t,U,X)   - U(1)*X(6)          + 1/2 * K2(X(3)) * X(1)^2;
 
-d_T  = @(t,U,X)   h(X(1), X(2), X(3)) + alpha * (X(4) - X(3)) + (T_in - X(3)) * U(1);
-d_Tc = @(t,U,X)   beta * (X(3) - X(4)) + gamma * U(2);
+d_T  = @(t,U,X)   U(1)*(T_in - X(3)) + (k_W*A_R)/(varrho*C_p*V_R) * (X(4) - X(3)) - 1/(varrho*C_p) * h(X(1), X(2), X(3));
+d_Tc = @(t,U,X)   1/(m_K*C_pK) * U(2) + (k_W*A_R)/(m_K*C_pK) * (X(3) - X(4));
 
 d_X  = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X)];
 sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
@@ -72,7 +73,7 @@ numOp = 25*25;
 % Auxiliary Derivatives
 dK_1  = @(Te)         (K10 * E1 * exp(-E1 / (Te + 273.12))) / (Te +273.12).^2; 
 dK_2  = @(Te)         (K20 * E2 * exp(-E2 / (Te + 273.12))) / (Te +273.12).^2;
-dh_dt = @(cAe,cBe,Te) -gamma*(dK_1(Te)*(cAe*dH_AB + cBe*dH_BC) + dK_2(Te)*cAe^2*dH_AD);
+dh_dt = @(cAe,cBe,Te) -1/(varrho*C_p)*(dK_1(Te)*(cAe*dH_AB + cBe*dH_BC) + dK_2(Te)*cAe^2*dH_AD);
 
 posX = @(i) mod(i,25)+(mod(i,25) == 0)*25;
 posY = @(i) ceil(i/25);
@@ -80,23 +81,23 @@ posY = @(i) ceil(i/25);
 % Linearized Matrices
 A_e = @(op) [-U_ss(posX(op), 1)-K1(X_ss(posX(op), posY(op),3))-2*K2(X_ss(posX(op), posY(op),3))*X_ss(posX(op), posY(op),1)         0                          dK_1(X_ss(posX(op), posY(op),3))*X_ss(posX(op), posY(op),1)-dK_2(X_ss(posX(op), posY(op),3))*X_ss(posX(op), posY(op),1)^2    0     ;
                K1(X_ss(posX(op), posY(op),3))                                   -U_ss(posX(op),1)-K1(X_ss(posX(op), posY(op),3))          dK_1(X_ss(posX(op), posY(op),3))*(X_ss(posX(op), posY(op),1) - X_ss(posX(op), posY(op),2))               0     ;  
-              -gamma*(K1(X_ss(posX(op), posY(op),3))*dH_AB+2*K2(X_ss(posX(op), posY(op),3))*X_ss(posX(op), posY(op),1)*dH_AB)  -gamma*(K1(X_ss(posX(op), posY(op),3))*dH_BC)  -U_ss(posX(op),1)-alpha+dh_dt(X_ss(posX(op), posY(op),1),X_ss(posX(op), posY(op),2),X_ss(posX(op), posY(op),3))     alpha ;
-               0                                             0                          beta                                        -beta  ];
+              -1/(varrho*C_p)*(K1(X_ss(posX(op), posY(op),3))*dH_AB+2*K2(X_ss(posX(op), posY(op),3))*X_ss(posX(op), posY(op),1)*dH_AB)  -1/(varrho*C_p)*(K1(X_ss(posX(op), posY(op),3))*dH_BC)  -U_ss(posX(op),1)-(k_W*A_R)/(varrho*C_p*V_R)+dh_dt(X_ss(posX(op), posY(op),1),X_ss(posX(op), posY(op),2),X_ss(posX(op), posY(op),3))     (k_W*A_R)/(varrho*C_p*V_R) ;
+               0                                             0                          (k_W*A_R)/(m_K*C_pK)                                        -(k_W*A_R)/(m_K*C_pK)  ];
 
-A_l = @(x_e, u_e) [-u_e(1)-K1(x_e(3))-2*K2(x_e(3))*x_e(1)             0                          -dK_1(x_e(3))*x_e(1)-dK_2(x_e(3))*x_e(1)^2     0     ;
-                   K1(x_e(3))                                         -u_e(1)-K1(x_e(3))         dK_1(x_e(3))*(x_e(1) - x_e(2))                 0     ;  
-                  -gamma*(K1(x_e(3))*dH_AB+2*K2(x_e(3))*x_e(1)*dH_AB)  -gamma*(K1(x_e(3))*dH_BC)  -u_e(1)-alpha+dh_dt(x_e(1),x_e(2),x_e(3))      alpha ;
-                   0                                                  0                          beta                                           -beta];               
+A_l = @(x_e, u_e) [-u_e(1)-K1(x_e(3))-2*K2(x_e(3))*x_e(1)                       0                                   -dK_1(x_e(3))*x_e(1)-dK_2(x_e(3))*x_e(1)^2                      0     ;
+                   K1(x_e(3))                                                   -u_e(1)-K1(x_e(3))                  dK_1(x_e(3))*(x_e(1) - x_e(2))                                  0     ;  
+                  -1/(varrho*C_p)*(K1(x_e(3))*dH_AB+2*K2(x_e(3))*x_e(1)*dH_AB)  -1/(varrho*C_p)*(K1(x_e(3))*dH_BC)  -u_e(1)-(k_W*A_R)/(varrho*C_p*V_R)+dh_dt(x_e(1),x_e(2),x_e(3))  (k_W*A_R)/(varrho*C_p*V_R) ;
+                   0                                                            0                                   (k_W*A_R)/(m_K*C_pK)                                            -(k_W*A_R)/(m_K*C_pK)];               
                
 B_e = @(op) [ c_in - X_ss(posX(op), posY(op),1)      0;
                 -X_ss(posX(op), posY(op),2)          0;
               T_in - X_ss(posX(op), posY(op),3)      0;
-                   0         gamma];
+                   0         1/(m_K*C_pK)];
                
 B_l = @(x_e, u_e) [ c_in - x_e(1)      0;
                       -x_e(2)          0;
                     T_in - x_e(3)      0;
-                        0         gamma];
+                        0         1/(m_K*C_pK)];
 
 C = [1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1];
 D = [0 0; 0 0; 0 0; 0 0];
@@ -122,8 +123,9 @@ D = [0 0; 0 0; 0 0; 0 0];
 %% SAVES THE MODEL %%
 newVars = setdiff(who, vars);
 
-exo_cstr.param        = struct('alpha', alpha, 'beta', beta, 'gamma', gamma, 'delta', delta, 'K10', K10, 'K20', K20, ...
-                               'E1', E1, 'E2', E2, 'dH_AB', dH_AB, 'dH_BC', dH_BC, 'dH_AD', dH_AD, 'c_in', c_in, 'T_in', T_in);
+exo_cstr.param        = struct('varrho', varrho, 'C_p', C_p, 'C_pK', C_pK, 'A_R', A_R, 'V_R', V_R, ...
+                               'm_K', m_K, 'k_W', k_W, 'K10', K10, 'K20', K20, 'E1', E1, 'E2', E2, ...
+                               'dH_AB', dH_AB, 'dH_BC', dH_BC, 'dH_AD', dH_AD, 'c_in', c_in, 'T_in', T_in);
 exo_cstr.model        = d_X;
 exo_cstr.sysVar       = sysVar;
 exo_cstr.oper         = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss, 1)*size(X_ss, 2));

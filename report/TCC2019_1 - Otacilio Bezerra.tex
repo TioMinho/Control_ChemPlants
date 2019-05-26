@@ -2879,8 +2879,8 @@ The meaning and value of each parameter is shown in Table \ref{table:exo_paramet
 	\hline
 	Inflow concentration of $A$ & $\rho^{(A)}_{in}$ 	& $5.1$		& $\text{mol}/l$ \\
 	Inflow liquid temperature & $T_{in}$ 	& $130$		& $º C$ \\
-	Nominal kinetic rate for $A \rightarrow B$ & $K_{10}$	& $(1.287)\times 10^{10}$	& $h^{-1}$ \\
-	Nominal kinetic rate for $B \rightarrow D$ & $K_{20}$	& $(1.287)\times 10^{10}$	& $h^{-1}$ \\
+	Nominal kinetic rate for $A \rightarrow B$ & $K_{10}$	& $(1.287)\times 10^{12}$	& $h^{-1}$ \\
+	Nominal kinetic rate for $B \rightarrow D$ & $K_{20}$	& $(1.287)\times 10^{12}$	& $h^{-1}$ \\
 	Nominal kinetic rate for $2A \rightarrow D$ & $K_{30}$	& $(9.043)\times 10^{9}$	& $l\  \text{mol}^{-1} h $ \\
 	Activation energy for $A \rightarrow B$ & $E_{1}/R$	& $9758.3$	& - \\
 	Activation energy for $B \rightarrow C$ & $E_{2}/R$	& $9758.3$	& - \\
@@ -2932,6 +2932,76 @@ The simulation results are mainly analyzed through graphical visualizations of t
 % ---------------------------------------------------------------
 \clearpage
 \chapter{Results and Discussion}
+
+a
+
+\section{Dynamical Analysis}
+
+\subsection{Nonlinear model simulation}
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/dynamics01}
+	\caption{a}
+	\label{fig:dynamics01}
+\end{figure}
+
+a
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/dynamics02}
+	\caption{a}
+	\label{fig:dynamics02}
+\end{figure}
+
+a
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/dynamics03}
+	\caption{a}
+	\label{fig:dynamics03}
+\end{figure}
+
+a
+
+\begin{equation} \label{eq:exoLinSS01}
+	\mathbf{A} = \begin{bmatrix}
+		-u_{1e} - K_1 - 2K_2 x_{1e} & 0 & \dot{K}_1 x_{1e} + \dot{K}_2 x_{1e}^2 & 0 \\
+		K_1 					 & -u_{1e} - K_1 & \dot{K}_1 (x_{1e} - x_{2e}) & 0 \\
+		(dh/dx_1) & (dh/dx_2) & -u_{1e} - \alpha + (dh/dx_3) & \alpha \\
+		0 & 0 & \beta & -\beta \\
+	\end{bmatrix}
+\end{equation} 
+
+and	
+
+\begin{equation} \label{eq:exoLinSS02}
+	\mathbf{B} = \begin{bmatrix}
+		C_{Af} - x_{1e} & 0 \\
+		-x_{2e}			& 0 \\
+		T_F - x_{3e}    & 0 \\
+		0 			    & \gamma
+	\end{bmatrix}
+\end{equation} 
+
+a
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/linear01}
+	\caption{a}
+	\label{fig:linear01}
+\end{figure}
+
+a
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/matrixExp1}
+	\caption{a}
+	\label{fig:matrixExp1}
+\end{figure}	
+
+
+
+\section{Optimal Control}
 
 a
 
