@@ -36,14 +36,14 @@ sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_
 
 %% OPERATING POINTS %%
 % Stationary Space Numerical Calculation
-% U_ss = [linspace(5, 35, 25)' linspace(-8500, 0, 25)'];
+% U_ss = [linspace(5, 35, 50)' linspace(-8500, 0, 50)'];
 % X_ss = zeros(25,25,4);
 % prev = [0 0 0 0];
-% for i = 1:1:25
-%     for j = 1:1:25
+% for i = 1:1:50
+%     for j = 1:1:50
 %         F = @(X) d_X(0, [U_ss(i,1) U_ss(j,2)], X);      
 %         
-%         X_ss(i,j,:) = fsolve(F, prev);
+%         X_ss(i,j,:) = fsolve(F, prev, optimset('Display','off'));
 %         prev = X_ss(i,j,:);
 %     end
 % end
@@ -86,7 +86,7 @@ A_e = @(op) [-U_ss(posX(op), 1)-K1(X_ss(posX(op), posY(op),3))-2*K2(X_ss(posX(op
 
 A_l = @(x_e, u_e) [-u_e(1)-K1(x_e(3))-2*K2(x_e(3))*x_e(1)                       0                                   -dK_1(x_e(3))*x_e(1)-dK_2(x_e(3))*x_e(1)^2                      0     ;
                    K1(x_e(3))                                                   -u_e(1)-K1(x_e(3))                  dK_1(x_e(3))*(x_e(1) - x_e(2))                                  0     ;  
-                  -1/(varrho*C_p)*(K1(x_e(3))*dH_AB+2*K2(x_e(3))*x_e(1)*dH_AB)  -1/(varrho*C_p)*(K1(x_e(3))*dH_BC)  -u_e(1)-(k_W*A_R)/(varrho*C_p*V_R)+dh_dt(x_e(1),x_e(2),x_e(3))  (k_W*A_R)/(varrho*C_p*V_R) ;
+                  -1/(varrho*C_p)*(K1(x_e(3))*dH_AB+2*K2(x_e(3))*x_e(1)*dH_AD)  -1/(varrho*C_p)*(K1(x_e(3))*dH_BC)  -u_e(1)-(k_W*A_R)/(varrho*C_p*V_R)+dh_dt(x_e(1),x_e(2),x_e(3))  (k_W*A_R)/(varrho*C_p*V_R) ;
                    0                                                            0                                   (k_W*A_R)/(m_K*C_pK)                                            -(k_W*A_R)/(m_K*C_pK)];               
                
 B_e = @(op) [ c_in - X_ss(posX(op), posY(op),1)      0;

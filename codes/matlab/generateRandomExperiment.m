@@ -1,7 +1,7 @@
 function exp_param = generateRandomExperiment(xe)
 % generateRandomExperiment
 %   Detailed explanation goes here    
-    types = {'lqg', 'lqgi'};
+    types = {'lqg'};
     Q_values = [1 5:5:500];
     Qi_values = 12:1:15;
     R_values = [1 5:5:500];
@@ -19,14 +19,16 @@ function exp_param = generateRandomExperiment(xe)
     
         t = 0:0.1:23.9; T = numel(t);
         
-        idx = randperm(size(r_values_track, 2), 4);
+        %idx = randperm(size(r_values_track, 2), 4);
         rr = r_values_track;
-        r = [ones(2,T/4).*[xe(2); xe(3)] ones(2,T/4).*[rr(1,idx(1)); rr(2,idx(2))] ones(2,T/4).*[rr(1,idx(3)); rr(2,idx(4))] ones(2,T/4).*[xe(2); xe(3)]];
+        
+        r = [ones(2,T/4).*[xe(2); xe(3)] ones(2,T/4).*[xe(2); xe(3)].*[1.15;1.01], ones(2,T/4).*[xe(2); xe(3)].*[0.85;0.99], ones(2,T/4).*[xe(2); xe(3)]];
+        %r = [ones(2,T/4).*[xe(2); xe(3)] ones(2,T/4).*[rr(1,idx(1)); rr(2,idx(2))] ones(2,T/4).*[rr(1,idx(3)); rr(2,idx(4))] ones(2,T/4).*[xe(2); xe(3)]];
         x0 = xe;
     else
         Q = diag(Q_values(randperm(numel(Q_values), 4)));
         
-        t = 0:0.0025:0.5975; T = numel(t);
+        t = (0:0.002:0.248)'; T = numel(t);
         r = ones(2,T).*[xe(2); xe(3)];
         
         idx = randperm(size(x0_values,2), 4);
