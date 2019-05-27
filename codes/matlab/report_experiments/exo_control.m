@@ -36,7 +36,8 @@ cpal = [209 17 65;    % 1 - Metro Red
 %% Model Loading %%
 run exothermal_cstr/exo_model.m
 
-xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];
+%xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];
+xe = squeeze(exo_cstr.oper.X(10,10,:))'; ue = exo_cstr.oper.U(10,:);
 oper.xe = xe';
 oper.ue = ue';
 
@@ -47,7 +48,7 @@ exo_cstr.sizeY      =  2 ;
 %% Figure 4.5 %%
 % - Simulation Parameters
 % Time and Initial States
-exp_param.t = (0:0.1:11.9)'; exp_param.T = numel(exp_param.t);
+exp_param.t = (0:0.1:53.9)'; exp_param.T = numel(exp_param.t);
 exp_param.x_0 = xe;
 exp_param.oper = oper;
 
@@ -60,8 +61,8 @@ exp_param.r = [ones(2,floor(exp_param.T/6)).*[xe(2); xe(3)], ...
 
 
 % Disturbance signal
-exp_param.w = randn(exp_param.T, 4) .* [.0 .0 .0 .0];      % Process Noise
-exp_param.z = randn(exp_param.T, 2) .* [.0 .0];              % Measurement Noise
+exp_param.w = mvnrnd([0; 0; 0; 0], diag([0 0 0 0]), exp_param.T);    % Process Noise
+exp_param.z = mvnrnd([0; 0], diag([0, 0]), exp_param.T);                            % Measurement Noise
 
 % Controller and Observer
 exp_param.type = "lqri";
@@ -72,17 +73,14 @@ exp_param.R = diag([50 10]);
 exp_param.N = exp_param.T;
 
 Qi       = [12 11 10 9];
-Q_values = [1 5:5:500];
-R_values = [1 5:5:500];
-
-w_values = [linspace(0.01, 0.1); linspace(0.01, 0.1); linspace(0.01, 0.03); linspace(0.01, 0.03)]';
-z_values = [linspace(0.01, 0.1); linspace(0.01, 0.1)]';
+Q_values = [1 2.^(1:11)];
+R_values = [1 2.^(1:11)];
 
 % ---------------------------
 % - Simulation of the Outputs
 try
-    for i=1:4
-    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 4)) 10^Qi(i) 10^Qi(i)]);
+    for i=1:1
+    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 4)) 1e1 1]);
     exp_param.R = diag(R_values(randperm(numel(R_values), 2)));
     
     [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param.t, exp_param.r, exp_param.x_0, exp_param.type, ...
@@ -99,21 +97,21 @@ try
     % - Visualization of the Simulation
     figure(1);
     subplot(2,2,1)
-    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on
+    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on
     subplot(2,2,3)
-    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on
+    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on
     xlabel("Time (hr)")
     
     subplot(2,2,2) 
     plot(exp_param.t, exp_param.r(1,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    plot(exp_param.t, exp_param.yout(2,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
 %     s = scatter(exp_param.t, exp_param.xout(2,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
 %     s.MarkerFaceAlpha = 0.3;
 %     s.MarkerEdgeAlpha = 0.3;
     
     subplot(2,2,4) 
     plot(exp_param.t, exp_param.r(2,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    plot(exp_param.t, exp_param.yout(3,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on;     
+    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;     
 %     s = scatter(exp_param.t, exp_param.xout(3,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
 %     s.MarkerFaceAlpha = 0.3;
 %     s.MarkerEdgeAlpha = 0.3;
@@ -133,25 +131,8 @@ try
     
     subplot(2,2,2), ylabel("x_1 = \Delta x_1 + x_{o1} (mol/l)")
     subplot(2,2,4), ylabel("x_2 = \Delta x_2 + x_{o2} (^o C)")
-    
-    %[~, xout] = simulate(exo_cstr.model, exp_param.t, exp_param.uout, exp_param.x_0);
-    
-    figure(2)
-    subplot(1,2,1)
-    plot(exp_param.t, exp_param.r(1,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on;     
-%     s = scatter(exp_param.t, exp_param.xout(2,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.4;
-%     s.MarkerEdgeAlpha = 0.4;
-    
-    subplot(1,2,2)
-    plot(exp_param.t, exp_param.r(2,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1.5, 'color', cpal(9+i,:)); hold on;     
-%     s = scatter(exp_param.t, exp_param.xout(3,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.4;
-%     s.MarkerEdgeAlpha = 0.4;
     end
-
+    
 catch err
     fprintf("Erro!\n");
     rethrow(err)
@@ -164,23 +145,6 @@ subplot(2,2,1), hold off
 subplot(2,2,2), hold off
 subplot(2,2,3), hold off
 subplot(2,2,4), hold off
-
-timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
-figname = "report_experiments/figs/exoSim_control_" + char(timeNow);
-fig = gcf; fig.PaperPositionMode = 'auto'; 
-print('-bestfit', figname, '-dpdf', '-r300')
-system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
-
-figure(2)
-subplot(1,2,1) 
-ylabel("Concentration (mol/l)")
-xlabel("Time (1/hr)")
-hold off
-
-subplot(1,2,2)
-ylabel("Temperature (^o C)")
-xlabel("Time (1/hr)")
-hold off
 
 timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
 figname = "report_experiments/figs/exoSim_control_" + char(timeNow);

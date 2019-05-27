@@ -48,10 +48,10 @@ xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];
 % Time
 t = (0:0.01:1)'; T = numel(t);
 % Initial Conditions
-X_0 = [1.235 0.9 134.14 128.95 2.4192 0.2730];
+X_0 = [squeeze(exo_cstr.oper.X(10,10,:))' 0 0];
 % Input Signal
-U = [ones(1,T)*18.83
-     ones(1,floor(T/3))*-4495.7 ones(1,T-2*floor(T/3))*-6495 ones(1,floor(T/3))*-4495.7];   
+U = [ones(1,T)*exo_cstr.oper.U(10,1)
+     ones(1,T)*exo_cstr.oper.U(10,2)];   
  
 % Simulation of the Outputs
 [~, y] = simulate(exo_cstr.sysVar, t, U, X_0);
@@ -145,8 +145,8 @@ system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 %  Steady-State Points Visualization %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(3);
-surface(exo_cstr.oper.U(:,1), exo_cstr.oper.U(:,2), exo_cstr.oper.X(:,:,2)'); hold on
-scatter3(ue(1), ue(2), 2, 200, [0.9 1 0.9], 'x', 'linewidth', 2)
+surf(exo_cstr.oper.U(:,1), exo_cstr.oper.U(:,2), exo_cstr.oper.X(:,:,2)'); hold on
+%scatter3(ue(1), ue(2), 2, 200, [0.9 1 0.9], 'x', 'linewidth', 2)
 ylim([-8500, 0]), ylabel("Cooling Capacity (kJ/h)"), xlabel("Flow-rate (1/hr)")
 grid('off')
 colorbar('NorthOutside')
@@ -161,8 +161,8 @@ print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 figure(4)
-surface(exo_cstr.oper.U(:,1), exo_cstr.oper.U(:,2), exo_cstr.oper.X(:,:,3)'); hold on
-scatter3(ue(1), ue(2), 150, 200, [0.9 1 0.9], 'x', 'linewidth', 2)
+surf(exo_cstr.oper.U(:,1), exo_cstr.oper.U(:,2), exo_cstr.oper.X(:,:,3)'); hold on
+%scatter3(ue(1), ue(2), 150, 200, [0.9 1 0.9], 'x', 'linewidth', 2)
 ylim([-8500, 0]), ylabel("Cooling Capacity (kJ/h)"), xlabel("Flow-rate (1/hr)")
 grid('off')
 colorbar('NorthOutside')
