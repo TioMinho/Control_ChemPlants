@@ -78,7 +78,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         r = r - C * xe;
         
         % Initial States
-        x(:,1)     = X_0 + z(1, :)*C; 
+        x(:,1)     = X_0; 
         x_hat(:,1) = X_0' - xe;
         y_aux      = X_0;
         
@@ -89,7 +89,6 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
             % == Simulation for each timestep (i) on time signal (t) ==
             for i = 1:numel(t)-1
-                
                 % Calculates the input signal
                 u(:,i) = r(:,i) - K{i}*(x(:, i) - xe);
                 
@@ -154,11 +153,6 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmp(type, 'lqg'))
-            % Generates the actual model for the plant
-            x(:,1)  = X_0 - xe' + z(1,:)*C;
-            B_st = [B eye(nx)];
-            realSys = ss(A, B_st, eye(size(A)), zeros(size(A,1), size(B_st,2)) );
-            
             % Estimate the covariances for the process and measurement noises
             Q_k = cov(w);
             R_k = cov(z);
@@ -173,30 +167,25 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             for i = 1:numel(t)-1
                 % Calculates the input signal
                 u(:,i) = r(:,i) - K{i}*x_hat(:, i);
+                
+                % Simulates the actual plant (represented by the nonlinear model)
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                x(:, i+1) = y_aux(end, :);
 
                 % Defines the closed-loop matrix for this instant
                 A_cl = (A - B*K{i} - Ke{i}*C);
-                B_cl = [zeros(nx,ny) Ke{i}];
+                B_cl = [B Ke{i}];
                 
-                % Simulates the real disturbed plant
-                aux = lsim(realSys, [u(:,i:i+1); w(i:i+1,:)'], t(i:i+1), x(:,i));
-                x(:, i+1) = aux(end, :) + z(i+1,:)*C;
-
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1))], t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, [r(:,1:i+1); C*(x(:,1:i+1)-xe)+z(1:i+1,:)'], t(1:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
             end
             
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmp(type, 'lqgi'))
-            % Generates the actual model for the plant
-            x(:,1)  = X_0 - xe';
-            B_st = [B eye(nx)];
-            realSys = ss(A, B, eye(size(A)), zeros(size(A,1), size(B,2)) );
-            
             % Augments the state auxiliary vector in time and updates the initial conditions
             x_hat = zeros(nx+ny, numel(t));
             x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
@@ -218,31 +207,24 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % Generates and augments the Kalman observer state-space
             Ke = kalmanBucy(A, C, Q_k, R_k, 0:deltaT:N); K{1} = K{2};
             
-            % Define the closed-loop matrices
-            B_cl = [zeros(nx, ny); eye(ny)];
-
             % == Simulation for each timestep (i) on time signal (t) ==
            for i = 1:numel(t)-1
                 % Calculates the input signal
                 u(:,i) = - K{i} * x_hat(:, i);
                 
+                % Simulates the actual plant (represented by the nonlinear model)
+                [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                x(:, i+1) = y_aux(end, :);
+                
                 % Define the closed-loop matrices
                 A_cl = [A-B*K{i}(:,1:nx)-Ke{i}*C  -B*K{i}(:,nx+1:end); 
-                                -C                zeros(ny)];
-                B_cl = [Ke{i} zeros(nx, ny); zeros(ny), eye(ny)];
+                                zeros(ny, nx)                zeros(ny)];
+                B_cl = [zeros(nx, ny) Ke{i}; eye(ny) -eye(ny)];
                 
-                % Simulates the real disturbed plant
-                aux = lsim(realSys, u(:,i:i+1), t(i:i+1), x(:,i));
-                x(:, i+1) = aux(end, :) + z(i+1,:)*C;
-                            
                 % Simulates the linear model
-                n_resp = expm( A_cl * (t(i+1) - t(1)) ) * x_hat(:,1);
-                f_resp = 0;
-                for j =1:i+1
-                    f_resp = f_resp + deltaT * expm( A_cl * (t(i+1) - t(j)) ) * ( B_cl * [C*(x(:,j)); r(:,j)] ) ;
-                end
-
-                x_hat(:, i+1) = n_resp + f_resp;
+                sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
+                aux = lsim(sys, [r(:,1:i+1); C*(x(:,1:i+1)-xe)+z(1:i+1,:)'], t(1:i+1), x_hat(:,i));
+                x_hat(:, i+1) = aux(end, :);
            end
             
         % == SWITCHING MODE LINEAR QUADRATIC REGULATOR CONTROLLER ==,

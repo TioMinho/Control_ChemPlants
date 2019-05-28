@@ -36,8 +36,8 @@ cpal = [209 17 65;    % 1 - Metro Red
 %% Model Loading %%
 run exothermal_cstr/exo_model.m
 
-%xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];
-xe = squeeze(exo_cstr.oper.X(10,10,:))'; ue = exo_cstr.oper.U(10,:);
+xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];
+%xe = squeeze(exo_cstr.oper.X(10,10,:))'; ue = exo_cstr.oper.U(10,:);
 oper.xe = xe';
 oper.ue = ue';
 
@@ -48,24 +48,24 @@ exo_cstr.sizeY      =  2 ;
 %% Figure 4.5 %%
 % - Simulation Parameters
 % Time and Initial States
-exp_param.t = (0:0.1:53.9)'; exp_param.T = numel(exp_param.t);
+exp_param.t = (0:0.005:13.995)'; exp_param.T = numel(exp_param.t); T = numel(exp_param.t);
 exp_param.x_0 = xe;
 exp_param.oper = oper;
 
 % Reference Signal
 exp_param.r = [ones(2,floor(exp_param.T/6)).*[xe(2); xe(3)], ...
-               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[1.2;1], ...
-               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[0.8;1], ...
-               ones(2,exp_param.T-5*floor(exp_param.T/6)).*[xe(2); xe(3)]];
+               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[1.1;1], ...
+               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[1.1;1], ...
+               ones(2,-2+exp_param.T-5*floor(exp_param.T/6)).*[xe(2); xe(3)]];
+% exp_param.r = [(xe(2) + -0.1*idinput(exp_param.T, 'PRBS', [0. 0.005]))'; xe(3)*ones(1,exp_param.T)];
 %exp_param.r = ones(2,exp_param.T).*[xe(2); xe(3)];
 
-
 % Disturbance signal
-exp_param.w = mvnrnd([0; 0; 0; 0], diag([0 0 0 0]), exp_param.T);    % Process Noise
-exp_param.z = mvnrnd([0; 0], diag([0, 0]), exp_param.T);                            % Measurement Noise
+exp_param.w = mvnrnd([0; 0; 0; 0], diag([0.1 0.1 0.1 0.1]), exp_param.T);    % Process Noise
+exp_param.z = mvnrnd([0; 0], diag([0.0001, 0.0001]), exp_param.T);                            % Measurement Noise
 
 % Controller and Observer
-exp_param.type = "lqri";
+exp_param.type = "lqgi";
 
 exp_param.Q = diag([20, 20, 25, 25]);
 exp_param.R = diag([50 10]);
@@ -73,15 +73,19 @@ exp_param.R = diag([50 10]);
 exp_param.N = exp_param.T;
 
 Qi       = [12 11 10 9];
-Q_values = [1 2.^(1:11)];
-R_values = [1 2.^(1:11)];
+Q_values = [2.^(6:11)];
+R_values = [2.^(6:11)];
 
 % ---------------------------
 % - Simulation of the Outputs
 try
     for i=1:1
-    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 4)) 1e1 1]);
-    exp_param.R = diag(R_values(randperm(numel(R_values), 2)));
+    
+%     exp_param.Q = diag(Q_values(randperm(numel(Q_values), 4)));
+%     exp_param.R = diag(R_values(randperm(numel(R_values), 2)));
+    
+    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 2)), 200, 1, 1e4 0]); exp_param.Q
+    exp_param.R = diag([100, R_values(randperm(numel(R_values), 1))]); exp_param.R
     
     [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param.t, exp_param.r, exp_param.x_0, exp_param.type, ...
                                      exp_param.Q, exp_param.R, exp_param.N, exp_param.w, exp_param.z);
@@ -96,41 +100,53 @@ try
 
     % - Visualization of the Simulation
     figure(1);
-    subplot(2,2,1)
+    subplot(3,2,1)
     plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on
-    subplot(2,2,3)
+    subplot(3,2,2)
     plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on
     xlabel("Time (hr)")
     
-    subplot(2,2,2) 
+    subplot(3,2,3) 
     plot(exp_param.t, exp_param.r(1,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+    plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
     plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-%     s = scatter(exp_param.t, exp_param.xout(2,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.3;
-%     s.MarkerEdgeAlpha = 0.3;
+    s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+    s.MarkerFaceAlpha = 0.3;
+    s.MarkerEdgeAlpha = 0.3;
+
+    subplot(3,2,5) 
+    plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(1,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
     
-    subplot(2,2,4) 
+    subplot(3,2,4) 
     plot(exp_param.t, exp_param.r(2,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+    plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
     plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;     
-%     s = scatter(exp_param.t, exp_param.xout(3,:), 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.3;
-%     s.MarkerEdgeAlpha = 0.3;
+    s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', 'x', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+    s.MarkerFaceAlpha = 0.3;
+    s.MarkerEdgeAlpha = 0.3;
+    xlabel("Time (hr)")
+    
+    subplot(3,2,6) 
+    plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(4,:), 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;     
     xlabel("Time (hr)")
 
-    subplot(2,2,1)
+    subplot(3,2,1)
     plot(exp_param.t, ones(1,exp_param.T)*35, 'r:', 'linewidth', 1.5), hold on
     plot(exp_param.t, ones(1,exp_param.T)*5, 'r:', 'linewidth', 1.5)
     ylabel("u_1 = \Delta u_1 + u_{1o}")
     ylim([4, 36])
     
-    subplot(2,2,3)
+    subplot(3,2,2)
     plot(exp_param.t, ones(1,exp_param.T)*0, 'r:', 'linewidth', 1.5), hold on
     plot(exp_param.t, ones(1,exp_param.T)*-8500, 'r:', 'linewidth', 1.5)
     ylabel("u_2 = \Delta u_2 + u_{2o}")
-    ylim([-8700, 200])
+    ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
+    % ylim([-8700, 200])
     
-    subplot(2,2,2), ylabel("x_1 = \Delta x_1 + x_{o1} (mol/l)")
-    subplot(2,2,4), ylabel("x_2 = \Delta x_2 + x_{o2} (^o C)")
+    subplot(3,2,2), ylabel("x_1 = \Delta x_1 + x_{o1} (mol/l)")
+    subplot(3,2,4), ylabel("x_2 = \Delta x_2 + x_{o2} (^o C)")
     end
     
 catch err
@@ -141,10 +157,12 @@ end
 
 % - Exporting the Visualization to an Image
 figure(1)
-subplot(2,2,1), hold off
-subplot(2,2,2), hold off
-subplot(2,2,3), hold off
-subplot(2,2,4), hold off
+subplot(3,2,1), hold off
+subplot(3,2,2), hold off
+subplot(3,2,3), hold off
+subplot(3,2,4), hold off
+subplot(3,2,5), hold off
+subplot(3,2,6), hold off
 
 timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
 figname = "report_experiments/figs/exoSim_control_" + char(timeNow);
