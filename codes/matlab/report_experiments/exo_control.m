@@ -53,16 +53,16 @@ exp_param.x_0 = xe;
 exp_param.oper = oper;
 
 % Reference Signal
-exp_param.r = [ones(2,floor(exp_param.T/6)).*[xe(2); xe(3)], ...
-               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[0.9;1], ...
-               ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[0.9;1], ...
-               ones(2,exp_param.T-5*floor(exp_param.T/6)).*[xe(2); xe(3)]];
-% exp_param.r = [(xe(2) + -0.1*idinput(exp_param.T, 'PRBS', [0. 0.005]))'; xe(3)*ones(1,exp_param.T)];
+% exp_param.r = [ones(2,floor(exp_param.T/6)).*[xe(2); xe(3)], ...
+%                ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[1.1;1], ...
+%                ones(2,floor(exp_param.T/3)).*[xe(2); xe(3)].*[0.9;1], ...
+%                ones(2,exp_param.T-5*floor(exp_param.T/6)).*[xe(2); xe(3)]];
+exp_param.r = [xe(2)*ones(1,exp_param.T); (xe(3) + -3*idinput(exp_param.T, 'PRBS', [0. 0.02]))'; ];
 %exp_param.r = ones(2,exp_param.T).*[xe(2); xe(3)];
 
 % Disturbance signal
-exp_param.w = mvnrnd([0; 0; 0; 0], diag([0.5 0.5 0.5 0.5]), exp_param.T);    % Process Noise
-exp_param.z = mvnrnd([0; 0], diag([0.00001, 0.01]), exp_param.T);           % Measurement Noise
+exp_param.w = mvnrnd([0; 0; 0; 0], diag([0.1 0.1 0.1 0.1]), exp_param.T);    % Process Noise
+exp_param.z = mvnrnd([0; 0], diag([0.0001, 0.1]), exp_param.T);           % Measurement Noise
 
 % Controller and Observer
 exp_param.type = "lqgi";
@@ -83,8 +83,8 @@ try
 %     exp_param.Q = diag(Q_values(randperm(numel(Q_values), 4)));
 %     exp_param.R = diag(R_values(randperm(numel(R_values), 2)));
     
-    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 2)), 100, 1, 10^(4) 10^(-1)]); exp_param.Q
-    exp_param.R = diag([200, R_values(randperm(numel(R_values), 1))]); exp_param.R
+    exp_param.Q = diag([Q_values(randperm(numel(Q_values), 2)), 10, 1, 1e-1 1e5]); exp_param.Q
+    exp_param.R = diag([10000, R_values(randperm(numel(R_values), 1))]); exp_param.R
     
     [~, yout, xout, uout] = simulate(exo_cstr, oper, exp_param.t, exp_param.r, exp_param.x_0, exp_param.type, ...
                                      exp_param.Q, exp_param.R, exp_param.N, exp_param.w, exp_param.z);

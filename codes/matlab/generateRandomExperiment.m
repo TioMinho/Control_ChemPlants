@@ -1,12 +1,15 @@
 function exp_param = generateRandomExperiment(xe)
 % generateRandomExperiment
 %   Detailed explanation goes here    
-    types = {'lqg'};
-    Q_values = [1 5:5:500];
-    Qi_values = 12:1:15;
-    R_values = [1 5:5:500];
-    w_values = [linspace(0.1, 2); linspace(0.1, 2); linspace(0.01, 1); linspace(0.01, 1)]';
-    z_values = [linspace(0.1, 2); linspace(0.01, 1)]';
+    types = {'lqr', 'lqri', 'lqg', 'lqgi'};
+    
+    Q_values = 2.^(0:12);
+    Qi_values = 4:1:7;
+    
+    R_values = 2.^(0:8);
+    w_values = 10^(-1:-1:-4);
+    z_values = 10^(-2:-1:-5);
+    
     r_values_track = [xe(2)*linspace(0.5, 1.5); xe(3)*linspace(0.9, 1.1)];
     x0_values = [xe(1)*linspace(0.1, 1.1); xe(2)*linspace(0.1, 1.1); xe(3)*linspace(0.99, 1.01); xe(4)*linspace(0.99, 1.01)];
     

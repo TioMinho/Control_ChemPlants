@@ -180,7 +180,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 % Simulates the linear model using the Lagrange formula
                 %       x_k = e^{A (t - t_0)} x_0 + \int{ e^{A (t - \tau)} B u_\tau + L( Y_\tau - C x_\tau ) }
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, [r(:,1:i+1); C*(x(:,1:i+1)-xe)+z(1:i+1,:)'], t(1:i+1), x_hat(:,i));
+                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)+z(i:i+1,:)'], t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
 
             end
@@ -190,12 +190,9 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % Augments the state auxiliary vector in time and updates the initial conditions
             x_hat = zeros(nx+ny, numel(t));
             x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
-
-            x_a = zeros(ny, numel(t));
-            x_a(:,1) = r(:,1) - C*(X_0' - xe);
             
-            Q_k = cov(w); %([0.01 0.01 0.01 0.01]);
-            R_k = cov(z); %diag([0.0001, 0.0001]);
+            Q_k = diag([0.01 0.01 0.01 0.01]);
+            R_k = diag([0.0001, 0.0001]);
             
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny); 
@@ -214,22 +211,21 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % == Simulation for each timestep (i) on time signal (t) ==
            for i = 1:numel(t)-1
                 % Calculates the input signal
-                u(:,i) = - K{i} * [x_hat(1:nx, i); x_a(:,i)];
+                u(:,i) = - K{i} * x_hat(:,i);
                 
                 % Simulates the actual plant (represented by the nonlinear model)
                 [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
                 x(:, i+1) = y_aux(end, :);
-                x_a(:, i+1) = x_a(:, i) + (r(:,i+1) - C*(x(:,i+1)-xe)+z(i+1,:)');
                 
                 % Define the closed-loop matrices
                 A_cl = [A-B*K{i}(:,1:nx)-Ke{i}*C  -B*K{i}(:,nx+1:end); 
-                                -C                zeros(ny)];
+                           zeros(ny,nx)                zeros(ny)];
                 B_cl = [zeros(nx, ny)     Ke{i}; 
-                         eye(ny)        zeros(ny)];
+                         eye(ny)        -eye(ny)];
                 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, [r(:,1:i+1); C*(x(:,1:i+1)-xe)+z(1:i+1,:)'], t(1:i+1), x_hat(:,i));
+                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)+z(i:i+1,:)'], t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
            end
             

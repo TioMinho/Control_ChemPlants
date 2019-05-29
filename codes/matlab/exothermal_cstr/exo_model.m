@@ -11,7 +11,7 @@ fprintf('%s\n', "Loading the Exothermal CSTR model...")
 vars = who;
 %% MODEL PARAMETERS %%
 varrho = 0.9342; C_p = 3.01; C_pK = 2; A_R = 0.215;
-V_R = 10.01; m_K = 5; k_W = 4032;
+V_R = 10.0; m_K = 5; k_W = 4032;
 K10 = 1.287e12; K20 = 9.043e9;
 E1 = 9758.3; E2 = 8560;
 dH_AB = 4.2; dH_BC = -11; dH_AD = -41.85;
