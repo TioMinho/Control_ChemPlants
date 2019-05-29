@@ -142,7 +142,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 x_a(:, i+1) = x_a(:, i) + (r(:,i+1) - C*(x(:,i+1) - xe));
                 
                 % Defines the closed-loop matrix for this instant
-                A_cl = [A-B*K{i}(:,1:nx) -B*K{i}(:,nx+1:end); -C zeros(ny)];
+                A_cl = [A-B*K{i}(:,1:nx) -B*K{i}(:,nx+1:end); 
+                            -C                 zeros(ny)];
             
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(nx+ny), zeros(nx+ny,ny));
@@ -190,8 +191,11 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             x_hat = zeros(nx+ny, numel(t));
             x_hat(:,1) = [X_0' - xe; r(:,1) - C*(X_0' - xe) ];
 
-            Q_k = cov(w);
-            R_k = cov(z);
+            x_a = zeros(ny, numel(t));
+            x_a(:,1) = r(:,1) - C*(X_0' - xe);
+            
+            Q_k = cov(w); %([0.01 0.01 0.01 0.01]);
+            R_k = cov(z); %diag([0.0001, 0.0001]);
             
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny); 
@@ -205,21 +209,23 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             K = lqr_(A_i, B_i, Q, R, 0:deltaT:N);
 
             % Generates and augments the Kalman observer state-space
-            Ke = kalmanBucy(A, C, Q_k, R_k, 0:deltaT:N); K{1} = K{2};
+            Ke = kalmanBucy(A, C, Q_k, R_k, 0:deltaT:N);
             
             % == Simulation for each timestep (i) on time signal (t) ==
            for i = 1:numel(t)-1
                 % Calculates the input signal
-                u(:,i) = - K{i} * x_hat(:, i);
+                u(:,i) = - K{i} * [x_hat(1:nx, i); x_a(:,i)];
                 
                 % Simulates the actual plant (represented by the nonlinear model)
                 [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
                 x(:, i+1) = y_aux(end, :);
+                x_a(:, i+1) = x_a(:, i) + (r(:,i+1) - C*(x(:,i+1)-xe)+z(i+1,:)');
                 
                 % Define the closed-loop matrices
                 A_cl = [A-B*K{i}(:,1:nx)-Ke{i}*C  -B*K{i}(:,nx+1:end); 
-                                zeros(ny, nx)                zeros(ny)];
-                B_cl = [zeros(nx, ny) Ke{i}; eye(ny) -eye(ny)];
+                                -C                zeros(ny)];
+                B_cl = [zeros(nx, ny)     Ke{i}; 
+                         eye(ny)        zeros(ny)];
                 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
