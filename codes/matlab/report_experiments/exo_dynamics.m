@@ -64,6 +64,51 @@ xlabel("Time (hr)"), ylabel("Flow-rate (1/hr)")
 subplot(2,2,2)
 p = plot(t, y(1, :), 'linewidth', 1.5, 'color', cpal(11,:)); hold on
 p = plot(t, y(2, :), 'linewidth', 1.5, 'color', cpal(12,:)); hold on
+%p = plot(t, y(5, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(13,:)); hold on
+%p = plot(t, y(6, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(14,:));
+xlabel("Time (hr)"), ylabel("Concentration (mol/l)")
+
+subplot(2,2,3), plot(t, U(2,:), 'linewidth', 1.5, 'color', [0.3 0.3 0.3])
+xlabel("Time (hr)"), ylabel("Cooling Capacity (kJ/hr)")
+ylim([-7000 -4000])
+
+subplot(2,2,4), 
+plot(t, y(3, :), 'linewidth', 1.5, 'color', cpal(17,:)); hold on
+plot(t, y(4, :), 'linewidth', 1.5, 'color', cpal(16,:));
+xlabel("Time (hr)"), ylabel("Temperatures (ºC)")
+
+% - Exporting the Visualization to an Image
+timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
+figname = "report_experiments/figs/exoSim_dynamics_" + char(timeNow);
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Model Non-Linear Simulation - Disturbed %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Simulation Parameters
+% Time
+t = (0:0.01:1)'; T = numel(t);
+% Initial Conditions
+X_0 = [squeeze(exo_cstr.oper.X(10,10,:))' 0 0];
+% Input Signal
+U = [ones(1,T)*exo_cstr.oper.U(10,1)
+     ones(1,T)*exo_cstr.oper.U(10,2)];   
+ 
+W = [sin(t)'*0.1; sin(t)'*0.6; sin(t)'];
+ 
+% Simulation of the Outputs
+[~, y] = simulate(exo_cstr.sysVar_W, t, [U; W], X_0);
+    
+%% Visualization
+figure(1);
+subplot(2,2,1), plot(t, U(1,:), 'linewidth', 1.5, 'color', [0.3 0.3 0.3])
+xlabel("Time (hr)"), ylabel("Flow-rate (1/hr)")
+
+subplot(2,2,2)
+p = plot(t, y(1, :), 'linewidth', 1.5, 'color', cpal(11,:)); hold on
+p = plot(t, y(2, :), 'linewidth', 1.5, 'color', cpal(12,:)); hold on
 p = plot(t, y(5, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(13,:)); hold on
 p = plot(t, y(6, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(14,:));
 xlabel("Time (hr)"), ylabel("Concentration (mol/l)")
@@ -83,6 +128,7 @@ figname = "report_experiments/figs/exoSim_dynamics_" + char(timeNow);
 fig = gcf; fig.PaperPositionMode = 'auto'; 
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Model Linearized Simulation %%

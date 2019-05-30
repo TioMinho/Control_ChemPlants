@@ -22,7 +22,7 @@ K1 = @(T)          K10 * exp( -E1 / (T + 273.15) );
 K2 = @(T)          K20 * exp( -E2 / (T + 273.15) );
 h  = @(cA, cB, T) (K1(T)*(cA * dH_AB + cB * dH_BC) + K2(T) * cA^2 * dH_AD);
 
-%% SYSTEM DYNAMICS %%
+%% SYSTEM DYNAMICS - NOMINAL CASE %%
 d_cA = @(t,U,X)     U(1)*(c_in - X(1)) - K1(X(3)) * X(1) - K2(X(3)) * X(1)^2;
 d_cB = @(t,U,X)   - U(1)*X(2)          + K1(X(3)) * (X(1) - X(2));
 d_cC = @(t,U,X)   - U(1)*X(5)          + K1(X(3)) * X(2) ;
@@ -31,8 +31,20 @@ d_cD = @(t,U,X)   - U(1)*X(6)          + 1/2 * K2(X(3)) * X(1)^2;
 d_T  = @(t,U,X)   U(1)*(T_in - X(3)) + (k_W*A_R)/(varrho*C_p*V_R) * (X(4) - X(3)) - 1/(varrho*C_p) * h(X(1), X(2), X(3));
 d_Tc = @(t,U,X)   1/(m_K*C_pK) * U(2) + (k_W*A_R)/(m_K*C_pK) * (X(3) - X(4));
 
-d_X  = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X)];
+d_X    = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X)];
 sysVar = @(t,U,X) [d_cA(t,U,X) d_cB(t,U,X) d_T(t,U,X) d_Tc(t,U,X) d_cC(t,U,X) d_cD(t,U,X)];
+
+%% SYSTEM DYNAMICS - DISTURBED CASE %%
+d_cA_w = @(t,U,X)     U(1)*((c_in+U(3))  - X(1)) - K1(X(3)) * X(1) - K2(X(3)) * X(1)^2;
+d_cB_w = @(t,U,X)   - U(1)*X(2)          + K1(X(3)) * (X(1) - X(2));
+d_cC_w = @(t,U,X)   - U(1)*X(5)          + K1(X(3)) * X(2) ;
+d_cD_w = @(t,U,X)   - U(1)*X(6)          + 1/2 * K2(X(3)) * X(1)^2;
+
+d_T_w  = @(t,U,X)   U(1)*((T_in+U(4)) - X(3)) + (k_W*A_R)/(varrho*C_p*V_R) * (X(4) - X(3)) - 1/(varrho*C_p) * h(X(1), X(2), X(3));
+d_Tc_w = @(t,U,X)   1/(m_K*C_pK) * U(2) + (k_W*A_R)/(m_K*C_pK) * (X(3) - X(4));
+
+d_X_w    = @(t,U,X) [d_cA_w(t,U,X) d_cB_w(t,U,X) d_T_w(t,U,X) d_Tc_w(t,U,X)];
+sysVar_w = @(t,U,X) [d_cA_w(t,U,X) d_cB_w(t,U,X) d_T_w(t,U,X) d_Tc_w(t,U,X) d_cC_w(t,U,X) d_cD_w(t,U,X)];
 
 %% OPERATING POINTS %%
 % Stationary Space Numerical Calculation
@@ -128,6 +140,8 @@ exo_cstr.param        = struct('varrho', varrho, 'C_p', C_p, 'C_pK', C_pK, 'A_R'
                                'dH_AB', dH_AB, 'dH_BC', dH_BC, 'dH_AD', dH_AD, 'c_in', c_in, 'T_in', T_in);
 exo_cstr.model        = d_X;
 exo_cstr.sysVar       = sysVar;
+exo_cstr.model_W      = d_X_w;
+exo_cstr.sysVar_W     = sysVar_w;
 exo_cstr.oper         = struct('U', U_ss, 'X', X_ss, 'size', size(X_ss, 1)*size(X_ss, 2));
 exo_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D, 'A_l', A_l, 'B_l', B_l);
 % exo_cstr.poles        = lambda;
@@ -135,6 +149,7 @@ exo_cstr.ss_model     = struct('A', A_e, 'B', B_e, 'C', C, 'D', D, 'A_l', A_l, '
 % exo_cstr.trf_matrix   = e_At;
 exo_cstr.sizeX        = size(C, 2);
 exo_cstr.sizeU        = size(D, 2);
+exo_cstr.sizeW        = 2;
 exo_cstr.sizeY        = size(C, 1);
 
 save('../data/exo_cstr_model.mat', 'exo_cstr')
