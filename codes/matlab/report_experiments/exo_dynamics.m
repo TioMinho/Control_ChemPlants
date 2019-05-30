@@ -36,7 +36,7 @@ cpal = [209 17 65;    % 1 - Metro Red
 %  EXOTHERMAL CSTR %%
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
-run exothermal_cstr/exo_model.m
+run models/exo_model.m
 %load('data/exo_cstr_model.mat')
 
 xe = [1.235 0.9 134.14 128.95]; ue = [18.83 -4495.7];

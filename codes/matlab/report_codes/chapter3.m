@@ -34,7 +34,7 @@ cpal = [209 17 65;    % 1 - Metro Red
 %  ISOTHERMAL CSTR 
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
-run isothermal_cstr/iso_model.m
+run models/iso_model.m
 % load('data/iso_cstr_model.mat')
 
 %% Figure 3.2 %%

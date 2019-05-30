@@ -34,7 +34,7 @@ cpal = [209 17 65;    % 1 - Metro Red
 %  ISOTHERMAL CSTR 
 %  %%%%%%%%%%%%%%
 %% Model Loading %%
-run isothermal_cstr/iso_model.m
+run models/iso_model.m
 
 %% Figure 4.5 %%
 % - Simulation Parameters

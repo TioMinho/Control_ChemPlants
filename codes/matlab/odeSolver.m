@@ -1,6 +1,5 @@
 function [ t, y ] = odeSolver( odefun, tspan, u, y0, N )
 % ODESOLVER Solving ordinary differential equations via the Euler method.
-%   Detailed explanation goes here
     h = (tspan(2) - tspan(1)) / (N - 1);
     t = linspace(tspan(1), tspan(2), N);
     y = zeros(N, numel(y0));
