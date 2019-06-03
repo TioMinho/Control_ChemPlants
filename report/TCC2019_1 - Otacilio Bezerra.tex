@@ -104,7 +104,7 @@
 \title{ \normalsize \textsc{Course Conclusion Paper - DRAFT} 
         \\[2.0cm]             
         \HRule{0.5pt} \\              
-        \LARGE \textbf{\uppercase{Dynamical Modelling and Control of Chemical Reactive Systems}}
+        \LARGE \textbf{\uppercase{Optimal Control: An application to a non-isothermal continuous reactor}}
         \HRule{2pt} \\[0.5cm]  
 }
 
@@ -141,15 +141,15 @@
 \setcounter{page}{1}
 \chapter{Introduction}
 
-This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactive Systems, therefore the discussion will follow the notation common to the literature of this field, and a ``modern" approach to this theory is explored. 
+This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactors, therefore the discussion will follow the notation common to the literature of this field, and the modern approach to this theory is explored. 
 
-The sections are organized as follows: Section 1.1 provides general definitions for control systems engineering, Section 1.2 discuss chemical reactive systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
+The sections are organized as follows: Section 1.1 provides a general view on control systems engineering, Section 1.2 discuss chemical reactive systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
 
 \section{Control Systems Engineering}
 
 The discipline of Control Systems Engineering deals with the design of devices, named \textit{controllers}, that are integrated to a physical system (a \textit{dynamical system}, in most cases) in order to impose a desired behavior to this system. To achieve this goal, the discipline covers topics ranging from applied mathematics, such as dynamical systems theory and signal processing, to a more engineering discussion, regarding instrumentation and implementation of these controllers in a real-life plant or individual system. 
 
-A system, in a broad physical sense, is defined as a ensemble of interacting components that responds to external stimuli producing a determined dynamical response, and whose individual parts are not able to produce the same functionality by their own. Thus, the first essential element in Control Theory is a mathematical model of the system of interest. One such model is the \textit{Input-Output Representation}, as shown in \textbf{fig!!!}, in which an input stimuli, a signal $u(t)$, acts on the system producing an output response, a signal $y(t)$, described by the following differential equation:
+A system, in a broad physical sense, is defined as a ensemble of interacting components that responds to external stimuli producing a determined dynamical response, and whose individual parts are not able to produce the same functionality by their own. Thus, the first essential element in Control Theory is a mathematical model of the system of interest. One such model is the \textit{Input-Output Representation}, in which an input stimuli, a signal $u(t)$, acts on the system producing an output response, a signal $y(t)$, described by the following differential equation:
 \begin{equation} \label{eq:01-01}
 \begin{split}
     \alpha_n \cfrac{d^n y(t)}{dt^n} + \alpha_{n-1} & \cfrac{d^{n-1} y(t)}{dt^{n-1}} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) = \\
@@ -157,34 +157,85 @@ A system, in a broad physical sense, is defined as a ensemble of interacting com
 \end{split}
 .\end{equation}
 
-[fig]
-
 In this representation, the input $u(t)$ is called the \textit{manipulated variable}, since it represents a arbitrary stimuli that can be given directly by human action or a by an automatic controller, while the output $y(t)$ is called the \textit{controlled variable}, since it can only be modified indirectly through $u(t)$. This also leads to a \textit{cause-and-effect} interpretation of the system.
 
-A model can provide a quantitative understanding of the system that is useful both to access some response specifications and to design controllers to modify them based on some requirements. In the case of the model in Equation \eqref{eq:01-01}, it is possible to calculate the response $y(t)$, and its derivatives, resulting from any specific action $u(t)$. Besides, a model can be used to perform computer simulations, in order to visualize the dynamical behavior of the system without actually manipulating it, since real experiments could be expensive or even damage the system. Consider, for instance, a schematic and a simulation for a model representing a mass-spring-damper system, shown at \textbf{!!!!}.
+A model can provide a quantitative understanding of the system that is useful both to access some response specifications and to design controllers to modify them based on some requirements. In the case of the model in Equation \eqref{eq:01-01}, it is possible to calculate the response $y(t)$, and its derivatives, resulting from any specific action $u(t)$. Besides, a model can be used to perform computer simulations, in order to visualize the dynamical behavior of the system without actually manipulating it, since real experiments could be expensive or even damage the system. Consider, for instance, a schematic and a simulation for a model representing a mass-spring-damper system, shown at Fig. \ref{fig:intro01}.
 
-[fig]
+\begin{figure}[ht] \centering
+	\begin{tikzpicture}[node distance=8cm]
+		\node (img1) {\includegraphics[width=0.43\textwidth]{chapter1/massSpringDamper}};
+		\node [right of=img1](img2) {\includegraphics[width=0.47\textwidth]{chapter1/massSpringDamperPlot}};
+	\end{tikzpicture}
+	\caption{The schematic of a simple Mass-Spring-Damper system and its dynamical response to being forced by an unitary constant force.}
+	\label{fig:intro01}
+\end{figure}
 
-In this simulation, the \textit{rise time}, \textit{peak time}, \textit{overshoot ratio} and \textit{steady-state value} are examples of response specifications that can be defined to describe the system behavior to a external stimuli (in this case, a constant force of unit magnitude). These specified parameters are characteristic to responses of a class of systems known as \textit{underdamped second-order systems}, that will be discussed further in the document. 
+In this simulation, quantities as the rise time, peak time, overshoot ratio and steady-state value of the signal are examples of response specifications that can be defined to describe the system behavior to a external stimuli (in this case, a constant force of unit magnitude). These specified parameters are characteristic to responses of a class of systems known as \textit{underdamped second-order systems}, that will be discussed further in the document. 
 
-A controller is used to calculate, for a time $t \in \left[ t_0, t_N\right)$, the necessary input $u(t)$ to produce an output $y(t)$ as close as possible to a desired reference signal $r(t)$. There are two common configurations, shown in \textbf{Fig!!!}, of how to connect the controller to the system.
+A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, the necessary input $u(t)$ to produce an output $y(t)$ as close as possible to a desired reference signal $r(t)$. There are two common configurations, shown in Fig. \ref{fig:intro02}, of how to connect the controller to the system.
 
-[fig]
+\begin{figure}[ht] 
+	\begin{subfigure}{0.65\textwidth}
+	\vskip0.25cm
+	\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [block, minimum width=6em, minimum height=3.5em, right of=input] (controller) {\textbf{Controller}};
+	    \node [block, minimum width=6em, minimum height=3.5em, right of=controller,
+	            node distance=3.5cm] (system) {\textbf{System}};
+	    % We draw an edge between the controller and system block to 
+	    % calculate the coordinate u. We need it to place the measurement block. 
+	    \draw [->, thick] (controller) -- node[name=u] {} (system);
+	    \node [output, right of=system, node distance=3cm] (output) {};
+	
+	    % Once the nodes are placed, connecting them is easy. 
+	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$u(t)$}  (controller);
+	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
+	\end{tikzpicture}
+	
+	\end{subfigure} \\ \vspace{.6ex}
+	\hfill \begin{subfigure}{0.65\textwidth}
+	\vskip0.75cm
+	\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
+	    % We start by placing the blocks
+	    \node [input, name=input] {};
+	    \node [sum, right of=input] (sum) {};
+	    \node [block, minimum width=6em, minimum height=3.5em, right of=sum] (controller) {\textbf{Controller}};
+	    \node [block, minimum width=6em, minimum height=3.5em, right of=controller,
+	            node distance=3.5cm] (system) {\textbf{System}};
+	    % We draw an edge between the controller and system block to 
+	    % calculate the coordinate u. We need it to place the measurement block. 
+	    \draw [->, thick] (controller) -- node[name=u] {} (system);
+	    \node [output, right of=system, node distance=3cm] (output) {};
+	    \node [block, minimum width=6em, minimum height=3.5em, below of=u] (measurements) {\textbf{Sensor}};
+	
+	    % Once the nodes are placed, connecting them is easy. 
+	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$r(t)$} node[pos=0.8] {$+$}  (sum);
+	    \draw [->, thick] (sum) -- (controller);
+	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
+	    \draw [->, thick] (y) |- (measurements);
+	    \draw [->, thick] (measurements) -| node[pos=0.95] {$-$} node [near end] {} (sum);
+	\end{tikzpicture}
+	\end{subfigure}
+	
+	\caption{The two most popular configurations for connecting controllers to dynamical systems. }
+	\label{fig:intro02}
+\end{figure}
 
-The configuration in \textbf{Fig!!!.a}, known as \textit{Open-Loop Controller}, calculates the action as a function $u(t) = \pi(r, t)$, given an initial condition $y(t_0) = y_0$. In this case, the controller does not observe the output $y(t)$, and relies on the model to guarantee that the system is driven to the reference. Of course, if there are any external disturbances acting on this configuration, or if the model is not reliable enough, it is not possible to guarantee that the requirements are met. Thus, these type of controllers are not suitable for critical applications, and its use is restricted to systems where deviance from the desired reference can be tolerated. \textbf{[exemplos de aplicações?]}
+The configuration shown in the upper left of Fig. \ref{fig:intro02}, known as the \textit{Open-Loop Controller}, calculates the action as a function $u(t) = \pi(r, t)$, given an initial condition $y(t_0) = y_0$. In this case, the controller does not observe the output $y(t)$, and relies on the model to guarantee that the system is driven to the reference. Of course, if there are any external disturbances acting on this configuration, or if the model is not reliable enough, it is not possible to guarantee that the requirements are met. Thus, these type of controllers are not suitable for critical applications, and its use is restricted to systems where deviance from the desired reference can be tolerated. \textbf{[reference]}
 
-In contrast, the configuration in \textbf{Fig!!!.b}, known as \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \textbf{[exemplos de aplicações? + references]}
+In contrast, the configuration in the lower right of Fig. \ref{fig:intro02}, known as the \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \textbf{[reference]}
 
 \section{Chemical Reactive Systems}
 
-A chemical reaction, the transformation of a chemical substance into another, is a process central to chemistry and to nature itself. A reaction equation is a intuitive representation of such transformations. For instance, consider the following equation representing a \textit{synthesis reaction}:
+A chemical reaction, the transformation of a chemical substance into another, is a process central to chemistry and to nature itself. A reaction equation is a intuitive representation of such transformations. For instance, consider the following equation representing a \textit{synthesis} reaction:
 \begin{equation}
     A + 2 B \longrightarrow 3 C + D 
 .\end{equation} 
 
-In this equation, the compounds $A$ and $2 B$ forms the set of \textit{reactants}, $\mathbb{R}$, while $3 C$ and $D$ forms the set of \textit{products}, $\mathcal{P}$. The coefficients in such equations are the \textit{stoichiometric numbers}, providing an information about proportionality between the quantity of each substances in the reaction. 
+\noindent In this equation, the compounds $A$ and $2 B$ forms the set of reactants, $\mathcal{R}$, while $3 C$ and $D$ forms the set of products, $\mathcal{P}$. The coefficients in such equations are the stoichiometric numbers, providing an information about proportionality between the quantity of each substances in this reaction. 
 
-Usually the products can be directly used as reactants in another reaction, in which case they can also be referred as a intermediate product (or byproduct), and the equations can be appended in a ``series" representation. In this case, each $k$-th intermediate product forms a set $\mathcal{I}_k$. In addition to a chain of series reactions, there is also the possibility of different reactions to occur in parallel, in the same system. The combination of these sets of reactants, byproducts, products and reactions are often referred as a \textit{chemical reaction network}, and the associated equation can be represented in general form as:
+Usually the products can be directly used as reactants in another reaction, in which case they can also be referred as an intermediate product (or byproduct), and the equations can be appended in a ``series" representation. In this case, each $k$-th intermediate product forms a set $\mathcal{I}_k$. In addition to a chain of series reactions, there is also the possibility of different reactions to occur in parallel, in the same system. The combination of these sets of reactants, byproducts, products and reactions are often referred as a \textit{chemical reaction network}, and the associated equation can be represented in general form as:
 \begin{equation} \label{eq:chemNetwork}
 \left\{ \begin{matrix}
     \mathbb{R}^{(1)}  & \longrightarrow & \mathcal{I}^{(1)}_1  &  \longrightarrow & \cdots & \longrightarrow & \mathcal{I}^{(1)}_{M_1} & \longrightarrow & \mathcal{P}^{(1)} \\
@@ -196,17 +247,49 @@ Usually the products can be directly used as reactants in another reaction, in w
 
 Moreover, chemical reactions displays a dynamical behavior concerning the speed at which a reaction occurs. This rate of reaction, its \textit{kinetics}, are dependent on the conditions in the environment, such as temperature and pressure, and on some properties of the reaction itself. In the case of a \textit{isothermal process}, i.e., when the temperature in the environment remains constant, this rate can be calculated as a constant $K$, leading to a representation on the form:
 \begin{equation}
-    \mathbb{R} \overset{K}{\longrightarrow} \mathcal{P}
+    \mathcal{R} \overset{K}{\longrightarrow} \mathcal{P}
 .\end{equation} 
 
-When the temperature in the environment is not constant, the process is said to be \textit{endothermic} or \textit{exothermic} if, respectively, it consumes or produces energy. The kinetics of the reactions in such processes are usually functions of the temperature which, given an activation energy $E$, are assumed to follow the Arrhenius equation:
+When the temperature in the environment is not constant, the process is said to be endothermic or exothermic if, respectively, it consumes or produces energy. The kinetics of the reactions in such processes are usually functions of the temperature which, given an activation energy $E$, are assumed to follow the following form, known as the Arrhenius equation:
 \begin{equation} \label{eq:arrhenius1}
     K(T) = K_0 e^{-E / T}
 .\end{equation}
 
-In practice, these chemical reactions are produced by mixing the reactants in some environment with adequate conditions. In order to control the quantities of these substances, actual processes consists in a manipulation of the concentrations of reactants in some container, usually by providing a mass flow of these substances through some fluid. A major interest is to manipulate the reactants in some way to produce a desired concentration of one or more products in the chemical reaction network, allowing this problem to be addressed by a control engineering perspective. A \textit{chemical reactor system}, depicted in \textbf{Fig!!!}, is a system where a controller can manipulate the concentration of some reactants to produce a desired concentration of some products.
+In practice, these chemical reactions are produced by mixing the reactants in some environment with adequate conditions. In order to control the quantities of these substances, actual processes consists in a manipulation of the concentrations of reactants in some container, usually by providing a mass flow of these substances through some fluid. A major interest is to manipulate the reactants in some way to produce a desired concentration of one or more products in the chemical reaction network, allowing this problem to be addressed by a control engineering perspective. A \textit{chemical reactor system}, depicted in Fig. \ref{fig:intro03}, is a system where a controller can manipulate the concentration of some reactants to produce a desired concentration of some products.
 
-[img]
+\begin{figure} \centering
+	\begin{subfigure}{0.47\textwidth}
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}[auto, node distance=3cm, >=latex']
+		\node [input] (input1) {};
+		\node [block, right of=input1, minimum width=8em, minimum height=5em, label={below:Isothermal Chemical Reactor}] (system) {{\large \bfseries System}};
+		\node [output, right of=system] (output) {};
+		
+		\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (system);
+		\draw[->, line width=0.5mm] (system) -- node[pos=0.9]{Products} (output);
+	\end{tikzpicture}}
+	\end{subfigure} \hfill
+	\begin{subfigure}{0.47\textwidth}
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}[auto, node distance=3cm, >=latex']
+		\node [input] (input1) {};
+		\node [input, below of=input1, node distance=1.5em] (input2) {};
+		\node [input, below of=input2, node distance=1.5em] (input3) {};
+		\node [block, right of=input2, minimum width=8em, minimum height=5em, label={below:Non-isothermal Chemical Reactor}] (system) {{\large \bfseries System}};
+		\node [output, right of=system] (output2) {};
+		\node [output, above of=output2, node distance=1.5em] (output1) {};		
+		\node [output, below of=output2, node distance=1.5em] (output3) {};
+		
+		\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (input1-|system.west);
+		\draw[->, line width=0.5mm] (input3) -- node[pos=0.1]{Heat Capacity} (input3-|system.west);
+		\draw[->, line width=0.5mm] (system) ++(0,2em) -- node[pos=0.9]{Products} (system-|output1.west);
+		\draw[->, line width=0.5mm] (system) -- node[pos=0.9]{Temperature} (system-|output3.west);
+	\end{tikzpicture}}
+	\end{subfigure}	
+	
+	\caption{a}
+	\label{fig:intro03}
+\end{figure}
 
 When the process is not isothermal, the occurrence of a reaction contributes to the entropy of the environment, and consequently affects the kinetics of the subsequent ones. To compensate for this, practical applications also try to control the conditions in the environment using instruments external to the reactions themselves. Because of the use of the Arrhenius equation to model these reaction rates, this control is usually implemented through a cooling or heating system coupled to the original reactor system, resulting in the schematic on \textbf{Fig!!!}.
 
@@ -2700,137 +2783,137 @@ Now, the discussion turns to the robustness properties of these optimal controll
 
 Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
 
-% 5 - Receding Horizon Optimal Control
-% ---------------------------------------------------------------
-\clearpage
-\chapter{Receding Horizon Optimal Control}
-
-The previous chapter introduced the concept of finite-horizon optimal control, presenting the Linear Quadratic Regulator as a solution to the condition imposed by the Hamilton-Jacobi equation. Despite being a popular solution with nice properties, there are some downsides of the LQR standard formulation. This chapter explores a optimal controller formulation based on a receding horizon control strategy. In the first section the motivation and definition of the moving horizon strategy are stated. The second sections explores the possibility of combining the receding horizon strategy with an iterative linearization procedure to yield an optimal operation in respect to the nonlinear system itself.
-
-\section{Optimization in Moving Horizons}
-
-A major disadvantage of the standard finite-horizon optimal controller is that the time in which the system will operate becomes restricted to the time horizon used for the optimization. This might becomes a problem in the case that the system is interrupted or subjected to strong disturbances, given that corrective action would require time and the desired state could not be achieved in the given horizon. Similarly, the restricted time horizon is also problematic in the case that the system should track a non-constant reference signal, since it also has be assumed of fixed length for the optimization to account for the entire signal. 
-
-A possible solution to this issue is to perform a Receding Horizon Control (RHC) strategy \textbf{[references]}. In the context of optimal control, a receding horizon controller is also known in literature as the \textit{Model-Predictive Controller} \textbf{[references]}, although this name is usually associated with constrained optimization procedures. The strategy is defined as follows:
-
-\begin{boxed-definition}{(Receding-Horizon Control)} \label{def:recedingHorizon}
-	Considers a linear system in State-Space form and a control horizon of size $T \in \mathbb{R}^+$. The \textit{Receding-Horizon Control} strategy for an optimal controller of this system is represented as:
-	\begin{equation}
-        \dot{\bm{x}}(t) = \left( \bm{A} - \bm{B} \bm{K}(t) \right) \bm{x}(t)
-    ,\end{equation} 
-    
-	\noindent where $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t)$ represents the optimal gain from the LQR cost function (Definition \ref{def:lqr}) for an iterative time interval $[t, t+T]$, and $\bm{P}(t)$ which solves the the Riccati differential equation:
-    \begin{equation}
-        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
-    ,\end{equation}
-    
-    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
-\end{boxed-definition}
-
-In the optimization community, this problem is also popular in the following notation, where the moving horizon becomes explicit:
-\begin{align}
-\begin{matrix*}[l]
-    \textbf{minimize} & {\displaystyle \int_{t}^{t+T}  \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} \right) d\tau } \\
-    \hfill \textbf{s.t.} & \left. \begin{matrix*}[l] 
-    	\dot{\bm{x}}(\tau) = \bm{A}\bm{x}(\tau) + \bm{B}\bm{u}(\tau)  \\ 
-    	\bm{u}(\tau) = \pi(\bm{x}(t), \cdots, \bm{x}(\tau))
-    \end{matrix*} \right\} \forall \tau \in [t, t+T]
-\end{matrix*}
-.\end{align}
-
-This definition basically states that the optimization to be performed is similar to the standard case, but, since the time horizon is now a moving window of size $T$, the gain matrices $\bm{K} : \mathbb{R} \rightarrow \mathbb{R}^{r \times n}$ changes together with time. This is a consequence for the fact the the Ricatti differential equation has to be solved backwards in time for each new horizon at each new time instance. Of course, this means that for each which time interval that is optimized, only the first action is actually applied to the system. The Fig. \ref{fig:rhc01} illustrates this control strategy.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=\textwidth]{chapter5/recedingHorizon}
-	\caption{Illustration of the Receding Horizon Control strategy.}
-	\label{fig:rhc01}
-\end{figure}
-
-From the Separation Principle, it is always possible to increment this approach by introducing a optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
-
-\textbf{[properties?]}
-
-\section{Linear Parameter-Varying Models}
-
-The optimal controllers discussed so far suffers from a performance disadvantage when regarding the control of nonlinear systems. As shown in Theorem \ref{th:linearization}, a nonlinear system can be approximated by a linear model around a specific steady-state point. The problem, however, is that the optimization accounts for a nominal linear system that, in the case of a linearized model, will not represent the real dynamics of the nonlinear system as its states deviates from the steady-state value used. For this reason, the LQR solution will not provide an optimal solution in the light of the real system.
-
-In this section, a solution to the nonlinear problematic is presented through an iterative linearization process, where the full dynamics are approximated by a series of linear models obtained for each time instance. This approach is referred in literature as Linear Switched Systems \textbf{[references]}. Before any further discussion, first consider the following definition.
-
-\begin{boxed-definition}{(Linear Parameter-Varying System)} \label{def:lpv}
-	A \textit{Linear Parameter-Varying} (LPV) State-Space representation describing a system with state vector $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, output vector $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$ and input vector $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$ is given by the system of equations: 
-    \begin{align} \label{eq:SSRepr04}
-    \begin{cases}
-        \dot{\bm{x}}(t) = \bm{A}(\bm{\theta}(t)) \bm{x}(t) + \bm{B}(\bm{\theta}(t)) \bm{u}(t) & \\
-        \bm{y}(t) = \bm{C}(\bm{\theta}(t)) \bm{x}(t) + \bm{D}(\bm{\theta}(t)) \bm{u}(t) &
-    \end{cases}
-    ,\end{align}
-
-    \noindent where $\bm{A}(\cdot) \in \mathbb{R}^{n \times n}$, $\bm{B}(\cdot) \in \mathbb{R}^{n \times r}$, $\bm{C}(\cdot) \in \mathbb{R}^{p \times n}$ and $\bm{D}(\cdot) \in \mathbb{R}^{p \times r}$ are appropriate functions of the parameter function $\bm{\theta} : \mathbb{R} \rightarrow \mathbb{R}^{z}$. 
-\end{boxed-definition}
-
-The LPV State-Space model is a linear realization of a system that can change with time through the result of a function $\bm{\theta}(\cdot)$. The first discussions on this representation for dynamical models were motivated from the Gain Scheduling control method \textbf{[references]}, where it serves as an linear embedding of the nonlinear model. From Theorem \ref{th:linearization} it is clear that a possible formulation for such a model is given by: 
-\begin{equation}
-\begin{cases}
-        \Delta \dot{\bm{x}}(t)) =\left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o,  \bm{u}_o}  \Delta \bm{u}(t) \\ \\
-        \hfill \bm{y}(t) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{u}(t) \\
-\end{cases}
-,\end{equation}
-
-\noindent in which case it is possible to set $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t-\delta t), \bm{u}(t-\delta t) \end{bmatrix}^T$ and denote the Jacobians as:
-\begin{align} \label{eq:lpvJacobians}
-\begin{matrix*}[l]
-        \bm{A}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; & \bm{B}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; \\ \\ \bm{C}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} ; & \bm{D}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} 
-\end{matrix*}
-\end{align}
-
-The formulation in \eqref{eq:lpvJacobians} might not be a perfect linearization of the system, since the values $\bm{x}(t)$ and $\bm{u}(t)$ are not constrained to yield $\bm{f}(\bm{x}(t), \bm{u}(t))$, i.e., they may be non-stationary points of the system. In the case that $\delta t > 0$, these matrices functions represents a causal switching law for linear systems \textbf{[reference]}, and the LPV system tends to a nonlinear system as $\delta t \to 0$. For some families of state and input trajectories it is possible to guarantee stability and other asymptotic system properties \textbf{[reference]}, which are heavily based on Lyapunov's theory \textbf{[reference]}. 
-
-Consider the linearization Jacobians stated in \eqref{eq:isoReact01}. In the case that only the two first states are modelled, a LPV formulation for that system is given as:
-\begin{align}   \label{eq:isoReactLPV}
-\left\{ \begin{matrix*}[l]
-    \Delta \dot{\bm{x}}(t) = \begin{bmatrix}
-        -\theta^{(1)} - K_{AB} - 2K_{AC} \bm{\theta}^{(2)}_1 & 0 \\ K_{AB} & - \theta^{(1)} - K_{BC} 
-    \end{bmatrix} \Delta \bm{x}(t) +  \begin{bmatrix}
-        \rho_{in}^{(A)} - \bm{\theta}^{(2)}_1 \\ - \bm{\theta}^{(2)}_2
-    \end{bmatrix} \Delta u(t) \\ \\
-    \phantom{\Delta} \bm{y}(t) = \begin{bmatrix}
-        1 & 0  \\ 0 & 1 
-    \end{bmatrix} \Delta \bm{x}(t) + \begin{bmatrix}
-        0 \\ 0 
-    \end{bmatrix} \Delta u(t)
-\end{matrix*} \right.
-,\end{align}
-
-\noindent where $\theta^{(1)} = u(t-\delta t)$ and $\bm{\theta}^{(2)} = \bm{x}(t-\delta t)$. Notice that the matrix $\bm{A}(\cdot)$ in this case should always result in a stable system, since the variables in the diagonal are constrained to be positive, given their physical meaning. A simulation is shown in Fig. \ref{fig:lpvSim01} for this system, given a sequence of different amplitude steps as inputs, to visualize how well this system response can approxima	te the nonlinear response.
-
-[fig]
-
-\section{Receding Horizon Control for Switched Systems}
-
-Combining the receding horizon strategy together with the linear switching approach, it is possible to develop a method to controlling nonlinear systems by optimizing over a series of linearized systems. The receding horizon, in this case, becomes a necessity since the optimization has to be repeated every time that the matrices $\bm{A}(\cdot)$ and $\bm{B}(\cdot)$ changes. A formal definition of such controller is given below.
-
-\begin{boxed-definition}{(RHC for LPV Systems)} \label{def:recedingHorizon}
-	Considers a linear parameter-varying system in State-Space form, a control horizon of size $T \in \mathbb{R}^+$ and a switching time distance $\delta t$. The receding horizon control strategy for an optimal controller of this switched system is represented as:
-	\begin{equation}
-        \dot{\bm{x}}(t) = \left( \bm{A}(\bm{\theta}(t)) - \bm{B}(\bm{\theta}(t)) \bm{K}(t) \right) \bm{x}(t)
-    ,\end{equation} 
-    
-	\noindent where $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t - \delta t), \bm{u}(t - \delta t) \end{bmatrix}$ is the parameter function and $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t)$ represents the optimal gain for an iterative time interval $[t, t+T]$, given $\bm{P}(t)$ which solves the the Riccati differential equation:
-    \begin{equation}
-        -\dot{\bm{P}}(t) = \bm{A}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{P}(t) \bm{A}(\bm{\theta}(t)) - \bm{P}(t) \bm{B}(\bm{\theta}(t)) \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{Q}
-    ,\end{equation}
-    
-    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
-\end{boxed-definition}
-
-A simulation of controlling the system from \eqref{eq:isoReactLPV} is shown at Fig. \ref{fig:rhcLPV01}, demonstrating the quality of this approach to directly control the nonlinear system. For this configuration, the transient characteristics of the response can then be tuned by the design of $\bm{Q}$, $\bm{R}$ and the time parameters $\bm{T}$ and $\delta t$. 
-
-[fig]
-
-As stated earlier, it is also possible to apply this approach to stochastic systems, which are modelled as the nominal State-Space models perturbed by white Gaussian noise. The main difference is that the switching is done through the estimated states, making the approximation to the nonlinear response dependent on the estimator capabilities. A simulation of such configuration is shown in Fig. \ref{fig:rhcLPV02}. Notice how the action of noise made the closed-loop system exhibits some pseudo-periodic behavior, while still being able to follow the reference signal.
-
-[fig]
+%% 5 - Receding Horizon Optimal Control
+%% ---------------------------------------------------------------
+%\clearpage
+%\chapter{Receding Horizon Optimal Control}
+%
+%The previous chapter introduced the concept of finite-horizon optimal control, presenting the Linear Quadratic Regulator as a solution to the condition imposed by the Hamilton-Jacobi equation. Despite being a popular solution with nice properties, there are some downsides of the LQR standard formulation. This chapter explores a optimal controller formulation based on a receding horizon control strategy. In the first section the motivation and definition of the moving horizon strategy are stated. The second sections explores the possibility of combining the receding horizon strategy with an iterative linearization procedure to yield an optimal operation in respect to the nonlinear system itself.
+%
+%\section{Optimization in Moving Horizons}
+%
+%A major disadvantage of the standard finite-horizon optimal controller is that the time in which the system will operate becomes restricted to the time horizon used for the optimization. This might becomes a problem in the case that the system is interrupted or subjected to strong disturbances, given that corrective action would require time and the desired state could not be achieved in the given horizon. Similarly, the restricted time horizon is also problematic in the case that the system should track a non-constant reference signal, since it also has be assumed of fixed length for the optimization to account for the entire signal. 
+%
+%A possible solution to this issue is to perform a Receding Horizon Control (RHC) strategy \textbf{[references]}. In the context of optimal control, a receding horizon controller is also known in literature as the \textit{Model-Predictive Controller} \textbf{[references]}, although this name is usually associated with constrained optimization procedures. The strategy is defined as follows:
+%
+%\begin{boxed-definition}{(Receding-Horizon Control)} \label{def:recedingHorizon}
+%	Considers a linear system in State-Space form and a control horizon of size $T \in \mathbb{R}^+$. The \textit{Receding-Horizon Control} strategy for an optimal controller of this system is represented as:
+%	\begin{equation}
+%        \dot{\bm{x}}(t) = \left( \bm{A} - \bm{B} \bm{K}(t) \right) \bm{x}(t)
+%    ,\end{equation} 
+%    
+%	\noindent where $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t)$ represents the optimal gain from the LQR cost function (Definition \ref{def:lqr}) for an iterative time interval $[t, t+T]$, and $\bm{P}(t)$ which solves the the Riccati differential equation:
+%    \begin{equation}
+%        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
+%    ,\end{equation}
+%    
+%    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
+%\end{boxed-definition}
+%
+%In the optimization community, this problem is also popular in the following notation, where the moving horizon becomes explicit:
+%\begin{align}
+%\begin{matrix*}[l]
+%    \textbf{minimize} & {\displaystyle \int_{t}^{t+T}  \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} \right) d\tau } \\
+%    \hfill \textbf{s.t.} & \left. \begin{matrix*}[l] 
+%    	\dot{\bm{x}}(\tau) = \bm{A}\bm{x}(\tau) + \bm{B}\bm{u}(\tau)  \\ 
+%    	\bm{u}(\tau) = \pi(\bm{x}(t), \cdots, \bm{x}(\tau))
+%    \end{matrix*} \right\} \forall \tau \in [t, t+T]
+%\end{matrix*}
+%.\end{align}
+%
+%This definition basically states that the optimization to be performed is similar to the standard case, but, since the time horizon is now a moving window of size $T$, the gain matrices $\bm{K} : \mathbb{R} \rightarrow \mathbb{R}^{r \times n}$ changes together with time. This is a consequence for the fact the the Ricatti differential equation has to be solved backwards in time for each new horizon at each new time instance. Of course, this means that for each which time interval that is optimized, only the first action is actually applied to the system. The Fig. \ref{fig:rhc01} illustrates this control strategy.
+%
+%\begin{figure}[ht]
+%	\centering
+%	\includegraphics[width=\textwidth]{chapter5/recedingHorizon}
+%	\caption{Illustration of the Receding Horizon Control strategy.}
+%	\label{fig:rhc01}
+%\end{figure}
+%
+%From the Separation Principle, it is always possible to increment this approach by introducing a optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
+%
+%\textbf{[properties?]}
+%
+%\section{Linear Parameter-Varying Models}
+%
+%The optimal controllers discussed so far suffers from a performance disadvantage when regarding the control of nonlinear systems. As shown in Theorem \ref{th:linearization}, a nonlinear system can be approximated by a linear model around a specific steady-state point. The problem, however, is that the optimization accounts for a nominal linear system that, in the case of a linearized model, will not represent the real dynamics of the nonlinear system as its states deviates from the steady-state value used. For this reason, the LQR solution will not provide an optimal solution in the light of the real system.
+%
+%In this section, a solution to the nonlinear problematic is presented through an iterative linearization process, where the full dynamics are approximated by a series of linear models obtained for each time instance. This approach is referred in literature as Linear Switched Systems \textbf{[references]}. Before any further discussion, first consider the following definition.
+%
+%\begin{boxed-definition}{(Linear Parameter-Varying System)} \label{def:lpv}
+%	A \textit{Linear Parameter-Varying} (LPV) State-Space representation describing a system with state vector $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, output vector $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$ and input vector $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$ is given by the system of equations: 
+%    \begin{align} \label{eq:SSRepr04}
+%    \begin{cases}
+%        \dot{\bm{x}}(t) = \bm{A}(\bm{\theta}(t)) \bm{x}(t) + \bm{B}(\bm{\theta}(t)) \bm{u}(t) & \\
+%        \bm{y}(t) = \bm{C}(\bm{\theta}(t)) \bm{x}(t) + \bm{D}(\bm{\theta}(t)) \bm{u}(t) &
+%    \end{cases}
+%    ,\end{align}
+%
+%    \noindent where $\bm{A}(\cdot) \in \mathbb{R}^{n \times n}$, $\bm{B}(\cdot) \in \mathbb{R}^{n \times r}$, $\bm{C}(\cdot) \in \mathbb{R}^{p \times n}$ and $\bm{D}(\cdot) \in \mathbb{R}^{p \times r}$ are appropriate functions of the parameter function $\bm{\theta} : \mathbb{R} \rightarrow \mathbb{R}^{z}$. 
+%\end{boxed-definition}
+%
+%The LPV State-Space model is a linear realization of a system that can change with time through the result of a function $\bm{\theta}(\cdot)$. The first discussions on this representation for dynamical models were motivated from the Gain Scheduling control method \textbf{[references]}, where it serves as an linear embedding of the nonlinear model. From Theorem \ref{th:linearization} it is clear that a possible formulation for such a model is given by: 
+%\begin{equation}
+%\begin{cases}
+%        \Delta \dot{\bm{x}}(t)) =\left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o,  \bm{u}_o}  \Delta \bm{u}(t) \\ \\
+%        \hfill \bm{y}(t) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{u}(t) \\
+%\end{cases}
+%,\end{equation}
+%
+%\noindent in which case it is possible to set $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t-\delta t), \bm{u}(t-\delta t) \end{bmatrix}^T$ and denote the Jacobians as:
+%\begin{align} \label{eq:lpvJacobians}
+%\begin{matrix*}[l]
+%        \bm{A}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; & \bm{B}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)}; \\ \\ \bm{C}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} ; & \bm{D}(\bm{x}(t-\delta t), \bm{u}(t-\delta t)) = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}(t-\delta t), \bm{u}(t-\delta t)} 
+%\end{matrix*}
+%\end{align}
+%
+%The formulation in \eqref{eq:lpvJacobians} might not be a perfect linearization of the system, since the values $\bm{x}(t)$ and $\bm{u}(t)$ are not constrained to yield $\bm{f}(\bm{x}(t), \bm{u}(t))$, i.e., they may be non-stationary points of the system. In the case that $\delta t > 0$, these matrices functions represents a causal switching law for linear systems \textbf{[reference]}, and the LPV system tends to a nonlinear system as $\delta t \to 0$. For some families of state and input trajectories it is possible to guarantee stability and other asymptotic system properties \textbf{[reference]}, which are heavily based on Lyapunov's theory \textbf{[reference]}. 
+%
+%Consider the linearization Jacobians stated in \eqref{eq:isoReact01}. In the case that only the two first states are modelled, a LPV formulation for that system is given as:
+%\begin{align}   \label{eq:isoReactLPV}
+%\left\{ \begin{matrix*}[l]
+%    \Delta \dot{\bm{x}}(t) = \begin{bmatrix}
+%        -\theta^{(1)} - K_{AB} - 2K_{AC} \bm{\theta}^{(2)}_1 & 0 \\ K_{AB} & - \theta^{(1)} - K_{BC} 
+%    \end{bmatrix} \Delta \bm{x}(t) +  \begin{bmatrix}
+%        \rho_{in}^{(A)} - \bm{\theta}^{(2)}_1 \\ - \bm{\theta}^{(2)}_2
+%    \end{bmatrix} \Delta u(t) \\ \\
+%    \phantom{\Delta} \bm{y}(t) = \begin{bmatrix}
+%        1 & 0  \\ 0 & 1 
+%    \end{bmatrix} \Delta \bm{x}(t) + \begin{bmatrix}
+%        0 \\ 0 
+%    \end{bmatrix} \Delta u(t)
+%\end{matrix*} \right.
+%,\end{align}
+%
+%\noindent where $\theta^{(1)} = u(t-\delta t)$ and $\bm{\theta}^{(2)} = \bm{x}(t-\delta t)$. Notice that the matrix $\bm{A}(\cdot)$ in this case should always result in a stable system, since the variables in the diagonal are constrained to be positive, given their physical meaning. A simulation is shown in Fig. \ref{fig:lpvSim01} for this system, given a sequence of different amplitude steps as inputs, to visualize how well this system response can approxima	te the nonlinear response.
+%
+%[fig]
+%
+%\section{Receding Horizon Control for Switched Systems}
+%
+%Combining the receding horizon strategy together with the linear switching approach, it is possible to develop a method to controlling nonlinear systems by optimizing over a series of linearized systems. The receding horizon, in this case, becomes a necessity since the optimization has to be repeated every time that the matrices $\bm{A}(\cdot)$ and $\bm{B}(\cdot)$ changes. A formal definition of such controller is given below.
+%
+%\begin{boxed-definition}{(RHC for LPV Systems)} \label{def:recedingHorizon}
+%	Considers a linear parameter-varying system in State-Space form, a control horizon of size $T \in \mathbb{R}^+$ and a switching time distance $\delta t$. The receding horizon control strategy for an optimal controller of this switched system is represented as:
+%	\begin{equation}
+%        \dot{\bm{x}}(t) = \left( \bm{A}(\bm{\theta}(t)) - \bm{B}(\bm{\theta}(t)) \bm{K}(t) \right) \bm{x}(t)
+%    ,\end{equation} 
+%    
+%	\noindent where $\bm{\theta}(t) = \begin{bmatrix} \bm{x}(t - \delta t), \bm{u}(t - \delta t) \end{bmatrix}$ is the parameter function and $\bm{K}(t) = - \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t)$ represents the optimal gain for an iterative time interval $[t, t+T]$, given $\bm{P}(t)$ which solves the the Riccati differential equation:
+%    \begin{equation}
+%        -\dot{\bm{P}}(t) = \bm{A}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{P}(t) \bm{A}(\bm{\theta}(t)) - \bm{P}(t) \bm{B}(\bm{\theta}(t)) \bm{R}^{-1} \bm{B}^T(\bm{\theta}(t)) \bm{P}(t) + \bm{Q}
+%    ,\end{equation}
+%    
+%    \noindent with terminal condition $\bm{P}(t+T) = \bm{Q}_f$.
+%\end{boxed-definition}
+%
+%A simulation of controlling the system from \eqref{eq:isoReactLPV} is shown at Fig. \ref{fig:rhcLPV01}, demonstrating the quality of this approach to directly control the nonlinear system. For this configuration, the transient characteristics of the response can then be tuned by the design of $\bm{Q}$, $\bm{R}$ and the time parameters $\bm{T}$ and $\delta t$. 
+%
+%[fig]
+%
+%As stated earlier, it is also possible to apply this approach to stochastic systems, which are modelled as the nominal State-Space models perturbed by white Gaussian noise. The main difference is that the switching is done through the estimated states, making the approximation to the nonlinear response dependent on the estimator capabilities. A simulation of such configuration is shown in Fig. \ref{fig:rhcLPV02}. Notice how the action of noise made the closed-loop system exhibits some pseudo-periodic behavior, while still being able to follow the reference signal.
+%
+%[fig]
 
 % 6 - Methodology
 % ---------------------------------------------------------------
@@ -3345,7 +3428,11 @@ Now, the experiments for controllers that track non-constant references is prese
 	\label{fig:lqri01}
 \end{figure}
 
-a
+After the introduction of the integral action, two more weights were needed to be selected for the controller optimization. As expected, the MIMO case actually imposes a trade-off between reaching the reference for the concentration and for the temperature, in the case that they do not represent a valid steady-state. Therefore, the choices of weights to the integral action has to take in account the fact that a aggressive set-point tracking may result in oscillatory, or even unstable, systems. To avoid these situations, the weights were selected to cause a smooth tracking, and the control horizon was expanded to allow the controller to operate for more hours. 
+
+Despite the mentioned difficulties, the controller was able to drive the system as close as possible to the reference, while still obeying the manipulated variables constraints. Notice that, in the moments were the reference changes, the change in the concentration resulted in a momentarily change in the temperature, which is promptly corrected by the feedback action of the controller. This change, however, is very small and the temperature remained within a interval of $0.5ºC$ around the reference signal, which is a excellent result. Another nice response observed in the visualization comprises in the change in the coolant temperature, which follows closely the shape of the change in the cooling capacity. In the last simulations, this variable evolved in a similar manner to the reactor temperature, but, in this case, the first was directly manipulated to allow for the latter to stay at the steady-state value.
+
+Following the same case of the previous subsection, the same controller was used to simulate a closed-loop operation in the case when disturbances to the real system are occurring. In this case, a pulse signal is applied to the same variables as in the last case, but for each time instant multiple of $\lfloor T/4 \rfloor$ with a duration of $0.02T$, which is a longer step in this case since $T$ is greater. The results are presented at Fig. \ref{fig:lqri02}. 
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqri02}
@@ -3354,7 +3441,9 @@ a
 	\label{fig:lqri02}
 \end{figure}	
 
-a
+The first interesting phenomena to notice is that the system responded more aggressively to the disturbances that occurred between the time interval $t \in [0.8, 4]$ for which $r(t) = 1$, when compared to the disturbances occurring in the interval $t \in [4, 7.2]$ for which $r(t) = 0.8$. This is expected from the fact that the system has non-linear terms associated with the concentration $\rho_A$, which is greater at the first interval. The controller, however, was able to correct the disturbances and drive the system back to the reference in both cases, exhibiting a smoother response in the latter.
+
+In the direction for a more realistic scenario, the same reference tracking just proposed was used together with a Linear Quadratic Gaussian, augmented with integral action, to perform the feedback over the estimated states. In this case, the integral of the error was calculated directly from the noise measurements, rather from an output calculated from the estimated states. The process and measurement noises used were the same as in the regulation case, and the covariance matrices were estimated directly from the noise signals. The resulting operation is displayed at Fig. \ref{fig:lqg01}.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi01}
@@ -3362,16 +3451,15 @@ a
 	\label{fig:lqgi01}
 \end{figure}
 
-a
+The first difference noted was the fact that the weights for the augmented states for the LQG controller actually needed a value of greater magnitude than those used for the LQR case. Despite of this, the information on the covariances were enough to allow for a accurate estimation of the real system states, and the control performed was very similar to that obtained when directly accessing the system real states, just as expected. However, it is noticeable that the input signals yielded by the controller were actually smoother and resulted in a apparent better tracking. This can be explained by the fact that the assignment of weights for the augmented states allowed for a better trade-off between the concentration and temperature tracking, resulting in a smaller deviance.
+
+For completeness, the same tracking objective was simulated for the case of disturbances actuating on the real system, just as in the previous cases, as shown in Fig. \ref{fig:lqgi02}. The resulting control was actually similar to the case observed from directly accessing the states. This fact proves the feasibility of using controller-estimator configurations for reference tracking control, even in the presence of disturbances to the process. 
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi02}
 	\caption{a}
 	\label{fig:lqgi02}
 \end{figure}	
-
-a
-
 
 % 8 - Conclusion
 % ---------------------------------------------------------------

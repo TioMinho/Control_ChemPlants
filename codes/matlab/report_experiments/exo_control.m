@@ -15,6 +15,7 @@ clc; clear all; close all;
 
 % Sets the Default Renderer to tbe the Painters
 set(0, 'DefaultFigureRenderer', 'painters');
+addpath("utils/")
 
 % Some colors
 cpal = [209 17 65;    % 1 - Metro Red
@@ -224,7 +225,7 @@ end
 
 %%
 % - Visualization of the Simulation
-foldername = "data/simulations/nice/lqgi/";
+foldername = "data/simulations/nice/lqri/";
 folder = dir(foldername);
 files = {folder.name}; files = files(3:end);
 for name = files
@@ -232,68 +233,66 @@ for name = files
     load(foldername+name)
     T = numel(exp_param.t);
 
-    figure(1);
     clf
-    subplot(3,2,1)
-    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1.25, 'color', [0.2 0.2 0.2]); hold on
-    subplot(3,2,2)
-    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1.25, 'color', [0.2 0.2 0.2]); hold on
+    [ha, pos] = tight_subplot(3,2,[.01 .1],[.1 .01],[.1 .01]);
     
-    subplot(3,2,3) 
-    plot(exp_param.t, exp_param.r(1,:), 'linewidth', 1.25, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    %plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', 'o', 'MarkerEdgeColor', cpal(18,:)); hold on;     
-    s.MarkerFaceAlpha = 0.2;
-    s.MarkerEdgeAlpha = 0.2;
-    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1.5, 'color', cpal(18,:)); hold on;
+    axes(ha(1))
+    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1, 'color', [0.2 0.2 0.2]); hold on
+    set(ha(1), "XTickLabel", [])
+    
+    axes(ha(2))
+    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1, 'color', [0.2 0.2 0.2]); hold on
+    set(ha(2), "XTickLabel", [])
+    
+    axes(ha(3))
+    plot(exp_param.t, exp_param.r(1,:), 'linewidth', 1, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+%     plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(18,:)); hold on;
+%     s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', '.', 'MarkerEdgeColor', cpal(18,:)); hold on;     
+%     s.MarkerFaceAlpha = 0.4;
+%     s.MarkerEdgeAlpha = 0.4;
+    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1, 'color', cpal(18,:)); hold on;
     ylabel("Concentration - \rho_B (^o C)")
     ylim([min(exp_param.xout(2,:))-0.05 max(exp_param.xout(2,:))+0.05])
+    set(ha(3), "XTickLabel", [])
     
-    subplot(3,2,5) 
-    %plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
+    axes(ha(5))
+%     plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold on;
     plot(exp_param.t, exp_param.xout(1,:), 'linewidth', 1, 'color', cpal(17,:)); hold on;
     ylabel("Concentration - \rho_A (^o C)")
     xlabel("Time (hr)")
     ylim([min(exp_param.xout(1,:))-0.05 max(exp_param.xout(1,:))+0.05])
     
-    subplot(3,2,4) 
-    plot(exp_param.t, exp_param.r(2,:), 'linewidth', 1.25, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    %plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', 'o', 'MarkerEdgeColor', cpal(16,:)); hold on;     
-    s.MarkerFaceAlpha = 0.2;
-    s.MarkerEdgeAlpha = 0.2;
-    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1.5, 'color', cpal(16,:)); hold on;     
+    axes(ha(4))
+    plot(exp_param.t, exp_param.r(2,:), 'linewidth', 1, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+%     plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on;
+%     s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', '.', 'MarkerEdgeColor', cpal(16,:)); hold on;     
+%     s.MarkerFaceAlpha = 0.4;
+%     s.MarkerEdgeAlpha = 0.4;
+    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1, 'color', cpal(16,:)); hold on;     
     ylabel("Temperature - Reactor (^o C)")
     ylim([min(exp_param.xout(3,:))-0.5 max(exp_param.xout(3,:))+0.5])
+    set(ha(4), "XTickLabel", [])
     
-    subplot(3,2,6) 
-    %plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
+    axes(ha(6))
+%     plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(15,:)); hold on;
     plot(exp_param.t, exp_param.xout(4,:), 'linewidth', 1, 'color', cpal(15,:)); hold on;     
     ylim([min(exp_param.xout(4,:))-0.5 max(exp_param.xout(4,:))+0.5])
     ylabel("Temperature - Coolant (^o C)")
     xlabel("Time (hr)")
 
-    subplot(3,2,1)
-    plot(exp_param.t, ones(1,T)*35, 'r:', 'linewidth', 1.25), hold on
-    plot(exp_param.t, ones(1,T)*5, 'r:', 'linewidth', 1.25)
+    axes(ha(1))
+    plot(exp_param.t, ones(1,T)*35, 'r:', 'linewidth', 1), hold on
+    plot(exp_param.t, ones(1,T)*5, 'r:', 'linewidth', 1)
     ylabel("Input Flow-Rate (1/hr)")
 %     ylim([min(exp_param.uout(1,:)), max(exp_param.uout(1,:))])
     ylim([4, 36])
     
-    subplot(3,2,2)
-    plot(exp_param.t, ones(1,T)*0, 'r:', 'linewidth', 1.25), hold on
-    plot(exp_param.t, ones(1,T)*-8500, 'r:', 'linewidth', 1.25)
+    axes(ha(2))
+    plot(exp_param.t, ones(1,T)*0, 'r:', 'linewidth', 1), hold on
+    plot(exp_param.t, ones(1,T)*-8500, 'r:', 'linewidth', 1)
     ylabel("Cooling Capacity (kJ/hr)")
 %     ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
     ylim([-8700, 200])
-    
-    subplot(3,2,1), hold off
-    subplot(3,2,2), hold off
-    subplot(3,2,3), hold off
-    subplot(3,2,4), hold off
-    subplot(3,2,5), hold off
-    subplot(3,2,6), hold off
-    
     
     timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
     figname = "report_experiments/figs/exoSim_control_" + char(timeNow);

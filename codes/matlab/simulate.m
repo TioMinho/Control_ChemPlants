@@ -204,7 +204,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                    zeros(ny, nu)];
             C_i = [C, zeros(ny, ny)];
             D_i = D;
-
+    
             % Calculate the LQRI gain matrix
             K = lqr_(A_i, B_i, controller.Q, controller.R, 0:deltaT:controller.N);
 
