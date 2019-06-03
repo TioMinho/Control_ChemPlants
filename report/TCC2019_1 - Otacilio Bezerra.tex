@@ -2841,15 +2841,22 @@ This chapter details the methodology used in order to attest the discussion pres
 
 \section{Non-Isothermal Continuous Stirred Tank}
 
-The chemical reactor used for the experiments was the non-isothermal Continuous Stirred Tank (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of systems that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactor. The reaction scheme follows the same Van de Vusse scheme explored throughout this report:
+The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of processes that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. 
+
+This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactions. The reaction scheme follows the same Van de Vusse scheme explored earlier in this report:
 \begin{align}
 \left\{\ \begin{matrix*}[l]
-	\overbrace{\textbf{C}_5 \textbf{H}_6}^{A} & \overset{K_1(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_7 \textbf{OH}}^{B} & \overset{K_2(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_8 (\textbf{OH})_2}^{C} \\ 
+	\overbrace{\textbf{C}_5 \textbf{H}_6}^{A} & \overset{K_1(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_7 \textbf{OH}}^{B} & \overset{K_2(T)}{\longrightarrow} & \overbrace{\textbf{C}_5 \textbf{H}_8 \textbf{(OH)}_2}^{C} \\ 
 	\overbrace{2 \textbf{C}_5 \textbf{H}_6}^{2A} & \overset{K_3(T)}{\longrightarrow} & \overbrace{\textbf{C}_10 \textbf{H}_12}^{D}
 \end{matrix*} \right.
 .\end{align}
 
-Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and $K_3(T)$ are function of the temperature, and they are assumed to follow the Arrhenius equation from \eqref{eq:arrhenius1}. In order to control the temperature, ensuring some safety constraints to the process, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$, $\rho_B$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology01}. 
+Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and $K_3(T)$ are function of the temperature inside the tank, and they are assumed to follow the Arrhenius equation in the form:
+\begin{equation}
+	K_{i}(T) = K_{i0} e^{\frac{-E_i / R}{T+273.15}}
+\end{equation}
+
+In order to control the temperature, ensuring some safety constraints to the process, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario also assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology01}. 
 
 \begin{figure}[ht] \centering
 	\includegraphics[scale=0.75]{chapter6/exoCSTR}
@@ -2860,14 +2867,14 @@ Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and 
 A nonlinear dynamical model, which was obtained from the first principles approach, is proposed to represent the evolution of the important states:
 \begin{align} \label{eq:engellModel}
 \begin{cases}
-	\hfill \dot{\rho_A} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\
-	\hfill \dot{\rho_B} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\
-	\hfill \dot{T} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\
-	\hfill \dot{T_C} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
+	\hfill \cfrac{d \rho_A}{dt} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\
+	\hfill \cfrac{d \rho_B}{dt} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\
+	\hfill \cfrac{d T}{dt} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\
+	\hfill \cfrac{d T_C}{dt} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
 \end{cases}
 .\end{align}
 
-The meaning and value of each parameter is shown in Table \ref{table:exo_parameters}. Additionally, the real system has some constraints in respect to the manipulated variables, namely:
+The meaning and value of each system variable is shown in Table \ref{table:exo_parameters}. Additionally, the real system has some constraints in respect to the manipulated variables, namely:
 \begin{equation}
 \begin{matrix}
 	5 hr^{-1} \leq F \leq 35 h^{-1}; & -8500 \cfrac{kJ}{h} \leq Q \leq 0 \cfrac{kJ}{h}
@@ -2878,6 +2885,11 @@ The meaning and value of each parameter is shown in Table \ref{table:exo_paramet
   \centering
 	\begin{tabular}{l | c | c l }
 	\textbf{System Variable} & \textbf{Symbol} & \textbf{Value} & \textbf{Unit} \\
+	\hline
+	Concentration $A$ in the reactor solution & $\rho_A$ 	& $-$		& $\text{mol}/l$ \\
+	Concentration $A$ in the reactor solution & $\rho_B$ 	& $-$		& $\text{mol}/l$ \\
+	Temperature inside the reactor & $T$ 	& $-$		& $º C$ \\
+	Temperature of the coolant jacket & $T_C$ 	& $-$		& $º C$ \\
 	\hline
 	Inflow concentration of $A$ & $\rho^{(A)}_{in}$ 	& $5.1$		& $\text{mol}/l$ \\
 	Inflow liquid temperature & $T_{in}$ 	& $130$		& $º C$ \\
@@ -2898,20 +2910,14 @@ The meaning and value of each parameter is shown in Table \ref{table:exo_paramet
 	Coolant mass & $m_K$ & $5.0$ & $kg$ \\
 	Heat transfer coefficient & $k_W$ & $4032.0$ & $kJ\ h^{-1} m^2 K$ \\
   \end{tabular} 
-  \caption{Model parameters and variable nomenclature.}
+  \caption{Model parameters and variables nomenclature.}
   \label{table:exo_parameters} 
 \end{table} \vskip0.25cm
 
 
 \section{Simulation}
 
-The process and all the control structures were simulated using the MATLAB software. In the first part of the experiments, the process was analyzed in respect to the following characteristics and properties of its dynamical models:
-\begin{enumerate}
-	\item Nonlinear model natural and forced response simulation;
-	\item Linearized State-Space model structure and response simulation;
-	\item Analysis of the response in time domain;
-	\item Assessment of the stability, controllability and observability properties;
-\end{enumerate}
+The process and all the control structures were simulated using the MATLAB software. In the first part of the experiments, the dynamics of the process were analyzed in respect to the mathematical structure of the models and through the simulation results. 
 
 In respect to the control, the second part of the experiments focused on the design of controllers using the optimal control techniques. The controllers were developed and analyzed in the same order that they were presented in this document:
 \begin{enumerate}
@@ -3260,81 +3266,60 @@ Moreover, the last property of the system to be accessed concerns the observabil
 
 \section{Optimal Control}
 
-\subsection{Linear Quadratic Regulator}
+\subsection{Regulation}
 
-The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01} for 4 different realizations of this controller. The controllers differs only on the choice of the weights $Q$ and $R$. In these simulations, the system was initiated at a non-zero initial state, specifically, at $20\%$ above the first and $5\%$ below the second steady-state value. The goal was to visualize how the controllers change the dynamic responses of the systems as they drive it to the zero-state reference. 
+The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01}. The simulation started with an initial state $x_1(0) = x_2(0) = 0$ (or, equivalently, $\Delta x_1(0) = -x_{1o}$ and $\Delta x_2(0) = -x_{2o}$) while maintaining the states $x_3$ and $x_4$ at the steady-state value. The goal of this simulation was to represent the scenario where the solution in the tank does not actually contain any concentration of the reagents or products. This scenario, thus, requires that the controller ``starts" the process by providing the flow of reagent necessary to achieve the desirable steady-state concentration of the controlled product. Notice that the resulting reactions will change the temperature inside the tank, requiring also that the controller manipulates the cooling capacity in order to control the reactor temperature.
 
-The simulations shows that the choice of weights can produce very distinct closed-loop systems. In the case of controller $LQR_4$, for instance, the 
 
 \begin{figure}[ht] \centering
-	\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{chapter7/lqr01}};
-		
-		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5.4cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_1$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_2$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_3$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_4$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+	\includegraphics[width=\textwidth]{chapter7/lqr01}
 	
 	\caption{a}
 	\label{fig:lqr01}
 \end{figure}
 
-a
+As expected, the controller momentarily increases the input flow-rate in order to accelerate the production of compound $B$, returning to the steady-state value to achieve the desired reference. Notice that the input flow-rate does not grow further in the first minutes in order to avoid overshoots, which occurs in the results presented but with small magnitude. In respect to the reactor temperature, the controller was able to respond to the sudden change by decreasing the absolute value of the cooling capacity, causing the coolant to increase its temperature and, consequently, returns the reactor temperature to the reference. Therefore, the simulation shows that the proposed optimal controller is able to drive the process to a desired constant reference in an optimal manner, not causing overshoots and/or oscillations, in a small amount of time.
 
 \begin{figure}[ht] \centering
-	\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{chapter7/lqr02}};
-		
-		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.3cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_1$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_2$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_3$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQR_4$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+	\includegraphics[width=\textwidth]{chapter7/lqr02}
 	
 	\caption{a}
 	\label{fig:lqr02}
 \end{figure}	
 
-\begin{table}
+To further test the capabilities of this controller, the same control objective was considered, but while subjecting the actual system to disturbances in the system variables. Specifically, disturbances were applied to the inflow concentration and temperature, $\rho^{(A)}_{in}$ and $T_{in}$, respectively, to represent the scenario where the fluid entering the tank could be perturbed by previous processes or by instrumentation limitations. To simulate these cases, pulse signals of values $w_1 = \pm 0.5$ and $w_2 = \pm 2$ were applied to the nominal value of the inflow concentration and temperature, respectively. Each pulse starts at an odd multiple of $\lfloor T/4 \rfloor$ and lasts for $0.02T$ hours, where $T$ is the length of the simulation time vector, i.e., the total size of the control horizon. The simulation results are shown in Fig. \ref{fig:lqr02}.
+
+First of all, it was observed that the control horizon had to be increased in order to allow the feedback controller to perceive the disturbance and corrects the system response accordingly. As a direct result of the larger horizon, the controller performed more aggressively at the first minutes. Despite of this, the input signals did not violated the defined constraints for the manipulated variables, indicated at the visualization by the red dotted lines. It was observed that the regulator is capable of react to the disturbances and provide a corrective action to return to the steady-state point. 
+
+Until now, the experiments were done assuming that the optimal controller had direct access to the real system states. In a more realistic scenario, the states can only be reconstructed through noisy measurements of the system output. A Linear Quadratic Gaussian (LQG) controller is proposed to deal with this limitation, considering the same control objectives of the previous experiments. In the next simulations it was assumed a process noise $\bm{w} : \mathbb{R} \rightarrow \mathbb{R}^{4}$ and measurement noise $\bm{z} : \mathbb{R} \rightarrow \mathbb{R}^{2}$ described by the following Gaussian distributions:
+\begin{equation}
+\begin{matrix}
+	\bm{w}(t) \sim \mathcal{N}\left( \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.1 & 0 & 0 & 0 \\ 0 & 0.1 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \\ 0 & 0 & 0 & 0.1 \end{bmatrix} \right) & 
+\bm{z}(t) \sim \mathcal{N}\left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.0001 & 0 \\ 0 & 0.1 \end{bmatrix} \right)
+\end{matrix}
+\end{equation}
+
+The covariance matrix of the noise $\bm{w}(t)$ tries represents the uncertainty of the non-linear model behavior in respect to the linearized model, while the covariance matrix of $\bm{z}(t)$ aims to represent realistic limitation of measurement devices in respect to these variables. Initially, it is assumed that the Kalman-Bucy estimator can accurately estimate these covariances before optimizing each estimator gain $\bm{K}_e(t)$. The simulation results, for the scenario of starting the process, is shown in Fig. \ref{fig:lqg01}.
+ 
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/lqg01}
+	\caption{a}
+	\label{fig:lqg01}
+\end{figure}
+
+The estimation of the covariance matrices gave the estimator enough information to accurately reconstruct the state vector from the observations. As it can be seen in the visualizations, this control-estimation operation is very similar to the one shown in Fig. \ref{fig:lqr01}, when the states were directly known. It is visible, however, a slightly greater peak value for the cooling capacity in this case. Thus, the LQG controller proved to be optimal even for in realistic configurations.
+
+Furthermore, the same controller was also evaluated for the case where disturbances in the system variables are present. In this experiment, the same disturbance signal used in the LQR simulation is provided to the observed system. The results are shown in Fig. \ref{fig:lqg02}.
+
+\begin{figure}[ht] \centering
+	\includegraphics[width=\textwidth]{chapter7/lqg02}
+	\caption{a}
+	\label{fig:lqg02}
+\end{figure}	
+
+Doing a comparison with Fig. \ref{fig:lqr01}, it seems that the system responses are very similar. However, the controller in this case performed less aggressively, which resulted in a more damped response for the concentrations, in the beginning of the operation. The corrective actions for the disturbances were also smoother than of those before, and they are barely visible in the scale of the visualization. Finally, the performance metrics for the discussed controllers are displayed in Table \ref{tb:lqrMetrics}.
+
+\begin{table}[ht]
 	\centering
 	\begin{tabular}{l | c c | c c c c}
 		\textbf{Controller} & $\bm{Q}_{\Delta}$ & $\bm{R}_{\Delta}$ & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
@@ -3349,38 +3334,13 @@ a
 	\label{tb:lqrMetrics}
 \end{table}
 
-\subsection{Linear Quadratic Servo}
+\subsection{Tracking}
 
-a
+Now, the experiments for controllers that track non-constant references is presented. As in the previous subsection, the first controller simulated consists in the Linear Quadratic Regulator with Integral Action (LQRI), also known as Linear Quadratic Servo (LQ-Servo). The simulations starts with initial states equal to the steady-state values. The proposed scenario for this controller is to increase and then decrease the amount of compound $B$ that is produced, while maintaining the reactor temperature at a constant value. For the concentration control, the reference signal is comprised by a sequence of step functions which varies from approximately $12\%$ of the operation value, which is a realistic set-point change in such processes. The results of the simulation are shown in Fig. \ref{fig:lqri01}.
 
 \begin{figure}[ht] \centering
-	\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{chapter7/lqri01}};
-		
-		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5.4cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_1$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_2$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_3$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_4$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+	\includegraphics[width=\textwidth]{chapter7/lqri01}
+	
 	\caption{a}
 	\label{fig:lqri01}
 \end{figure}
@@ -3388,74 +3348,11 @@ a
 a
 
 \begin{figure}[ht] \centering
-	\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{chapter7/lqri02}};
-		
-		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.3cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_1$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_2$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_3$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1.5cm] (label) {$LQRI_4$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+	\includegraphics[width=\textwidth]{chapter7/lqri02}
 	
 	\caption{a}
 	\label{fig:lqri02}
 \end{figure}	
-
-\subsection{Linear Quadratic Gaussian}
-
-a
-
-\begin{figure}[ht] \centering
-	\includegraphics[width=\textwidth]{chapter7/lqg01}
-	\caption{a}
-	\label{fig:lqg01}
-\end{figure}
-
-a
-
-\begin{figure}[ht] \centering
-	\includegraphics[width=\textwidth]{chapter7/lqg02}
-	\caption{a}
-	\label{fig:lqg02}
-\end{figure}	
-
-a
-
-\begin{figure}[ht] \centering
-	\includegraphics[width=\textwidth]{chapter7/lqg03}
-	\caption{a}
-	\label{fig:lqg03}
-\end{figure}
-
-a
-
-\begin{figure}[ht] \centering
-	\includegraphics[width=\textwidth]{chapter7/lqg04}
-	\caption{a}
-	\label{fig:lqg04}
-\end{figure}	
-
-
-\subsection{Linear Quadratic Gaussian Servo}
 
 a
 
