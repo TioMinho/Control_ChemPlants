@@ -20,17 +20,12 @@
 \usepackage{subcaption}
 \usepackage{siunitx}
 \usepackage{tikz, pgfplots}
-
 \usepackage{framed}
-\definecolor{myYellow}{rgb}{1,0.65,0}
-\definecolor{myRed}{rgb}{0.84, 0.18, 0.13}
-\definecolor{myGreen}{rgb}{0, 0.53, 0.27}
-\definecolor{myBlue}{rgb}{0, 0.34, 0.91}
-\colorlet{shadecolor}{myBlue!7}
 
 \numberwithin{figure}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{table}{chapter}
+
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -38,6 +33,7 @@
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}{Example}[chapter]
 
 \newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
@@ -56,6 +52,23 @@
     basicstyle=\footnotesize \ttfamily,breaklines=true,
     escapeinside={\%*}{*)}
 }
+
+% --------------------------------------------------------------------
+% Definition of new Colors
+% --------------------------------------------------------------------
+\definecolor{myYellow}{rgb}{1,0.65,0}
+\definecolor{myRed}{rgb}{0.84, 0.18, 0.13}
+\definecolor{myGreen}{rgb}{0, 0.53, 0.27}
+\definecolor{myBlue}{rgb}{0, 0.34, 0.91}
+
+\definecolor{pastelRed}{RGB}{255,189,189}
+\definecolor{pastelBlue}{RGB}{201,201,255}
+\definecolor{pastelBlue2}{RGB}{27,133,184}
+\definecolor{pastelPurple}{RGB}{241,203,255}
+\definecolor{pastelGreen}{RGB}{225,247,213}
+\definecolor{pastelGreen2}{RGB}{85,158,131}
+\definecolor{pastelYellow}{RGB}{195,203,113}
+
 
 % --------------------------------------------------------------------
 % Tikz Macros
@@ -89,14 +102,20 @@
 \newcounter{boxed-theorem}
 \makeatletter
 \newenvironment{boxed-theorem}[1]
-{\begin{shaded} \begin{theorem}{#1}}
+{\colorlet{shadecolor}{pastelBlue2!5} \begin{shaded} \begin{theorem}{#1}}
 {\end{theorem} \end{shaded}}
 
 \newcounter{boxed-definition}
 \makeatletter
 \newenvironment{boxed-definition}[1]
-{\begin{shaded} \begin{definition}{#1}}
+{\colorlet{shadecolor}{pastelYellow!10} \begin{shaded} \begin{definition}{#1}}
 {\end{definition} \end{shaded}}
+
+\newcounter{boxed-example}
+\makeatletter
+\newenvironment{boxed-example}[1]
+{\colorlet{shadecolor}{pastelRed!15} \begin{shaded} \begin{example}{#1}}
+{\end{example} \end{shaded}}
 
 % ---------------------------------------------------------------
 % Metadata 
@@ -143,13 +162,13 @@
 
 This chapter presents the main problem in discussion and the basic concepts concerning its formulation and solutions, which are detailed further in the next chapters. This is a work on Control Theory and its application to Chemical Reactors, therefore the discussion will follow the notation common to the literature of this field, and the modern approach to this theory is explored. 
 
-The sections are organized as follows: Section 1.1 provides a general view on control systems engineering, Section 1.2 discuss chemical reactive systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
+The sections are organized as follows: Section 1.1 provides a general view on control systems engineering, Section 1.2 discuss chemical reactor systems and its importance in both industry and academia, Sections 1.3 and 1.4 describes the motivation and justification of this work, respectively, and Section 1.5 details the subsequent chapters in this document.
 
 \section{Control Systems Engineering}
 
 The discipline of Control Systems Engineering deals with the design of devices, named \textit{controllers}, that are integrated to a physical system (a \textit{dynamical system}, in most cases) in order to impose a desired behavior to this system. To achieve this goal, the discipline covers topics ranging from applied mathematics, such as dynamical systems theory and signal processing, to a more engineering discussion, regarding instrumentation and implementation of these controllers in a real-life plant or individual system. 
 
-A system, in a broad physical sense, is defined as a ensemble of interacting components that responds to external stimuli producing a determined dynamical response, and whose individual parts are not able to produce the same functionality by their own. Thus, the first essential element in Control Theory is a mathematical model of the system of interest. One such model is the \textit{Input-Output Representation}, in which an input stimuli, a signal $u(t)$, acts on the system producing an output response, a signal $y(t)$, described by the following differential equation:
+A system, in a broad physical sense, is defined as an ensemble of interacting components that responds to external stimuli producing a determined dynamical response, and whose individual parts are not able to produce the same functionality by their own. Thus, the first essential element in Control Theory is a mathematical model of the system of interest. One such model is the \textit{Input-Output Representation}, in which an input stimuli, a signal $u(t)$, acts on the system producing an output response, a signal $y(t)$, described by the following differential equation:
 \begin{equation} \label{eq:01-01}
 \begin{split}
     \alpha_n \cfrac{d^n y(t)}{dt^n} + \alpha_{n-1} & \cfrac{d^{n-1} y(t)}{dt^{n-1}} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) = \\
@@ -157,20 +176,20 @@ A system, in a broad physical sense, is defined as a ensemble of interacting com
 \end{split}
 .\end{equation}
 
-In this representation, the input $u(t)$ is called the \textit{manipulated variable}, since it represents a arbitrary stimuli that can be given directly by human action or a by an automatic controller, while the output $y(t)$ is called the \textit{controlled variable}, since it can only be modified indirectly through $u(t)$. This also leads to a \textit{cause-and-effect} interpretation of the system.
+In this representation, the input $u(t)$ is called the \textit{manipulated variable}, since it represents an arbitrary stimuli that can be given directly by human action or a by an automatic controller, while the output $y(t)$ is called the \textit{controlled variable}, since it can only be modified indirectly through $u(t)$. This also leads to a \textit{cause-and-effect} interpretation of the system.
 
-A model can provide a quantitative understanding of the system that is useful both to access some response specifications and to design controllers to modify them based on some requirements. In the case of the model in Equation \eqref{eq:01-01}, it is possible to calculate the response $y(t)$, and its derivatives, resulting from any specific action $u(t)$. Besides, a model can be used to perform computer simulations, in order to visualize the dynamical behavior of the system without actually manipulating it, since real experiments could be expensive or even damage the system. Consider, for instance, a schematic and a simulation for a model representing a mass-spring-damper system, shown at Fig. \ref{fig:intro01}.
+A model can provide a quantitative understanding of the system that is useful both to access some response specifications and to design controllers to modify them based on some requirements. In the case of the model in \eqref{eq:01-01}, it is possible to calculate the response $y(t)$, and its derivatives, resulting from any specific action $u(t)$. Besides, a model can be used to perform computer simulations, in order to visualize the dynamical behavior of the system without actually manipulating it, since real experiments could be expensive or even damage the system. Consider, for instance, a schematic and a simulation for a model representing a mass-spring-damper system, shown at Fig. \ref{fig:intro01}.
 
 \begin{figure}[ht] \centering
 	\begin{tikzpicture}[node distance=8cm]
-		\node (img1) {\includegraphics[width=0.43\textwidth]{chapter1/massSpringDamper}};
-		\node [right of=img1](img2) {\includegraphics[width=0.47\textwidth]{chapter1/massSpringDamperPlot}};
+		\node  (img1) {\includegraphics[width=0.44\textwidth]{chapter1/massSpringDamper}};
+		\node [right of=img1,yshift=-0.8em](img2) {\includegraphics[width=0.47\textwidth]{chapter1/massSpringDamperPlot}};
 	\end{tikzpicture}
 	\caption{The schematic of a simple Mass-Spring-Damper system and its dynamical response to being forced by an unitary constant force.}
 	\label{fig:intro01}
 \end{figure}
 
-In this simulation, quantities as the rise time, peak time, overshoot ratio and steady-state value of the signal are examples of response specifications that can be defined to describe the system behavior to a external stimuli (in this case, a constant force of unit magnitude). These specified parameters are characteristic to responses of a class of systems known as \textit{underdamped second-order systems}, that will be discussed further in the document. 
+In this simulation, quantities as the rise time, peak time, overshoot ratio and steady-state value of the visualized signal are examples of response specifications that can be defined to describe the system behavior to an external stimuli (in this case, a constant force of unit magnitude). These specified parameters are characteristic to responses of a class of systems known as \textit{underdamped second-order systems}, that will be discussed further in the document. 
 
 A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, the necessary input $u(t)$ to produce an output $y(t)$ as close as possible to a desired reference signal $r(t)$. There are two common configurations, shown in Fig. \ref{fig:intro02}, of how to connect the controller to the system.
 
@@ -185,11 +204,11 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 	            node distance=3.5cm] (system) {\textbf{System}};
 	    % We draw an edge between the controller and system block to 
 	    % calculate the coordinate u. We need it to place the measurement block. 
-	    \draw [->, thick] (controller) -- node[name=u] {} (system);
+	    \draw [->, thick] (controller) -- node[pos=0.5] {$u(t)$} node[name=u] {} (system);
 	    \node [output, right of=system, node distance=3cm] (output) {};
 	
 	    % Once the nodes are placed, connecting them is easy. 
-	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$u(t)$}  (controller);
+	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$r(t)$}  (controller);
 	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
 	\end{tikzpicture}
 	
@@ -205,13 +224,13 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 	            node distance=3.5cm] (system) {\textbf{System}};
 	    % We draw an edge between the controller and system block to 
 	    % calculate the coordinate u. We need it to place the measurement block. 
-	    \draw [->, thick] (controller) -- node[name=u] {} (system);
+	    \draw [->, thick] (controller) -- node[pos=0.5,name=u] {$u(t)$} (system);
 	    \node [output, right of=system, node distance=3cm] (output) {};
 	    \node [block, minimum width=6em, minimum height=3.5em, below of=u] (measurements) {\textbf{Sensor}};
 	
 	    % Once the nodes are placed, connecting them is easy. 
 	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$r(t)$} node[pos=0.8] {$+$}  (sum);
-	    \draw [->, thick] (sum) -- (controller);
+	    \draw [->, thick] (sum) -- node[pos=0.4] {$e(t)$} (controller);
 	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
 	    \draw [->, thick] (y) |- (measurements);
 	    \draw [->, thick] (measurements) -| node[pos=0.95] {$-$} node [near end] {} (sum);
@@ -226,9 +245,9 @@ The configuration shown in the upper left of Fig. \ref{fig:intro02}, known as th
 
 In contrast, the configuration in the lower right of Fig. \ref{fig:intro02}, known as the \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \textbf{[reference]}
 
-\section{Chemical Reactive Systems}
+\section{Chemical reactor Systems}
 
-A chemical reaction, the transformation of a chemical substance into another, is a process central to chemistry and to nature itself. A reaction equation is a intuitive representation of such transformations. For instance, consider the following equation representing a \textit{synthesis} reaction:
+A chemical reaction, the transformation of a chemical substance into another, is a process central to chemistry and to nature itself. A reaction equation is an intuitive representation of such transformations. For instance, consider the following equation representing a \textit{synthesis} reaction:
 \begin{equation}
     A + 2 B \longrightarrow 3 C + D 
 .\end{equation} 
@@ -250,92 +269,110 @@ Moreover, chemical reactions displays a dynamical behavior concerning the speed 
     \mathcal{R} \overset{K}{\longrightarrow} \mathcal{P}
 .\end{equation} 
 
-When the temperature in the environment is not constant, the process is said to be endothermic or exothermic if, respectively, it consumes or produces energy. The kinetics of the reactions in such processes are usually functions of the temperature which, given an activation energy $E$, are assumed to follow the following form, known as the Arrhenius equation:
+When the temperature in the environment is not constant, the process is said to be endothermic or exothermic if, respectively, it consumes or produces energy. The kinetics of the reactions in such processes are usually functions of the temperature $T$ which are assumed to follow the following form, known as the Arrhenius equation
 \begin{equation} \label{eq:arrhenius1}
-    K(T) = K_0 e^{-E / T}
-.\end{equation}
+    K(T) = K_0 e^{\frac{-E/R}{T}}
+,\end{equation}
 
-In practice, these chemical reactions are produced by mixing the reactants in some environment with adequate conditions. In order to control the quantities of these substances, actual processes consists in a manipulation of the concentrations of reactants in some container, usually by providing a mass flow of these substances through some fluid. A major interest is to manipulate the reactants in some way to produce a desired concentration of one or more products in the chemical reaction network, allowing this problem to be addressed by a control engineering perspective. A \textit{chemical reactor system}, depicted in Fig. \ref{fig:intro03}, is a system where a controller can manipulate the concentration of some reactants to produce a desired concentration of some products.
+\noindent where $K_0$ is the nominal kinetic rate, $E$ is an activation energy associated with the reaction, $R$ is the universal gas constant and $T$ is the absolute temperature (in kelvins).
+
+In practice, these chemical reactions are produced by mixing the reactants in some environment with adequate conditions. In order to control the quantities of these substances, actual processes consists in a manipulation of the concentrations of reactants in some container, usually by providing a mass flow of these substances through some fluid. A major interest is to manipulate the reactants in some way to produce a desired concentration of one or more products in the chemical reaction network, allowing this problem to be addressed by a control engineering perspective. A \textit{chemical reactor system}, depicted in Fig. Fig. \ref{fig:intro03a}, is a system where the concentration of some reactants is manipulated to produce a desired concentration of some products, given a chemical reaction network describing the reaction between these entities.
 
 \begin{figure} \centering
 	\begin{subfigure}{0.47\textwidth}
 	\resizebox{\textwidth}{!}{
 	\begin{tikzpicture}[auto, node distance=3cm, >=latex']
 		\node [input] (input1) {};
-		\node [block, right of=input1, minimum width=8em, minimum height=5em, label={below:Isothermal Chemical Reactor}] (system) {{\large \bfseries System}};
+		\node [block, right of=input1, minimum width=8em, minimum height=5em] (system) {{\large \bfseries System}};
 		\node [output, right of=system] (output) {};
+		
+		\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathbb{R}^{(1)}  & \overset{K_{11}}{\longrightarrow} & \cdots & \overset{K_{1n}}{\longrightarrow} &  \mathcal{P}^{(1)} \\ \vdots &  & \vdots &  & \vdots \\ \mathbb{R}^{(N)} &  \overset{K_{n1}}{\longrightarrow} & \cdots & \overset{K_{nn}}{\longrightarrow} & \mathcal{P}^{(N)} \\\end{matrix} \right.$};		
 		
 		\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (system);
 		\draw[->, line width=0.5mm] (system) -- node[pos=0.9]{Products} (output);
 	\end{tikzpicture}}
+	
+	\caption{Isothermal chemical reactor}
+	\label{fig:intro03a}
 	\end{subfigure} \hfill
-	\begin{subfigure}{0.47\textwidth}
+	\begin{subfigure}{0.49\textwidth}
 	\resizebox{\textwidth}{!}{
 	\begin{tikzpicture}[auto, node distance=3cm, >=latex']
 		\node [input] (input1) {};
 		\node [input, below of=input1, node distance=1.5em] (input2) {};
 		\node [input, below of=input2, node distance=1.5em] (input3) {};
-		\node [block, right of=input2, minimum width=8em, minimum height=5em, label={below:Non-isothermal Chemical Reactor}] (system) {{\large \bfseries System}};
+		\node [block, right of=input2, minimum width=8em, minimum height=5em] (system) {{\large \bfseries System}};
 		\node [output, right of=system] (output2) {};
 		\node [output, above of=output2, node distance=1.5em] (output1) {};		
 		\node [output, below of=output2, node distance=1.5em] (output3) {};
 		
+		\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathbb{R}^{(1)}  & \overset{K_{11}(T)}{\longrightarrow} & \cdots & \overset{K_{1n}(T)}{\longrightarrow} &  \mathcal{P}^{(1)} & & \Delta H_1 \\ \vdots &  & \vdots &  & \vdots  & &  \\ \mathbb{R}^{(N)} &  \overset{K_{n1}(T)}{\longrightarrow} & \cdots & \overset{K_{nn}(T)}{\longrightarrow} & \mathcal{P}^{(N)}  & & \Delta H_n \\ \end{matrix} \right.$};				
+		
 		\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (input1-|system.west);
 		\draw[->, line width=0.5mm] (input3) -- node[pos=0.1]{Heat Capacity} (input3-|system.west);
-		\draw[->, line width=0.5mm] (system) ++(0,2em) -- node[pos=0.9]{Products} (system-|output1.west);
-		\draw[->, line width=0.5mm] (system) -- node[pos=0.9]{Temperature} (system-|output3.west);
+		\draw[<-, line width=0.5mm] (output1) -- node[pos=0.1,yshift=1.5em]{Products} (output1-|system.east);
+		\draw[<-, line width=0.5mm] (output3) -- node[pos=0.1,yshift=1.5em]{Temperature} (output3-|system.east);
 	\end{tikzpicture}}
+	
+	\caption{Non-isothermal chemical reactor}
+	\label{fig:intro03b}
 	\end{subfigure}	
 	
-	\caption{a}
+	\caption{General graphical representations of common chemical reactor systems.}
 	\label{fig:intro03}
 \end{figure}
 
-When the process is not isothermal, the occurrence of a reaction contributes to the entropy of the environment, and consequently affects the kinetics of the subsequent ones. To compensate for this, practical applications also try to control the conditions in the environment using instruments external to the reactions themselves. Because of the use of the Arrhenius equation to model these reaction rates, this control is usually implemented through a cooling or heating system coupled to the original reactor system, resulting in the schematic on \textbf{Fig!!!}.
-
-[img]
+When the process is non-isothermal, the occurrence of a reaction contributes to the entropy of the environment, and consequently affects the kinetics of the subsequent ones. To compensate for this, practical applications also try to control the conditions in the environment using instruments external to the reactions themselves. Because of the use of the Arrhenius equation to model these reaction rates, this control is usually implemented through a cooling or heating system coupled to the original reactor system, resulting in the schematic on Fig. \ref{fig:intro03b}. Moreover, note that the equation associated with non-isothermal reactions suffers a change of notation to include the value of entropy change, denoted $\Delta H$, resulting in the following general equation known as the \textit{reaction heat equation}:
+\begin{equation}
+\begin{matrix}    
+	\mathcal{R} \overset{K(T)}{\longrightarrow} \mathcal{P} & & \Delta H
+\end{matrix}
+.\end{equation} 
 
 \section{Motivation}
 
-The use of automatic controllers to impose a desired behaviour to physical systems is a practice ubiquitous in many engineering fields. In the last years, the price of digital computers have been dropping while their performance have been growing. Consequently, digital controllers have became the central key in developments in important and innovative fields such as aeronautics \textbf{[reference]} and autonomous driving \textbf{[reference]}. In parallel, this theory is also useful to understand and bring inspiration from nature itself since, for instance, the mechanisms for temperature regulation observed in vertebrate animals behave as a feedback controller \cite{Heller:1978}.
+The use of automatic controllers to impose a desired behaviour to physical systems is a practice ubiquitous in many engineering fields. In the last years, the price of digital computers have been dropping while their performance have been growing. Consequently, digital controllers have became the central key in developments in important and innovative fields such as aeronautics \textbf{[reference]}, autonomous driving \textbf{[reference]} and several industrial applications \textbf{[reference]}. In parallel, this theory is also useful to understand and bring inspiration from nature itself since, for instance, the mechanisms for temperature regulation observed in vertebrate animals behave as a feedback controller \cite{Heller:1978}.
 
-Most recent developments in Control Theory focus on using Feedback Controllers to achieve \textit{Robust and Optimal Control}. This theory accounts for the design of controllers that deals with uncertainty, either from the model or from the observation of the system, and are able to achieve the control objectives in a \textit{optimal manner}. Despite being a few decades old, these fields have gained a lot of interest in the last years thanks to recent results in \textit{Machine Learning}, particularly in \textit{Reinforcement Learning}, that are having success in using optimization techniques for artificial agents to control themselves in environments loaded with uncertainty \textbf{[reference]}.
+Most recent developments in Control Theory focus on using Feedback Controllers to achieve \textit{Robust and Optimal Control} \textbf{[reference]}. This theory accounts for the design of controllers that deals with uncertainty, either from the model or from the observation of the system, and are able to achieve the control objectives in a \textit{optimal manner}. Despite being a few decades old, these fields have gained a lot of interest in the last years thanks to recent results in \textit{Machine Learning} theory, particularly in \textit{Reinforcement Learning}, which have been successful in applying optimization techniques for controlling artificial agents in environments loaded with uncertainty \textbf{[reference]}.
 
-Furthermore, the specific application of controlling chemical reactor systems brings benefits from the fact that chemical reactions are present in most biological and industrial processes. In this sense, controllers can be used to guarantee safety constraints, maximize productivity and minimize the use of resources, in such way that is unfeasible without automatic and high performing machinery.
+Furthermore, the specific application of controlling chemical reactor systems brings benefits from the fact that this class of dynamical system are present in most biological and industrial processes \textbf{[reference]}. In general, controllers can be used to guarantee safety constraints, maximize productivity and minimize the use of resources, in such a way that could not be achieved without automatic and high performing machinery. The inherent complexity and uncertainty existent in these systems also poses this control problem as a challenging research field still open to be explored.
 
 \section{Objectives}
 
-This works aims to provide a self-contained discussion of modelling and control of chemical reactive systems in the perspective of modern control theory. Therefore, the results are focused on \textit{state feedback controllers} modelled in continuous and discrete time, but analysis in the frequency domain is also considered in order to explain some concepts. Several properties of these models, both in the open-loop and closed-loop regime, are summarized in the document and the intention is to have a generalized framework to understand, evaluate and design those systems. Finally, the theory of more advanced methods such as optimal estimation and optimal control is also developed in the same sense.
+This works aims to provide a self-contained discussion of modeling and control of chemical rector systems in the perspective of modern control, with focus on optimal control theory. Therefore, the results are focused on \textit{state-feedback controllers} modeled in continuous time. Several properties of the dynamical models of such systems, both in the open-loop and feedback regime, are summarized in the document and the intention is to have a generalized mathematical framework to understand, evaluate and design those control systems. Finally, a specific problem concerning the control of a non-isothermal continuous reactor is explored to demonstrate an application of the theory developed throughout the document.
 
 \section{Chapters Organization}
 
-The chapters of this document are mainly organized in two parts. The first part, comprised by the chapters 2, 3 and 4, builds the necessary theoretical background and provides the mathematical framework for the applications. The second part, comprised by the chapters 5 and 6, describes the experiments and results of applying these methods in real-world applications.
+The chapters of this document are mainly organized in two parts. The first part, comprised by the chapters 2, 3 and 4, builds the necessary theoretical background and provides the mathematical framework for modeling and control of the discussed systems. The second part, comprised by the chapters 5 and 6, describes the experiments and results of applying these methods in real-world applications.
 
-Individually, the chapters are organized as follows: chapter 2 introduces the dynamical models and its several properties with respect to the real system behavior, chapter 3 discusses classical methods in developing automatic controllers and state observers, chapter 4 presents more advanced methods in optimal estimation and optimal control, chapter 5 describes the practical experiments used to validate the previous discussions, chapter 6 summarizes and discusses the results of the experiments and evaluate the several controllers performances and, finally, chapter 7 provides the conclusion of the document and possible future works.
+Individually, the chapters are organized as follows. Chapter 2 introduces the concept of dynamical models and their several properties with respect to a real system behavior. Chapter 3 discusses general results of state-feedback controllers and state observers. Chapter 4 presents the theory of optimal estimation and optimal control, in a broad perspective. Chapter 5 describes practical experiments in respect to a real-world continuous reactor system. Chapter 6 summarizes and discusses the results of these experiments, emphasizing the theory from the previous sections. Finally, chapter 7 concludes the document and highlight the most important results.
 
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2 - Dynamical System Modelling
 % ---------------------------------------------------------------
 \clearpage
 \chapter{Dynamical System Analysis}
 
-This chapter discusses the mathematical models for dynamical systems and their use in response analysis. The sections starts by introducing a procedure to build models from physical principles and presenting equivalent common representations. Next, the response of systems, in a time domain, are analyzed in the light of such models, relating the mathematical structure with the dynamical behavior. Finally, some important properties are defined and proved using these formulations and the system response in a frequency domain is also presented.
+This chapter discusses the mathematical models for dynamical systems. The sections starts by introducing a procedure to build models from physical principles and presenting equivalent common representations. Next, the time evolution of dynamical systems, in a natural or forced regime, is analyzed in relation to the mathematical structure of such models. Finally, some important properties of the systems are defined and discussed. A discussion of the system evolution in the frequency domain is also presented.
 
-\section{Model from First Principles}
+\section{First Principles Models}
 
-A dynamical system is a physical system whose states evolves with time. For this reason, one can represent a dynamical system using the \textit{first principles} from physics itself, and formulate the evolution in time by calculating the rate of change of the states in respect to time. Thus, dynamical models can be equated using differential equations with time derivatives. 
+A dynamical system is a physical system whose state evolves with time. One can represent a dynamical system using the \textit{first principles} from physics, and formulate the evolution in time by calculating the rate of change of its state in respect to time. Thus, dynamical models are represented using differential equations with time derivatives. 
 
-A straightforward procedure to model a system consists of identifying the variables of interest and relate them using conservation laws, such as conservation of mass, conservation of energy or conservation of momentum. The resulting differential equations are in the form:
+A straightforward procedure to model a system consists of identifying the variables of interest and relate them using conservation laws, such as conservation of mass, conservation of energy or conservation of momentum. The resulting models are in the form:
 \begin{equation} \label{eq:massCons01}
     \begin{pmatrix}
-        \text{Rate of} \\ \text{Mass/Energy/Momentum} \\ \text{Accumulation}
+        \text{Rate of} \\ \text{accumulation of} \\ \text{Mass/Energy/Momentum}  
     \end{pmatrix} = \begin{pmatrix}
-        \text{Mass/Energy/Momentum} \\ \text{entering the System}
+        \text{Mass/Energy/Momentum} \\ \text{entering} \\ \text{the system}
     \end{pmatrix} - \begin{pmatrix}
-        \text{Mass/Energy/Momentum} \\ \text{leaving the System}
+        \text{Mass/Energy/Momentum} \\ \text{leaving} \\ \text{the system}
     \end{pmatrix}
 .\end{equation}
 
-The choice of which conservation law to use depends on the system itself, since the variables of interest can provide dynamics to the system in many forms. Usually, conservation of mass is used to relate dynamics of concentrations and volumes, or other material variables, while conservation of momentum is often used to relate dynamics of motion. Since energy can be converted on form, the conservation laws of this quantity can be used to model several dynamics, such as the rate of change in heat, electrical charges or velocity of a system.
+The choice of which conservation law to use depends on the system itself. Usually, conservation of mass is used to relate dynamics of concentrations and volumes, or other material variables, while conservation of momentum is used to relate dynamics of motion. Since energy can be converted on form, the conservation laws of this quantity can be used to model several dynamics, such as the rate of change in heat, electrical charges or velocity of a system.
 
 In the case of a chemical reactor system, the variables of interest are the concentrations of the chemical substances in the system. Hence, the rate of accumulation of a substance can be represented using the mass conservation law, or mass balance:
 \begin{equation} \label{eq:massCons02}
@@ -344,57 +381,50 @@ In the case of a chemical reactor system, the variables of interest are the conc
         \text{Accumulation} \\ \text{of mass} \\ \text{in the system}
     \end{pmatrix} &= 
     \begin{pmatrix}
-        \text{Mass} \\ \text{entering} \\ \text{the System}
+        \text{Mass} \\ \text{entering} \\ \text{the system}
     \end{pmatrix} - \begin{pmatrix}
-        \text{Mass} \\ \text{leaving} \\ \text{the System}
+        \text{Mass} \\ \text{leaving} \\ \text{the system}
     \end{pmatrix} \\
     &= \left[ \begin{pmatrix}
-        \text{Mass flow} \\ \text{entering} \\ \text{System}
+        \text{Mass flow} \\ \text{entering} \\ \text{system}
     \end{pmatrix} + \begin{pmatrix}
         \text{Mass} \\  \text{produced} \\ \text{by reactions}
     \end{pmatrix} \right] - \left[ \begin{pmatrix}
-        \text{Mass flow} \\ \text{leaving} \\ \text{System}
+        \text{Mass flow} \\ \text{leaving} \\ \text{system}
     \end{pmatrix} + \begin{pmatrix}
         \text{Mass} \\ \text{consumed} \\ \text{by reactions}
     \end{pmatrix} \right]
 \end{split}
 .\end{equation}
 
-\begin{boxed-theorem}{(Mass Balance of Reactors)} \label{th:isoReactSys01}
-    Consider a closed isothermal reactor system comprised of a diluted solution of constant volume $V$, whose reactions are described by a chemical reaction network as in Definition \ref{eq:chemNetwork}. The change of concentration for any compound $A$ in this reactor is described by the dynamical model:
-    \begin{equation} \label{eq:isoModel1}
-            \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha} \right)
-    ,\end{equation}
-
-    \noindent where $\rho^{(A)}_{in}$ and $\rho^{(A)}_{out}$ are the densities of $A$ in the flows entering and leaving the system, respectively, and where $\alpha X \rightarrow \beta A$ and $\alpha A \rightarrow \beta X$ represents the reactions in the network between $A$ and any other compound $X$ with density $\rho_X$, each occurring with kinetic rates $K_{XA}$ and $K_{AX}$, respectively.
-\end{boxed-theorem}
-
-\begin{proof}
-    First of all, as denoted in \eqref{eq:massCons02}, the mass flow of any substance $A$ entering and leaving the system, $M_{in}$ and $M_{out}$, respectively, given a fluid inflow $F_{in}$ with density $\rho^{(A)}_{in}$ and a fluid outflow $F_{out}$ with $\rho^{(A)}_{out}$, can be calculated as:
+\begin{boxed-example}{(\textit{Mass Balance of Reactors})} \label{ex:isoReactSys01}
+    For the sake of illustration, consider the process of obtaining a first principles model for the concentration of a general substance in a reactor system, as follows. Consider a system such as the one depicted in \ref{fig:intro03a}. First of all, one has to evaluate the mass flow through the system, as denoted in \eqref{eq:massCons02}. The mass of any substance $A$ entering and leaving the system, denoted respectively by $M_{in}$ and $M_{out}$, are assumed to be provided by a flow of fluid carrying the substance. Given a fluid inflow $F_{in}$, with density $\rho^{(A)}_{in}$, and an outflow $F_{out}$, with density $\rho^{(A)}_{out}$, the mass flow is calculated by equations:
     \begin{equation}
         \begin{matrix}
-            M_{in} = \rho^{(A)}_{in} F_{in} & & M_{out} = \rho^{(A)}_{out} F_{out}
+            M_{in} = \rho^{(A)}_{in} F_{in} &; & M_{out} = \rho^{(A)}_{out} F_{out}
         \end{matrix}
     .\end{equation}
     
-    To calculate the mass contribution from the reactions, it is necessarily first to formulate the mass contribution for a single reaction. In this case, consider a reaction between two chemical compounds $X$ and $Y$, with stoichiometric numbers $\alpha$ and $\beta$:
+    Now, one has to consider the quantities of mass that are consumed and produced by the reactions of the chemical reaction network associated to the system. In this case, consider the following reaction between two chemical compounds $X$ and $Y$, with stoichiometric numbers $\alpha$ and $\beta$:
     \begin{equation} \label{eq:simpleEq01}
         \alpha X \overset{K_{XY}}{\longrightarrow} \beta Y
     .\end{equation}
     
-    Under the assumption that the reactant is in a dilute solution, the rate of this equation obeys the \textit{law of mass action} \cite{Horn:1972}. Given a constant kinetic rate $K_{XY}$, since the system is isothermal, and the volume of the solution as $V$, the mass of $X$ consumed, $M^{(X)}_\text{cons}$, and the mass of $Y$ produced, $M^{(Y)}_\text{prod}$, are given by the power-laws:
+    Under the assumption that the reactant is in a dilute solution, the rate of this equation obeys the \textit{law of mass action} \cite{Horn:1972}. Given a constant kinetic rate $K_{XY}$ and the volume of the solution as $V$, the mass of $X$ consumed, $M^{(X)}_\text{cons}$, and the mass of $Y$ produced, $M^{(Y)}_\text{prod}$, are given by the power-laws:
     \begin{equation}
         \begin{matrix}
-            M^{(X)}_\text{cons} = \cfrac{V}{\beta} K_{XY} (\rho_X)^{\alpha} & & M^{(Y)}_\text{prod} = \cfrac{V}{\alpha} K_{XY} (\rho_X)^{\alpha}
+            M^{(X)}_\text{cons} = \cfrac{V}{\beta} K_{XY} (\rho_X)^{\alpha} &; & M^{(Y)}_\text{prod} = \cfrac{V}{\alpha} K_{XY} (\rho_X)^{\alpha}
         \end{matrix}
     ,\end{equation}
     
     \noindent where $\rho_X$ and $\rho_Y$ are the respective densities of these compounds. Assuming that the network represents a set of reactions occurring within an chemical solution of volume $V$, the mass of a substance $A$ that is consumed and produced by the reactions, named respectively $M_\text{cons}$ and $M_\text{prod}$, are given by summing over the contribution of each reaction on the network where $A$ is either a reactant or a product to any other compound $X$:
     \begin{equation}
-            M_\text{cons} = V \sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha}\ \ \ \ \  M_\text{prod} = V \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha}
+    \begin{matrix}
+            M_\text{cons} = V \sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha} &; &  M_\text{prod} = V \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha}
+    \end{matrix}
     .\end{equation}
     
-    Finally, packing all together, the mass balance of any substance $A$ in a isothermal chemical reactive system can be represented by the general dynamical model:
+    Finally, directly substituting these values in \eqref{eq:massCons02}, the mass balance of any substance $A$ in an isothermal chemical reactor system can be represented by the general dynamical model:
     \begin{equation}
     \begin{split}
         \begin{pmatrix}
@@ -416,7 +446,7 @@ In the case of a chemical reactor system, the variables of interest are the conc
     \begin{equation} \label{eq:isoModel3}
             \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha} \right)
     .\end{equation}
-\end{proof}
+\end{boxed-example}
 
 Notice some important restrictions to the use of the model just presented. First of all, to calculate the mass contribution of an individual reaction was necessary to use a model which assumes that the reactor system is actually comprised of a dilute solution in some closed container. In industry, this means that the reactor system is actually a tank containing the solution. The inflow and outflow of fluid can be represented by flows through pipes which can be manipulated by some valve or pump. An illustration of such physical system is exhibited at Fig. \ref{fig:tank01a}.
 
@@ -430,7 +460,7 @@ Furthermore, this model accounts for a single substance $A$, but the system is a
 \end{cases}
 ,\end{align}
 
-\noindent where $X_1, X_2, ..., X_n$ are the chemical compounds inside the reactor and $f(\cdot)$ is the dynamical model presented in Theorem \ref{th:isoReactSys01}.
+\noindent where $X_1, X_2, ..., X_n$ are the chemical compounds inside the reactor and $f(\cdot)$ is the dynamical model presented in Example \ref{ex:isoReactSys01}.
 
 \begin{figure}[ht] 
     \centering
@@ -447,17 +477,17 @@ Furthermore, this model accounts for a single substance $A$, but the system is a
     \label{fig:tank01}
 \end{figure}
 
-The model discussed so far is very simple and can describe several applications. To account for more complex systems, the same modeling procedure can be applied. For instance, it is possible to extend the description to account for exothermic and endothermic processes, when the temperature inside the system has a dynamical evolution and the dynamics of the reactions starts to depend on it.
+The model discussed so far is fairly simple. To account for more complex systems, the same modeling procedure can still be applied. For instance, it is possible to extend the description to account for exothermic and endothermic processes, when the temperature inside the system has a dynamical evolution and the dynamics of the reactions starts to depend on it.
 
 When discussing non-isothermal processes, it is also common to discuss heating or cooling systems that tries to impose certain operational conditions to the reactions, as illustrated in Fig. \ref{fig:tank01b}. In exothermic processes, for instance, the heat accumulated in the system tends to grows as the reactions occurs, which can be very dangerous. One approach to regulate the temperature consists in involving the chemical solution, or the container containing it, with a material whose temperature can be manipulated, transferring or absorbing heat by conductance. The temperature of this material can be manipulated by, for instance, running a heated fluid or converting electrical energy to heat energy.
 
-\begin{boxed-theorem}{(Non-isothermal Reactor System)} \label{th:exoReactSys01}
-    Consider a closed non-isothermal reactor system comprised of a diluted solution of constant volume $V$. Assume, also, that the system is involved by a cooling/heating system with capacity $Q$ and that the reactions obeys the Arrhenius equation. The change of concentration for any compound $A$ in this reactor is described by the dynamical model:
+\begin{boxed-example}{(Non-isothermal Reactor System)} \label{ex:exoReactSys01}
+    Consider a closed non-isothermal reactor system comprised of a diluted solution of constant volume $V$. In this case, the kinetic rates will follow the Arrhenius equation from \eqref{eq:arrhenius1}. As a result, the mass balance of the reactor results in the following dynamics for the concentration of any substances $A$: 
     \begin{equation} \label{eq:exoModel1}
-            \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} e^{-\frac{E_{XA}}{T}} (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \right)
+            \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} e^{-\frac{E_{XA}/R}{T}} (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} e^{-\frac{E_{AX}/R}{T}} (\rho_A)^{\alpha} \right)
     ,\end{equation}
 
-    \noindent where $E_{XA}$ and $E_{AX}$ are the activation energy needed for each reaction, and the rest of the parameters are the same as defined in Theorem \ref{th:isoReactSys01}. Furthermore, the change of temperature inside the reactor system, $T$, and in the cooling/heating system, $T_C$, are described by the dynamical models:
+    \noindent where $E_{XA}$ and $E_{AX}$ are the activation energy needed for each reaction, and the rest of the parameters are still the same as defined in Example \ref{ex:isoReactSys01}.  Furthermore, the change of temperature inside the reactor system, $T$, and in the cooling/heating system, $T_C$, are described by the dynamical models. :
     \begin{align} \label{eq:exoModel2}
     \begin{cases}
         \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX} \\
@@ -466,16 +496,18 @@ When discussing non-isothermal processes, it is also common to discuss heating o
     ,\end{align}
     
     \noindent where $T_{in}$ and $T_{out}$ are the temperatures of the fluid inflow and outflow, respectively, $\Delta H_{AX}$ is the energy change from each reaction $\alpha A \rightarrow \beta X$ and $\eta, \delta, \gamma, \beta \in \mathbb{R}$ are proportionality parameters specific to the system and environmental conditions.
-\end{boxed-theorem}
+    
+    Assume, also, that the system is involved by a cooling/heating system with capacity $Q$ and that the reactions obeys the Arrhenius equation. The change of concentration for any compound $A$ in this reactor is described by the dynamical model:
+\end{boxed-example}
 
 A proof of this theorem can be found in Appendix A. The non-isothermal reactor system is a more general model that accounts for the fact that the temperature of the environment is usually not constant. From this assumption, the flow entering and leaving the system are also not assumed to have the same temperature that the fluid inside the reactor. In practical applications, the temperature of the fluid inflow can either be manipulated or measured, where the temperature of the fluid outflow is actually assumed to be equal to the temperature inside the reactor. In addition, the proportionality constants are not functions of any dynamical variable, so they can be calculated before the operation of the system by using the properties of the materials and containers.
 
-In the case of this model, the rate of changes in the chemical concentrations depends on the temperature through the Arrhenius equation. However, the temperature of the reactor itself depends on those concentrations. So, as noted in Equation \eqref{eq:isoSys01}, the dynamical model of the entire reactor is a system of differential equations relating all those quantities.
+In the case of this model, the rate of changes in the chemical concentrations depends on the temperature through the Arrhenius equation. However, the temperature of the reactor itself depends on those concentrations. So, as noted in \eqref{eq:isoSys01}, the dynamical model of the entire reactor is a system of differential equations relating all those quantities.
 
 
-\section{Mathematical Models of Systems}
+\section{Canonical Representations for Dynamical Models}
 
-The last section presented the foundation for modeling a dynamical system using first principles from physics. Although it was a well-defined formulation, the resulting models are not guaranteed to be practical in a mathematical sense. This is to due to the fact that the differential equations, as evidenced in Equation \eqref{eq:exoModel1}, are usually nonlinear functions of the variables of interest, and the analysis of such functions are quite more challenging. In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations.
+The last section presented the foundation for modeling a dynamical system using first principles from physics. Although it was a well-defined formulation, the resulting models are not guaranteed to be practical in a mathematical sense. This is to due to the fact that the differential equations, as evidenced in \eqref{eq:exoModel1}, are usually nonlinear functions of the variables of interest, and the analysis of such functions are quite more challenging. In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations.
 
 \begin{boxed-definition}{(Input-Output Representation)} \label{def:IORepr01}
     An Input-Output (IO) representation of a dynamical system with $p \geq 1$ output variables, represented by $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is the system of differential equations:
@@ -734,7 +766,7 @@ Note that this method can be used to convert non-linear models obtained from the
 \end{matrix}    
 .\end{align}
 
-Consider $\bm{x} = [\rho_A, \rho_B, \rho_C, \rho_D]^T$ and $u = q$, and consider also that the states are perfectly observed, so that $\bm{y} = \bm{x}$. Using Theorem \ref{th:isoReactSys01},  the state-equation for the nonlinear State-Space representation of this reactor is:
+Consider $\bm{x} = [\rho_A, \rho_B, \rho_C, \rho_D]^T$ and $u = q$, and consider also that the states are perfectly observed, so that $\bm{y} = \bm{x}$. Using Example \ref{ex:isoReactSys01},  the state-equation for the nonlinear State-Space representation of this reactor is:
 \begin{align}
 \begin{cases}
     \dot{x_1}(t) = u(t) (\rho_{in}^{(A)} - x_1(t)) - (K_{AB} x_1(t) + K_{AD} (x_1(t))^2)\\
@@ -771,7 +803,7 @@ Notice that the response of this model represents the deviations around the give
     \label{fig:linResp01}
 \end{figure}
 
-\section{Response Analysis in Time Domain}
+\section{Response Analysis in the Time Domain}
 
 Once that a model is well-established, it is possible both to simulate the system and to analyze its response, both for a natural or forced regime. This section, then, focus on developing a quantitative understanding of a system behavior through a linear model. The results are focused on continuous-time response of linear and time-invariant (LTI) systems in the form:
 \begin{align}
@@ -814,7 +846,7 @@ The proof is direct from Definition \ref{def:stateTransM}, and a detailed discus
 \end{boxed-theorem}
 
 \begin{proof}
-    First of all, consider a system in State-Space representation with state equation as defined in Equation \eqref{eq:SSRepr03}. Multiplying both sides by $e^{-\bm{A} t}$:
+    First of all, consider a system in State-Space representation with state equation as defined in \eqref{eq:SSRepr03}. Multiplying both sides by $e^{-\bm{A} t}$:
     \begin{equation} \label{eq:lagrTH01}
     \begin{split}
         e^{-\bm{A} t} \dot{\bm{x}}(t) &= e^{-\bm{A} t} (\bm{A} \bm{x}(t) + \bm{B} \bm{u}(t)) \\
@@ -854,7 +886,7 @@ When discussing the response of a system, the focus is actually directed to the 
     \bm{x}(t) = \bm{x}_{\text{n}}(t) + \bm{x}_{\text{f}}(t) 
 ,\end{equation}
 
-\noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral term. This concept is visualized in Fig. \ref{fig:linResp02} for the total response of the first two states of the model derived in Equation \eqref{eq:isoReact01}, given the operation points $\bm{x}_o = [6.19, 1.09]$ and $u_o = 3.03$, excited with a step input $u(t) = 3$, $t \in [0, 1.2]$. In this plot, the solid line represents the total response, whereas the dashed and dotted lines represents the natural and forced response, respectively. It is easy to verify that the decomposition of the total response is equal to the sum of those independent components.
+\noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral term. This concept is visualized in Fig. \ref{fig:linResp02} for the total response of the first two states of the model derived in \eqref{eq:isoReact01}, given the operation points $\bm{x}_o = [6.19, 1.09]$ and $u_o = 3.03$, excited with a step input $u(t) = 3$, $t \in [0, 1.2]$. In this plot, the solid line represents the total response, whereas the dashed and dotted lines represents the natural and forced response, respectively. It is easy to verify that the decomposition of the total response is equal to the sum of those independent components.
 
 \begin{figure}[ht]
     \centering
@@ -888,11 +920,11 @@ The only problem remaining to fully characterize the dynamical response of a sys
     \end{align*} 
 \end{boxed-theorem}
 
-The proof of this expansion is somewhat extensive, but a detailed discussion can be found in \cite{Chen:1998}. Basically, the expansion in Equation \eqref{eq:sylvester01} is a direct application of the Cayley-Hamilton theorem \cite{Atiyah:2018} and the linear system in Equation \eqref{eq:sylvester02} is a result of the Sylvester's matrix theorem  \cite{Horn:2012}.
+The proof of this expansion is somewhat extensive, but a detailed discussion can be found in \cite{Chen:1998}. Basically, the expansion in \eqref{eq:sylvester01} is a direct application of the Cayley-Hamilton theorem \cite{Atiyah:2018} and the linear system in \eqref{eq:sylvester02} is a result of the Sylvester's matrix theorem \cite{Horn:2012}.
 
 From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$, also known as the \textit{poles} of the system. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
 
-Consider, for the sake of illustration, the same reactor model from Equation \eqref{eq:isoReact01}, but considering only the first two states (since they are independent of the others). Let $\bm{x}_o = [6.19, 1.09]^T$ and $u_0 = 3.03$, just as before. The resulting matrix $\bm{A}$ and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
+Consider, for the sake of illustration, the same reactor model from \eqref{eq:isoReact01}, but considering only the first two states (since they are independent of the others). Let $\bm{x}_o = [6.19, 1.09]^T$ and $u_0 = 3.03$, just as before. The resulting matrix $\bm{A}$ and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
 \begin{align} \label{eq:stateRespEx01}
     \bm{A} = \begin{bmatrix} 
         -5.93  &        0 \\
@@ -908,7 +940,7 @@ A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution o
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{chapter2/stateTrans01}
-    \caption{Simulation of the state-transition matrix $e^{\bm{A} t}$ in Equation \eqref{eq:stateRespEx01} for $t \in [0,2]$}
+    \caption{Simulation of the state-transition matrix $e^{\bm{A} t}$ in \eqref{eq:stateRespEx01} for $t \in [0,2]$}
     \label{fig:stateTrans01}
 \end{figure}
 
@@ -960,7 +992,7 @@ The elements of the resulting state-transition matrix are simulated for a specif
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{chapter2/stateTrans02}
-    \caption{Simulation of the state-transition matrix $e^{\bm{A} t}$ in Equation \eqref{eq:stateRespEx02} for $t \in [0,50]$}
+    \caption{Simulation of the state-transition matrix $e^{\bm{A} t}$ in \eqref{eq:stateRespEx02} for $t \in [0,50]$}
     \label{fig:stateTrans02}
 \end{figure}
 
@@ -1138,7 +1170,7 @@ The main result behind this criteria is that the natural response of a system sh
     A system in State-Space form, represented by a matrix $\bm{A} \in \mathbb{R}^{n \times n}$ with eigenvalues $\bm{\lambda} \in \mathbb{R}^n$, is BIBO stable if and only if $\mathbb{R}e[\lambda_i] < 0,\ \forall i \in [1,2,...,n]$.
 \end{boxed-theorem}
 
-A detailed proof of this theorem can be found in Appendix A. First of all, note that this criteria depends only on the eigenvalues of matrix $\bm{A}$, so the stability property of a system is invariant to any similarity transformation, since $\bm{A}$ and any transformed matrix $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ shares the same eigenvalues. From the previous results it is also known that the real part of the eigenvalues, independent of their multiplicity or domain, appears as the arguments of the exponential functions that are the system modes. Therefore, an eigenvalue with a negative real part will produce a mode that is a exponential decay, as this theorem indicates. By the same argument, if the matrix $\bm{A}$ has at least one eigenvalue $\lambda_j = 0$ such that $\mathbb{R}e[\lambda_i] \leq 0,\ \forall i \in [1,2,...,n]$, then the mode associated with this eigenvalue is a constant and the natural response becomes bounded. This configuration is known as a marginally stable condition, in the BIBO perspective. The time response of a $2$-nd order system is shown Fig. \ref{fig:stability01} for three different poles configurations, given an unitary step.
+A detailed proof of this theorem can be found in Appendix A. First of all, note that this criteria depends only on the eigenvalues of matrix $\bm{A}$, so the stability property of a system is invariant to any similarity transformation, since $\bm{A}$ and any transformed matrix $\tilde{\bm{A}} = \bm{P} \bm{A} \bm{P}^{-1}$ shares the same eigenvalues. From the previous results it is also known that the real part of the eigenvalues, independent of their multiplicity or domain, appears as the arguments of the exponential functions that are the system modes. Therefore, an eigenvalue with a negative real part will produce a mode that is an exponential decay, as this theorem indicates. By the same argument, if the matrix $\bm{A}$ has at least one eigenvalue $\lambda_j = 0$ such that $\mathbb{R}e[\lambda_i] \leq 0,\ \forall i \in [1,2,...,n]$, then the mode associated with this eigenvalue is a constant and the natural response becomes bounded. This configuration is known as a marginally stable condition, in the BIBO perspective. The time response of a $2$-nd order system is shown Fig. \ref{fig:stability01} for three different poles configurations, given an unitary step.
 
 \begin{figure}[ht]
     \centering
@@ -1185,7 +1217,7 @@ While the discussion on controllability concerns the possibility of driving a sy
     A system in State-Space form with matrices $(\bm{A}, \bm{C})$ is said to be observable if, given an input signal $\bm{u}(t)$ and output signal $\bm{y}(t)$, over the interval $t \in [t_0, T]$, it is possible to uniquely determine the value of the initial state $\bm{x}(t_0)$. Otherwise, the system is said to be unobservable.
 \end{boxed-definition}
 
-Similarly to the controllability property, there are several ways to analyze the observability of a system, given a mathematical model. A popular criteria introduces the concept of a observability matrix.
+Similarly to the controllability property, there are several ways to analyze the observability of a system, given a mathematical model. A popular criteria introduces the concept of an observability matrix.
 
 \begin{boxed-theorem}{(Observability in SS)}
     Consider a system in linear State-Space form with matrices $(\bm{A}, \bm{C})$ and the observability matrix $\bm{\mathcal{O}} \in \mathbb{R}^{nq \times n}$ defined as:
@@ -1654,7 +1686,7 @@ Until now, the state feedback was discussed in the perspective that the device h
 A device that generates a state-vector $\bm{x}(t)$ from the output signal $\bm{y}(t)$ is known as \textit{state observer}, or \textit{state estimator} in some cases. Amongst the several possible configurations, a very practical and popular one is the \textit{Luenberger observer}, which is defined below.
 
 \begin{boxed-definition}{(Luenberger Observer)} \label{def:luenberger}
-    Given a system in State-Space with output signal $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^p$ and a observer gain $\bm{L} \in \mathbb{R}^{n \times p}$, the estimated state-vector $\hat{\bm{x}}(t)$ is represented by the observer system:
+    Given a system in State-Space with output signal $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^p$ and an observer gain $\bm{L} \in \mathbb{R}^{n \times p}$, the estimated state-vector $\hat{\bm{x}}(t)$ is represented by the observer system:
     \begin{equation}
         \dot{\hat{\bm{x}}}(t) = \bm{A} \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{L} \left( \bm{y}(t) - \bm{C} \hat{\bm{x}}(t) \right)
     ,\end{equation}
@@ -1730,7 +1762,7 @@ The observer system works as a parallel system that is simulated alongside with 
     Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design     a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $K$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ establishes the theorem.
 \end{proof}
 
-The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using a observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
+The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using an observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
 
 One of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector, thus being able to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
 
@@ -2049,7 +2081,7 @@ To facilitate the discussion and analysis of optimal controllers, consider a sub
     \noindent where $l(\cdot) : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ and $l_f(\cdot) : \mathbb{R}^{n} \rightarrow \mathbb{R}$ are, respectively, the trajectory and terminal \textit{loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
 \end{boxed-definition}
 
-This formulation presents a notion of, basically, optimize for an trajectory $P^* = [\bm{x}(t_0), \cdots, \bm{x}(T)]$ which is optimal given the loss functions, and then find the control input that can achieve this trajectory. As will be shown later, this is a very feasible strategy for controllable linear systems. In a optimization notation, this problem can also be presented as the following \textit{program}: 
+This formulation presents a notion of, basically, optimize for an trajectory $P^* = [\bm{x}(t_0), \cdots, \bm{x}(T)]$ which is optimal given the loss functions, and then find the control input that can achieve this trajectory. As will be shown later, this is a very feasible strategy for controllable linear systems. In an optimization notation, this problem can also be presented as the following \textit{program}: 
 \begin{align}
 \begin{matrix*}[l]
     \textbf{minimize} & \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T) \\
@@ -2114,7 +2146,7 @@ Now, the discussion turns to how to solve this general problem. In this work, th
     To establish the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
 \end{proof}
 
-The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition in $t = T$ to the beginning of the horizon at $t = t_0$. This is a result from the fact that an optimal action $u(t)$ depends on the loss function $l(\cdot)$ at time $t$ and on the optimal cost $V^*(\cdot)$ for a time immediately after that (for instance, $t+\delta t$), but the last action $u(T)$ depends only on $l_f(\cdot)$ since it no longer affects the system inside the control horizon. The recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman equation. A illustration of this principle is shown in Fig. \ref{fig:generalOC01}
+The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition in $t = T$ to the beginning of the horizon at $t = t_0$. This is a result from the fact that an optimal action $u(t)$ depends on the loss function $l(\cdot)$ at time $t$ and on the optimal cost $V^*(\cdot)$ for a time immediately after that (for instance, $t+\delta t$), but the last action $u(T)$ depends only on $l_f(\cdot)$ since it no longer affects the system inside the control horizon. The recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman equation. An illustration of this principle is shown in Fig. \ref{fig:generalOC01}
 
 \begin{figure}[ht]
     \centering
@@ -2169,7 +2201,7 @@ The last section introduced a general condition for solving a finite-horizon opt
     \noindent where is assumed that $\bm{Q},\bm{Q}_f  \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
 \end{boxed-definition}
 
-The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. In a engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. In a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is nice since quadratic optimization problems are widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
+The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. In an engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. In a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is nice since quadratic optimization problems are widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
 
 \begin{boxed-theorem}{} \label{th:costQuadraForm}
     Consider a continuous cost function $V : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ given as the LQR cost function defined in Definition \ref{def:lqr} for a linear system. Then the optimal cost $V^*(\bm{x}, t)$ has the quadratic form:
@@ -2272,7 +2304,7 @@ Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to 
 \end{split}
 .\end{equation}
 
-This formulation indicates that the Linear Quadratic Regulator solution follows the exact same form of a standard state-feedback regulator, represented by the linear but time-variant state-feedback gain $\bm{K}(t) = \bm{R}^{-1} \bm{B}^T \bm{P}(t)$. Therefore, the past results of state-feedback regulators are directly applied to the operation of this class of optimal controllers. Notice, also, that both the computation of $\bm{K}(t)$ and $\bm{P}(t)$ does not explicitly depends on $\bm{x}(t)$, meaning that, for a specific control horizon, they can be calculated off-line and then provided to the controller actuator for the on-line operation. For this reason, despite being a closed-loop controller with corrective action, the LQR can be considered a open-loop optimizer, since the optimization solution itself does not depend on the state signal.
+This formulation indicates that the Linear Quadratic Regulator solution follows the exact same form of a standard state-feedback regulator, represented by the linear but time-variant state-feedback gain $\bm{K}(t) = \bm{R}^{-1} \bm{B}^T \bm{P}(t)$. Therefore, the past results of state-feedback regulators are directly applied to the operation of this class of optimal controllers. Notice, also, that both the computation of $\bm{K}(t)$ and $\bm{P}(t)$ does not explicitly depends on $\bm{x}(t)$, meaning that, for a specific control horizon, they can be calculated off-line and then provided to the controller actuator for the on-line operation. For this reason, despite being a closed-loop controller with corrective action, the LQR can be considered an open-loop optimizer, since the optimization solution itself does not depend on the state signal.
 
 Now, as discussed in the previous chapter, the class of regulation controllers are broad but still restricted to a zero-state reference signal. To expand the range of application for the optimal controller just derived, it is possible to introduce integral action to the feedback, just as in the previous case.
 
@@ -2336,7 +2368,7 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 \section{Optimal State Estimators}
 
-As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of a observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
+As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of an observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
 
 First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \bm{R} \rightarrow \bm{R}^{n}$ and $\bm{v} : \bm{R} \rightarrow \bm{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w}_k \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, then it is possible to motivate a stochastic formulation of the linear State-Space model.
 
@@ -2596,11 +2628,11 @@ Since this method minimizes some cost function, it is indeed an optimal estimato
     \noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
 \end{boxed-theorem}
 
-A detailed proof of this theorem can be found in \textbf{[reference]}. The formulation of an optimal state estimator further emphasizes the duality between controllers and observers. Notice that the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves the exact same Riccati differential equation as the one in Theorem \ref{th:LQRAction}, but forward in time for matrices $\bm{A}^T$ and $\bm{C}^T$ instead of $\bm{A}$ and $\bm{B}$. Notice, however, that these filters are not limited to a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. Another direct result of the duality is that is possible to derive a estimator considering $t_0 \to -\infty$, which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
+A detailed proof of this theorem can be found in \textbf{[reference]}. The formulation of an optimal state estimator further emphasizes the duality between controllers and observers. Notice that the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves the exact same Riccati differential equation as the one in Theorem \ref{th:LQRAction}, but forward in time for matrices $\bm{A}^T$ and $\bm{C}^T$ instead of $\bm{A}$ and $\bm{B}$. Notice, however, that these filters are not limited to a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. Another direct result of the duality is that is possible to derive an estimator considering $t_0 \to -\infty$, which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
 
 \section{Linear Quadratic Gaussian (LQG)}
 
-This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and a estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. In this illustration, the open-loop system can represent either a mathematical model (possibly non-linear and time-varying) being simulated or a physical system whose output is only measured through some sensor device. 
+This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and an estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. In this illustration, the open-loop system can represent either a mathematical model (possibly non-linear and time-varying) being simulated or a physical system whose output is only measured through some sensor device. 
 
 \begin{figure}[ht]
     \centering
@@ -2667,7 +2699,7 @@ This chapter presented formulation for controllers and state estimators that are
     \label{fig:lqg01}
 \end{figure}
 
-The control configuration that connects a optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
+The control configuration that connects an optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
 
 \begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
     Consider a stochastic system in State-Space representation:
@@ -2745,7 +2777,7 @@ For the sake of illustration, consider the same system as controlled in \eqref{e
 
 In the last chapter, the poles of the feedback controlled system where directly assigned from the pole-placement method. In this chapter, however, the controllers were results of optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented. 
 
-First of all, the stability of the closed-loop system via Linear Quadratic Regulator is discussed. One might conclude that, since this controller is obtained from a optimization process, the resulting controller can not be unstable. Consider, however, the popular counter-intuition: consider a scalar system $\dot{x}(t) = x(t) + u(t)$, with $R = 1$ and $Q = 0$, such that its associated LQR cost function is:
+First of all, the stability of the closed-loop system via Linear Quadratic Regulator is discussed. One might conclude that, since this controller is obtained from an optimization process, the resulting controller can not be unstable. Consider, however, the popular counter-intuition: consider a scalar system $\dot{x}(t) = x(t) + u(t)$, with $R = 1$ and $Q = 0$, such that its associated LQR cost function is:
 \begin{equation}
     J(x,u,t_0) = \int_{t_0}^{\infty} u^2(t) dt
 .\end{equation}
@@ -2772,23 +2804,23 @@ The optimal output trajectory resulting from this control action is given by $\b
 
 Notice that, in contrast to the Pole-Placement method where the stability must be explicitly determined by the designer, the LQR controller can guarantee a stable closed-loop system directly by the observability property, even when the open-loop system is unstable. Since the BIBO stability (Definition \ref{def:BIBOStab}) discusses the magnitude of a system response as $t \to \infty$, the results are derived for infinite-horizon LQR. Despite of this, it is also possible to interpret some notion of stable response for finite-horizon LQR, since the cost function is always bounded by the optimal cost as conditioned by the Hamilton-Jacobi equation.
 
-Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of a unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
+Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of an unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.65]{chapter4/report_ch4_2}
-	\caption{Nyquist diagram of a single state system with a open-loop unstable pole but which is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.}
+	\caption{Nyquist diagram of a single state system with an open-loop unstable pole but which is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.}
 	\label{fig:lqrProperties01}
 \end{figure}
 
-Of course, there is no physical support of saying that a controller device exhibits a infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
+Of course, there is no physical support of saying that a controller device exhibits an infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
 
 %% 5 - Receding Horizon Optimal Control
 %% ---------------------------------------------------------------
 %\clearpage
 %\chapter{Receding Horizon Optimal Control}
 %
-%The previous chapter introduced the concept of finite-horizon optimal control, presenting the Linear Quadratic Regulator as a solution to the condition imposed by the Hamilton-Jacobi equation. Despite being a popular solution with nice properties, there are some downsides of the LQR standard formulation. This chapter explores a optimal controller formulation based on a receding horizon control strategy. In the first section the motivation and definition of the moving horizon strategy are stated. The second sections explores the possibility of combining the receding horizon strategy with an iterative linearization procedure to yield an optimal operation in respect to the nonlinear system itself.
+%The previous chapter introduced the concept of finite-horizon optimal control, presenting the Linear Quadratic Regulator as a solution to the condition imposed by the Hamilton-Jacobi equation. Despite being a popular solution with nice properties, there are some downsides of the LQR standard formulation. This chapter explores an optimal controller formulation based on a receding horizon control strategy. In the first section the motivation and definition of the moving horizon strategy are stated. The second sections explores the possibility of combining the receding horizon strategy with an iterative linearization procedure to yield an optimal operation in respect to the nonlinear system itself.
 %
 %\section{Optimization in Moving Horizons}
 %
@@ -2830,7 +2862,7 @@ Of course, there is no physical support of saying that a controller device exhib
 %	\label{fig:rhc01}
 %\end{figure}
 %
-%From the Separation Principle, it is always possible to increment this approach by introducing a optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
+%From the Separation Principle, it is always possible to increment this approach by introducing an optimal state estimator in a receding horizon fashion, as well. In this case, similarly to the controller, the optimal estimator gains are obtained for the entire horizon, but only the first gain is used to correct the state, before the horizon is updated.
 %
 %\textbf{[properties?]}
 %
@@ -2924,7 +2956,7 @@ This chapter details the methodology used in order to attest the discussion pres
 
 \section{Non-Isothermal Continuous Stirred Tank}
 
-The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of processes that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactive systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. 
+The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of processes that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactor systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. 
 
 This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactions. The reaction scheme follows the same Van de Vusse scheme explored earlier in this report:
 \begin{align}
@@ -3075,7 +3107,7 @@ The behavior of the process is accessed directly by simulating the nonlinear mod
 	\label{fig:dynamics01}
 \end{figure}
 
-The simulation shows that both compounds $A$ and $B$ grows together when there is an increase in the input flow-rate, in which case the first exhibits a greater response than the other. Of course, this conclusion is direct from the fact that the input carries concentrations of this very same chemical. In respect to the temperatures, notice that, since the process is non-isothermal, the temperatures raised together with the increase in the reagents concentrations. Given that the temperature of the liquid inflow is actually lower than the tank temperature at the steady-state, it is possible to relate the increase in the temperature directly to the occurrence of the chemical reactions. This fact characterizes the process as a exothermic process, as it can be also noted from the first-principles model.
+The simulation shows that both compounds $A$ and $B$ grows together when there is an increase in the input flow-rate, in which case the first exhibits a greater response than the other. Of course, this conclusion is direct from the fact that the input carries concentrations of this very same chemical. In respect to the temperatures, notice that, since the process is non-isothermal, the temperatures raised together with the increase in the reagents concentrations. Given that the temperature of the liquid inflow is actually lower than the tank temperature at the steady-state, it is possible to relate the increase in the temperature directly to the occurrence of the chemical reactions. This fact characterizes the process as an exothermic process, as it can be also noted from the first-principles model.
 
 The second simulation was performed similarly, but applying a negative pulse to the jacket cooling capacity. The result is shown in Fig. \ref{fig:dynamics02}. As expected, the change in the cooling capacity affects the temperatures inside the reactor tank and inside the cooling jacket. The visualization also shows that the change in the temperature slightly changed the concentration of the substances inside the reactor. Therefore, it is possible to consider an indirect effect of this manipulated variable to these system variables.
 
@@ -3428,9 +3460,9 @@ Now, the experiments for controllers that track non-constant references is prese
 	\label{fig:lqri01}
 \end{figure}
 
-After the introduction of the integral action, two more weights were needed to be selected for the controller optimization. As expected, the MIMO case actually imposes a trade-off between reaching the reference for the concentration and for the temperature, in the case that they do not represent a valid steady-state. Therefore, the choices of weights to the integral action has to take in account the fact that a aggressive set-point tracking may result in oscillatory, or even unstable, systems. To avoid these situations, the weights were selected to cause a smooth tracking, and the control horizon was expanded to allow the controller to operate for more hours. 
+After the introduction of the integral action, two more weights were needed to be selected for the controller optimization. As expected, the MIMO case actually imposes a trade-off between reaching the reference for the concentration and for the temperature, in the case that they do not represent a valid steady-state. Therefore, the choices of weights to the integral action has to take in account the fact that an aggressive set-point tracking may result in oscillatory, or even unstable, systems. To avoid these situations, the weights were selected to cause a smooth tracking, and the control horizon was expanded to allow the controller to operate for more hours. 
 
-Despite the mentioned difficulties, the controller was able to drive the system as close as possible to the reference, while still obeying the manipulated variables constraints. Notice that, in the moments were the reference changes, the change in the concentration resulted in a momentarily change in the temperature, which is promptly corrected by the feedback action of the controller. This change, however, is very small and the temperature remained within a interval of $0.5ºC$ around the reference signal, which is a excellent result. Another nice response observed in the visualization comprises in the change in the coolant temperature, which follows closely the shape of the change in the cooling capacity. In the last simulations, this variable evolved in a similar manner to the reactor temperature, but, in this case, the first was directly manipulated to allow for the latter to stay at the steady-state value.
+Despite the mentioned difficulties, the controller was able to drive the system as close as possible to the reference, while still obeying the manipulated variables constraints. Notice that, in the moments were the reference changes, the change in the concentration resulted in a momentarily change in the temperature, which is promptly corrected by the feedback action of the controller. This change, however, is very small and the temperature remained within an interval of $0.5ºC$ around the reference signal, which is an excellent result. Another nice response observed in the visualization comprises in the change in the coolant temperature, which follows closely the shape of the change in the cooling capacity. In the last simulations, this variable evolved in a similar manner to the reactor temperature, but, in this case, the first was directly manipulated to allow for the latter to stay at the steady-state value.
 
 Following the same case of the previous subsection, the same controller was used to simulate a closed-loop operation in the case when disturbances to the real system are occurring. In this case, a pulse signal is applied to the same variables as in the last case, but for each time instant multiple of $\lfloor T/4 \rfloor$ with a duration of $0.02T$, which is a longer step in this case since $T$ is greater. The results are presented at Fig. \ref{fig:lqri02}. 
 
@@ -3451,7 +3483,7 @@ In the direction for a more realistic scenario, the same reference tracking just
 	\label{fig:lqgi01}
 \end{figure}
 
-The first difference noted was the fact that the weights for the augmented states for the LQG controller actually needed a value of greater magnitude than those used for the LQR case. Despite of this, the information on the covariances were enough to allow for a accurate estimation of the real system states, and the control performed was very similar to that obtained when directly accessing the system real states, just as expected. However, it is noticeable that the input signals yielded by the controller were actually smoother and resulted in a apparent better tracking. This can be explained by the fact that the assignment of weights for the augmented states allowed for a better trade-off between the concentration and temperature tracking, resulting in a smaller deviance.
+The first difference noted was the fact that the weights for the augmented states for the LQG controller actually needed a value of greater magnitude than those used for the LQR case. Despite of this, the information on the covariances were enough to allow for an accurate estimation of the real system states, and the control performed was very similar to that obtained when directly accessing the system real states, just as expected. However, it is noticeable that the input signals yielded by the controller were actually smoother and resulted in an apparent better tracking. This can be explained by the fact that the assignment of weights for the augmented states allowed for a better trade-off between the concentration and temperature tracking, resulting in a smaller deviance.
 
 For completeness, the same tracking objective was simulated for the case of disturbances actuating on the real system, just as in the previous cases, as shown in Fig. \ref{fig:lqgi02}. The resulting control was actually similar to the case observed from directly accessing the states. This fact proves the feasibility of using controller-estimator configurations for reference tracking control, even in the presence of disturbances to the process. 
 
@@ -3485,14 +3517,14 @@ a
 \section*{Chapter 2}
 
 \begin{proof}{\textbf{(Theorem \ref{th:exoReactSys01})}}
-    Considering that the reactions obeys the Arrhenius equation, the dynamical model for the non-isothermal reactor is a direct application of Theorem \ref{th:isoReactSys01} when assuming that the kinetics are in the form:
+    Considering that the reactions obeys the Arrhenius equation, the dynamical model for the non-isothermal reactor is a direct application of Example \ref{ex:isoReactSys01} when assuming that the kinetics are in the form:
     \begin{equation}
         K_{XY} = K_{XY}(T) = K_{XY} e^{-\frac{E_{XY}}{T}} 
     ,\end{equation}
     
     \noindent with $T$ being the temperature in Kelvins and $E_{XY}$ being the activation energy needed for a reaction $X \rightarrow Y$ to occur.
 
-    In respect to the change in temperatures, the model is obtained by a analysis of the conservation of heat, an energy that obeys this principle: 
+    In respect to the change in temperatures, the model is obtained by an analysis of the conservation of heat, an energy that obeys this principle: 
     \begin{equation} \label{eq:jacket01}
         \begin{pmatrix}
             \text{Accumulation} \\ \text{of heat}
