@@ -102,19 +102,19 @@
 \newcounter{boxed-theorem}
 \makeatletter
 \newenvironment{boxed-theorem}[1]
-{\colorlet{shadecolor}{pastelBlue2!5} \begin{shaded} \begin{theorem}{#1}}
+{\colorlet{shadecolor}{pastelBlue2!10} \begin{shaded} \begin{theorem}{#1}}
 {\end{theorem} \end{shaded}}
 
 \newcounter{boxed-definition}
 \makeatletter
 \newenvironment{boxed-definition}[1]
-{\colorlet{shadecolor}{pastelYellow!10} \begin{shaded} \begin{definition}{#1}}
+{\colorlet{shadecolor}{pastelYellow!15} \begin{shaded} \begin{definition}{#1}}
 {\end{definition} \end{shaded}}
 
 \newcounter{boxed-example}
 \makeatletter
 \newenvironment{boxed-example}[1]
-{\colorlet{shadecolor}{pastelRed!15} \begin{shaded} \begin{example}{#1}}
+{\colorlet{shadecolor}{pastelRed!20} \begin{shaded} \begin{example}{#1}}
 {\end{example} \end{shaded}}
 
 % ---------------------------------------------------------------
@@ -420,7 +420,7 @@ In the case of a chemical reactor system, the variables of interest are the conc
     \noindent where $\rho_X$ and $\rho_Y$ are the respective densities of these compounds. Assuming that the network represents a set of reactions occurring within an chemical solution of volume $V$, the mass of a substance $A$ that is consumed and produced by the reactions, named respectively $M_\text{cons}$ and $M_\text{prod}$, are given by summing over the contribution of each reaction on the network where $A$ is either a reactant or a product to any other compound $X$:
     \begin{equation}
     \begin{matrix}
-            M_\text{cons} = V \sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha} &; &  M_\text{prod} = V \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha}
+            M_\text{cons} = V \displaystyle\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} (\rho_A)^{\alpha} &; &  M_\text{prod} = V \displaystyle\sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} (\rho_X)^{\alpha}
     \end{matrix}
     .\end{equation}
     
@@ -482,32 +482,61 @@ The model discussed so far is fairly simple. To account for more complex systems
 When discussing non-isothermal processes, it is also common to discuss heating or cooling systems that tries to impose certain operational conditions to the reactions, as illustrated in Fig. \ref{fig:tank01b}. In exothermic processes, for instance, the heat accumulated in the system tends to grows as the reactions occurs, which can be very dangerous. One approach to regulate the temperature consists in involving the chemical solution, or the container containing it, with a material whose temperature can be manipulated, transferring or absorbing heat by conductance. The temperature of this material can be manipulated by, for instance, running a heated fluid or converting electrical energy to heat energy.
 
 \begin{boxed-example}{(Non-isothermal Reactor System)} \label{ex:exoReactSys01}
-    Consider a closed non-isothermal reactor system comprised of a diluted solution of constant volume $V$. In this case, the kinetic rates will follow the Arrhenius equation from \eqref{eq:arrhenius1}. As a result, the mass balance of the reactor results in the following dynamics for the concentration of any substances $A$: 
+    Consider the process of obtaining a first principle model for a non-isothermal reactor, such as the one depicted in \ref{fig:intro03b}. In this case, the kinetic rates will follow the Arrhenius equation from \eqref{eq:arrhenius1}. Following the same procedure from Example \ref{ex:isoReactSys01}, a dynamical model for the concentrations of a substance $A$, inside this reactor, can be formulated as: 
     \begin{equation} \label{eq:exoModel1}
             \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA} e^{-\frac{E_{XA}/R}{T}} (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX} e^{-\frac{E_{AX}/R}{T}} (\rho_A)^{\alpha} \right)
     ,\end{equation}
 
-    \noindent where $E_{XA}$ and $E_{AX}$ are the activation energy needed for each reaction, and the rest of the parameters are still the same as defined in Example \ref{ex:isoReactSys01}.  Furthermore, the change of temperature inside the reactor system, $T$, and in the cooling/heating system, $T_C$, are described by the dynamical models. :
-    \begin{align} \label{eq:exoModel2}
-    \begin{cases}
-        \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX} \\
-        \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C) 
-    \end{cases}
-    ,\end{align}
+    \noindent where $E_{XA}$ and $E_{AX}$ are the activation energy needed for each reaction, and the rest of the parameters are still the same as defined in Example \ref{ex:isoReactSys01}.  
     
-    \noindent where $T_{in}$ and $T_{out}$ are the temperatures of the fluid inflow and outflow, respectively, $\Delta H_{AX}$ is the energy change from each reaction $\alpha A \rightarrow \beta X$ and $\eta, \delta, \gamma, \beta \in \mathbb{R}$ are proportionality parameters specific to the system and environmental conditions.
+    Furthermore, since the process is non-isothermal, the reactions will cause a change of temperature inside the reactor system. Consider the temperature inside the reactor, denoted as $T$. In this case, it is possible to relate its dynamics to the conservation law:  
+    \begin{equation}
+    \begin{split}
+        \begin{pmatrix}
+            \text{Accumulation} \\ \text{of thermal energy} \\ \text{in the system}
+        \end{pmatrix} &= \begin{pmatrix}
+            \text{Thermal energy} \\ \text{entering} \\ \text{the system}
+        \end{pmatrix} - \begin{pmatrix}
+            \text{Thermal energy} \\ \text{leaving} \\ \text{the system}
+        \end{pmatrix} \\
+         &= \begin{pmatrix}
+            \text{Heat flow} \\ \text{entering} \\ \text{the system}
+        \end{pmatrix} - \begin{pmatrix}
+            \text{Heat flow} \\ \text{leaving} \\ \text{the system}
+        \end{pmatrix} + \begin{pmatrix}
+            \text{Entropy} \\ \text{contribution} \\ \text{from reactions}
+        \end{pmatrix}
+    \end{split}
+    .\end{equation}
     
-    Assume, also, that the system is involved by a cooling/heating system with capacity $Q$ and that the reactions obeys the Arrhenius equation. The change of concentration for any compound $A$ in this reactor is described by the dynamical model:
+    It is well known, from Fourier's law \textbf{[seek reference]}, that the transfer of heat by conduction between the reactor and the coolant/heater, in their respective contact interfaces, is proportional to $(T_C - T)$, where $T_C$ represents the temperature of the latter. Moreover, another identifiable source of heat transfer consists in the fluid flow entering and leaving the system. Similarly for the conduction, this heat contribution should also be proportional to $(T_{in} - T_{out})$, where $T_{in}$ and $T_{out}$ are respectively the temperature of the fluid entering and leaving the reactor.
+    
+    The entropy contribution from a reaction $\alpha X \rightarrow \beta Y$, denoted as $S_{XY}$, is proportional to the concentration of $\rho_X$ consumed, or produced, by the reactions multiplied by the energy that it liberates or absorbs \textbf{[reference]}:
+    \begin{equation}
+        S_{XY} \sim K_{XY} e^{-\frac{E_{XY}}{T}} (\rho_X)^{\alpha} \Delta H_{XY}
+    .\end{equation}
+
+    All the proportionality can be turned into equalities by imposing real constant factors that are calculated independent of the dynamical variables. In the case of the heat transfer from the fluid, this constant factor is the flow-rate $q$ itself. Plugging all together, and summing the entropy contribution from each reaction, the accumulation of heat can be modeled:
+    \begin{equation}
+        \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX}
+    .\end{equation}
+    
+    Consider now the heating/cooling system involving the reactor system. From the choice of design of this apparatus, it is possible to manipulate the temperature of its material using a heat capacity $Q$, up to a real factor of $\gamma$. Similar to the temperature inside the container, there is the conduction of heat between the healing/cooling system and the walls of the container for the reactor. Therefore, the model of heat accumulation for this quantity is simply given by:
+    \begin{equation}
+        \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C)
+    .\end{equation}
 \end{boxed-example}
 
-A proof of this theorem can be found in Appendix A. The non-isothermal reactor system is a more general model that accounts for the fact that the temperature of the environment is usually not constant. From this assumption, the flow entering and leaving the system are also not assumed to have the same temperature that the fluid inside the reactor. In practical applications, the temperature of the fluid inflow can either be manipulated or measured, where the temperature of the fluid outflow is actually assumed to be equal to the temperature inside the reactor. In addition, the proportionality constants are not functions of any dynamical variable, so they can be calculated before the operation of the system by using the properties of the materials and containers.
+The non-isothermal reactor system is a more general model that accounts for the fact that the temperature of the environment is usually not constant. From this assumption, the flow entering and leaving the system are also not assumed to have the same temperature that the fluid inside the reactor. In practical applications, the temperature of the fluid inflow can either be manipulated or measured, where the temperature of the fluid outflow is actually assumed to be equal to the temperature inside the reactor. In addition, the proportionality constants are not functions of any dynamical variable, so they can be calculated before the operation of the system by using the properties of the materials and containers.
 
 In the case of this model, the rate of changes in the chemical concentrations depends on the temperature through the Arrhenius equation. However, the temperature of the reactor itself depends on those concentrations. So, as noted in \eqref{eq:isoSys01}, the dynamical model of the entire reactor is a system of differential equations relating all those quantities.
 
 
 \section{Canonical Representations for Dynamical Models}
 
-The last section presented the foundation for modeling a dynamical system using first principles from physics. Although it was a well-defined formulation, the resulting models are not guaranteed to be practical in a mathematical sense. This is to due to the fact that the differential equations, as evidenced in \eqref{eq:exoModel1}, are usually nonlinear functions of the variables of interest, and the analysis of such functions are quite more challenging. In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations.
+The last section presented the foundation for modeling a dynamical system using first principles from physics. Although it is a well-defined formulation, the resulting models are not guaranteed to be practical in a mathematical sense. This motivates a discussion about possible canonical formats for such models, which would allow for systematic analysis approaches. In the perspective of control theory, that are two main formats for the model of a system: the \textit{Input-Output} (IO) and the \textit{State-Space} (SS) representations.
+
+An input-output representation is a simple model that describes the entire system using only two types of variables, and their derivatives. Therefore, the dimension of these variables and the order of derivatives at each differential equation provides the information about the structure of the model. For instance, in the case where $p = r = 1$ the system can be classified as a \textit{Single-Input Single-Output} (SISO) configuration, whereas it is classified as a \textit{Multiple-Input Multiple-Output} (MIMO) configuration if $p,r > 1$. A formal definition is given below.
 
 \begin{boxed-definition}{(Input-Output Representation)} \label{def:IORepr01}
     An Input-Output (IO) representation of a dynamical system with $p \geq 1$ output variables, represented by $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is the system of differential equations:
@@ -535,9 +564,9 @@ The last section presented the foundation for modeling a dynamical system using 
     .\end{equation*}
 \end{boxed-definition}
 
-An input-output representation is a simple model that describes the entire system using only two types of variables, and their derivatives. Therefore, the dimension of these variables and the order of derivatives at each differential equation provides the information about the structure of the model. For instance, in the case where $p = r = 1$ the system can be classified as a \textit{Single-Input Single-Output} (SISO) configuration, whereas it is classified as a \textit{Multiple-Input Multiple-Output} (MIMO) configuration if $p,r > 1$. 
+This model presents a cause-and-effect interpretation of the system where the direct relationship between the input and output signal, and its derivatives, are equated as if the system is a processing unit. In practice, the input signals $\bm{u}(t)$ are the manipulated variables of the system, where the output signals $\bm{y}(t)$ are the observations of the controlled variables. This representation brings an easy visualization on how a desired system behavior can be achieved by applying a specific input signal, posing as a practical framework for designing controllers. 
 
-This model presents a cause-and-effect interpretation of the system where the direct relationship between the input and output signal, and its derivatives, are equated as if the system was a processing unit. In practice, the input signals $\bm{u}(t)$ are the manipulated variables of the system, where the output signals $\bm{y}(t)$ are the observations of the controlled variables. This representation brings an easy visualization on how a desired system behavior can be achieved by applying a specific input signal, posing as a practical framework for designing controllers. 
+The State-Space representation is another formulation for a dynamical model, centered in the concept of \textit{state variables}. In a formal definition, the set of state variables is the smallest set of linearly independent variables that can unequivocally determine the value of all the states variables given an initial state $\bm{x}(t_0)$, at time $t_0 \in \mathbb{R}$, and a forcing function $\bm{u}(t)$, for any time $t \geq t_0$. From a physical perspective, however, these variables may account for quantities that can describe the dynamics of the system, such as position or velocities. In comparison to the Input-Output representation, this formulation poses a simpler mathematical model, since it is composed by a system of first order ordinary differential equations and a system of algebraic equations. However, this model presents a semantical improvement over the latter since the inclusion of the state variables expands the internal description of the system. A formal definition is given below.
 
 \begin{boxed-definition}{(State-Space Representation)} \label{th:SSRepr01}
     A State-Space (SS) representation of a system with $n \geq 1$ states variables, represented by $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, for $p \geq 1$ output variables, represented by $\bm{y} : \mathbb{R} \rightarrow \mathbb{R}^{p}$, and $r \geq 1$ input variables, represented by $\bm{u} : \mathbb{R} \rightarrow \mathbb{R}^{r}$, is given by the systems of state and output equations:
@@ -549,7 +578,7 @@ This model presents a cause-and-effect interpretation of the system where the di
         \dot{x}_2(t) = f_2(x_1, ..., x_n, u_1, ..., u_r, t) \\
         \vdots \\
         \dot{x}_n(t) = f_n(x_1, ..., x_n, u_1, ..., u_r, t)
-    \end{cases} \hfill & \begin{cases}
+    \end{cases} \hfill &;  \begin{cases}
         y_1(t) = g_1(x_1, ..., x_n, u_1, ..., u_r, t) \\
         y_2(t) = g_2(x_1, ..., x_n, u_1, ..., u_r, t) \\
         \vdots \\
@@ -566,8 +595,6 @@ This model presents a cause-and-effect interpretation of the system where the di
     \end{cases}
     .\end{align}
 \end{boxed-definition}
-
-The State-Space representation is yet another formulation for a dynamical model, but centered in the concept of \textit{state variables}. In a formal definition, the set of state variables is the smallest set of linearly independent variables that can unequivocally determine the value of all the states variables given an initial state $\bm{x}(t_0)$ and a forcing function $\bm{u}(t)$, for any time $t \geq t_0$. In a physical perspective, however, these variables accounts for quantities that can describe the dynamics of the system, such as position or velocities, or they are latent variables that somehow stores intrinsic information about the system behavior. In comparison to the Input-Output representation, this formulation poses a simpler mathematical model, since it is composed by a system of ordinary differential equations and a system of algebraic equations. However, this model presents a semantical improvement over the latter since the inclusion of the state variables expands the internal description of the system. 
 
 \begin{figure}[ht] 
     \centering
@@ -586,7 +613,7 @@ The State-Space representation is yet another formulation for a dynamical model,
     \label{fig:model1}
 \end{figure}
 
-An graphical illustration of both representations is shown at Fig. \ref{fig:model1}. In the light of these formulations, a system can be classified in respect to the model mathematical structure. There are five main properties used for this classification: if the system is causal or non-causal, linear or nonlinear, dynamical or instantaneous, time-invariant or time-varying and with or without delay. The necessary and sufficient conditions for each one of these properties are summarized in Table \ref{table:classes01}.
+A graphical illustration of both representations is shown at Fig. \ref{fig:model1}. In the light of these formulations, a system can be classified with respect to the model mathematical structure. There are five main properties used for this classification: whether the system is causal or non-causal, linear or nonlinear, dynamical or instantaneous, time-invariant or time-varying and with or without delay. The necessary and sufficient conditions for each one of these properties are summarized in Table \ref{table:classes01}.
 
 \begin{table}[!ht]
     \centering
@@ -601,7 +628,7 @@ An graphical illustration of both representations is shown at Fig. \ref{fig:mode
     \hline 
         \textbf{Time-Invariant} & \makecell{$h_i(y_i(t),...,u_1(t),...,u_r(t)) = 0$\\$i \in  [1,2,...,p]$} & \makecell{$\dot{\bm{x}}(t) = \bm{f}(\bm{x}(t), \bm{u}(t))$ \\ $\bm{y}(t) = \bm{g}(\bm{x}(t), \bm{u}(t))$} \\
     \hline 
-        \textbf{Without-Delay}  & \makecell{All the signals share\\the same arguments} & \makecell{All the signals share\\the same arguments} \\
+        \textbf{Without-Delay}  & \makecell{All the signals share\\the same time arguments} & \makecell{All the signals share\\the same time arguments} \\
     \end{tabular} 
     \caption{Necessary and sufficient conditions for different classes of models.}
     \label{table:classes01} 
@@ -621,7 +648,7 @@ This work focus on dynamical linear systems, since its models are the most well 
     \noindent where $\bm{A}(t) : \mathbb{R} \rightarrow \mathbb{R}^{n \times n}$, $\bm{B}(t) : \mathbb{R} \rightarrow \mathbb{R}^{n \times r}$, $\bm{C}(t) : \mathbb{R} \rightarrow \mathbb{R}^{p \times n}$ and $\bm{D}(t) : \mathbb{R} \rightarrow \mathbb{R}^{p \times r}$. In the case of a time-invariant linear system, these matrices becomes constants. 
 \end{boxed-definition}
 
-This formulation has the advantages that the time response of the system can be easily calculated and that the analysis of the dynamics follows well-established results from linear algebra applied to the matrices $\bm{A}(t)$, $\bm{B}(t)$, $\bm{C}(t)$ or $\bm{D}(t)$, as well as for the vectors $\bm{x}(t)$ and $\bm{u}(t)$. Furthermore, the physical interpretation of the system through the state variables becomes straightforward in this model, even in the case of latent variables. 
+This formulation has the advantage that the time response of the system can be easily calculated and that the analysis of the dynamics follows well-established results from linear algebra applied to the matrices $\bm{A}(t)$, $\bm{B}(t)$, $\bm{C}(t)$ or $\bm{D}(t)$, as well as for the vectors $\bm{x}(t)$ and $\bm{u}(t)$. Furthermore, the physical interpretation of the system through the state variables becomes straightforward in this model.
 
 In addition to the State-Space representation, the linear assumption also benefits Input-Output representations. One major analytical tool that can be used in these cases is to transform this model to a frequency domain, using a linear transform operator, in order to simplify the solution for the differential equations. The most popular choice of transformation is the \textit{Laplace transform}, $\mathcal{L}\{ h(t) \}$, which converts functions in time to functions in complex frequencies. Using the properties of this operator, differential equations are converted to simple algebraic equations.
 
@@ -639,7 +666,22 @@ In addition to the State-Space representation, the linear assumption also benefi
     .\end{equation}
 \end{boxed-theorem}
 
-An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: just compute the transfer function between each pair of input and output, leading to the matrix $\bm{G} \in \mathbb{C}^{n \times m}$.
+An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: just compute the transfer function between each pair of input and output, leading to the matrix $\bm{G} \in \mathbb{C}^{n \times m}$. For the general linear case, this matrix has the form:
+\begin{align}
+\bm{G}(s) = 
+\begin{bmatrix}
+	\cfrac{Y_1(s)}{U_1(s)} & \cfrac{Y_1(s)}{U_2(s)} & \cdots & \cfrac{Y_1(s)}{U_r(s)} \\
+	\cfrac{Y_2(s)}{U_1(s)} & \cfrac{Y_2(s)}{U_2(s)} & \cdots & \cfrac{Y_2(s)}{U_r(s)} \\
+	\vdots & \vdots & \ddots & \vdots \\
+	\cfrac{Y_n(s)}{U_1(s)} & \cfrac{Y_2(s)}{U_2(s)} & \cdots & \cfrac{Y_n(s)}{U_r(s)} \\
+\end{bmatrix} =
+\begin{bmatrix}
+	\cfrac{\beta_m^{(11)} s^m + \cdots + \beta^{(11)}_0}{\alpha^{(1)}_n s^n + \cdots + \alpha^{(1)}_0} & \cdots & \cfrac{\beta_m^{(1r)} s^m + \cdots + \beta^{(1r)}_0}{\alpha^{(1)}_n s^n + \cdots + \alpha^{(1)}_0} \\
+	\cfrac{\beta_m^{(21)} s^m + \cdots + \beta^{(21)}_0}{\alpha^{(2)}_n s^n + \cdots + \alpha^{(2)}_0} & \cdots & \cfrac{\beta_m^{(2r)} s^m + \cdots + \beta^{(2r)}_0}{\alpha^{(2)}_n s^n + \cdots + \alpha^{(2)}_0} \\
+	\vdots & \ddots & \vdots \\
+	\cfrac{\beta_m^{(n1)} s^m + \cdots + \beta^{(n1)}_0}{\alpha^{(n)}_n s^n + \cdots + \alpha^{(n)}_0} & \cdots & \cfrac{\beta_m^{(nr)} s^m + \cdots + \beta^{(nr)}_0}{\alpha^{(n)}_n s^n + \cdots + \alpha^{(n)}_0} \\
+\end{bmatrix}
+\end{align}
 
 \begin{boxed-theorem}{(Passage from SS to IO)} \label{th:SSToIO}
     Consider a linear and time-invariant system in State-Space form with initial states $\bm{x}(0^-) = \bm{0}$ and represented as:
@@ -652,7 +694,7 @@ An indirect result of this is that the SS representation can be converted to the
     
     The equivalent system in Input-Output representation is given by the transfer function:
     \begin{align}
-    \bm{G}(s) = \bm{Y}(s)\bm{U}^{-1}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B} + \bm{D}
+    \bm{G}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B} + \bm{D}
     .\end{align}
 \end{boxed-theorem}
  
