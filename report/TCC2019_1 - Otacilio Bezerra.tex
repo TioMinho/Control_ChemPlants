@@ -35,7 +35,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -355,7 +355,7 @@ Individually, the chapters are organized as follows. Chapter 2 introduces the co
 \clearpage
 \chapter{Dynamical System Analysis}
 
-This chapter discusses the mathematical models for dynamical systems. The sections starts by introducing a procedure to build models from physical principles and presenting equivalent common representations. Next, the time evolution of dynamical systems, in a natural or forced regime, is analyzed in relation to the mathematical structure of such models. Finally, some important properties of the systems are defined and discussed. A discussion of the system evolution in the frequency domain is also presented.
+This chapter discusses the mathematical models for dynamical systems. The sections starts by introducing a procedure to build models from physical principles and presenting equivalent common representations. Next, the time evolution of dynamical systems is analyzed in relation to the mathematical structure of such models. Finally, some important properties of the systems are defined and discussed. A discussion of the system evolution in the frequency domain is also presented.
 
 \section{First Principles Models}
 
@@ -652,64 +652,70 @@ This formulation has the advantage that the time response of the system can be e
 
 In addition to the State-Space representation, the linear assumption also benefits Input-Output representations. One major analytical tool that can be used in these cases is to transform this model to a frequency domain, using a linear transform operator, in order to simplify the solution for the differential equations. The most popular choice of transformation is the \textit{Laplace transform}, $\mathcal{L}\{ h(t) \}$, which converts functions in time to functions in complex frequencies. Using the properties of this operator, differential equations are converted to simple algebraic equations.
 
-\begin{boxed-theorem}{(Transfer Function)} \label{th:transFun01}
+\begin{boxed-definition}{(Transfer Function)} \label{th:transFun01}
     Given a linear model for a SISO system, with initial conditions $\bm{y}(0^-) = \bm{u}(0^-) = \bm{0}$, in the Input-Output formulation:
     \begin{equation}
     \begin{split}
         \alpha_n \cfrac{d^n y(t)}{dt^n} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) &= \beta_m \cfrac{d^m u(t)}{dt^m} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t)
     \end{split}
-    .\end{equation}
+    ,\end{equation}
     
-    Its transfer function, in the Laplace domain, is calculated as:
+\noindent its correspondent transfer function, calculated in the Laplace domain, is defined as:
     \begin{equation} \label{eq:transFun01}
          G(s) = \cfrac{Y(s)}{U(s)} = \cfrac{\beta_m s^m + \beta_{m-1} s^{m-1} + \cdots + \beta_{1} s + \beta_0}{\alpha_n s^n + \alpha_{n-1} s^{n-1} + \cdots + \alpha_{1} s + \alpha_0}
     .\end{equation}
-\end{boxed-theorem}
+\end{boxed-definition}
 
-An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: just compute the transfer function between each pair of input and output, leading to the matrix $\bm{G} \in \mathbb{C}^{n \times m}$. For the general linear case, this matrix has the form:
+An indirect result of this is that the SS representation can be converted to the IO representation using the Laplace transform operator, leading to a notion of equivalence between the two representations. Notice that the extension to the MIMO case is straightforward: just compute the transfer function between each pair of input and output, leading to the matrix $\bm{G} \in \mathbb{C}^{p \times r}$, for a system with $p$ outputs and $r$ inputs. For the general linear case, this matrix has the form:
 \begin{align}
 \bm{G}(s) = 
 \begin{bmatrix}
-	\cfrac{Y_1(s)}{U_1(s)} & \cfrac{Y_1(s)}{U_2(s)} & \cdots & \cfrac{Y_1(s)}{U_r(s)} \\
-	\cfrac{Y_2(s)}{U_1(s)} & \cfrac{Y_2(s)}{U_2(s)} & \cdots & \cfrac{Y_2(s)}{U_r(s)} \\
-	\vdots & \vdots & \ddots & \vdots \\
-	\cfrac{Y_n(s)}{U_1(s)} & \cfrac{Y_2(s)}{U_2(s)} & \cdots & \cfrac{Y_n(s)}{U_r(s)} \\
+	\cfrac{Y_1(s)}{U_1(s)} & \cfrac{Y_1(s)}{U_2(s)} & \cdots & \cfrac{Y_1(s)}{U_r(s)} \vspace{0.7ex} \\
+	\cfrac{Y_2(s)}{U_1(s)} & \cfrac{Y_2(s)}{U_2(s)} & \cdots & \cfrac{Y_2(s)}{U_r(s)} \vspace{0.7ex} \\
+	\vdots & \vdots & \ddots & \vdots \vspace{0.7ex} \\
+	\cfrac{Y_p(s)}{U_1(s)} & \cfrac{Y_p(s)}{U_2(s)} & \cdots & \cfrac{Y_p(s)}{U_r(s)}
 \end{bmatrix} =
 \begin{bmatrix}
-	\cfrac{\beta_m^{(11)} s^m + \cdots + \beta^{(11)}_0}{\alpha^{(1)}_n s^n + \cdots + \alpha^{(1)}_0} & \cdots & \cfrac{\beta_m^{(1r)} s^m + \cdots + \beta^{(1r)}_0}{\alpha^{(1)}_n s^n + \cdots + \alpha^{(1)}_0} \\
-	\cfrac{\beta_m^{(21)} s^m + \cdots + \beta^{(21)}_0}{\alpha^{(2)}_n s^n + \cdots + \alpha^{(2)}_0} & \cdots & \cfrac{\beta_m^{(2r)} s^m + \cdots + \beta^{(2r)}_0}{\alpha^{(2)}_n s^n + \cdots + \alpha^{(2)}_0} \\
-	\vdots & \ddots & \vdots \\
-	\cfrac{\beta_m^{(n1)} s^m + \cdots + \beta^{(n1)}_0}{\alpha^{(n)}_n s^n + \cdots + \alpha^{(n)}_0} & \cdots & \cfrac{\beta_m^{(nr)} s^m + \cdots + \beta^{(nr)}_0}{\alpha^{(n)}_n s^n + \cdots + \alpha^{(n)}_0} \\
+	\cfrac{\beta_{m_{11}}^{(11)} s^{m_{11}} + \cdots + \beta^{(11)}_{0}}{\alpha^{(1)}_{n_1} s^{n_1} + \cdots + \alpha^{(1)}_0} & \cdots & \cfrac{\beta_{m_1}^{(1r)} s^{m_{1r}} + \cdots + \beta^{(1r)}_0}{\alpha^{(1)}_{n_1} s^{n_1} + \cdots + \alpha^{(1)}_0} \vspace{0.7ex} \\
+	\cfrac{\beta_{m_{21}}^{(21)} s^{m_{21}} + \cdots + \beta^{(21)}_{0}}{\alpha^{(2)}_{n_2} s^{n_2} + \cdots + \alpha^{(2)}_0} & \cdots & \cfrac{\beta_{m_2}^{(2r)} s^{m_{2r}} + \cdots + \beta^{(2r)}_0}{\alpha^{(2)}_{n_2} s^{n_2} + \cdots + \alpha^{(2)}_0} \vspace{0.7ex} \\
+	\vdots & \ddots & \vdots \vspace{0.7ex} \\
+	\cfrac{\beta_{m_{p1}}^{(p1)} s^{m_{p1}} + \cdots + \beta^{(p1)}_{0}}{\alpha^{(p)}_{n_p} s^{n_p} + \cdots + \alpha^{(p)}_0} & \cdots & \cfrac{\beta_{m_p}^{(pr)} s^{m_{pr}} + \cdots + \beta^{(pr)}_0}{\alpha^{(p)}_{n_p} s^{n_p} + \cdots + \alpha^{(p)}_0} 
 \end{bmatrix}
-\end{align}
+.\end{align}
 
 \begin{boxed-theorem}{(Passage from SS to IO)} \label{th:SSToIO}
     Consider a linear and time-invariant system in State-Space form with initial states $\bm{x}(0^-) = \bm{0}$ and represented as:
     \begin{align}
     \begin{cases}
-        \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{u}(t) \\
-        \bm{y}(t) = \bm{C} \bm{x}(t) + \bm{D}(t) \\
+        \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) \\
+        \bm{y}(t) = \bm{C} \bm{x}(t) + \bm{D} \bm{u}(t) \\
     \end{cases}     
     .\end{align}
     
-    The equivalent system in Input-Output representation is given by the transfer function:
+\noindent The equivalent system in Input-Output representation is given by the transfer function:
     \begin{align}
     \bm{G}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B} + \bm{D}
     .\end{align}
 \end{boxed-theorem}
  
 \begin{proof}
-    Applying the Laplace transfer in both sides of the equation:
+    Applying the Laplace formation to both sides of the equation, using the property of derivative in time, results in:
     \begin{equation} \label{eq:convertSSIO01}
     \begin{split}
-        \mathcal{L} \left\{ \dot{\bm{x}}(t) \right\} &= \bm{A} \mathcal{L} \left\{ \bm{x}(t) \right\} + \bm{B} \mathcal{L} \left\{ u(t) \right\} \\
+        \mathcal{L} \left\{ \dot{\bm{x}}(t) \right\} &= \bm{A} \mathcal{L} \left\{ \bm{x}(t) \right\} + \bm{B} \mathcal{L} \left\{ \bm{u}(t) \right\} \\
         s \bm{X}(s) - \dot{\bm{x}}(0^-) &= \bm{A} \bm{X}(s) + \bm{B} \bm{U}(s) \\
-        (s\bm{I}  - \bm{A}) \bm{X}(s) &=  \bm{B} \bm{U}(s) \\
-         \bm{X}(s) &= (s\bm{I}  - \bm{A})^{-1} \bm{B} \bm{U}(s)
     \end{split}
     .\end{equation}
+
+\noindent Substituting the derivative $\dot{\bm{x}}(0^-) = 0$ and doing some manipulations results in:
+	\begin{equation}
+	\begin{split}
+		(s\bm{I}  - \bm{A}) \bm{X}(s) &=  \bm{B} \bm{U}(s) \\
+		\bm{X}(s) &= (s\bm{I}  - \bm{A})^{-1} \bm{B} \bm{U}(s)		
+	\end{split}
+	.\end{equation}    
     
-    By applying the same procedure in the output equations, using the previous result, the Laplace transform of the output is:
+\noindent Finally, applying the same procedure to the output equations, and using the previous result, the Laplace transform of the output is:
     \begin{equation} \label{eq:convertSSIO02}
     \begin{split}
         \mathcal{L} \left\{ \bm{y}(t) \right\} &= \bm{C} \mathcal{L} \left\{ \bm{y}(t) \right\} + \bm{D} \mathcal{L} \left\{ u(t) \right\} \\
@@ -719,7 +725,7 @@ An indirect result of this is that the SS representation can be converted to the
     \end{split}
     .\end{equation}
     
-    In conclusion, since by definition $\bm{Y}(s) = \bm{G}(s) \bm{U}(s)$, it is possible to obtain the transfer function matrix $\bm{G}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B} + \bm{D}$ as an equivalent representation of the system.
+    Since, by definition, $\bm{Y}(s) = \bm{G}(s) \bm{U}(s)$, it is possible to obtain the transfer function matrix $\bm{G}(s) = \bm{C} (s\bm{I} - \bm{A})^{-1} \bm{B} + \bm{D}$ as an equivalent representation of the system.
 \end{proof}
 
 Despite of the discussion about the benefits of linear models, it is necessary to account for the fact that physical systems will present, in most situations, nonlinear behavior. For this reason, some effort must be done to develop a linear model that can describe the nonlinear behavior with certain accuracy, even if over some small region of the space. With this motivation, a technique for \textit{linearization} of a nonlinear model is detailed below.
@@ -744,7 +750,7 @@ Despite of the discussion about the benefits of linear models, it is necessary t
     \noindent where
     \begin{equation}
     \begin{matrix}
-        \bm{A} = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}} \right|_{\bm{x}_o, \bm{u}_o}, & \bm{B} = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o}, & \bm{C} = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}} \right|_{\bm{x}_o,  \bm{u}_o}, & \bm{D} = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o} 
+        \bm{A} = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}} \right|_{\bm{x}_o, \bm{u}_o}; & \bm{B} = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o}; & \bm{C} = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}} \right|_{\bm{x}_o,  \bm{u}_o}; & \bm{D} = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o} 
     \end{matrix}
     \end{equation}
     
@@ -757,7 +763,7 @@ Despite of the discussion about the benefits of linear models, it is necessary t
 \end{boxed-theorem}
 
 \begin{proof}
-    Consider a system represented by state equations $\bm{f}(\cdot)$ and output equations $\bm{g}(\cdot)$, with steady-state points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$. Now, consider a very small perturbation $\Delta u(t)$ in the input signal around these operation points. This perturbation will result in small changes in the state and output variables:
+    Consider a system represented by state equations $\bm{f}(\cdot)$ and output equations $\bm{g}(\cdot)$, with steady-state points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$. Now, consider a very small perturbation $\Delta \bm{u}(t)$ in the input signal around these operation points. This perturbation will result in small changes in the state and output variables:
     \begin{align}
     \begin{matrix}
         \bm{x}(t) = \bm{x}_o + \Delta \bm{x}(t); & &
@@ -766,7 +772,7 @@ Despite of the discussion about the benefits of linear models, it is necessary t
     \end{matrix}
     .\end{align}
     
-    This results in the following configuration on the State-Space:
+    \noindent This results in the following configuration on the State-Space:
     \begin{align}
     \begin{cases}
         \cfrac{d(\bm{x}_o + \Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o + \Delta \bm{x}(t), \bm{u}_o + \Delta \bm{u}(t) ) \\
@@ -774,15 +780,15 @@ Despite of the discussion about the benefits of linear models, it is necessary t
     \end{cases}
     ,\end{align}
     
-    \noindent where $d(\bm{x}_o + \Delta \bm{x}(t)) / dt = d(\Delta \bm{x}(t)) / dt$, since $\bm{x}_o$ is constant. The perturbed variables are very close to the operation points, hence the functions $\bm{f}(\cdot)$ and $g(\cdot)$ can be approximated by a Taylor series expansion, yielding:
+    \noindent where $d(\bm{x}_o + \Delta \bm{x}(t)) / dt = d(\Delta \bm{x}(t)) / dt$, since $\bm{x}_o$ is constant. The perturbed variables are very close to the steady-state points, hence the functions $\bm{f}(\cdot)$ and $\bm{g}(\cdot)$ can be approximated by a Taylor series expansion, yielding:
     \begin{align}
     \begin{cases}
-        \hfill \cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + \text{high order terms} \\ \\
-        \bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + \text{high order terms} \\
+        \hfill \cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + O(\Delta \bm{x}^2, \Delta \bm{u}^2) \\ \\
+        \bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + O(\Delta \bm{x}^2, \Delta \bm{u}^2) \\
     \end{cases}
     .\end{align}
     
-    Since the steady-state condition implies zero variation, it is possible to assume $\bm{f}(\bm{x}_o, \bm{u}_o) = 0$ and $g(\bm{x}_o, \bm{u}_o) = 0$, since they are ordinary differential equations. Truncating in the first order terms and substituting $\bm{y}(t) = \bm{y}_o + \Delta \bm{y}(t)$ results in:
+    Since the steady-state condition implies zero variation, it is possible to assume $\bm{f}(\bm{x}_o, \bm{u}_o) = \bm{0}$ and $g(\bm{x}_o, \bm{u}_o) = \bm{0}$, since they are ordinary differential equations. Truncating in the first order terms and substituting $\bm{y}(t) = \bm{y}_o + \Delta \bm{y}(t)$ results in:
     \begin{align}
     \begin{cases}
         \cfrac{d(\Delta \bm{x}(t))}{dt} =\left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o,  \bm{u}_o}  \Delta \bm{u}(t) \\ \\
@@ -799,55 +805,74 @@ Despite of the discussion about the benefits of linear models, it is necessary t
     .\end{align}
 \end{proof}
 
-Note that this method can be used to convert non-linear models obtained from the first-principle procedure to a desirable State-Space form, since those models are usually in the non-linear State-Space representation. Consider for instance, a reactor system describing an isothermal process that follows the Van de Vusse reaction scheme \cite{VanDeVusse:1964}:
-\begin{align}
-\begin{matrix}
-    \textbf{Reaction Scheme:}  & & \textbf{Flow parameters:} \\ 
-    A\overset{K_{AB}}{\rightarrow} B \overset{K_{BC}}{\rightarrow} C & & \rho_{in}^{(B)}(t) = \rho_{in}^{(C)}(t) = \rho_{in}^{(D)}(t) = 0 \\
-    2 A \overset{K_{AD}}{\rightarrow} D & &  \rho_{out}^{(k)}(t) = \rho_k(t),\ k \in \{A, B, C, D\}
-\end{matrix}    
-.\end{align}
+Note that this method can be used to convert non-linear models obtained from the first-principle procedure to a desirable State-Space form, since those models are usually in the non-linear State-Space representation. 
 
-Consider $\bm{x} = [\rho_A, \rho_B, \rho_C, \rho_D]^T$ and $u = q$, and consider also that the states are perfectly observed, so that $\bm{y} = \bm{x}$. Using Example \ref{ex:isoReactSys01},  the state-equation for the nonlinear State-Space representation of this reactor is:
-\begin{align}
-\begin{cases}
-    \dot{x_1}(t) = u(t) (\rho_{in}^{(A)} - x_1(t)) - (K_{AB} x_1(t) + K_{AD} (x_1(t))^2)\\
-    \dot{x_2}(t) = -u(t) x_2(t) + K_{AB} x_1(t) - K_{BC} x_2(t) \\
-    \dot{x_3}(t) = -u(t) x_3(t) + K_{BC} x_2(t) \\
-    \dot{x_4}(t) = -u(t) x_4(t) + \cfrac{1}{2} K_{AD} (x_1(t))^2
-\end{cases}
-.\end{align}
+\begin{boxed-example}{(Van de Vusse Reactor)} \label{ex:vanDeVusse01}
+	Consider, for instance, a reactor system describing an isothermal process that follows the Van de Vusse reaction scheme \cite{VanDeVusse:1964}:
+	\begin{align}
+	\left\{ \begin{matrix*}[r]
+	    A & \overset{K_{AB}}{\longrightarrow} & B & \overset{K_{BC}}{\longrightarrow} & C \\
+	    2 A & \overset{K_{AD}}{\longrightarrow} & D & &
+	\end{matrix*} \right.
+	.\end{align}
+	
+\noindent Consider, also, that the concentration of substances $A$, $B$, $C$ and $D$ inside the fluid inflow and outflow are described by the following conditions: 
+	\begin{align}
+	\left\{ \begin{matrix*}[l]
+		\rho_{in}^{(B)}(t) = \rho_{in}^{(C)}(t) = \rho_{in}^{(D)}(t) = 0 \\
+		\rho_{out}^{(k)}(t) = \rho_k(t),\ \forall k \in \{A, B, C, D\}
+	\end{matrix*} \right.
+	.\end{align}
+	
+\noindent Now, let $\bm{x} = [\rho_A, \rho_B, \rho_C, \rho_D]^T$ and $u = q$, and assume that the states are perfectly observed, so that $\bm{y} = \bm{x}$. Using Example \ref{ex:isoReactSys01},  the nonlinear State-Space representation of this reactor is can be modeled by the state-equations:
+	\begin{align}
+	\begin{cases}
+	    \dot{x_1}(t) = u(t) (\rho_{in}^{(A)} - x_1(t)) - (K_{AB} x_1(t) + K_{AD} (x_1(t))^2)\\
+	    \dot{x_2}(t) = -u(t) x_2(t) + K_{AB} x_1(t) - K_{BC} x_2(t) \\
+	    \dot{x_3}(t) = -u(t) x_3(t) + K_{BC} x_2(t) \\
+	    \dot{x_4}(t) = -u(t) x_4(t) + \cfrac{1}{2} K_{AD} (x_1(t))^2
+	\end{cases}
+	.\end{align}
+	
+	To select steady-state points $\bm{x}_o$ and $u_o$, it is necessary to find values for $\bm{x}(t)$ and $u(t)$ that satisfies the system $\dot{\bm{x}}(t) = \bm{0}$. This can be done analytically, in some cases, or by using numerical methods. Finally, the linear State-Space matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ are obtained by taking the derivative each one of these equations in respect to each state and input, resulting in:
+	\begin{align}   \label{eq:isoReact01}
+	\left\{ \begin{matrix*}[l]
+	    \bm{A} = \begin{bmatrix}
+	        -u_o - K_{AB} - 2K_{AC} x_{1o} & 0 & 0 & 0 \\ K_{AB} & -u_o - K_{BC} & 0 & 0 \\ 0 & K_{BC} & -u_o & 0 \\ K_{AD} x_{1o} & 0 & 0 & -u_o
+	    \end{bmatrix}; \hfill & &
+	    \bm{B} = \begin{bmatrix}
+	        \rho_{in}^{(A)}-x_{1o} \\ -x_{2o} \\ -x_{3o} \\ -x_{4o} 
+	    \end{bmatrix}; \hfill \\  \\ 
+	    \bm{C} = \begin{bmatrix}
+	        1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1
+	    \end{bmatrix}; \hfill & &
+	    \bm{D} = \begin{bmatrix}
+	        0 \\ 0 \\ 0 \\ 0
+	    \end{bmatrix} \hfill
+	\end{matrix*} \right.
+	.\end{align}
+\end{boxed-example}
 
- To select steady-state points $\bm{x}_o$ and $\bm{u}_o$, it is necessary to find values for $\bm{x}(t)$ and $u(t)$ that satisfies the system $\dot{\bm{x}}(t) = \bm{0}$. This can be done by analytical formulas, in some cases, by numerical methods or by simply simulating the nonlinear system and measuring these quantities when the states displays zero variation. Finally, the linear matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$ are obtained by deriving each one of these equations in respect to each state and input, resulting:
-\begin{align}   \label{eq:isoReact01}
-\left\{ \begin{matrix*}[l]
-    \bm{A} = \begin{bmatrix}
-        -u_o - K_{AB} - 2K_{AC} x_{1o} & 0 & 0 & 0 \\ K_{AB} & -u_o - K_{BC} & 0 & 0 \\ 0 & K_{BC} & -u_o & 0 \\ K_{AD} x_{1o} & 0 & 0 & -u_o
-    \end{bmatrix} \hfill & &
-    \bm{B} = \begin{bmatrix}
-        \rho_{in}^{(A)}-x_{1o} \\ -x_{2o} \\ -x_{3o} \\ -x_{4o} 
-    \end{bmatrix} \hfill \\  \\ 
-    \bm{C} = \begin{bmatrix}
-        1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1
-    \end{bmatrix} \hfill & &
-    \bm{D} = \begin{bmatrix}
-        0 \\ 0 \\ 0 \\ 0
-    \end{bmatrix} \hfill
-\end{matrix*} \right.
-.\end{align}
-
-Notice that the response of this model represents the deviations around the given operation points. If the errors in approximating the non-linearities of the actual system are somehow tolerable, this model can still be used as a nominal model to represent all the operations, given that the response is vertically ``correted" as $\bm{x}(t) = \Delta \bm{x}(t) + \bm{x}_o$ (and for initial states $\Delta \bm{x}_0 = \bm{x}(t_0) - \bm{x}_o$ and input signal $\Delta \bm{u}(t) = \bm{u}(t) - \bm{u}_o$). The simulation of both the nonlinear and the linear systems are displayed in Fig. \ref{fig:linResp01}, with the dashed line the linear response of a system given $\bm{x}_o = [6.19, 1.09, 0.60, 1.05]^T$ and $u_0 = 3.03$.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{chapter2/linResp01}
+	Notice that the response of a linearized model represents the deviations around the given steady-state points. If the errors in approximating the non-linearities of the actual system are somehow tolerable, however, this model can still be used as a nominal model to represent the system in any point in space. For the sake of illustration, the simulation of both the nonlinear and the linear systems are displayed in Fig. \ref{fig:linResp01}, for a realization of the system accounted in Example \ref{ex:vanDeVusse01}. In this realization, the kinetic rates were set as $K_{AB} = 5/6$, $K_{BC} = 5/3$ and $K_{AC} = 1/6$, and the inflow concentration was consider constant as $\rho_{in}^{(A)} = 10\ (mol/l)$. In this simulation, the dashed line represents the linear response of the linearized model given $\bm{x}_o = [6.19, 1.09, 0.60, 1.05]^T$ and $u_0 = 3.03$. Notice how the linearized system is capable of approximating the behavior of the non-linear system when closer to the steady-state point, but starts to display an error when the system leaves that state.
+	
+\begin{figure}[ht] \centering
+	\begin{subfigure}{0.9\textwidth}
+	\begin{tikzpicture}
+    	\node (img) {\includegraphics[width=\textwidth]{chapter2/linResp_1_1}};
+    	\node [below of=img, node distance=5.5em] (xlabel) {\footnotesize Time (min)};
+   	\end{tikzpicture}
+	\end{subfigure} \\
+    \begin{subfigure}{0.9\textwidth}
+    	\includegraphics[width=\textwidth]{chapter2/linResp_1_2}
+	\end{subfigure}
+	
     \caption{Comparison between the nonlinear and linear response of the reactor system.}
     \label{fig:linResp01}
 \end{figure}
 
 \section{Response Analysis in the Time Domain}
 
-Once that a model is well-established, it is possible both to simulate the system and to analyze its response, both for a natural or forced regime. This section, then, focus on developing a quantitative understanding of a system behavior through a linear model. The results are focused on continuous-time response of linear and time-invariant (LTI) systems in the form:
+Once that a model is well-established, it is possible both to simulate the system and to analyze its response, given an initial state and input signal. This section focus on developing a quantitative understanding of a system behavior through a linear model. The results are focused on continuous-time response of linear and time-invariant systems in the form:
 \begin{align}
 \begin{cases}
     \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) \\
@@ -855,7 +880,7 @@ Once that a model is well-established, it is possible both to simulate the syste
 \end{cases}
 .\end{align}
 
-First of all, it is necessary to access some properties of the matrix $\bm{A}$, which describes the natural evolution of the states. 
+First of all, it is necessary to access some properties of the matrix $\bm{A}$, which describes the influence of the states in the evolution of the system. Consider, in this case, the following matrix defined by computing the exponential of the matrix $\bm{A}$. 	
 
 \begin{boxed-definition}{(State-Transition Matrix)} \label{def:stateTransM}
     Consider a system in State-Space representation with matrix $\bm{A} \in \mathbb{R}^{n \times n}$. Its \textit{State-Transition Matrix}, $e^{\bm{A} t} \in \mathbb{R}^{n \times n}$ , is the converging series:
@@ -864,18 +889,18 @@ First of all, it is necessary to access some properties of the matrix $\bm{A}$, 
 .\end{equation} 
 \end{boxed-definition}
 
-This matrix is central to the computation of the system time response, as it will be shown shortly. Since the matrix $A$ is a square matrix, this operation leads to some useful properties.
+This matrix is central to the computation of the system time response, since it can directly relate the initial state of a system to any other state forward in time \textbf{[reference?]}. Moreover, the exponential of a matrix is not a trivial operation. However, the fact that the State-Space matrix $\bm{A}$ is always a square matrix results in the following properties for the State-Transition matrix, stated below.
 
 \begin{boxed-theorem}{} \label{th:stateTransMProp}
     Consider a matrix exponential as in Definition \ref{def:stateTransM}, for a matrix $\bm{A}  \in \mathbb{R}^{n \times n}$. Then, the following properties holds:
 \begin{align}
-        1)\ \cfrac{d ( e^{\bm{A} t} )}{dt} = \bm{A} e^{\bm{A} t} & &
-        2)\ e^{\bm{A} t} e^{\bm{A} \tau} = e^{\bm{A} (t + \tau)} & &
-        3)\ e^{-\bm{A} t} e^{\bm{A} t} = e^{\bm{A} t} e^{-\bm{A} t} = \bm{I}
+        {\rm I})\ \cfrac{d ( e^{\bm{A} t} )}{dt} = \bm{A} e^{\bm{A} t}; & &
+        {\rm II})\ e^{\bm{A} t} e^{\bm{A} \tau} = e^{\bm{A} (t + \tau)}; & &
+        {\rm III})\ e^{-\bm{A} t} e^{\bm{A} t} = e^{\bm{A} t} e^{-\bm{A} t}; = \bm{I}
 .\end{align}
 \end{boxed-theorem}
 
-The proof is direct from Definition \ref{def:stateTransM}, and a detailed discussion of these properties is omitted. Given these results, the calculation of the time response of a system in SS representation becomes straightforward.
+The proof of these properties can be obtained directly from using the Definition \ref{def:stateTransM} and doing some algebra. Given these results, the calculation of the time response of a system in SS representation becomes straightforward.
 
 \begin{boxed-theorem}{(Lagrange Formula)} \label{th:lagrangeForm}
     Consider a LTI system in State-Space representation. Its response for any time $t \geq t_0$, initial state $\bm{x}(t_0)$ and input signal $\bm{u}(t)$ is given by the solutions of the state and output equations:
@@ -896,7 +921,7 @@ The proof is direct from Definition \ref{def:stateTransM}, and a detailed discus
     \end{split}
     .\end{equation}
     
-    Using the first assertive in Theorem \ref{th:stateTransMProp}, it is easy to see that $d[e^{-\bm{A} t} x(t)]/dt = e^{-\bm{A} t} \dot{\bm{x}}(t) - \bm{A} e^{-\bm{A} t} \bm{x}(t)$. Substituting this result in \eqref{eq:lagrTH01} and integrating both sides from $t_0$ to $t$:
+\noindent Using the multiplication rule and the first property from Theorem \ref{th:stateTransMProp}, it is easy to see that $d[e^{-\bm{A} t} \bm{x}(t)]/dt = e^{-\bm{A} t} \dot{\bm{x}}(t) - \bm{A} e^{-\bm{A} t} \bm{x}(t)$. Substituting this result in \eqref{eq:lagrTH01} and integrating both sides from $t_0$ to $t$:
     \begin{equation} \label{eq:lagrTH02}
     \begin{split}
         \cfrac{d(e^{-\bm{A} t} \bm{x}(t))}{dt} &= e^{-\bm{A} t} \bm{B} \bm{u}(t) \\
@@ -905,7 +930,7 @@ The proof is direct from Definition \ref{def:stateTransM}, and a detailed discus
     \end{split}
     .\end{equation}
     
-    Multiplying both sides by $e^{\bm{A} t}$ and using the second and third assertive from Theorem \ref{th:stateTransMProp}, the state response can be calculated as:
+\noindent Multiplying both sides of \eqref{eq:lagrTH02} by $e^{\bm{A} t}$ and using the second and third property from Theorem \ref{th:stateTransMProp}, the state response can be calculated as:
     \begin{equation} \label{eq:lagrTH03}
     \begin{split}
         e^{\bm{A} t} \left( e^{-\bm{A} t} \bm{x}(t) \right. &- \left. e^{-\bm{A} t_0} \bm{x}(t_0) \right) = e^{\bm{A} t} \int_{t_0}^{t} e^{-\bm{A} \tau} \bm{B} \bm{u}(\tau) d\tau \\
@@ -914,45 +939,54 @@ The proof is direct from Definition \ref{def:stateTransM}, and a detailed discus
     \end{split}
     .\end{equation}
     
-    Finally, substituting \eqref{eq:lagrTH03} into the output equation leads to:
+\noindent Finally, substituting \eqref{eq:lagrTH03} into the output equation leads to:
     \begin{equation} \label{eq:lagrTH04}
     \begin{split}
         \bm{y}(t) &= \bm{C} \left( e^{\bm{A} (t - t_0)} \bm{x}(t_0) + \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d\tau \right) + \bm{D} \bm{u}(t) \\ 
-        \bm{y}(t) &= \bm{C} e^{\bm{A}(t - t_0)} \bm{x}(t) + \bm{C} \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau + \bm{D} \bm{u}(t) 
+         &= \bm{C} e^{\bm{A}(t - t_0)} \bm{x}(t) + \bm{C} \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau + \bm{D} \bm{u}(t) 
     \end{split}
     .\end{equation}
 \end{proof}
 
-When discussing the response of a system, the focus is actually directed to the state equation describing its dynamics, since the output equation only represents an observation of the system through the states. In this sense, the Lagrange formula exposes the nice characteristic of linear systems that the total response is a composition of two separated actions:
+When discussing the response of a system, the focus is directed to the state equation describing its dynamics, since the output equation represents an observation of the system through the states. In this sense, the Lagrange formula shows the nice characteristic of linear systems that the total response is a composition of two separated actions:
 \begin{equation}
     \bm{x}(t) = \bm{x}_{\text{n}}(t) + \bm{x}_{\text{f}}(t) 
 ,\end{equation}
 
 \noindent where the natural response, $\bm{x}_{\text{n}}(t)$, corresponds to the state-transition matrix multiplication term and the forced response, $\bm{x}_{\text{f}}(t)$, corresponds to the integral term. This concept is visualized in Fig. \ref{fig:linResp02} for the total response of the first two states of the model derived in \eqref{eq:isoReact01}, given the operation points $\bm{x}_o = [6.19, 1.09]$ and $u_o = 3.03$, excited with a step input $u(t) = 3$, $t \in [0, 1.2]$. In this plot, the solid line represents the total response, whereas the dashed and dotted lines represents the natural and forced response, respectively. It is easy to verify that the decomposition of the total response is equal to the sum of those independent components.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\textwidth]{chapter2/linResp02}
-    \caption{Simulation of the total response decomposition for the two first states of the model from \eqref{eq:isoReact01} shown separately (left) and in a single visualization (right) in which the steady-state point is indicated by a circle.}
+\begin{figure}[ht] \centering
+    \begin{subfigure}{0.46\textwidth}
+    	\includegraphics[width=\textwidth]{chapter2/linResp_2_1}
+   	\end{subfigure} \hfill
+    \begin{subfigure}{0.50	\textwidth}
+    	\includegraphics[width=\textwidth]{chapter2/linResp_2_2}
+   	\end{subfigure}
+
+    \caption{Simulation of the total response decomposition for the two first states of the model from \eqref{eq:isoReact01}. Each state response is shown separately (left) and together into a trajectory visualization (right), in which the steady-state point is indicated by a circle.}
     \label{fig:linResp02}
 \end{figure}
 
-The only problem remaining to fully characterize the dynamical response of a system is to compute the state-transition matrix, which can be done in several ways \cite{Moler_VanLoan:2003}. A specific method, known as the \textit{Sylvester expansion}, is an analytical solution that brings an interesting understanding of the system behavior through the state-state matrix $A$.
+In order to characterize the dynamical response of a system, there is still the need to compute the state-transition matrix. This can be done in several ways \cite{Moler_VanLoan:2003}. A specific method, known as the \textit{Sylvester expansion}, is an analytical solution that brings an understanding of the system behavior through the eigenvalues of the state-state matrix $\bm{A}$.
 
 \begin{boxed-theorem}{(Sylvester expansion)} \label{th:sylvester01}
-    Consider a matrix exponential function $\bm{f}(\bm{A}) = e^{\bm{A} t}$ for any square matrix $\bm{A} \in \mathbb{R}^{n \times n}$, whose distinct eigenvalues are $\bm{\lambda} \in \mathbb{R}^{m},\ m \leq n,$ with associated multiplicity vector $\bm{\nu} \in \mathbb{R}^m$ such that $\sum_j \nu_j = n$. The result of this function can be expanded as:
+    Consider a matrix exponential function $e^{\bm{A} t}$ for any square matrix $\bm{A} \in \mathbb{R}^{n \times n}$, whose distinct eigenvalues are $\bm{\lambda} \in \mathbb{R}^{m},\ m \leq n,$ with associated multiplicity vector $\bm{\nu} \in \mathbb{R}^m$ such that $\| \bm{\nu} \|_1 = n$. The result of this function can be expanded as
     \begin{equation} \label{eq:sylvester01}
-        f(\bm{A}) = e^{\bm{A} t} = \beta_0(t) \bm{I} + \beta_1(t) \bm{A} + \beta_2(t) \bm{A}^2 + ... + \beta_{n-1}(t) \bm{A}^{n-1} = \sum_{i=0}^{n-1} \beta_i(t) \bm{A}^i
+        e^{\bm{A} t} = \beta_0(t) \bm{I} + \beta_1(t) \bm{A} + \beta_2(t) \bm{A}^2 + ... + \beta_{n-1}(t) \bm{A}^{n-1} = \sum_{i=0}^{n-1} \beta_i(t) \bm{A}^i
     ,\end{equation} 
     
-    \noindent where $\beta_i(t) : \mathbb{R} \rightarrow \mathbb{R}$, $i \in [1,2,...,n-1]$, are scalar functions of time that solves the linear system:
+    \noindent where $\beta_i(t) : \mathbb{R} \rightarrow \mathbb{R}$, $i \in [1,2,...,n-1]$, are scalar functions of time. These functions are obtained by solving the linear system
     \begin{equation} \label{eq:sylvester02}
         \bm{V} \bm{\beta} = \bm{\eta}
-    \end{equation} 
+    ,\end{equation} 
     
-    \noindent for the parameter matrix $\bm{\beta} = [\beta_0(t), \beta_1(t), ..., \beta_n(t)]^T$, and the vector of modes $\bm{\eta} = [\eta_1, \eta_2, ..., \eta_m]^T$ and the confluent Vandermonde matrix $\bm{V} = [V_1, V_2, ..., V_m]^T$ given as
+    \noindent for the parameter matrix $\bm{\beta} = [\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)]^T$, given vector of modes $\bm{\eta} = [\eta_1, \eta_2, ..., \eta_m]^T$ such that
     \begin{align*}
-        \eta_i & = \begin{bmatrix} e^{\lambda_i t} & te^{\lambda_i t} & t^2e^{\lambda_i t} & \cdots & t^{\nu_i-1}e^{\lambda_i t} \end{bmatrix}^T \\ \\
+        \eta_i & = \begin{bmatrix} e^{\lambda_i t} & te^{\lambda_i t} & t^2e^{\lambda_i t} & \cdots & t^{\nu_i-1}e^{\lambda_i t} \end{bmatrix}^T \\
+    \end{align*}
+    
+	\noindent and the confluent Vandermonde matrix $\bm{V} = [V_1, V_2, ..., V_m]^T$ such that
+    \begin{align*}
         V_j     & = \begin{bmatrix}
             1 & \lambda_j & \lambda_j^2 & \cdots & \lambda_j^{(\nu_j - 1)} & \cdots & \lambda_j^{n-1} \\
             0 & 1 & 2\lambda_j & \cdots & (\nu_j - 1) \lambda_j^{(\nu_j - 1)} & \cdots & (n-1)\lambda_j^{n-2} \\
@@ -966,18 +1000,22 @@ The proof of this expansion is somewhat extensive, but a detailed discussion can
 
 From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to understand the relationship between the state-transition matrix $e^{\bm{At}}$ and each eigenvalue $\lambda$ of the matrix $\bm{A}$, also known as the \textit{poles} of the system. First of all, notice that the formulation of the linear system that defines the parameters $\beta_0(t), \beta_1(t), ..., \beta_{n-1}(t)$ implies that each one of these functions are linear combinations of the exponentials $e^{\lambda_i t}$ for each eigenvalue $\lambda_i,\ i=1,2,...m$. These exponentials are known as the \textit{modes} of the matrix $\bm{A}$. Since the Sylvester expansion is linear in those parameters, it is possible to conclude that the state-transition matrix, and consequently the response of a system, is a linear combination of the modes.
 
-Consider, for the sake of illustration, the same reactor model from \eqref{eq:isoReact01}, but considering only the first two states (since they are independent of the others). Let $\bm{x}_o = [6.19, 1.09]^T$ and $u_0 = 3.03$, just as before. The resulting matrix $\bm{A}$ and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
-\begin{align} \label{eq:stateRespEx01}
-    \bm{A} = \begin{bmatrix} 
-        -5.93  &        0 \\
-        0.83   &  -4.70 
-    \end{bmatrix} && e^{\bm{A} t} = \begin{bmatrix} 
-        e^{-5.93 t}  &        0 \\
-        0.68 e^{-4.7 t} - 0.68 e^{-5.93 t}  &  e^{-4.70 t} 
-    \end{bmatrix}
-.\end{align}
-
-A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) = \bm{0},\ t \in [t_0, t]$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
+\begin{boxed-example}
+	Consider, for the sake of illustration, the same State-Space model as the one simulated in Fig. \ref{fig:linResp01}, but considering only the first two states (since they are independent of the others). Its matrix $\bm{A}$ is shown below:
+	\begin{align} \label{eq:stateRespEx01}
+	    \bm{A} = \begin{bmatrix} 
+	        -5.93  &        0 \\
+	        0.83   &  -4.70 
+	    \end{bmatrix} && e^{\bm{A} t} = \begin{bmatrix} 
+	        e^{-5.93 t}  &        0 \\
+	        0.68 e^{-4.7 t} - 0.68 e^{-5.93 t}  &  e^{-4.70 t} 
+	    \end{bmatrix}
+	.\end{align}
+	
+	and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
+	
+	A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) = \bm{0},\ t \in [t_0, t]$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
+\end{boxed-example}
 
 \begin{figure}[ht]
     \centering

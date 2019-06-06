@@ -12,12 +12,12 @@
 % cd /home/minho/Documents/Minho/Control_ChemPlants/
 % cd /home/minhotmog/Dropbox/Research/TCC/Codes/
 clc; clear all; close all;
+addpath("utils/")
 
 % Sets the Default Renderer to tbe the Painters
 set(0, 'DefaultFigureRenderer', 'painters');
 
 % Some colors
-load('data/ccmap.mat');
 cpal = [209 17 65;    % 1 - Metro Red
         0 177 89;     % 2 - Metro Green
         0 174 219;    % 3 - Metro Blue
@@ -44,7 +44,7 @@ x_o = y(:,end);
 
 % - Real simulation parameters
 t = (0:0.01:5.99)';                                          
-X_0 = [0 0 0 0];
+X_0 = x_o;
 U = [ones(1, numel(t)/4)*1  ones(1, numel(t)/4)*3  ones(1, numel(t)/4)*2 ones(1, numel(t)/4)*4];
 
 % - State-space model selection
@@ -54,28 +54,42 @@ iso_cstr_lin = ss(A, B, C, D);
 
 % - Simulation of the Outputs
 [~, y] = simulate(iso_cstr.sysVar, t, U+3.03, X_0);
-[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t, -x_o);
+[y_lin, ~, ~] = lsim(iso_cstr_lin, U, t, X_0-x_o);
 
 % - Visualization of the Simulation
-figure(1);
-
-subplot(2,2,1), plot(t, U, 'k-', 'linewidth', 1.5), title("Input Signal")
-xlabel("Time (min)"), ylabel("u (m^3/min)")
-ylim([0, 5])
-
-
-for i = 1:4
-    subplot(4,2,2*i), plot(t, y(i,:), 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
-    subplot(4,2,2*i), plot(t, y_lin(:,i)+x_o(i), 'linewidth', 1.5, 'linestyle', '--', 'color', cpal(5+i, :))
-    ylabel(strcat("x_", int2str(i), " (mol/l)"))
-end
-subplot(4,2,2); title("State Response")
-subplot(4,2,8); xlabel("Time (min)")
+figure(1)
+clf
+[ha, pos] = tight_subplot(1,1,[.02 .1],[.1 .01],[.1 .01]);
+axes(ha(1))
+plot(t, U, 'k-', 'linewidth', 1)
+ylim([0, 5]), ytickformat("%.1f")
+xlabel("Time (min)"), ylabel("u (1/min)")
 
 % - Exporting the Visualization to an Image
-% fig = gcf;
-% fig.PaperPositionMode = 'auto';
-% print('-bestfit', 'isothermal_cstr/simulation/report_ch2_1', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_1_1";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+figure(2)
+clf
+[ha, pos] = tight_subplot(2,2,[.02 .1],[.1 .01],[.1 .01]);
+for i = 1:4
+    axes(ha(i))
+    plot(t, y(i,:), 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
+    plot(t, y_lin(:,i)+x_o(i), 'linewidth', 1, 'linestyle', '--', 'color', cpal(5+i, :))
+    ylabel(strcat("x_", int2str(i), " (mol/l)"))
+end
+axes(ha(1)); set(ha(1), "XTickLabel", []), ytickformat("%.1f")
+axes(ha(2)); set(ha(2), "XTickLabel", [])
+axes(ha(3)); xlabel("Time (min)")
+axes(ha(4)); xlabel("Time (min)")
+
+% - Exporting the Visualization to an Image
+figname = "report_codes/figs/report_ch2_1_2";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.4 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -83,47 +97,58 @@ subplot(4,2,8); xlabel("Time (min)")
 x_o = y(1:2,end);
 
 % - Real simulation parameters
-t = (0:0.1:1.2)';      
+t = (0:0.1:1)';      
 U = ones(1,numel(t)) * 3;
 U_zero = zeros(1,numel(t));
 
 % - State-space model selection
 A = iso_cstr.ss_model.A_l(x_o, 3.03);     B = iso_cstr.ss_model.B_l(x_o, 3.03);
-C = eye(2);                                               D = zeros(2,1);
+C = eye(2);                               D = zeros(2,1);
 iso_cstr_lin = ss(A, B, C, D);
 
 % - Simulation of the Outputs
-[y_lin, ~, ~]        = lsim(iso_cstr_lin, U, t, [10 10]/3.5);
-[y_lin_nat, ~, ~] = lsim(iso_cstr_lin, U_zero, t, [10 10]/3.5);
+[y_lin, ~, ~]      = lsim(iso_cstr_lin, U, t, [10 10]/3.5);
+[y_lin_nat, ~, ~]  = lsim(iso_cstr_lin, U_zero, t, [10 10]/3.5);
 y_lin_forc = y_lin - y_lin_nat;
 
 % - Visualization of the Simulation
-figure(2);
-subplot(2,2,1)
-plot(t, y_lin(:,1), 'linewidth', 1.5, 'color', cpal(6, :)); hold on;
-plot(t, y_lin_nat(:,1), 'linewidth', 1.5, 'linestyle', '--', 'color', cpal(6, :)); hold on;
-plot(t, y_lin_forc(:,1), 'linewidth', 1.5, 'linestyle', ':', 'color', cpal(6, :)); hold on;
+figure(1); clf
+[ha, pos] = tight_subplot(2,1,[.02 .1],[.1 .01],[.1 .01]);
+axes(ha(1))
+plot(t, y_lin(:,1), 'linewidth', 1, 'color', cpal(6, :)); hold on;
+plot(t, y_lin_nat(:,1), 'linewidth', 1, 'linestyle', '--', 'color', cpal(6, :)); hold on;
+plot(t, y_lin_forc(:,1), 'linewidth', 1, 'linestyle', ':', 'color', cpal(6, :)); hold on;
 ylabel("\Delta x_1 (mol/l)")
+set(ha(1), "XTickLabel", [])
 
-subplot(2,2,3)
+axes(ha(2))
 plot(t, zeros(1,numel(t)), 'k-'); hold on;
-plot(t, y_lin(:,2), 'linewidth', 1.5, 'color', cpal(8, :)); hold on;
-plot(t, y_lin_nat(:,2), 'linewidth', 1.5, 'linestyle', '--', 'color', cpal(8, :)); hold on;
-plot(t, y_lin_forc(:,2), 'linewidth', 1.5, 'linestyle', ':', 'color', cpal(8, :)); hold on;
+plot(t, y_lin(:,2), 'linewidth', 1, 'color', cpal(8, :)); hold on;
+plot(t, y_lin_nat(:,2), 'linewidth', 1, 'linestyle', '--', 'color', cpal(8, :)); hold on;
+plot(t, y_lin_forc(:,2), 'linewidth', 1, 'linestyle', ':', 'color', cpal(8, :)); hold on;
 ylabel("\Delta x_2 (mol/l)")
 xlabel("Time (min)")
 ylim([-1, 3.5])
 
-subplot(1,2,2)
+% - Exporting the Visualization to an Image
+figname = "report_codes/figs/report_ch2_2_1";
+fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 3];
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+
+figure(2); clf
+[ha, pos] = tight_subplot(1,1,[.02 .1],[.1 .01],[.1 .01]);
+axes(ha(1))
 scatter(y_lin(end,1), y_lin(end,2), 'ko')
 z = zeros(size(t));
 surface([y_lin(:,1) y_lin(:,1)]',[y_lin(:,2) y_lin(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',2); hold on
+        'facecol','no', 'edgecol','interp', 'linew',1.5); hold on
 surface([y_lin_nat(:,1) y_lin_nat(:,1)]',[y_lin_nat(:,2) y_lin_nat(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',1.5, 'LineStyle', '--'); hold on
+        'facecol','no', 'edgecol','interp', 'linew',1, 'LineStyle', '--'); hold on
 surface([y_lin_forc(:,1) y_lin_forc(:,1)]',[y_lin_forc(:,2) y_lin_forc(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',1.5, 'LineStyle', ':');
-colormap hot
+        'facecol','no', 'edgecol','interp', 'linew',1, 'LineStyle', ':');
+colormap jet
 c = colorbar;
 c.Label.String = 'Time (min)';
 
@@ -132,9 +157,11 @@ xlabel("\Delta x_1 (mol/l)")
 grid
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_2', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_2_2";
+fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 4];
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
 
 %% Figure 2.5 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values

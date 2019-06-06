@@ -64,8 +64,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
         % == Separates the process and measurement noises ==
         if exist('noise', 'var')
-            w = noise(1:nx, :)';
-            z = noise(nx+1:end, :)';
+            w = noise(:, 1:nx)';
+            z = noise(:, nx+1:end)';
         else
             w = zeros(nx,numel(t));
             z = zeros(ny,numel(t));
@@ -97,7 +97,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 if exist('W', 'var')
                     [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
                 else
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
                 
                 x(:, i+1) = y_aux(end, :);
@@ -143,7 +143,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 if exist('W', 'var')
                     [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
                 else
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
                 
                 x(:, i+1) = y_aux(end, :);
@@ -162,40 +162,40 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmpi(controller.type, 'lqg'))
             % Calculate the LQR gain matrix
-            K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N);  
+%             K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N);  
 
             % Calculates the Kalman-Bucy gain matrix
             Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, 0:deltaT:controller.N); 
-
+            
+            u = ones(2, numel(t)) .* (ue .* [1.1; 0.9] - ue);
+            
             % == Simulation for each timestep (i) on time signal (t) ==
             for i = 1:numel(t)-1
                 % Calculates the input signal
-                u(:,i) = r(:,i) - K{i}*x_hat(:, i);
+%                 u(:,i) = r(:,i) - K{i}*x_hat(:, i);
 
                 % Simulates the actual plant (represented by the nonlinear model)
                 if exist('W', 'var')
                     [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
                 else
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
-                
                 x(:, i+1) = y_aux(end, :);
 
                 % Defines the closed-loop matrix for this instant
-                A_cl = (A - B*K{i} - Ke{i}*C);
+                A_cl = (A - Ke{i}*C);
                 B_cl = [B Ke{i}];
 
                 % Simulates the linear model using the Lagrange formula
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)+z(:,i:i+1)], t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 2]), t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
             end
 
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmpi(controller.type, 'lqgi'))
             % Augments the state auxiliary vector in time and updates the initial conditions
-            x_hat = zeros(nx+ny, numel(t));
-            x_hat(:,1) = [x_0' - xe; r(:,1) - C*(x_0' - xe) ];
+            x_a(:,1) = r(:,1) - C*(x_0' - xe);
 
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny); 
@@ -214,26 +214,25 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             % == Simulation for each timestep (i) on time signal (t) ==
            for i = 1:numel(t)-1
                 % Calculates the input signal
-                u(:,i) = - K{i} * x_hat(:,i);
+                u(:,i) = - K{i} * [x_hat(:,i); x_a(:,i)];
 
                 % Simulates the actual plant (represented by the nonlinear model)
                 if exist('W', 'var')
                     [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
                 else
-                    [~, y_aux] = odeSolver(model.model, t(i:i+1), u(:,i) + ue, x(:,i), 100);
+                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
                 
                 x(:, i+1) = y_aux(end, :);
+                x_a(:, i+1) = x_a(:, i) + (r(:,i+1) - C*(x(:,i+1) - xe));
 
                 % Define the closed-loop matrices
-                A_cl = [A-B*K{i}(:,1:nx)-Ke{i}*C  -B*K{i}(:,nx+1:end); 
-                           zeros(ny,nx)                zeros(ny)];
-                B_cl = [zeros(nx, ny)     Ke{i}; 
-                         eye(ny)        -eye(ny)];
+                A_cl = (A - Ke{i}*C);
+                B_cl = [B Ke{i}];
 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, [r(:,i:i+1); C*(x(:,i:i+1)-xe)+z(:,i:i+1)], t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 2]), t(i:i+1), x_hat(:,i));
                 x_hat(:, i+1) = aux(end, :);
            end
 

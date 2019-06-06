@@ -51,12 +51,12 @@ exo_cstr.sizeY      =  2 ;
 %%
 % = Simulation Parameters = %
 % - Time and Initial States
-t = (0:0.002:0.298)'; T = numel(t);
-x_0 = xe .* [0 0 1.0 1.0];
+t = (0:0.02:10.58)'; T = numel(t);
+x_0 = xe;
 
 % - Reference Signal
-%r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
-r = ones(2,T).*[xe(2); xe(3)];
+r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
+%r = ones(2,T).*[xe(2); xe(3)];
 
 % - Noise and Disturbance signals
 w = mvnrnd([0; 0; 0; 0], diag([0.1 0.1 0.1 0.1]), T);  % Process Noise
@@ -65,28 +65,28 @@ z = mvnrnd([0; 0], diag([0.0001, 0.01]), T);            % Measurement Noise
 W = [ zeros(1,T); 
       zeros(1,T)]'; %mvnrnd([0; 0; 0], diag([0.01, 0.01, 0.1]), T);
 
-tFrac = floor(T/4);
-sFrac = round(T*0.02);
-W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
-W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
-W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
-W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
-
-W(1*tFrac:1*tFrac+sFrac,2) = -3;
-W(2*tFrac:2*tFrac+sFrac,2) = +2;
-W(3*tFrac:3*tFrac+sFrac,2) = +3;
-W(4*tFrac:4*tFrac+sFrac,2) = -2;
+% tFrac = floor(T/4);
+% sFrac = round(T*0.02);
+% W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
+% W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
+% W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
+% W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
+% 
+% W(1*tFrac:1*tFrac+sFrac,2) = -3;
+% W(2*tFrac:2*tFrac+sFrac,2) = +2;
+% W(3*tFrac:3*tFrac+sFrac,2) = +3;
+% W(4*tFrac:4*tFrac+sFrac,2) = -2;
   
 % = Controller and Estimator Definitions = %
-controller.type = "lqr";
+controller.type = "lqgi";
 
 controller.oper.xe = xe'; controller.oper.ue = ue';
 controller.N = T;
 
-controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2)]); %diag([1, 1, 1, 1]);
+controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 1e3 1e-1]); %diag([1, 1, 1, 1]);
 controller.R = diag([1/(1^2), 1/(300^2)]);
 
-controller.Q_k = diag(diag(cov(w)));
+controller.Q_k = 0*diag(diag(cov(w)));
 controller.R_k = diag(diag(cov(z)));
 
 % ----
@@ -105,7 +105,7 @@ try
 %     controller.Q = diag([Q_values(randperm(numel(Q_values), 4)), Qi_values(1) 1e-4]); controller.Q
 %     controller.R = diag(R_values(randperm(numel(R_values), 2))); controller.R
 
-    [~, yout, xout, uout] = simulate(exo_cstr, t, r, x_0, "control", controller, "disturbance", W);
+    [~, yout, xout, uout] = simulate(exo_cstr, t, r, x_0, "control", controller, "disturbance", W, 'noise', [w z]);
 
     % Exports the Visualization to a PDF
     exp_param.model = exo_cstr;
@@ -122,54 +122,54 @@ try
     save("data/simulations/"+controller.type+"/exoSim_"+char(timeNow), 'exp_param')
 
     % - Visualization of the Simulation
-    figure(1);
+    figure(2); clf
     subplot(3,2,1)
-    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on
+    plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on
     subplot(3,2,2)
-    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on
+    plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on
     
     subplot(3,2,3) 
     plot(exp_param.t, exp_param.r(1,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    %plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on;
-%     s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', 'o', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.2;
-%     s.MarkerEdgeAlpha = 0.2;
+    plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
+    s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', '.', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+    s.MarkerFaceAlpha = 0.5;
+    s.MarkerEdgeAlpha = 0.5;
     ylabel("Concentration - \rho_B (^o C)")
 
     subplot(3,2,5) 
-    %plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    plot(exp_param.t, exp_param.xout(1,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(1,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
     ylabel("Concentration - \rho_A (^o C)")
     xlabel("Time (hr)")
     
     subplot(3,2,4) 
     plot(exp_param.t, exp_param.r(2,:), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-    %plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on;     
-%     s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', 'o', 'MarkerEdgeColor', cpal(8,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.2;
-%     s.MarkerEdgeAlpha = 0.2;
+    plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on;     
+    s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', '.', 'MarkerEdgeColor', cpal(8,:)); hold on;     
+    s.MarkerFaceAlpha = 0.5;
+    s.MarkerEdgeAlpha = 0.5;
     ylabel("Temperature - Reactor (^o C)")
 
     subplot(3,2,6) 
-    %plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1.5, 'color', cpal(10+i,:)); hold on;
-    plot(exp_param.t, exp_param.xout(4,:), 'linewidth', 1.25, 'color', cpal(10+i,:)); hold on;     
+    plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(10+i,:)); hold on;
+    plot(exp_param.t, exp_param.xout(4,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on;     
     ylabel("Temperature - Coolant (^o C)")
     xlabel("Time (hr)")
 
     subplot(3,2,1)
-    plot(exp_param.t, ones(1,T)*35, 'r:', 'linewidth', 1.25), hold on
-    plot(exp_param.t, ones(1,T)*5, 'r:', 'linewidth', 1.25)
+    plot(exp_param.t, ones(1,T)*35, 'r:', 'linewidth', 1), hold on
+    plot(exp_param.t, ones(1,T)*5, 'r:', 'linewidth', 1)
     ylabel("Input Flow-Rate (1/hr)")
-    ylim([min(exp_param.uout(1,:)), max(exp_param.uout(1,:))])
-    %ylim([4, 36])
+%     ylim([min(exp_param.uout(1,:)), max(exp_param.uout(1,:))])
+    ylim([4, 36])
     
     subplot(3,2,2)
-    plot(exp_param.t, ones(1,T)*0, 'r:', 'linewidth', 1.25), hold on
-    plot(exp_param.t, ones(1,T)*-8500, 'r:', 'linewidth', 1.25)
+    plot(exp_param.t, ones(1,T)*0, 'r:', 'linewidth', 1), hold on
+    plot(exp_param.t, ones(1,T)*-8500, 'r:', 'linewidth', 1)
     ylabel("Cooling Capacity (kJ/hr)")
-    ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
+%     ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
     %ylim([-8700, 200])
     
     subplot(3,2,1), hold off
