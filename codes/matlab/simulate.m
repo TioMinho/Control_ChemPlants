@@ -107,7 +107,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Simulates the linear model using the Lagrange formula
                 sys = ss(A_cl, B, eye(nx), zeros(nx,nu));
-                aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat(r(:,i), [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
             end
 
@@ -155,24 +155,24 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(nx+ny), zeros(nx+ny,ny));
-                aux = lsim(sys, r(:,i:i+1), t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat(r(:,i), [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
             end
 
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmpi(controller.type, 'lqg'))
             % Calculate the LQR gain matrix
-%             K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N);  
+            K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N);  
 
             % Calculates the Kalman-Bucy gain matrix
             Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, 0:deltaT:controller.N); 
             
-            u = ones(2, numel(t)) .* (ue .* [1.1; 0.9] - ue);
+%             u = ones(2, numel(t)) .* (ue .* [1.1; 0.9] - ue);
             
             % == Simulation for each timestep (i) on time signal (t) ==
             for i = 1:numel(t)-1
                 % Calculates the input signal
-%                 u(:,i) = r(:,i) - K{i}*x_hat(:, i);
+                u(:,i) = r(:,i) - K{i}*x_hat(:, i);
 
                 % Simulates the actual plant (represented by the nonlinear model)
                 if exist('W', 'var')
@@ -183,19 +183,21 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 x(:, i+1) = y_aux(end, :);
 
                 % Defines the closed-loop matrix for this instant
-                A_cl = (A - Ke{i}*C);
+                A_cl = (A - B*K{i} - Ke{i}*C);
                 B_cl = [B Ke{i}];
 
                 % Simulates the linear model using the Lagrange formula
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 2]), t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat([r(:,i); C*(x(:,i)-xe)+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
             end
 
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmpi(controller.type, 'lqgi'))
             % Augments the state auxiliary vector in time and updates the initial conditions
-            x_a(:,1) = r(:,1) - C*(x_0' - xe);
+            x_a(:,1) = r(:,1) - C*(x_0'-xe) + z(:,1);
+            
+%             x(:,1) = x_hat(:,1);
 
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny); 
@@ -222,9 +224,13 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 else
                     [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
-                
+
                 x(:, i+1) = y_aux(end, :);
-                x_a(:, i+1) = x_a(:, i) + (r(:,i+1) - C*(x(:,i+1) - xe));
+                
+%                 aux = lsim(ss(A,B,eye(size(A)),zeros(size(B))), repmat(u(:,i), [1 100]), linspace(t(i),t(i+1),100), x(:,i), 'zoh');
+%                 x(:,i+1) = aux(end,:);
+
+                x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1)-xe)+z(:,i) );
 
                 % Define the closed-loop matrices
                 A_cl = (A - Ke{i}*C);
@@ -232,7 +238,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 2]), t(i:i+1), x_hat(:,i));
+                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
            end
 

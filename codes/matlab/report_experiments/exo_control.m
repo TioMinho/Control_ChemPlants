@@ -59,8 +59,8 @@ r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor
 %r = ones(2,T).*[xe(2); xe(3)];
 
 % - Noise and Disturbance signals
-w = mvnrnd([0; 0; 0; 0], diag([0.1 0.1 0.1 0.1]), T);  % Process Noise
-z = mvnrnd([0; 0], diag([0.0001, 0.01]), T);            % Measurement Noise
+w = mvnrnd([0; 0; 0; 0], diag([.1 .1 .1 .1]), T);  % Process Noise
+z = mvnrnd([0; 0], diag([0.00001, 0.0001]), T);            % Measurement Noise
 
 W = [ zeros(1,T); 
       zeros(1,T)]'; %mvnrnd([0; 0; 0], diag([0.01, 0.01, 0.1]), T);
@@ -83,10 +83,10 @@ controller.type = "lqgi";
 controller.oper.xe = xe'; controller.oper.ue = ue';
 controller.N = T;
 
-controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 1e3 1e-1]); %diag([1, 1, 1, 1]);
+controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 10e1 1e-1]); %diag([1, 1, 1, 1]);
 controller.R = diag([1/(1^2), 1/(300^2)]);
 
-controller.Q_k = 0*diag(diag(cov(w)));
+controller.Q_k = diag(diag(cov(w)));
 controller.R_k = diag(diag(cov(z)));
 
 % ----
@@ -122,7 +122,7 @@ try
     save("data/simulations/"+controller.type+"/exoSim_"+char(timeNow), 'exp_param')
 
     % - Visualization of the Simulation
-    figure(2); clf
+    figure(3); clf
     subplot(3,2,1)
     plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1, 'color', cpal(10+i,:)); hold on
     subplot(3,2,2)
@@ -172,12 +172,12 @@ try
 %     ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
     %ylim([-8700, 200])
     
-    subplot(3,2,1), hold off
-    subplot(3,2,2), hold off
-    subplot(3,2,3), hold off
-    subplot(3,2,4), hold off
-    subplot(3,2,5), hold off
-    subplot(3,2,6), hold off
+    subplot(3,2,1), xlim([t(1) t(end)]), hold off
+    subplot(3,2,2), xlim([t(1) t(end)]), hold off
+    subplot(3,2,3), xlim([t(1) t(end)]), hold off
+    subplot(3,2,4), xlim([t(1) t(end)]), hold off
+    subplot(3,2,5), xlim([t(1) t(end)]), hold off
+    subplot(3,2,6), xlim([t(1) t(end)]), hold off
     
     end
     

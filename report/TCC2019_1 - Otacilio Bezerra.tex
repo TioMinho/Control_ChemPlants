@@ -35,7 +35,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -1012,7 +1012,7 @@ From the expansion presented in Theorem \ref{th:sylvester01}, it is possible to 
 	    \end{bmatrix}
 	.\end{align}
 	
-	and state-transition matrix $e^{\bm{A} t}$ are shown below, where is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal:
+\noindent It is easy to see that $\bm{\lambda} = [-5.93, -4.70]$, since $\bm{A}$ is diagonal. 
 	
 	A simulation in time, shown in Fig \ref{fig:stateTrans01}, shows the evolution of each element of $e^{\bm{A} t}$ for a given time interval. Considering only the natural response $\bm{x}_n(t)$, i.e., setting $\bm{u}(t) = \bm{0},\ t \in [t_0, t]$, it is evident that the actual response of each state in the system is a row-wise weighted sum of these elements, where the weights are given by the initial state $\bm{x}(t_0)$. Therefore, the $(i, j)$ element of this matrix describes how the $j$-th state affects the response of the $i$-th state.
 \end{boxed-example}
