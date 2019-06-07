@@ -55,12 +55,12 @@ t = (0:0.02:10.58)'; T = numel(t);
 x_0 = xe;
 
 % - Reference Signal
-r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
+r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 1*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
 %r = ones(2,T).*[xe(2); xe(3)];
 
 % - Noise and Disturbance signals
-w = mvnrnd([0; 0; 0; 0], diag([.1 .1 .1 .1]), T);  % Process Noise
-z = mvnrnd([0; 0], diag([0.00001, 0.0001]), T);            % Measurement Noise
+w = mvnrnd([0; 0; 0; 0], diag([.001 .001 .001 .001]), T);  % Process Noise
+z = mvnrnd([0; 0], diag([0.0001, 0.01]), T);            % Measurement Noise
 
 W = [ zeros(1,T); 
       zeros(1,T)]'; %mvnrnd([0; 0; 0], diag([0.01, 0.01, 0.1]), T);
@@ -78,14 +78,14 @@ W = [ zeros(1,T);
 % W(4*tFrac:4*tFrac+sFrac,2) = -2;
   
 % = Controller and Estimator Definitions = %
-controller.type = "lqgi";
+controller.type = "ekf-lqri";
 
 controller.oper.xe = xe'; controller.oper.ue = ue';
 controller.N = T;
 
-controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 10e1 1e-1]); %diag([1, 1, 1, 1]);
+controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 0.5 0]); %diag([1, 1, 1, 1]);
 controller.R = diag([1/(1^2), 1/(300^2)]);
-
+    
 controller.Q_k = diag(diag(cov(w)));
 controller.R_k = diag(diag(cov(z)));
 

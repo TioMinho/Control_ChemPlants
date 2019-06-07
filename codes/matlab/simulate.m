@@ -86,7 +86,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC REGULATOR ==
         if(strcmpi(controller.type, 'lqr'))
             % Calculate the LQR gain matrices
-            K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N); 
+            K = lqr_(A, B, controller.Q, controller.R, t'); 
 
             % == Simulation for each timestep (i) on time signal (t) ==
             for i = 1:numel(t)-1
@@ -129,7 +129,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
             D_i = D;
 
             % Calculate the LQRI gain matrix
-            K = lqr_(A_i, B_i, controller.Q, controller.R, 0:deltaT:controller.N);
+            K = lqr_(A_i, B_i, controller.Q, controller.R, t');
 
             % Calculate the closed-loop augmented matrix
             B_cl = [zeros(nx, ny); eye(ny)];
@@ -162,10 +162,10 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR ==,
         elseif(strcmpi(controller.type, 'lqg'))
             % Calculate the LQR gain matrix
-            K = lqr_(A, B, controller.Q, controller.R, 0:deltaT:controller.N);  
+            K = lqr_(A, B, controller.Q, controller.R, t');  
 
             % Calculates the Kalman-Bucy gain matrix
-            Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, 0:deltaT:controller.N); 
+            Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, t'); 
             
 %             u = ones(2, numel(t)) .* (ue .* [1.1; 0.9] - ue);
             
@@ -195,26 +195,25 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmpi(controller.type, 'lqgi'))
             % Augments the state auxiliary vector in time and updates the initial conditions
-            x_a(:,1) = r(:,1) - C*(x_0'-xe) + z(:,1);
-            
+            x_a(:,1) = r(:,1) - C*(x_0'-xe);
 %             x(:,1) = x_hat(:,1);
 
             % Augment the state and input matrices
-            A_i = [A, zeros(nx, ny); 
+            A_i = [A, zeros(nx, ny);
                   -C, zeros(ny)];
-            B_i = [B; 
+            B_i = [B;
                    zeros(ny, nu)];
             C_i = [C, zeros(ny, ny)];
             D_i = D;
     
             % Calculate the LQRI gain matrix
-            K = lqr_(A_i, B_i, controller.Q, controller.R, 0:deltaT:controller.N);
+            K = lqr_(A_i, B_i, controller.Q, controller.R, t');
 
             % Generates and augments the Kalman observer state-space
-            Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, 0:deltaT:controller.N);
+            Ke = kalmanBucy(A, C, controller.Q_k, controller.R_k, t');
 
             % == Simulation for each timestep (i) on time signal (t) ==
-           for i = 1:numel(t)-1
+            for i = 1:numel(t)-1
                 % Calculates the input signal
                 u(:,i) = - K{i} * [x_hat(:,i); x_a(:,i)];
 
@@ -224,13 +223,12 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 else
                     [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
                 end
-
-                x(:, i+1) = y_aux(end, :);
                 
-%                 aux = lsim(ss(A,B,eye(size(A)),zeros(size(B))), repmat(u(:,i), [1 100]), linspace(t(i),t(i+1),100), x(:,i), 'zoh');
-%                 x(:,i+1) = aux(end,:);
+                x(:, i+1) = y_aux(end, :);
+                x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1)-xe)+z(:,i));
 
-                x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1)-xe)+z(:,i) );
+%               aux = lsim(ss(A,B,eye(size(A)),zeros(size(B))), repmat(u(:,i), [1 100]), linspace(t(i),t(i+1),100), x(:,i), 'zoh');
+%               x(:,i+1) = aux(end,:);
 
                 % Define the closed-loop matrices
                 A_cl = (A - Ke{i}*C);
@@ -240,7 +238,121 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
                 aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
-           end
+            end
+           
+        % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
+        elseif(strcmpi(controller.type, 'ekf-lqri'))
+            % Augments the state auxiliary vector in time and updates the initial conditions
+            r = r + C * xe;
+            x_a(:,1) = r(:,1) - C*x_0';
+            
+            
+            % Augment the state and input matrices
+            A_i = [A, zeros(nx, ny);
+                  -C, zeros(ny)];
+            B_i = [B;
+                   zeros(ny, nu)];
+            C_i = [C, zeros(ny, ny)];
+            D_i = D;
+    
+            % Calculate the LQRI gain matrix
+            K = lqr_(A_i, B_i, controller.Q, controller.R, t');
+            
+            Pe = cell(controller.N+1,1); Pe{1} = controller.Q_k;
+            Ke = cell(controller.N,1);
+            
+            Ke{1} = Pe{1} * C' * pinv(controller.R_k);
+            
+            A = cell(controller.N,1); A{1} = model.ss_model.A_l(xe, ue);
+            
+            % == Simulation for each timestep (i) on time signal (t) ==
+            for i = 1:numel(t)-1
+                % Calculates the input signal
+                u(:,i) = - K{i} * [x_hat(:,i); x_a(:,i)];
+
+                % Simulates the actual plant (represented by the nonlinear model)
+                if exist('W', 'var')
+                    [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
+                else
+                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
+                end
+                
+                x(:, i+1) = y_aux(end, :);
+                x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*x(:,i+1) + z(:,i));
+
+                % Define the closed-loop matrices
+                A_cl = (A{i} - Ke{i}*C);
+                B_cl = [B Ke{i}];
+
+                % Simulates the linear model
+                sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
+                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
+                x_hat(:, i+1) = aux(end, :);
+
+                % == EKF ATT ==
+                x_hat(:,i) = xe + x_hat(:,i); xe = xe + x_hat(:,i+1);
+                u(:,i) = ue + u(:,i); ue = u(:,i);
+                
+                A{i+1} = model.ss_model.A_l(xe, ue);
+                
+                [~, aux] = ode45(@(t,P) -mRiccati(t, P, A{i}', C', controller.Q_k, controller.R_k), t(i:i+1), Pe{i});
+                [m, n] = size(aux); aux = mat2cell(aux, ones(m,1), n);
+                aux = cellfun(@(p) reshape(p, size(A{i})), aux, 'UniformOutput', false);
+                
+                Pe{i+1} = aux{end};
+                Ke{i+1} = Pe{i+1} * C' * pinv(controller.R_k);
+                
+                
+                
+                figure(1); clf
+    subplot(3,2,1)
+    plot(t(1:i), u(1,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on
+    subplot(3,2,2)
+    plot(t(1:i), u(2,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on
+    
+    subplot(3,2,3) 
+    plot(t(1:i), r(1,1:i), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+    plot(t(1:i), x_hat(2,1:i), 'linestyle', '--', 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    plot(t(1:i), x(2,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    s = scatter(t(1:i), x(2,1:i)+z(1,1:i), '.', 'MarkerEdgeColor', [0.8500 0.3250 0.0980]); hold on;     
+    s.MarkerFaceAlpha = 0.5;
+    s.MarkerEdgeAlpha = 0.5;
+    ylabel("Concentration - \rho_B (^o C)")
+
+    subplot(3,2,5) 
+    plot(t(1:i), x_hat(1,1:i), 'linestyle', '--', 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    plot(t(1:i), x(1,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    ylabel("Concentration - \rho_A (^o C)")
+    xlabel("Time (hr)")
+    
+    subplot(3,2,4) 
+    plot(t(1:i), r(2,1:i), 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+    plot(t(1:i), x_hat(3,1:i), 'linestyle', '--', 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    plot(t(1:i), x(3,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;     
+    s = scatter(t(1:i), x(3,1:i)+z(2,1:i), '.', 'MarkerEdgeColor', [0.8500 0.3250 0.0980]); hold on;     
+    s.MarkerFaceAlpha = 0.5;
+    s.MarkerEdgeAlpha = 0.5;
+    ylabel("Temperature - Reactor (^o C)")
+
+    subplot(3,2,6) 
+    plot(t(1:i), x_hat(4,1:i), 'linestyle', '--', 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;
+    plot(t(1:i), x(4,1:i), 'linewidth', 1, 'color', [0.8500 0.3250 0.0980]); hold on;     
+    ylabel("Temperature - Coolant (^o C)")
+    xlabel("Time (hr)")
+
+    subplot(3,2,1)
+    plot(t(1:i), ones(1,i)*35, 'r:', 'linewidth', 1), hold on
+    plot(t(1:i), ones(1,i)*5, 'r:', 'linewidth', 1)
+    ylabel("Input Flow-Rate (1/hr)")
+    ylim([4, 36])
+    
+    subplot(3,2,2)
+    plot(t(1:i), ones(1,i)*0, 'r:', 'linewidth', 1), hold on
+    plot(t(1:i), ones(1,i)*-8500, 'r:', 'linewidth', 1)
+    ylabel("Cooling Capacity (kJ/hr)")
+    ylim([-8700, 200])
+                drawnow
+           end    
 
         % == SWITCHING MODE LINEAR QUADRATIC REGULATOR CONTROLLER ==,
         elseif(strcmpi(controller.type, 'switch-lqr'))
