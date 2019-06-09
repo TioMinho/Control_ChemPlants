@@ -783,8 +783,8 @@ Despite of the discussion about the benefits of linear models, it is necessary t
     \noindent where $d(\bm{x}_o + \Delta \bm{x}(t)) / dt = d(\Delta \bm{x}(t)) / dt$, since $\bm{x}_o$ is constant. The perturbed variables are very close to the steady-state points, hence the functions $\bm{f}(\cdot)$ and $\bm{g}(\cdot)$ can be approximated by a Taylor series expansion, yielding:
     \begin{align}
     \begin{cases}
-        \hfill \cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + O(\Delta \bm{x}^2, \Delta \bm{u}^2) \\ \\
-        \bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + O(\Delta \bm{x}^2, \Delta \bm{u}^2) \\
+        \hfill \cfrac{d(\Delta \bm{x}(t))}{dt} &= \bm{f}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{f}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{f}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + \mathcal{O}(\Delta \bm{x}^2, \Delta \bm{u}^2) \\ \\
+        \bm{y}_o + \Delta \bm{y}(t) &= \bm{g}(\bm{x}_o, \bm{u}_o) + \left. \cfrac{\partial \bm{g}}{\partial \bm{x}}\right\vert_{\bm{x}_o, \bm{u}_o} \Delta \bm{x}(t) + \left. \cfrac{\partial \bm{g}}{\partial \bm{u}}\right\vert_{\bm{x}_o, \bm{u}_o}  \Delta \bm{u}(t) + \mathcal{O}(\Delta \bm{x}^2, \Delta \bm{u}^2) \\
     \end{cases}
     .\end{align}
     
@@ -1624,7 +1624,7 @@ Of course, if the feedback gain matrix impose that all poles of the system are i
 	\end{matrix}    
 	.\end{equation}
 	
-	\noindent It is easy to verify that this system is controllable, since its controllability matrix is full-rank. In this case, consider the gains $\bm{K}_1 = [-0.993, 1.221]$, $\bm{K}_2 = [0.782, 0.549]$ and $\bm{K}_3 = [0.81, 5.20]$ to yield regulator controllers. The correspondent closed-loop systems $\bm{A}^{(i)}_{cl}$ for each $i$-th controller are given as:
+	\noindent It is easy to verify that this system is controllable, since its controllability matrix is full-rank. In this case, consider the gains $K_1 = [-0.993, 1.221]$, $K_2 = [0.782, 0.549]$ and $K_3 = [0.81, 5.20]$ to yield regulator controllers. The correspondent closed-loop systems $\bm{A}^{(i)}_{cl}$ for each $i$-th controller are given as:
 	\begin{equation}
 	\begin{matrix}
 		\bm{A}^{(1)}_{cl} = \begin{bmatrix} 
@@ -1645,7 +1645,7 @@ Of course, if the feedback gain matrix impose that all poles of the system are i
 	\noindent Since the open-loop system was obtained by the linearized model in \eqref{eq:isoReact01} for $\bm{x}_o = [6.19, 1.09]^T$ and $u_o = 3.03$, the regulator will impose the zero-state $\Delta \bm{x} = \bm{0}$ which actually means imposing $\bm{x}(t) = [6.19, 1.09]^T$ as $t \to \infty$. 
 \end{boxed-example}
 
-The responses of the three closed-loop systems calculated in Example \ref{ex:regulator01} Fig. \ref{fig:regulator01}. The simulations assumed initial state $\Delta \bm{x}(t) = \bm{0} - \bm{x}_o$, and the response and input signal were vertically corrected by $\bm{x}_o$ and $\bm{u}_o$, respectively. Notice that, as expected, the feedback gains $\bm{K}_i$ can effectively change the system behavior, even to cause pseudo-periodic responses.
+The responses of the three closed-loop systems calculated in Example \ref{ex:regulator01} are shown in Fig. \ref{fig:regulator01}. The simulations assumed initial state $\Delta \bm{x}(t) = \bm{0} - \bm{x}_o$, and the response and input signal were vertically corrected by $\bm{x}_o$ and $\bm{u}_o$, respectively. Notice that, as expected, the feedback gains $\bm{K}_i$ can effectively change the system behavior, even causing pseudo-periodic responses.	
 
 \begin{figure}[ht] \centering
     \includegraphics[width=\textwidth]{chapter3/report_ch3_1}
@@ -1684,12 +1684,12 @@ Despite being a feasible solution, there are still problems with this definition
 The problem of the previous formulation for a tracking controller is that it is not robust to actions that happens outside the model. A direct cause of this is the fact that the feedforward gain $\bm{F}$ does not benefit from the real-time corrective action of the state-feedback, but rather is calculated \textit{off-line} using the model properties. Therefore, a way to ensure a more robust operation could be to insert real-time information about the tracking error directly to the feedback corrective action. With this motivation, a new formulation of the tracking controller is given below.
 
 \begin{boxed-definition}{(Robust Tracking Controllers)} \label{def:robustTracking}
-    Given a State-space system and augmented state $\bm{x}_a(t)$ defined as:
+    Consider a State-space system and augmented state $\bm{x}_a : \mathbb{R} \rightarrow \mathbb{R}^{p}$ defined by:
     \begin{equation}
-        \bm{x}_a(t) = \int_{0}^{t} \bm{r}(\tau) - \bm{C} \bm{x}(\tau) d\tau \Longrightarrow \dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)
+        \bm{x}_a(t) = \int_{0}^{t} \bm{r}(\tau) - \bm{y}(\tau) d\tau \Longrightarrow \dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{y}(t)
     .\end{equation}
     
-    A robust tracking (or servo) controller, defined by the gain $\tilde{\bm{K}} = \begin{bmatrix} \bm{K} & \bm{K}_a \end{bmatrix}$, is the one which operates on the following augmented version of the original system:
+\noindent A robust tracking (or servo) controller, defined by the gain $\tilde{\bm{K}} = \begin{bmatrix} \bm{K} & \bm{K}_a \end{bmatrix}$, for $\bm{K} \in \mathbb{R}^{r \times n}$ and $\bm{K}_a \in \mathbb{R}^{r \times p}$, operates on the following augmented version of the original system:
     \begin{align} \label{eq:augmentedSystem}
     \begin{cases}
         \begin{bmatrix}
@@ -1702,7 +1702,7 @@ The problem of the previous formulation for a tracking controller is that it is 
             \bm{x}_a(t)
         \end{bmatrix} + \begin{bmatrix}
             \bm{0} \\
-            \bm{I}
+            \bm{I_p}
         \end{bmatrix} \bm{r}(t)
         \\
         \hfill \bm{y}(t) &= \begin{bmatrix}
@@ -1714,14 +1714,16 @@ The problem of the previous formulation for a tracking controller is that it is 
     \end{cases}
     \end{align}
     
-    or, equivalently:
+    \noindent or, equivalently:
     \begin{align}
     \begin{cases}
-        \tilde{\bm{x}}(t) = \tilde{\bm{A}} \tilde{\bm{x}}(t) + \tilde{\bm{B}} \tilde{\bm{r}}(t) \\
+        \dot{\tilde{\bm{x}}}(t) = \tilde{\bm{A}}_{cl} \tilde{\bm{x}}(t) + \tilde{\bm{B}} \bm{r}(t) \\
         \bm{y}(t) = \tilde{\bm{C}} \tilde{\bm{x}}(t) \hfill
     \end{cases}
     .\end{align}
 \end{boxed-definition}
+
+Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking error until a time $t$, this formulation is usually characterized as imposing ``integral action" to the controller. The schematic in Fig. \ref{fig:tracking02} illustrates how an integrator can be included to the block diagram of the control loop.
 
 \begin{figure}[ht]
     \centering
@@ -1770,67 +1772,103 @@ The problem of the previous formulation for a tracking controller is that it is 
     \label{fig:tracking02}
 \end{figure}
 
-Since the augmented state $\bm{x}_a(t)$ represents an integral of the tracking error until a time $t$, this formulation is usually characterized as imposing ``integral action" to the controller. The schematic at Fig. \ref{fig:tracking02} illustrates how an integrator can be included to the block diagram of the control loop. Therefore, it must be discussed if the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of regular state-feedback gains, so that this imposed regulator would work.
+Notice that state-equation for closed-loop of this new augmented system is resulting from
+\begin{equation}  \label{eq:augmentedSystem02} 
+	\tilde{\bm{A}}_{cl} = \begin{bmatrix} \phantom{-}\bm{A} & \bm{0} \\ -\bm{C} & \bm{0} \end{bmatrix} - \begin{bmatrix} \bm{B} \bm{K} & \bm{B} \bm{K}_a \\ \bm{0} & \bm{0} \end{bmatrix} = \begin{bmatrix} \phantom{-}\bm{A} & \bm{0} \\ -\bm{C} & \bm{0} \end{bmatrix} - \begin{bmatrix} \bm{B} \\ \bm{0} \end{bmatrix} \begin{bmatrix} \bm{K} & \bm{K}_a \end{bmatrix} = \tilde{\bm{A}} - \tilde{\bm{B}} \tilde{\bm{K}}
+.\end{equation}
+
+\noindent In this case, it must be discussed whether the new gain $\tilde{\bm{K}}$ still preserves the eigenvalue assignment property of a state-feedback gain defined on the original State-Space model.
 
 \begin{boxed-theorem}{} \label{th:augmentedCtrb}
     If the SISO system described by $(\bm{A}, B)$ is controllable and its transfer function $G(s)$ has no zero at $s = 0$, then the eigenvalues of the augmented matrix $\tilde{\bm{A}}$ can be assigned arbitrary by the feedback gain $\tilde{\bm{K}}$.
 \end{boxed-theorem}
 
 \begin{proof}
-    Consider a SISO controllable system. After the augmentation, the controllability matrix $\tilde{\bm{\mathcal{C}}}$ is calculated as:
+    Consider a SISO controllable system. After the augmentation, the new controllability matrix $\tilde{\bm{\mathcal{C}}} \in \mathbb{R}^{(n+p)\times nr}$ is calculated as:
     \begin{align}
     \begin{split}
         \tilde{\bm{\mathcal{C}}} &= \begin{bmatrix}
-            B & \bm{A} B & \bm{A}^2 B & \bm{A}^3 B & \cdots & \bm{A}^{n-1} B \\
+        \begin{array}{c c c c c c}
+            B & \bm{A} B & \bm{A}^2 B & \bm{A}^3 B & \cdots & \bm{A}^{n-1} B \\ 
             0 & -C B & -C \bm{A} B & -C \bm{A}^2 B & \cdots & -C \bm{A}^{n-2} B
+        \end{array}
         \end{bmatrix} \\
         &=
             \begin{bmatrix}
-                1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
-                0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
+            \begin{array}{c c c c c c}
+                1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
+                0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
                 0 & 0 & 1 & -\alpha_1  & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
-                0 & 0 & 0 & 1 &  \cdots & \Delta_4(\alpha_1,...,\alpha_n) \\
+                0 & 0 & 0 & 1 &  \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
                 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
-                0 & 1 & -\beta_1 & -\beta\alpha_1 - \alpha_2  & \cdots & \Delta_n(\alpha_1,...,\alpha_n) \\
-            \end{bmatrix}
+                0 & 0 & 0 & 0 & \cdots & \Delta_{n}(\alpha_1,...,\alpha_n) \\
+                0 & -\beta_1 & -\beta_1 \alpha_1 - \beta_2 & -\beta_1(\alpha_1^2 - \alpha_2) + \beta_2 \alpha_1 - \beta_3  & \cdots & \Delta_{n+1}(\alpha_1,...,\alpha_n)
+            \end{array}
+            \end{bmatrix},
     \end{split}
-    ,\end{align}
+    \end{align}
     
-    \noindent where $\Delta_i(\alpha_1,...,\alpha_n)$ is a polynomial created to save space in this representation. By inspection of this matrix, it is possible to discover a pattern between the rows. Since elementary operations between the rows ${r_1, r_2, ..., r_n}$ doesn't change the matrix row rank, the last row of the matrix can be transformed as $r_n = r_n + r_{n-1}\beta_{n-2} + r_{n-2}\beta_{n-3} + \cdots + r_{2}\beta_{1}$. The result is the triangular matrix in the form:
+    \noindent where $\Delta_i(\alpha_1,...,\alpha_n)$ is a polynomial used to save space in the equations. By inspection of this matrix, it is possible to discover a pattern between the rows. Since elementary operations between the rows ${r_1, r_2, ..., r_n}$ do not change the matrix row rank, the last row of the matrix can be transformed as $r_n = r_n + r_{n-1}\beta_{n-2} + r_{n-2}\beta_{n-3} + \cdots + r_{2}\beta_{1}$. The result is the triangular matrix in the form:
     \begin{align}
     \begin{split}
         \tilde{\bm{\mathcal{C}}} &= 
             \begin{bmatrix}
-                1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
-                0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
-                0 & 0 & 1 & -\alpha_1  & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
+                1 & -\alpha_1 & -\alpha_1^2 - \alpha_2 & -\alpha_1(\alpha_1^2 - \alpha_2) + \alpha_2 \alpha_1 - \alpha_3 & \cdots & \Delta_1(\alpha_1,...,\alpha_n) \\
+                0 & 1 & -\alpha_1 & -\alpha_1^2 - \alpha_2  & \cdots & \Delta_2(\alpha_1,...,\alpha_n) \\
+                0 & 0 & 1 & -\alpha_1  & \cdots & \Delta_3(\alpha_1,...,\alpha_n) \\
                 0 & 0 & 0 & 1 &  \cdots & \Delta_4(\alpha_1,...,\alpha_n) \\
                 \vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
-                0 & 0 & 0 & 0  & \cdots & \beta_n \\
+                0 & 0 & 0 & 0 & \cdots & \Delta_{n}(\alpha_1,...,\alpha_n) \\
+                0 & 0 & 0 & 0  & \cdots & \beta_n
             \end{bmatrix}
     \end{split}
     .\end{align}
     
-    Since $\bm{G}(s)$ has no zeros at $s = 0$, then $\beta_n \neq 0$, meaning that $\tilde{\bm{\mathcal{C}}}$ is nonsingular and, therefore has full row rank. This concludes that the augmented system $(\tilde{\bm{A}}, \tilde{\bm{B}})$ is controllable and, from Theorem \ref{th:polePlace}, the eigenvalues of $\tilde{\bm{A}}$ can be assigned anywhere in the complex plane.
+    Since $G(s)$ has no zeros at $s = 0$, then $\beta_n \neq 0$, meaning that $\tilde{\bm{\mathcal{C}}}$ is nonsingular and, therefore has full row rank. From this it can be concluded that the augmented system $(\tilde{\bm{A}}, \tilde{B})$ is controllable and, from Theorem \ref{th:polePlace}, the eigenvalues of $\tilde{\bm{A}}$ can be assigned anywhere in the complex plane.
 \end{proof}
 
-This result does not scale naturally to MIMO systems, but the main intuition is the same. Basically, if the augmented matrices are controllable, the robust tracking can be achieved by the same formulation. A possible intuition on how this system performs the robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem} is basically a regulator, albeit from the term $\bm{B} \bm{K}_a \bm{x}_a(t)$. Because of this, a control action will always be applied whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal, following the direction that minimizes this difference. When $\bm{x}_a(t) = \bm{0}$, this equation reduces to a simple regulator, and the disturbances are expected to be rejected. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. 
+Although the result was only shown for the SISO case, the main intuition still holds in the MIMO case, but the equations become cumbersome. Basically, if the augmented matrices are controllable, the robust tracking can be achieved by the same formulation. 
 
-For the sake of illustration, consider the same system used in \eqref{eq:isoSys02Rep}. Unfortunately, the augmented version of this \textit{single-input multiple-output} (SIMO) formulation is not controllable. However, the SISO version obtained by letting $C = \begin{bmatrix} 0, 1 \end{bmatrix}$ obeys Theorem \ref{th:augmentedCtrb}, so a robust tracking controller can be designed by state-feedback. Some simulations of closed-loop systems for this system to track are shown in Fig. \ref{fig:tracking03} for a non-constant reference consisting of a sequence of step signals.
+A possible intuition on how this system performs robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem02} has the same form of a basic regulator, except from the term $\bm{B} \bm{K}_a$ which is a linear function of $\bm{x}_a(t)$. Because of this, a control action will always be requested whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal. When $\bm{x}_a(t) = \bm{0}$, the equation reduces to a simple regulator. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. 
 
-\begin{figure}[ht]
-    \centering
+\begin{boxed-example}{}
+	For the sake of illustration, consider the same system used in \eqref{eq:isoSys02Rep}. Unfortunately, the augmented version of this \textit{single-input multiple-output} (SIMO) formulation is not controllable. However, the SISO version obtained by letting $C = \begin{bmatrix} 0, 1 \end{bmatrix}$ obeys Theorem \ref{th:augmentedCtrb} and has no zeros at $s=0$. Thus, a robust tracking controller can be designed by state-feedback. Consider the gains $\tilde{K}_1 = [-0.99, 1.22, -25]$, $\tilde{K}_2 = [0.78, 0.55, -25]$ and $\tilde{K}_3 = [0.81, 5.20, -50]$. The correspondent closed-loop systems $tilde{\bm{A}}^{(i)}_{cl}$ for each $i$-th controller are given as:
+	\begin{equation}
+	\begin{matrix}
+		\tilde{\bm{A}}^{(1)}_{cl} = \begin{bmatrix*}[r] 
+	       -9.70 7 & \phantom{-}4.65 & -95.25 \\
+    \phantom{-}1.92 & -6.04 & \phantom{-}27.45 \\
+         0 & -1.00     &   0
+	    \end{bmatrix*}; & \tilde{B} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} \\ \\
+	    \tilde{\bm{A}}^{(2)}_{cl} = \begin{bmatrix*}[r] 
+	        -2.94 &  2.09 & -95.25 \\
+   			-0.02 & -5.30 &  27.46 \\
+         		  0 & -1.00  &      0
+	    \end{bmatrix*}; & \tilde{B} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} \\ \\
+	    \tilde{\bm{A}}^{(3)}_{cl} = \begin{bmatrix*}[r] 
+	        -2.84 & 19.81 &-190.50 \\
+	 	  	-0.06 & -10.41 & 54.91 \\
+        		 0  & -1.00   &     0
+	    \end{bmatrix*}; & \tilde{B} = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}
+	\end{matrix}.
+	\end{equation}
+\end{boxed-example}
+
+Some simulations of closed-loop systems for this system to track are shown in Fig. \ref{fig:tracking03} for a non-constant reference consisting of a sequence of step signals.
+
+\begin{figure}[ht] \centering
     \includegraphics[width=\textwidth]{chapter3/report_ch3_2}
-    \caption{Simulation of three closed-loop systems showing the input signal (left) and state response (right) for augmented gains $\tilde{K}_1 = [-0.99, 1.22, -25]$, $\tilde{K}_2 = [0.78, 0.55, -25]$ and $\tilde{K}_3 = [0.81, 5.20, -50]$. The reference signal is indicated by the black dashed line.}
+    
+    \caption{Simulation of three closed-loop systems showing the input signal (left) and state response (right) for reference tracking. The reference signal is indicated by the black dashed line.}
     \label{fig:tracking03}
 \end{figure}
 
 
 \section{Deterministic State Observers}
 
-Until now, the state feedback was discussed in the perspective that the device has direct to the real value of all states of the system. This is assumption is actually unrealistic, since the states are only observed through the output signal $\bm{y}(t)$, that maps the states through the matrix $\bm{C}$, which itself is not assumed to be always equal to the identity matrix. In practice, this means that some states could not be measured, due to technical difficulties or economic reasons, or that the instrumentation available is not perfect, and the observations are prone to deviate from the real value. In reactor systems, for instance, is hard to measure the actual value of chemical compounds concentrations in small scales, and the measuring process itself could be very slow or simply unpractical in operational conditions \textbf{[reference]}. Since the state-vector is necessary for the state-feedback to compute the input to the system, this section discusses how to develop devices that can reconstruct information about the states from the observations of the available sensor.
+Until now, the state feedback was discussed from the perspective that the device has direct access to the real value of all the states of the system. This assumption is unrealistic, since the states are only observed through the output signal $\bm{y}(t)$, through the matrix $\bm{C}$, which itself is not assumed to be always equal to the identity matrix. In practice, this means that some states could not be measured, due to technical difficulties or economic reasons, or that the instrumentation available is not perfect, and the observations are prone to deviate from the real value. Since the state-vector is necessary for the state-feedback to compute the input to the system, this section discusses how to develop devices that can reconstruct the states from the observations.
 
-A device that generates a state-vector $\bm{x}(t)$ from the output signal $\bm{y}(t)$ is known as \textit{state observer}, or \textit{state estimator} in some cases. Amongst the several possible configurations, a very practical and popular one is the \textit{Luenberger observer}, which is defined below.
+A device that determines a state-vector $\bm{x}(t)$ from the output signal $\bm{y}(t)$ is known as \textit{state observer}, or \textit{state estimator} in some cases. Amongst several possible techniques, a practical and popular one is the \textit{Luenberger observer}, which is defined below.
 
 \begin{boxed-definition}{(Luenberger Observer)} \label{def:luenberger}
     Given a system in State-Space with output signal $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^p$ and an observer gain $\bm{L} \in \mathbb{R}^{n \times p}$, the estimated state-vector $\hat{\bm{x}}(t)$ is represented by the observer system:
@@ -1844,7 +1882,7 @@ A device that generates a state-vector $\bm{x}(t)$ from the output signal $\bm{y
     .\end{equation}
 \end{boxed-definition}
 
-The observer system works as a parallel system that is simulated alongside with the actual system, as illustrate in Fig. \ref{fig:luenberger01}. The expected result is that the observer yields $\hat{\bm{x}}(t) = \bm{x}(t)$, as time $t \to \infty$. Alternatively, it is possible to create a variable $\bm{e}(t) = \bm{x}(t) - \hat{\bm{x}}(t)$ such that, using \eqref{eq:luenberger02}:
+The observer system works as a parallel system that is simulated alongside the actual system, as illustrate in Fig. \ref{fig:luenberger01}. The expected result is that the observer yields $\hat{\bm{x}}(t) = \bm{x}(t)$, as time $t \to \infty$. Alternatively, it is possible to create a variable $\bm{e}(t) = \bm{x}(t) - \hat{\bm{x}}(t)$ such that, using \eqref{eq:luenberger02}:
 \begin{align}
 \begin{split}
     \dot{\bm{e}} &= \bm{x} - \hat{\bm{x}} \\ 
@@ -1855,7 +1893,7 @@ The observer system works as a parallel system that is simulated alongside with 
 \end{split}
 ,\end{align}
 
-\noindent which implies that the observer asymptotically tracks the actual state-vector if $\bm{e}(t) = \bm{0}$ as $t \to \infty$. Analyzing the equation above, it is intuitive to notice that this result can be guaranteed if all the eigenvalues of matrix $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ have negative real parts. The following theorem relates this statement with the choice of a gain $\bm{L}$.
+\noindent which implies that the observer asymptotically tracks the actual state-vector if $\bm{e}(t) = \bm{0}$ as $t \to \infty$. Analyzing the equation above, it is intuitive to notice that this result can be guaranteed if all the eigenvalues of matrix $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ have negative real parts, since it implies that the natural response of $\dot{\bm{e}}$ vanishes and there is no forcing input action to yield forcing response to this variable (Theorem \ref{th:BIBOStab}). Therefore, a specific gain $\bm{L}$ could be designed to ensure this condition and allows the observer to asymptotically track the state-vector with a desired behavior. The following theorem relates this statement with the choice of a gain $\bm{L}$.
 
 \begin{figure}[ht]
     \centering
@@ -1902,16 +1940,16 @@ The observer system works as a parallel system that is simulated alongside with 
 \end{figure}
 
 \begin{boxed-theorem}
-    If a system in State-Space representation is observable, then by a Luenberger observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
+    If a system in State-Space representation is observable, then by a Luenberger observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, as long as that complex conjugate eigenvalues are assigned in pairs.
 \end{boxed-theorem} 
 
 \begin{proof}
-    Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design     a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $K$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ establishes the theorem.
+    Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design     a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $\bm{K}$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ proves the theorem.
 \end{proof}
 
-The procedure stated in this proof presents the similarities between closed-loop observers, such as the Luenberger observer, and closed-loop controllers as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using an observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
+The procedure stated in this proof highlights the similarities between existing closed-loop observers, such as the Luenberger observer, and closed-loop controllers, such as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using an observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
 
-One of the main reasons to develop an observer is to allows for state-feedback controllers to access the values of the state-vector, thus being able to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
+The only reason to develop an observer is to allow for state-feedback controllers to access the values of the state-vector, thus being able to calculate an appropriate action to follow the reference signal. If a controller can only access the estimated state-vector $\tilde{\bm{x}}(t)$, it is possible to define a State-Space formulation for a closed-loop based on feedback from estimated states given data from a, possibly non-linear and time-varying, disturbed system.
 
 \begin{boxed-definition}{(Feedback from Estimated States)} \label{def:fdbckLuenberger}
     Given a system in State-Space representation whose state-vector is reconstructed from a Luenberger observer of gain $\bm{L} \in \mathbb{R}^{n \times p}$ and input signal is calculated through state-feedback with gain $\bm{K} \in \mathbb{R}^{n \times r}$, its time evolution can be represented through the model:
@@ -2006,7 +2044,7 @@ Notice, now, that the formulation just defined imposes that the dynamics of the 
 \end{boxed-theorem}
 
 \begin{proof}
-    Consider a feedback from estimated states as defined in \eqref{eq:fdbckLuenberger01}. That controller-estimator system can be rewritten as a single state equation:
+    Consider a feedback from estimated states as defined in \eqref{eq:fdbckLuenberger01}. The controller-estimator system can be rewritten as a single state equation:
     \begin{equation}
     \begin{bmatrix} \dot{\bm{x}} \\ \dot{\hat{\bm{x}}}  \end{bmatrix}
     =
@@ -2031,7 +2069,7 @@ Consider, now, the following similarity transformation $\bm{z}(t) = \bm{P} \bm{x
     \end{bmatrix} 
 .\end{equation}
 
-Since $\bm{P} = \bm{P}^{-1}$, and this is a valid similarity transformation that does not alters the system eigenvalues, the equivalent system for state $\bm{z}(t)$ is obtained as:
+Since $\bm{P} = \bm{P}^{-1}$, and this is a valid similarity transformation that does not alter the system eigenvalues, the equivalent system for state $\bm{z}(t)$ is obtained as:
 \begin{equation}
     \begin{bmatrix} \dot{\bm{x}} \\ \dot{\bm{e}}    \end{bmatrix}
     =
@@ -2043,14 +2081,14 @@ Since $\bm{P} = \bm{P}^{-1}$, and this is a valid similarity transformation that
     \begin{bmatrix} \bm{B} \\ \bm{0} \end{bmatrix} \bm{r}
 .\end{equation} \vskip0.2cm
 
-Since the matrix obtained is block triangular, it is possible to conclude that the system in such configuration has eigenvalues that are contributions from the eigenvalues of $\left( \bm{A} - \bm{B} \bm{K} \right)$ and $\left( \bm{A} - \bm{L} \bm{C} \right)$ separately.
+Since the system matrix obtained is block triangular, it is possible to conclude that the system in such configuration has eigenvalues that are separate contributions from the eigenvalues of $\left( \bm{A} - \bm{B} \bm{K} \right)$ and from $\left( \bm{A} - \bm{L} \bm{C} \right)$.
 \end{proof}
 
 The Separation Principle is a nice results that further motivates the topology of Fig. \ref{fig:observer02}, since it explicitly states that the design of the controller and the state observer can be done separately. Thus, any structure that obeys the state feedback formulation can be used as a controller and the same is valid for the observer device. In the next chapter, this result will be explored to motivate the use of more advanced control and state estimation techniques without having to redefine the analytical tools and intuitions built for traditional state-feedback controllers from pole-placement methods.
 
 \section{Properties of State-Feedback Controllers}
 
-The last section introduces the first considerations into applying state-feedback in real-world systems, given limitations on the instruments and uncertainty on the environment. Basically, a mathematical analysis of such closed-loop controllers allows for a full characterization of the system behavior, but the real system will exhibit a different response due to these limitations and, essentially, due to possible external disturbances. Therefore, it is desirable to anticipate these variations and discuss the properties of the closed-loop system in the sense of robustness and stability margins. Since this goal requires that the system response is evaluated in as general as possible context, the discussion in this section relies on frequency response analysis, which consider a broader class of input signals: sinusoids of any frequency. Consider the representation of closed-loop systems shown in Fig. \ref{fig:properties01}, which consists of a simplified version of Fig. \ref{fig:feedback01} in the Laplace frequency domain considering only the state response.
+The last section introduces the first considerations into applying state-feedback in real-world systems, given limitations on the instruments and uncertainty on the environment. Basically, a mathematical analysis of such closed-loop systems allows for a full characterization of its behavior, but the real system will exhibit a different response due to these limitations and, essentially, due to unmodelled external disturbances. Therefore, it is desirable to anticipate these variations and discuss the properties of the closed-loop system in the sense of robustness and stability margins. Since this goal requires that the system response is evaluated in as general as possible context, the discussion in this section relies on frequency response analysis, which consider a broader class of input signals: sinusoids of any frequency. Consider the representation of closed-loop systems shown in Fig. \ref{fig:properties01}, which consists of a simplified version of Fig. \ref{fig:feedback01} in the Laplace frequency domain considering only the state response.
 
 \begin{figure}[ht]
     \centering
@@ -2198,16 +2236,16 @@ A graphical representation of these margins, for both Bode plots and Nyquist dia
 \clearpage
 \chapter{Optimal Control and Estimation}
 
-This chapter introduces the vast field of optimal control and optimal estimation of dynamical systems. The developments are focused in optimize a cost function that produces an optimal state trajectory, and the control actions that causes it, given some conditions. The chapter starts by discussing a general formulation of the optimal control problem and then specializing this formulation to a case of a linear system with quadratic cost functions. After that, the dual optimal state estimation problem is discussed and a result that merges the optimal control with the optimal estimator is presented. Finally, the main stability and robustness properties of the controllers derived in this chapter are accessed.
+This chapter introduces the vast field of optimal control and optimal estimation of dynamical systems. The developments are focused in optimizing a cost function that produces an optimal sequence of control actions to achieve the desired control objective, under some conditions. The chapter starts by discussing a general formulation of the optimal control problem and then specializes the formulation to a case of a linear system with quadratic cost functions. After that, the dual optimal state estimation problem is discussed and a result that merges the optimal control with the optimal estimation is presented. Finally, the main stability and robustness properties of the controllers derived in this chapter are accessed.
 
-\section{General Formulation}
+\section{Formulation}
 
-The last chapter introduced the notion of controller synthesis as an engineering procedure to be done ``by hand" from a designer with some knowledge about the system and the control environment. This approach, despite being very popular and practical, introduces some design issues that make it difficult to generalize a controller to different systems within a same class or, more clearly, to MIMO configurations. Thus, a more general and automatic procedure to control synthesis is desirable.
+The last chapter introduced the notion of controller synthesis as an engineering procedure to be done ``by hand" from a designer with some knowledge about the system and the control environment. This approach, despite being very popular and practical, is rather time-consuming and demands the designer to consider what are the best pole locations given some hard specifications. In addition to that, the design techniques previously presented becomes more involving when applied to MIMO systems. Thus, a more general and automatic procedure to control synthesis is desirable.
 
-With this motivation, the concept of \textit{Optimal Control} \textbf{[references]} was introduced as an alternative strategy for controlling dynamical systems that determines the necessary action by optimizing a cost function (or maximizing a reward function). Usually, these formulations are data-driven methods that autonomously produces optimal input signals given a desired objective and restrictions, and can be easily generalized to different systems.
+With this motivation, the concept of \textit{Optimal Control} \textbf{[references]} was introduced as an alternative strategy for controlling dynamical systems. Optimal controllers determines the necessary action by minimizing a cost function (or maximizing a reward function). These formulations produces feedback controllers that autonomously requires optimal input signals given a desired objective and possible restrictions, begin easily generalized to different systems \textbf{[reference]}.
 
 \begin{boxed-definition}{(Optimal Control)} \label{def:optimalControl}
-Given a system in State-Space formulation, with state-vector signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $u(t) \in \mathbb{R}^r$, for any time $t$, is calculated by an optimal control through an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ as:
+Given a system in State-Space formulation, with state signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $\bm{u}	(t) \in \mathbb{R}^r$, for any time $t$, is optimal if an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ can be found as:
     \begin{equation}
         \bm{u}(t) = \pi^*(\bm{x}, \bm{r}, t) = \min_{\bm{u}} J(\bm{x}, \bm{r}, t)
     ,\end{equation}
@@ -2215,32 +2253,37 @@ Given a system in State-Space formulation, with state-vector signal $\bm{x} : \m
 \noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
 \end{boxed-definition}
 
-First of all, note that this optimization can be converted to maximizing a function $\bm{V}$ by making $\bm{V} = -\bm{J}$, so this document will only refers to optimization as minimizing some cost function. Basically, the problem of finding an optimal control law, or optimal control policy, $pi^*(\cdot)$ cares both for the choice of the cost function $J$ and for what optimization technique will be used to determine the value of $u(t)$ that achieve this minimum. This problem differs from standard optimization problems in data science because not only the data is usually obtained online from the system, but it is dependent through time and constrained by the dynamics of the model and optimal policy action. Thus, the solutions for this optimization are usually obtained through Calculus of Variations \textbf{[reference]} or, as is the approach used in this work, through Dynamic Programming \textbf{[reference]}.
+Note that this optimization can be converted to maximizing a function $V(\cdot)$ by evaluating $V(\cdot) = -J(\cdot)$. Thus, this document will only refers to optimization as minimizing some cost function. The problem of finding an optimal control law, or optimal control policy, $\pi^*(\cdot)$ depends on the choice of the cost function $J(\cdot)$, and several optimization techniques can be used to determine the value of $\bm{u}(t)$ that achieve its minimum. This problem differs from standard optimization problems because it is dependent of time, there can be a decision variable and it is constrained by the dynamics of the model and by the optimal policy action. Solutions to this optimization can be obtained from several methods \textbf{[references]}. The approach used in this work focus on Dynamic Programming \textbf{[reference]}.
 
 To facilitate the discussion and analysis of optimal controllers, consider a subclass of these controllers (that is still very general) defined below by a specific choice of functional for the cost function.
 
 \begin{boxed-definition}{(Finite-Horizon Optimal Regulators)} \label{def:finiteHorizonOC}
-    Consider a controller setup as in Definition \ref{def:optimalControl}. A \textit{Finite-Horizon Optimal Regulators} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
+    Consider a controller setup as in Definition \ref{def:optimalControl}. A \textit{Finite-Horizon Optimal Regulator} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
     \begin{equation}
-        J = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T)
+        J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T)
     ,\end{equation}
     
-    \noindent where $l(\cdot) : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ and $l_f(\cdot) : \mathbb{R}^{n} \rightarrow \mathbb{R}$ are, respectively, the trajectory and terminal \textit{loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
+    \noindent where $l(\cdot) : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ and $l_f(\cdot) : \mathbb{R}^{n} \rightarrow \mathbb{R}$ are, respectively, the \textit{trajectory} and \textit{terminal loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
 \end{boxed-definition}
 
-This formulation presents a notion of, basically, optimize for an trajectory $P^* = [\bm{x}(t_0), \cdots, \bm{x}(T)]$ which is optimal given the loss functions, and then find the control input that can achieve this trajectory. As will be shown later, this is a very feasible strategy for controllable linear systems. In an optimization notation, this problem can also be presented as the following \textit{program}: 
+This formulation presents a notion of optimizing for a sequence of control actions $[\bm{u}(t_0), \cdots, \bm{u}(T)]$ that can cause a state trajectory $[\bm{x}(t_0), \cdots, \bm{x}(T)]$, which is optimal given the loss functions. As will be shown later, this is a very feasible strategy for controllable linear systems. In an optimization notation, this problem can also be presented as the following \textit{program}: 
 \begin{align}
 \begin{matrix*}[l]
-    \textbf{minimize} & \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T) \\
-    \hfill \textbf{s.t.} & \dot{\bm{x}}(t) = \bm{f}(\bm{x}, \bm{u}, t)  \\
-                & \bm{u}(t) = \pi(\bm{x}(t_0), \cdots, \bm{x}(t))
+    \text{minimize} & \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T) \\
+    \hfill \text{s.t.} & \dot{\bm{x}}(t) = \bm{f}(\bm{x}, \bm{u}, t)  \\
+                & \bm{u}(t) = \bm{pi}(\bm{x}(t_0), \cdots, \bm{x}(t))
 \end{matrix*}
 .\end{align}
 
-Now, the discussion turns to how to solve this general problem. In this work, the solution for the optimal control will follow the same dynamic programming formulation as in \textbf{[reference]}. The first necessary effort, then, is to define an important partial differential equation known as the Hamilton-Jacobi equation.
+Now, the discussion turns to how to solve this general problem. In this work, the solution for the optimal control will follow the dynamic programming formulation as in \textbf{[reference]}. The first necessary effort, then, is to define an important partial differential equation known as the Hamilton-Jacobi equation.
 
 \begin{boxed-theorem}{(Hamilton-Jacobi equation)} \label{th:hamiltonJacobi}
-    Consider a finite-horizon cost function in the form of Definition \ref{def:finiteHorizonOC}, for a system described by the state-equation $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$. Consider also that the loss $l(\cdot)$ and state function $\bm{f}$ are smooth on their parameters. Then, minimizing any functional in the form of $J$ is equivalent to minimize the solution of the \textit{Hamilton-Jacobi equation}, which is given by the partial differential equation:
+    Consider a finite-horizon cost function in the form of Definition \ref{def:finiteHorizonOC}, for a system described by the state-equation $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$, restated as:
+    \begin{equation} \label{eq:valueCostFunctional}
+    	V(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T))
+    \end{equation}
+    
+    \noindent Consider also that the loss $l(\cdot)$ and state function $\bm{f}$ are smooth on their parameters. Then, minimizing any functional in the form of $V(\cdot)$ is equivalent to determining the solution of the \textit{Hamilton-Jacobi equation}, which is given by the partial differential equation:
     \begin{equation} \label{eq:HJEquation}
         \cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l(\bm{x}, \bm{u}, t) + \left[ \cfrac{\partial V^*}{\partial x} \right]^T \bm{f}(\bm{x}, \bm{u}, t)  \right]
     \end{equation}
@@ -2252,48 +2295,43 @@ Now, the discussion turns to how to solve this general problem. In this work, th
 \end{boxed-theorem}
 
 \begin{proof}
-    First of all, consider the restatement of the cost functional as the function $V(\cdot)$:
-    \begin{equation}
-        V(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T))
-    .\end{equation}
-    
-    Minimizing this cost functional over control inputs $\bm{u}(t_0), \cdots, \bm{u}(T)$ consists in evaluating the optimal cost:
+    First of all, consider the cost functional $V(\cdot)$ from \eqref{eq:valueCostFunctional}. Minimizing this functional with respect to the control inputs $\bm{u}(t_0), \cdots, \bm{u}(T)$ consists of evaluating the optimal cost:
     \begin{equation}
         V^*(\bm{x}, t_0) = \min_{\bm{u}(t_0), \cdots, \bm{u}(T)} \left[ \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right]
     .\end{equation}
     
-    Now, consider any $t \in [t_0, T]$ and $t_r \in [t, T]$. Since the original control action $\bm{u}(t), \cdots, \bm{u}(T)$ can be obtained through the concatenation of $\bm{u}(t), \cdots, \bm{u}(t_r)$ and $\bm{u}(t_r), \cdots, \bm{u}(T)$, the optimal cost in this interval can be represented in the recursive form:
+    Now, consider any $t \in [t_0, T]$ and $t_r \in [t, T]$. Since the original control action $\bm{u}(t), \cdots, \bm{u}(T)$ can be obtained through the concatenation of $\bm{u}(t), \cdots, \bm{u}(t_r)$ and $\bm{u}(t_r), \cdots, \bm{u}(T)$, the optimal cost in this interval can be represented as:
     \begin{equation} \label{eq:HJERecursive}
     \begin{split}
     V^*(\bm{x}, t) &= \min_{\bm{u}(t), \cdots, \bm{u}(T)} \left[ \int_{t}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \\
         &= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \min_{\bm{u}(t_r), \cdots, \bm{u}(T)} \left[ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + \int_{t_r}^{T} l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \right\} \\
         &= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + \min_{\bm{u}(t_r), \cdots, \bm{u}(T)} \left[ \int_{t_r}^{T} l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T)) \right] \right\} \\
-        &= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + V^*(\bm{x}, t_r) \right\}
+        &= \min_{\bm{u}(t), \cdots, \bm{u}(t_r)} \left\{ \int_{t}^{t_r} l(\bm{x}, \bm{u}, \tau) d \tau + V^*(\bm{x}, t_r) \right\}.
     \end{split}
-    .\end{equation}
-    
-    Without loss of generalization, let $t_r = t + \delta t$, where $\delta t$ is a small number. Since $l(\cdot)$ is a smooth function, the right-hand side of the recursive form above can be expanded by a Taylor series expansion:
+    \end{equation}
+
+	\noindent Notice that this is a recursive formula, since the optimal cost $V^*(\bm{x}, t)$ depends on $V^*(\bm{x}, t_r)$, which itself is an optimal cost for the future time $t_r \geq t$. Without loss of generalization, let $t_r = t + \delta t$, where $\delta t$ is a small number. Since $l(\cdot)$ is a smooth function, the right-hand side of the recursive form above can be expanded by a Taylor series expansion:
     \begin{equation}
     \begin{split}
-        V^*(\bm{x}, t) = \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} & \biggl\{ \delta t l(\bm{x}, \bm{u}, t + \delta t) \biggr. \\ 
-        & \left. + V^*(\bm{x}, t) + \left[ \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \right]^T \cfrac{d \bm{x}(t)}{dt} \delta t + \cfrac{\partial V^*(\bm{x}, t)}{\partial t} \delta t + O(\delta t)^2  \right\}
+        V^*(\bm{x}, t) = \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} & \biggl\{  l(\bm{x}, \bm{u}, t + \delta t) \delta t \biggr. \\ 
+        & \left. + V^*(\bm{x}, t) + \left[ \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \right]^T \cfrac{d \bm{x}(t)}{dt} \delta t + \cfrac{\partial V^*(\bm{x}, t)}{\partial t} \delta t + \mathcal{O}(\delta t)^2  \right\}
     \end{split}
     ,\end{equation}
     
-    \noindent where $O(\delta t)^2$ denotes the high order terms. Since the terms $V^*(\bm{x}, t)$ and $(\partial V^*/\partial t) \delta t$ does not depend on $\bm{u}(t)$, they can be taken out of the minimization. Rearranging the terms and substituting $d \bm{x} / dt = \bm{f}(\bm{x}, \bm{u}, t)$ results in:
+    \noindent where $\mathcal{O}(\delta t)^2$ denotes high order terms. Since the terms $V^*(\bm{x}, t)$ and $(\partial V^*/\partial t) \delta t$ do not depend on $\bm{u}(t)$, they can be disregarded of the minimization. Rearranging the terms and substituting $d \bm{x} / dt = \bm{f}(\bm{x}, \bm{u}, t)$ results in:
     \begin{equation}
         \cfrac{\partial V^*}{\partial t}(\bm{x}, t) =  - \min_{\bm{u}(t), \cdots, \bm{u}(t+\delta t)} \left\{ l(\bm{x}, \bm{u}, t + \delta t)  + \left[ \cfrac{\partial V^*(\bm{x}, t)}{\partial \bm{x}} \right]^T \bm{f}(\bm{x}, \bm{u}, t) + O(\delta t)^2  \right\}
     .\end{equation}
     
-    Finally, making $\delta t \to 0$ results in:
+    Finally, letting $\delta t \to 0$ yields:
     \begin{equation}
         \cfrac{\partial V^*}{\partial t} =  - \min_{\bm{u}(t)} \left\{ l(\bm{x}, \bm{u}, t)  + \left[ \cfrac{\partial V^*}{\partial \bm{x}} \right]^T \bm{f}(\bm{x}, \bm{u}, t) \right\}
     .\end{equation}
     
-    To establish the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
+    To prove the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
 \end{proof}
 
-The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition in $t = T$ to the beginning of the horizon at $t = t_0$. This is a result from the fact that an optimal action $u(t)$ depends on the loss function $l(\cdot)$ at time $t$ and on the optimal cost $V^*(\cdot)$ for a time immediately after that (for instance, $t+\delta t$), but the last action $u(T)$ depends only on $l_f(\cdot)$ since it no longer affects the system inside the control horizon. The recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman equation. An illustration of this principle is shown in Fig. \ref{fig:generalOC01}
+The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition at $t = T$ to the beginning of the horizon at $t = t_0$. This results from the fact that the last action $u(T)$ depends only on $l_f(\cdot)$, so it can be directly calculated for a desired final state $\bm{x}(T)$ and used to calculate the remaining optimal costs backward in time. This recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman (HJB) equation. An illustration of this principle is shown in Fig. \ref{fig:generalOC01}
 
 \begin{figure}[ht]
     \centering
@@ -2323,13 +2361,15 @@ The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can
         \draw [->, decorate, decoration={snake,amplitude=1.5mm, segment length=8mm}] (x13) -- node[pos=0.53]{$190$} (xT);
     \end{tikzpicture} 
     }
-    \caption{Illustration of the Bellman's Principle of Optimality. Each column represents a discrete time instance and each node represents a possible discrete state. The straight lines represents state transitions given an action with associated costs, whereas the curves represents the trajectory from that state to the terminal state with associated optimal cost. The optimal trajectory between the initial and terminal state is shown in red.}
+    \caption{Illustration of the Bellman's Principle of Optimality for a system with discrete set of states for a discrete time evolution. Each column represents a time instance and each node represents a possible state. The straight lines represents state transitions given an action with associated costs, whereas the curves represents the trajectory from that state to the terminal state with associated optimal cost. The optimal trajectory between the initial and terminal state is shown in red.}
     \label{fig:generalOC01}
 \end{figure}
 
-\section{Linear Quadratic Regulator (LQR)}
+\section{Linear Quadratic (LQ) Controllers}
 
-The last section introduced a general condition for solving a finite-horizon optimal control problem. Developing an analytical solution of that condition for any arbitrary loss function $l(\cdot)$ and state-equation $\bm{f}(\cdot)$ is usually intractable. However, there is a choice of loss function that, under a linear system, allows for a nice closed-form solution to the Hamilton-Jacobi-Bellman equation. This defines the popular class of optimal controllers known as the Linear Quadratic Regulators.
+The last section introduced a general condition for solving a finite-horizon optimal control problem. Developing an analytical solution of that condition for any arbitrary loss function $l(\cdot)$ and state-equation $\bm{f}(\cdot)$ is usually intractable. However, there is a choice of loss function that, under a linear system, allows for a nice closed-form solution to the Hamilton-Jacobi-Bellman equation. This defines the popular class of optimal controllers known as the Linear Quadratic Controllers. Since these controllers are realizations of state-feedback controllers, this section discuss the two possible control operations presented in the last chapter, namely regulation and reference tracking. 
+
+\subsubsection{Regulation}
 
 \begin{boxed-definition}{(Linear Quadratic Regulator)} \label{def:lqr}
     Given a linear State-Space system in the form:
@@ -2348,10 +2388,10 @@ The last section introduced a general condition for solving a finite-horizon opt
     \noindent where is assumed that $\bm{Q},\bm{Q}_f  \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
 \end{boxed-definition}
 
-The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. In an engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. In a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is nice since quadratic optimization problems are widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
+The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. From an engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. From a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is desirable since quadratic optimization problems have been widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
 
 \begin{boxed-theorem}{} \label{th:costQuadraForm}
-    Consider a continuous cost function $V : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ given as the LQR cost function defined in Definition \ref{def:lqr} for a linear system. Then the optimal cost $V^*(\bm{x}, t)$ has the quadratic form:
+    Consider a continuous cost function $V : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ given by the LQR cost function defined in Definition \ref{def:lqr} for a linear system. The optimal cost $V^*(\bm{x}, t)$ has the quadratic form:
     \begin{equation}
         V^*(\bm{x}, t) = \bm{x}^T(t) \bm{P}(t) \bm{x}(t)
     \end{equation}
@@ -2364,7 +2404,7 @@ The LQR optimal controller was first introduced in \textbf{[reference]} and has 
 \end{boxed-theorem}
 
 \begin{proof}
-    Since $V^*(\bm{x}, t)$ is the minimum value of $V(\bm{x}, \bm{u}^*, t)$ given an optimal input $\bm{u}^*(t)$ for $t \in [t, T]$, then any deviance $\lambda \in \mathbb{R}$ in this parameter will produce a greater value of the cost. Thus, a direct result from this and the fact that $V(\bm{x}, \bm{u}, t)$ is a quadratic function of $\bm{x}(t)$ and $\bm{u}(t)$ is:
+    Since $V^*(\bm{x}, t)$ is the minimum value of $V(\bm{x}, \bm{u}^*, t)$, given an optimal input $\bm{u}^*(t)$ for $t \in [t, T]$, then any deviation $\lambda \in \mathbb{R}$ in the parameters $(\bm{x},\ \bm{u}(t))$ will result in a greater value of the cost. A direct result from this and the fact that $V(\bm{x}, \bm{u}, t)$ is a quadratic function of $\bm{x}(t)$ and $\bm{u}(t)$ is that:
     \begin{equation}
         V^*(\bm{x}, t) \leq V(\lambda \bm{x}, \lambda \bm{u}^*, t) = \lambda^2 V^*(\bm{x}, t) \leq \lambda^2 V(\bm{x}, \lambda^{-1} \bm{u}^*, t) = V^*(\bm{x}, t)
     ,\end{equation}
@@ -2374,21 +2414,20 @@ The LQR optimal controller was first introduced in \textbf{[reference]} and has 
         V^*(\bm{x}, t) \leq \lambda^2 V^*(\bm{x}, t) \leq V^*(\bm{x}, t)
     ,\end{equation}
     
-    \noindent which implies $V^*(\bm{x}, t) = \lambda^2 V^*(\bm{x}, t)$ and establishes \eqref{eq:costQuadraForm021}. Similarly:
+    \noindent which directly implies $V^*(\bm{x}, t) = \lambda^2 V^*(\bm{x}, t)$ and establishes \eqref{eq:costQuadraForm021}. Similarly:
     \begin{align}
     \begin{split}
         V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t) &= \cfrac{1}{4} \left( V^*(2 \bm{x}_1, t) + V^*(2 \bm{x}_2, t) \right) \\
             & \leq \cfrac{1}{4} \left( V(2 \bm{x}_1, \bm{u}_{x_1+x_2}^* + \bm{u}_{x_1-x_2}^*, t) + V(2 \bm{x}_2, \bm{u}_{x_1+x_2}^* - \bm{u}_{x_1-x_2}^*, t) \right) \\
             & = \cfrac{1}{2} \left( V(\bm{x}_1 + \bm{x}_2, \bm{u}_{x_1+x_2}^*, t) + V(\bm{x}_1 - \bm{x}_2, \bm{u}_{x_1-x_2}^*, t) \right) \\
-            & = \cfrac{1}{2} \left( V^*(\bm{x}_1 + \bm{x}_2, t) + V^*(\bm{x}_1 - \bm{x}_2, t) \right) \\
-            & \leq V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t)
+            & = \cfrac{1}{2} \left( V^*(\bm{x}_1 + \bm{x}_2, t) + V^*(\bm{x}_1 - \bm{x}_2, t) \right) \leq V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t),
     \end{split}
-    ,\end{align}
+    \end{align}
     
     \noindent which implies $V^*(\bm{x}_1, t) + V^*(\bm{x}_2, t) = (1/2) \left( V^*(\bm{x}_1 + \bm{x}_2, t) + V^*(\bm{x}_1 - \bm{x}_2, t) \right)$ and establishes \eqref{eq:costQuadraForm022}. Therefore, the optimal cost function has a quadratic form $V^*(\bm{x}, t) = \bm{x}^T(t) \bm{P}(t) \bm{x}(t)$.
 \end{proof}
 
-Notice that only the fact that the LQR cost function is quadratic directly implies that the optimal cost is also quadratic. Therefore, it is possible to define the optimal action $\bm{u}^*(t)$ that produced this optimal cost by evaluating a relationship between it and the matrix $\bm{P}$. Since the quadratic cost just evaluated is defined for a finite-horizon optimal controller, it has to obey the condition imposed by the Hamilton-Jacobi equation, and the optimal controller can be solved as shown in the following theorem.
+This theorem shows that the fact that the cost function $V(\bm{x}, \bm{u}, t)$ is quadratic directly implies that the optimal cost $V^*(\bm{x}, t)$ is also quadratic. Therefore, it is possible to define the optimal action $\bm{u}^*(t)$ that produce this optimal cost by evaluating its relationship with the matrix $\bm{P}$. Since the quadratic cost just evaluated is defined for a finite-horizon optimal controller, it has to obey the condition imposed by the Hamilton-Jacobi equation, and the optimal controller can be solved as shown in the following theorem.
 
 \begin{boxed-theorem}{(LQR Control Action)} \label{th:LQRAction}
     Given a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, the optimal action produced by this optimal controller at any time $t \in [t_0, T]$ is given by:
@@ -2413,7 +2452,7 @@ Notice that only the fact that the LQR cost function is quadratic directly impli
     \end{split}
     ,\end{equation}
     
-    \noindent where, without loss of generalization, $\bm{P}(t)$ was assumed to be symmetric. Because of the quadratic nature, it is possible to calculate the minimum of the right-hand side of the equation by taking the derivative with respect to the control action and evaluate it for zero:
+    \noindent where, without loss of generalization, $\bm{P}(t)$ was assumed to be symmetric. Because of the quadratic nature, it is possible to calculate the minimum of the right-hand side of the equation by taking its derivative with respect to the control action and equating it to zero:
     \begin{equation}
     \begin{split}
         0 &= \cfrac{\partial}{\partial \bm{u}(t)} \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) \right) \\
@@ -2425,11 +2464,11 @@ Notice that only the fact that the LQR cost function is quadratic directly impli
     To solve for $\bm{P}$ first note that the following identity can be found by completing the squares:
     \begin{equation}
     \begin{split}
-        \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) = & (u + \bm{R}^{-1} \bm{B}^T \bm{P} x)^T \bm{R} (u + \bm{R}^{-1} \bm{B}^T \bm{P} x) \\ & + \bm{x}^T (\bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}) \bm{x}
+        \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} + (2 \bm{x}^T \bm{P}) \left( \bm{A} \bm{x} + \bm{B} \bm{u} \right) = & (\bm{u} + \bm{R}^{-1} \bm{B}^T \bm{P} \bm{x})^T \bm{R} (\bm{u} + \bm{R}^{-1} \bm{B}^T \bm{P} \bm{x}) \\ & + \bm{x}^T (\bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}) \bm{x}
     \end{split}
     .\end{equation}
     
-    Thus, plugging this identity and substituting the optimal control action results in the matrix Riccati equation:
+\noindent Thus, substituting this identity and substituting the optimal control action results in the matrix Riccati equation:
     \begin{equation}
     \begin{split}
     \bm{x}^T \dot{\bm{P}} \bm{x} &= \bm{x}^T (\bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}) \bm{x} \\
@@ -2437,10 +2476,10 @@ Notice that only the fact that the LQR cost function is quadratic directly impli
     \end{split}
     .\end{equation}
     
-    Finally, the terminal condition is direct from the fact that $V^*(\bm{x}, T) = \bm{x}^T(T) \bm{Q}_f \bm{x}(T)$.
+\noindent Finally, the terminal condition is direct from the fact that $V^*(\bm{x}, T) = \bm{x}^T(T) \bm{Q}_f \bm{x}(T)$.
 \end{proof}
 
-A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the controller action can be calculated in real-time. Several others optimal controllers may pose performance improvements, but usually depends on iterative optimization procedures, that can be hard to compute in high-dimensional systems (or even in critical low-dimensional systems). Furthermore, the time complexity of the LQR control action computation is governed by the solution of the Riccati differential equation which can be done very efficiently \textbf{[reference]}.
+A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the action can be calculated analytically. Several others optimal controllers may offer performance improvements, but usually depends on iterative optimization procedures, which can be computationally expensive to calculate for high-dimensional systems. Furthermore, the time complexity of the LQR control action computation is governed by the solution of the Riccati differential equation which can be done very efficiently \textbf{[reference]}.
 
 Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to a linear system in State-Space representation results in the following state-equation:
 \begin{equation}
@@ -2451,9 +2490,11 @@ Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to 
 \end{split}
 .\end{equation}
 
-This formulation indicates that the Linear Quadratic Regulator solution follows the exact same form of a standard state-feedback regulator, represented by the linear but time-variant state-feedback gain $\bm{K}(t) = \bm{R}^{-1} \bm{B}^T \bm{P}(t)$. Therefore, the past results of state-feedback regulators are directly applied to the operation of this class of optimal controllers. Notice, also, that both the computation of $\bm{K}(t)$ and $\bm{P}(t)$ does not explicitly depends on $\bm{x}(t)$, meaning that, for a specific control horizon, they can be calculated off-line and then provided to the controller actuator for the on-line operation. For this reason, despite being a closed-loop controller with corrective action, the LQR can be considered an open-loop optimizer, since the optimization solution itself does not depend on the state signal.
+This formulation indicates that the Linear Quadratic Regulator solution follows the exact same form of a general state-feedback regulator, represented by the linear but time-variant feedback system $\bm{A}_{cl}(t) = \left( \bm{A} - \bm{B} \bm{K}(t) \right)$. Notice, also, that both the computation of $\bm{K}(t)$ and $\bm{P}(t)$ does not explicitly depends on $\bm{x}(t)$, meaning that, for a specific control horizon, they can be calculated off-line and then provided to the controller actuator for the on-line operation. For this reason, despite being a closed-loop controller with corrective action, the LQR can be considered an open-loop optimizer, since the optimization solution itself does not depend on the state signal, but only on the system dynamical model.
 
-Now, as discussed in the previous chapter, the class of regulation controllers are broad but still restricted to a zero-state reference signal. To expand the range of application for the optimal controller just derived, it is possible to introduce integral action to the feedback, just as in the previous case.
+\subsubsection{Reference Tracking}
+
+As discussed in the previous chapter, the class of regulation controllers are broad but still restricted to a zero-state reference signal. To expand the range of application for the optimal controller just derived, it is possible to introduce integral action to the feedback.
 
 \begin{boxed-definition}{(Linear Quadratic Servo)} \label{def:lqServo}
     Given a linear State-Space system represented by matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$, augmented with state $\dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)$:
@@ -2492,12 +2533,14 @@ Now, as discussed in the previous chapter, the class of regulation controllers a
     \noindent where is assumed that $\tilde{\bm{Q}}, \tilde{\bm{Q}}_f \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
 \end{boxed-definition}
 
-As before, the integral action basically turns the tracking problem into a regulation problem. In this case, the optimal controller will try to optimize a zero-state for $\bm{x}_a(t)$, producing the reference tracking. The new $p$ diagonal entries of the augmented matrix $\tilde{\bm{Q}}$ can be interpreted as weights penalizing the state deviance from the reference signal. The solution for this controller is the same as the one derived in Theorem \ref{th:LQRAction}, but making $\bm{A} = \tilde{\bm{A}}$ and $\bm{B} = \tilde{\bm{B}}$, and the resulting control action can be equated as:
+As before, the integral action turns the tracking problem into a regulation problem. In this case, the optimal controller will try to regulate towards a zero-state for $\bm{x}_a(t)$, yielding a zero error between the output $\bm{y}(t)$ and reference signal $\bm{r}(t)$. The new $p$ diagonal entries of the augmented matrix $\tilde{\bm{Q}}$ can be interpreted as weights penalizing the state deviation from the reference signal. The solution for this controller is the same as the one derived in Theorem \ref{th:LQRAction}, with $\bm{A} = \tilde{\bm{A}}$ and $\bm{B} = \tilde{\bm{B}}$. The resulting control action is equal to:
 \begin{equation}
     \bm{u}(t) = \tilde{\bm{K}}(t)\tilde{\bm{x}}(t) = \begin{bmatrix} \bm{K}(t) & \bm{K}_a(t) \end{bmatrix} \begin{bmatrix} \bm{x}(t) \\ \bm{x}_a(t) \end{bmatrix}
 .\end{equation}
 
-To finish the section, it is also worth mentioning the fact that, for the LQR cost function, it is possible to determine an optimal controller for an infinite-horizon operation, that is, when $T \to \infty$. The fact that the control horizon is now infinite results in a stationary state-feedback gain $\bm{K}$, as stated below.
+\subsubsection{Infinite-Horizon LQ Controllers}
+
+To conclude the section, it is also worth mentioning that, for the LQR cost function, it is possible to determine an optimal controller for an infinite-horizon operation, that is, when $T \to \infty$. The fact that the control horizon is now infinite results in a stationary state-feedback gain $\bm{K}$, as stated below.
 
 \begin{boxed-theorem}{(Infinite-Horizon LQR)} \label{th:infiniteLQR}
     Consider a Linear Quadratic Regulator as defined in Definition \ref{def:lqr}, but with $T = \infty$. The optimal control action produced by this optimal controller at any time $t \in [t_0, \infty]$ is given by:
@@ -2505,9 +2548,9 @@ To finish the section, it is also worth mentioning the fact that, for the LQR co
         \bm{u}^*(t) = - \bm{K} \bm{x}(t) = - \bm{R}^{-1} \bm{B}^T \bm{P} \bm{x}(t)
     ,\end{equation}
     
-    \noindent where $\bm{K} = \bm{R}^{-1} \bm{B}^T \bm{P}$ and $\bm{P}(t)$ is the solution of the matrix algebraic Riccati equation:
+    \noindent where $\bm{K} = \bm{R}^{-1} \bm{B}^T \bm{P}$ and $\bm{P}$ is the solution of the matrix algebraic Riccati equation:
     \begin{equation}
-        0 = \bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}
+        \bm{0} = \bm{A}^T \bm{P} + \bm{P} \bm{A} - \bm{P} \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P} + \bm{Q}
     .\end{equation}
 \end{boxed-theorem}
 
@@ -2515,7 +2558,7 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 \section{Optimal State Estimators}
 
-As already discussed, the state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of an observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
+The state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of an observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
 
 First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \bm{R} \rightarrow \bm{R}^{n}$ and $\bm{v} : \bm{R} \rightarrow \bm{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w}_k \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, then it is possible to motivate a stochastic formulation of the linear State-Space model.
 

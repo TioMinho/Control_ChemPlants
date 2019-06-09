@@ -103,7 +103,7 @@ ny = size(C,1); nu = size(B,2); nx = size(A,1);
 
 % - Real simulation parameters
 t = (0:0.01:11.99)'; T = numel(t);
-r = [ones(1,T/4)*x_o(2) ones(1,T/4)*x_o(2)-2 ones(1,T/4)*x_o(2)+2 ones(1,T/4)*x_o(2)-4];
+r = [ones(1,T/4)*x_o(2) ones(1,T/4)*x_o(2)-0.2 ones(1,T/4)*x_o(2)+0.2 ones(1,T/4)*x_o(2)-0.4];
 
 % - Closed-Loop Tracking Systems
 K = {[place(A,B,[-4, -1.5]), -25]; [place(A,B,[-8, -5]), -25]; [place(A,B,[-4+3j, -4-3j]), -50]};
@@ -121,27 +121,29 @@ ia_sys = {ss(A_cl{1}, B_cl, eye(nx+ny), D_i), ...
           ss(A_cl{3}, B_cl, eye(nx+ny), D_i)};
 
 % - Perform the simulation
-Delta_x = [lsim(ia_sys{1}, r, t, -[x_o; r(1)+x_o(2)]), ...
-           lsim(ia_sys{2}, r, t, -[x_o; r(1)+x_o(2)]), ...
-           lsim(ia_sys{3}, r, t, -[x_o; r(1)+x_o(2)])];
+Delta_x = [lsim(ia_sys{1}, r, t, -[x_o*0; r(1)-x_o(2)]), ...
+           lsim(ia_sys{2}, r, t, -[x_o*0; r(1)-x_o(2)]), ...
+           lsim(ia_sys{3}, r, t, -[x_o*0; r(1)-x_o(2)])];
 
 % - Visualization of the Simulation
-figure(1);
-subplot(1,2,2), plot(t, r+x_o(1), 'k--'), hold on
+figure(1); clf
+[ha, pos] = tight_subplot(1,2,[.02 .1],[.1 .01],[.1 .01]);
+
+axes(ha(2)), plot(t, r+x_o(1), 'k--'), hold on
 
 for i = 1:3
-    subplot(1,2,1)
-    plot(t, (r - K{i}*Delta_x(:, 3*i-2:3*i)')+ u_o, 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    axes(ha(1))
+    plot(t, (r - K{i}*Delta_x(:, 3*i-2:3*i)')+ u_o, 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
     
-    subplot(1,2,2)
-    plot(t, Delta_x(:,3*i-1)+x_o(1), 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    axes(ha(2))
+    plot(t, Delta_x(:,3*i-1)+x_o(1), 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
 end
 
-subplot(1,2,1), ylabel("u = (\Delta u + u_{o})"), xlabel("Time (s)"), legend(["K_1", "K_2", "K_3"])
-subplot(1,2,2), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (s)")
+axes(ha(1)), ylabel("u = (\Delta u + u_{o})"), xlabel("Time (min)"), legend(["K_1", "K_2", "K_3"])
+axes(ha(2)), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (min)")
 
 % - Exporting the Visualization to an Image
-figname = "report_codes\figs\report_ch3_2";
+figname = "report_codes/figs/report_ch3_2";
 fig = gcf; fig.PaperPositionMode = 'auto'; 
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
