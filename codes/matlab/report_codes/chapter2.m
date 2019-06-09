@@ -169,7 +169,7 @@ system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 x_o = y(1:2,end);
 
 % - Real simulation parameters
-t_s = (0:0.01:1.99)';      
+t_s = (0:0.01:1.49)';      
 U = ones(1,numel(t_s));
 U_zero = zeros(1,numel(t_s));
 
@@ -181,19 +181,26 @@ syms t
 e_At = expm(A * t);
 
 % - Visualization of the Matrix Exponential
-figure(3);
+figure(3); clf
+[ha, pos] = tight_subplot(2,2,[.03 .02],[.1 .01],[.05 .01]);
 for i = 1:2
     for j = 1:2
-        subplot(2,2,(i-1)*2+j)
-        plot(t_s, double(subs(e_At(i,j), t_s)), 'linewidth', 1.5, 'color', cpal(8,:))
+        axes(ha((i-1)*2+j))
+        plot(t_s, double(subs(e_At(i,j), t_s)), 'linewidth', 1, 'color', cpal(8,:))
         ylim([0, inf+1])
     end
 end
 
+axes(ha(1)), set(gca, "XTickLabel", []), 
+axes(ha(2)), set(gca, "XTickLabel", []), set(gca, "YTickLabel", [])
+axes(ha(3)), xlabel("Time"), ylim([0 1])
+axes(ha(4)), xlabel("Time"), set(gca, "YTickLabel", [])
+
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_3', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_3";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.6 %%
 % - Real simulation parameters
@@ -209,21 +216,28 @@ syms t
 e_At = expm(A * t);
 
 % - Visualization of the Matrix Exponential
-figure(4);
+figure(4); clf
+[ha, pos] = tight_subplot(2,2,[.03 .02],[.1 .01],[.05 .01]);
 for i = 1:2
     for j = 1:2
-        subplot(2,2,(i-1)*2+j)
+        axes(ha((i-1)*2+j))
         plot(t_s, exp(A(1,1).*t_s), 'linewidth', 1, 'linestyle', '--', 'color', [0.6 0.6 0.6]); hold on
         plot(t_s, -exp(A(1,1).*t_s), 'linewidth', 1, 'linestyle', '--', 'color', [0.6 0.6 0.6]); hold on
-        plot(t_s, double(subs(e_At(i,j), t_s)), 'linewidth', 1.5, 'color', cpal(8,:))
+        plot(t_s, double(subs(e_At(i,j), t_s)), 'linewidth', 1, 'color', cpal(8,:))
         ylim([-inf, inf+1])
     end
 end
 
+axes(ha(1)), set(gca, "XTickLabel", []), 
+axes(ha(2)), set(gca, "XTickLabel", []), set(gca, "YTickLabel", [])
+axes(ha(3)), xlabel("Time"), 
+axes(ha(4)), xlabel("Time"), set(gca, "YTickLabel", [])
+
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_4', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_4";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.5 %%
 % - Simulation of the Nonlinear plat to obtain steady-state values
@@ -249,20 +263,23 @@ iso_cstr_lin2 = ss(A2, B2, C, D);
 [y_lin2, ~, ~] = step(iso_cstr_lin2, t2);
 
 % - Visualization of the Simulation
-figure(5);
+figure(5); clf
+[ha, pos] = tight_subplot(1,2,[.01 .08],[.1 .01],[.08 .01]);
 
-subplot(1,2,1), plot(t1, U1 * y_lin1(end), 'linestyle', '--', 'linewidth', 1, 'color', [0.6 0.6 0.6]); hold on
-plot(t1, y_lin1, 'linewidth', 1.5, 'color', cpal(8,:))
+axes(ha(1)), plot(t1, U1 * y_lin1(end), 'linestyle', '--', 'linewidth', 1, 'color', [0.6 0.6 0.6]); hold on
+plot(t1, y_lin1, 'linewidth', 1, 'color', cpal(8,:))
 xlabel("Time"), ylabel("x^{(1)}_1(t)")
+ylim([0, 1.4])
 
-subplot(1,2,2), plot(t2, U2 * y_lin2(end), 'linestyle', '--', 'linewidth', 1, 'color', [0.6 0.6 0.6]); hold on
-plot(t2, y_lin2, 'linewidth', 1.5, 'color', cpal(8,:))
+axes(ha(2)), plot(t2, U2 * y_lin2(end), 'linestyle', '--', 'linewidth', 1, 'color', [0.6 0.6 0.6]); hold on
+plot(t2, y_lin2, 'linewidth', 1, 'color', cpal(8,:))
 xlabel("Time"), ylabel("x^{(2)}_1(t)")
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_5', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_5";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.6 %%
 % - Real simulation parameters
@@ -271,7 +288,7 @@ U = ones(1,numel(t));
 
 % - State-space model selection
 A1 = [-0.4];                    B1 = [0.137];
-A2 = [-0.2];                      B2 = [0.069];
+A2 = [-0.2];                    B2 = [0.069];
 A3 = [-0.25 0.7; -0.7 -0.25];   B3 = [0.2; 0.2];
 A4 = [-0.5   1;   -1 -0.5];     B4 = [0.287; 0.287];
 
@@ -287,71 +304,31 @@ iso_cstr_lin4 = ss(A4, B4, [1 0], 0);
 [y_lin4, ~, ~] = step(iso_cstr_lin4, t);
 
 % - Visualization of the Simulation
-figure(6);
+figure(6); clf
+[ha, pos] = tight_subplot(1,2,[.01 .12],[.1 .01],[.08 .01]);
 
-subplot(1,2,1)
-plot(real(eig(A1)), imag(eig(A1)), 'x', 'color', cpal(6,:), 'markersize', 12); hold on
-plot(real(eig(A2)), imag(eig(A2)), 'x', 'color', cpal(7,:), 'markersize', 12); hold on
-plot(real(eig(A3)), imag(eig(A3)), 'x', 'color', cpal(8,:), 'markersize', 12); hold on
-plot(real(eig(A4)), imag(eig(A4)), 'x', 'color', cpal(9,:), 'markersize', 12)
+axes(ha(1))
+plot(real(eig(A1)), imag(eig(A1)), 'x', 'color', cpal(6,:), 'markersize', 12, 'linewidth', 1.5); hold on
+plot(real(eig(A2)), imag(eig(A2)), 'x', 'color', cpal(7,:), 'markersize', 12, 'linewidth', 1.5); hold on
+plot(real(eig(A3)), imag(eig(A3)), 'x', 'color', cpal(8,:), 'markersize', 12, 'linewidth', 1.5); hold on
+plot(real(eig(A4)), imag(eig(A4)), 'x', 'color', cpal(9,:), 'markersize', 12, 'linewidth', 1.5)
 xlabel("Real Axis"); ylabel("Imaginary Axis")
 ylim([-1.5, 1.5]); xlim([-0.75, 0])
 sgrid()
 
-subplot(1,2,2),
-plot(t, y_lin1, 'linewidth', 1.5, 'color', cpal(6,:)); hold on
-plot(t, y_lin2, 'linewidth', 1.5, 'color', cpal(7,:)); hold on
-plot(t, y_lin3, 'linewidth', 1.5, 'color', cpal(8,:)); hold on
-plot(t, y_lin4, 'linewidth', 1.5, 'color', cpal(9,:))
-xlabel("Time"), ylabel("Forced Response")
+axes(ha(2))
+plot(t, y_lin1, 'linewidth', 1, 'color', cpal(6,:)); hold on
+plot(t, y_lin2, 'linewidth', 1, 'color', cpal(7,:)); hold on
+plot(t, y_lin3, 'linewidth', 1, 'color', cpal(8,:)); hold on
+plot(t, y_lin4, 'linewidth', 1, 'color', cpal(9,:))
+xlabel("Time"), ylabel("Unitary Step Response")
 ylim([0, 0.6]);
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_6', '-dpdf', '-r300')
-
-%% Figure 2.7 %%
-
-% - Defining the basis
-P1 = [1 0; 0 1];
-P2 = [3 2; 1 2]; slope1 = P2(1,1) / P2(2,1); slope2 = P2(1,2) / P2(2,2);
-
-x1 = P1 * [1; 3];
-x2 = pinv(P2) * [1; 3];
-
-% - Visualization of the Simulation
-figure(7);
-
-subplot(1,2,1)
-plot([5, -5], [0, 0], 'color', [0.5 0.5 0.5]); hold on
-plot([0, 0], [-5, 5], 'color', [0.5 0.5 0.5]); hold on
-
-quiver(0, 0, P1(1,1)+0.1, P1(2,1), 'linewidth', 1.5, 'color', [0.2 0.2 0.2]); hold on
-quiver(0, 0, P1(1,2), P1(2,2)+0.1, 'linewidth', 1.5, 'color', [0.2 0.2 0.2]); hold on
-quiver(0, 0, x1(1,1)+0.1, x1(2,1)+0.3, 'linewidth', 1.5, 'color', cpal(8,:));
-xlim([-3.5, 3.5]); ylim([-1, 3.5])
-grid()
-set(gca, 'YTickLabel', [])
-set(gca, 'XTickLabel', [])
-
-subplot(1,2,2)
-plot([5, -5], [0, 0], 'color', [0.5 0.5 0.5]); hold on 
-plot([0, 0], [-5, 5], 'color', [0.5 0.5 0.5]); hold on
-
-quiver(0, 0, P2(1,1)+0.3, P2(2,1)+0.1, 'linewidth', 1.5, 'color', [0.2 0.2 0.2]); hold on
-quiver(0, 0, P2(1,2)+0.2, P2(2,2)+0.2, 'linewidth', 1.5, 'color', [0.2 0.2 0.2]); hold on
-quiver(0, 0, x1(1,1)+0.1, x1(2,1)+0.3, 'linestyle', ':', 'linewidth', 1.5, 'color', cpal(8,:));
-quiver(0, 0, x2(1,1)-0.1, x2(2,1)+0.2, 'linewidth', 1.5, 'color', cpal(8,:));
-xlim([-3.5, 3.5]); ylim([-1, 3.5])
-grid()
-set(gca, 'YTickLabel', [])
-set(gca, 'XTickLabel', [])
-
-% - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_7', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_6";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.8 %%
 % - Real simulation parameters
@@ -373,29 +350,31 @@ iso_cstr_lin3 = ss(A3, B3, [1 0], 0);
 [y_lin3, ~, ~] = step(iso_cstr_lin3, t);
 
 % - Visualization of the Simulation
-figure(8);
+figure(8); clf
+[ha, pos] = tight_subplot(1,2,[.01 .12],[.1 .01],[.08 .01]);
 
-subplot(1,2,1)
+axes(ha(1))
 plot([5, -5], [0, 0], 'color', [0.5 0.5 0.5]); hold on
 plot([0, 0], [-5, 5], 'color', [0.5 0.5 0.5]); hold on
-plot(real(eig(A1)), imag(eig(A1)), 'x', 'color', cpal(6,:), 'markersize', 12); hold on
-plot(real(eig(A2)), imag(eig(A2)), 'x', 'color', cpal(7,:), 'markersize', 12); hold on
-plot(real(eig(A3)), imag(eig(A3)), 'x', 'color', cpal(8,:), 'markersize', 12); hold on
+plot(real(eig(A1)), imag(eig(A1)), 'x', 'color', cpal(6,:), 'markersize', 12, 'linewidth', 1.5); hold on
+plot(real(eig(A2)), imag(eig(A2)), 'x', 'color', cpal(7,:), 'markersize', 12, 'linewidth', 1.5); hold on
+plot(real(eig(A3)), imag(eig(A3)), 'x', 'color', cpal(8,:), 'markersize', 12, 'linewidth', 1.5); hold on
 xlabel("Real Axis"); ylabel("Imaginary Axis")
 ylim([-2.5, 2.5]); xlim([-0.2, 0.2])
 grid()
 
-subplot(1,2,2),
-plot(t, y_lin1, 'linewidth', 1.5, 'color', cpal(6,:)); hold on
-plot(t, y_lin2, 'linewidth', 1.5, 'color', cpal(7,:)); hold on
-plot(t, y_lin3, 'linewidth', 1.5, 'color', cpal(8,:)); hold on
-xlabel("Time"), ylabel("Forced Response")
+axes(ha(2))
+plot(t, y_lin1, 'linewidth', 1, 'color', cpal(6,:)); hold on
+plot(t, y_lin2, 'linewidth', 1, 'color', cpal(7,:)); hold on
+plot(t, y_lin3, 'linewidth', 1, 'color', cpal(8,:)); hold on
+xlabel("Time"), ylabel("Unitary Step Response")
 ylim([-12 12])
 
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_8', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_7";
+fig = gcf; fig.PaperPositionMode = 'auto'; 
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% Figure 2.9 %%
 % - Real simulation parameters
@@ -436,8 +415,10 @@ x_o = y(1:2,end);
 A = iso_cstr.ss_model.A_l(x_o, 3.03);   B = iso_cstr.ss_model.B_l(x_o, 3.03);
 
 % - Visualization of the Simulation
-figure(10);
-subplot(1,2,1)
+figure(10); clf
+[ha, pos] = tight_subplot(1,1,[.01 .1],[.1 .01],[.08 .01]);
+
+axes(ha(1))
 bodeplot(tf(ss(A, B, [1 0], 0)), 'b-'); hold on 
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(8,:));
@@ -446,18 +427,32 @@ bodeplot(tf(ss(A, B, [0 1], 0)), 'b-');
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(4,:));
 grid()
+title("")
 
-subplot(2,2,2)
+% - Exporting the Visualization to an Image
+figname = "report_codes/figs/report_ch2_8_1";
+fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [10 6];
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+figure(11); clf
+[ha, pos] = tight_subplot(2,1,[.01 .08],[.1 .01],[.08 .01]);
+
+axes(ha(1))
 nyquistplot(tf(ss(A, B, [1 0], 0)), 'b-'), xlabel(""), xlim([-0.1, 0.75])
 lineHandle = findobj(gcf,'Type','line','-and','Color','b');
 set(lineHandle,'Color',cpal(8,:));
+ytickformat("%.2f")
+title("")
 
-subplot(2,2,4)
+axes(ha(2))
 nyquistplot(tf(ss(A, B, [0 1], 0)), 'b-'), title(""), xlim([-0.15, 0.025])
-lineHandle = findobj(gcf,'Type','line','-and','Color','b');
+lineHandle = findobj(gca,'Type','line');
 set(lineHandle,'Color',cpal(4,:));
 
+
 % - Exporting the Visualization to an Image
-fig = gcf;
-fig.PaperPositionMode = 'auto';
-print('-bestfit', 'isothermal_cstr/simulation/report_ch2_10', '-dpdf', '-r300')
+figname = "report_codes/figs/report_ch2_8_2";
+fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [10 6];
+print('-bestfit', figname, '-dpdf', '-r300')
+system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
