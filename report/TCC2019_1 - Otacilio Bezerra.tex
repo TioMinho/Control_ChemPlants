@@ -1399,26 +1399,28 @@ The immediate advantage of these visualizations is that is not necessary to comp
 \clearpage
 \chapter{Controller Synthesis}
 
-This chapter discusses the general results and properties for the design of dynamical controllers, focusing on feedback architectures. The devices are motivated and formulated using the State-Space model for dynamical systems, so the feedback is performed on the state response rather than the system output. For this reason, the results in this section focus on these equations, where the output equations is made implicit.
+This chapter discusses the general results and properties for the design of controllers, focusing on feedback architectures. The devices are motivated and formulated using the State-Space model for dynamical systems, so the feedback is performed on the state response rather than on the system output. For this reason, the results in this section focus on this formulation explicitly through the state-equations, where the output-equations are made implicit.
 
 \section{State Feedback Controllers}
 
-In modern control theory, advances in computer performance and in the methods themselves have made the design of controllers using State-Space models feasible for real-world applications. This is usually desirable since, as shown in the latter chapter, these kind of models provides a practical solution to understand dynamical system response and properties, so it is natural to want a controller design technique that accounts for that representation. The most basic, yet most popular, feedback controller used in those settings is the \textit{Full-State Feedback Controller}, defined below. 
+In modern control theory, advances in computer performance and the maturing of State-Space model analysis have made the design of controllers using State-Space models feasible for real-world applications. This is usually desirable since these kind of models provides a practical solution to understand dynamical system response and properties, so it is natural to want a controller design technique that accounts for that representation. The most basic, yet very popular, feedback controller used in those settings is the \textit{Full-State Feedback Controller}, defined below. 
 
-\begin{boxed-definition}{Full-State Feedback}
-    Given a linear system in State-Space representation, the input signal $\bm{u}(t)$ is calculated through feedback of the states as application of the linear control law:
+\begin{boxed-definition}{Full-State Linear Feedback}
+    Given a linear system in State-Space representation, an input action $\bm{u}(t)$ is calculated by the linear control law $\pi(\cdot)$ through state-feedback as:
     \begin{equation}
-        \bm{u(t)} = \pi(\bm{r}, \bm{x}, t) = \bm{r}(t) - \bm{K} \bm{x}(t)
+        \bm{u}(t) = \pi(\bm{r}(t), \bm{x}(t)) = \bm{r}(t) - \bm{K} \bm{x}(t)
     ,\end{equation}
     
     \noindent where $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal that the system must follows and $\bm{K} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
 \end{boxed-definition}
 
-The control law $\pi(\cdot)$ is linear and time-invariant, which makes the analysis of the closed-loop system similar to the one used in open-loop configurations. A schematic of the closed-loop system is shown at Fig. \ref{fig:feedback01}. Of course, this is a choice of control law, and feedback controllers can also be defined using nonlinear or time-dependent functions. Notice that this new definition for the calculation of $\bm{u}(t)$ allows for the following closed-loop representation of the system:
+A block diagram of the closed-loop system for the state-feedback controller is shown at Fig. \ref{fig:feedback01}. In this schematic each blocks represents a function or operation that is applied to the denoted signals, which themselves are represented by the arrows. The direction of the arrows indicates whether the signal variable is an operand or a result of an operation. 
+
+Notice that the control law of the full-state feedback is both linear and time-invariant, which makes the analysis of the closed-loop system similar to the one used in open-loop configurations.  Of course, this is a specific choice of control law, and feedback controllers can also be defined using nonlinear or time-dependent functions. Notice that this new definition for the calculation of $\bm{u}(t)$ allows for the following closed-loop representation of the system:
 \begin{align}
 \begin{split}
     \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \left( \bm{r}(t) - \bm{K} \bm{x}(t) \right) \\
-    \dot{\bm{x}}(t) &= \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t) + \bm{B} \bm{r}(t)
+    	 &= \left( \bm{A} - \bm{B} \bm{K} \right) \bm{x}(t) + \bm{B} \bm{r}(t)
 \end{split}
 .\end{align}
 
@@ -1458,7 +1460,7 @@ The control law $\pi(\cdot)$ is linear and time-invariant, which makes the analy
     \label{fig:feedback01}
 \end{figure}
 
-From this is clear that the inclusion of a feedback controller in the loop is equivalent to transform an open-loop system into a new system $(\bm{A}_{cl}, \bm{B})$, with $\bm{A}_{cl} = \bm{A} - \bm{B} \bm{K}$, whose manipulated variables is a reference signal $\bm{r}(t)$ but the controlled variables are still the same. Since $\bm{K}$ is an arbitrary matrix, it is possible to change the behavior of the closed-loop system, and consequently the controlled variables response, by designing this matrix. To understand better the capabilities of the state feedback, consider the following theorems.
+Clearly, the inclusion of a feedback controller in the loop is equivalent to transform an open-loop system into a new system $(\bm{A}_{cl}, \bm{B})$, with $\bm{A}_{cl} = \bm{A} - \bm{B} \bm{K}$, whose manipulated variable is now the reference signal $\bm{r}(t)$. Therefore, an appropriate choice of $\bm{K}$ allows to modify the behavior of the closed-loop system such that a desirable behavior is obtained. To understand better the capabilities of the state feedback, consider the following theorems.
 
 %\begin{boxed-theorem}
 %   Given any matrix $\bm{K} \in \mathbb{R}^{r \times n}$, the closed-loop system described by matrices $(\bm{A}-\bm{B}\bm{K}, \bm{B})$ is controllable if and only if the open-loop system $(\bm{A}, \bm{B})$ is controllable.
@@ -1511,34 +1513,34 @@ From this is clear that the inclusion of a feedback controller in the loop is eq
     .\end{align}
 \end{boxed-theorem} 
 
-Details for the proof of this theorem can be found in \textbf{[reference]}. An equivalent result can be proved for MIMO systems \textbf{[reference]}, but the result is very verbose and does not highlight the main results for the state-feedback. Using the canonical form just presented, it is possible to discuss a strong result for the state feedback controller.
+Details for the proof of this theorem can be found in \textbf{[reference]}. An equivalent result can be proved for MIMO systems \textbf{[reference]}, but the result is cumbersome and does not highlight the main results for the state-feedback. Using the canonical form just presented, it is possible to discuss an important result for the state feedback controller.
 
 \begin{boxed-theorem}{(Pole-Placement Method)} \label{th:polePlace}
-    If a system in State-Space representation is controllable, then by state feedback using a gain matrix $\bm{K} \in \mathbb{R}^{r \times n}$ the eigenvalues of $\bm{A}_{cl}=\bm{A}-\bm{B}\bm{K}$, the poles of the closed-loop system, can arbitrarily be assigned anywhere in the complex plane, given that complex conjugate eigenvalues are assigned in pairs.
+    If a system in State-Space representation is controllable, then by state feedback using a gain matrix $\bm{K} \in \mathbb{R}^{r \times n}$ the eigenvalues of $\bm{A}_{cl}=\bm{A}-\bm{B}\bm{K}$, the poles of the closed-loop system, can be placed arbitrarily in the complex plane, as long as complex conjugate eigenvalues are assigned in pairs.
 \end{boxed-theorem} 
 
 \begin{proof}
-    Consider that the system is controllable. In this case, it can be converted to the controller canonical form of Theorem \ref{th:controlCanon}. Substituting $\bm{z}(t) = \bm{P} \bm{x}(t)$ results in the following control law for the state feedback:
+    Suppose that the system is controllable. In this case, it can be converted to the controller canonical form of Theorem \ref{th:controlCanon}. Substituting $\bm{z}(t) = \bm{P} \bm{x}(t)$ results in the following control law for the state feedback:
     \begin{equation}
         u(t) = r(t) - \bm{K} \left( \bm{P}^{-1} \bm{z}(t) \right) = r(t) - \tilde{\bm{K}} \bm{z}(t)
     .\end{equation}
     
-    Applying the state feedback, the transformed closed-loop is given by:
+    \noindent Applying the state feedback, the transformed closed-loop is given by:
     \begin{equation} \label{eq:fdbckContrCanon}
     \tilde{\bm{A}}_{cl} = \bm{P} (\bm{A} - B \bm{K}) \bm{P}^{-1} = \bm{P} \bm{A} \bm{P}^{-1} - \bm{P} B \bm{K} \bm{P}^{-1} = \tilde{\bm{A}} - \tilde{B} \tilde{\bm{K}}
     .\end{equation}   
     
-    From Theorem \ref{th:simTrans01} it is known that $\bm{A}_{cl}$ and $\tilde{\bm{A}}_{cl}$ shares the same set of eigenvalues, and, therefore, the same characteristic equations. Consider this characteristic equation in the form:
+    \noindent From Theorem \ref{th:simTrans01} it is known that $\bm{A}_{cl}$ and $\tilde{\bm{A}}_{cl}$ share the same set of eigenvalues, and, consequently, the same characteristic equations. Consider this characteristic equation as:
     \begin{equation}
         \Delta(s) = det(s\bm{I} - \bm{A}) = s^n + \alpha_1 s^{n-1} + \alpha_2 s^{n-2} + \cdots + \alpha_{n-1} s + \alpha_n
     .\end{equation}
     
-    Given a desired a set of coefficients $[\tilde{\alpha}_1, \tilde{\alpha}_2, ..., \tilde{\alpha}_n]$ of a characteristic polynomial whose roots are the desired closed-loop eigenvalues, define the transformed feedback gain matrix as:
+    \noindent Given a set of coefficients $[\tilde{\alpha}_1, \tilde{\alpha}_2, ..., \tilde{\alpha}_n]$ for a characteristic polynomial whose roots are the closed-loop eigenvalues, define the transformed feedback gain matrix as:
     \begin{equation}
         \tilde{\bm{K}} = \begin{bmatrix} \tilde{\alpha}_1 - \alpha_1 & \tilde{\alpha}_2 - \alpha_2 & \cdots & \tilde{\alpha}_n - \alpha_n \end{bmatrix}
     .\end{equation}
     
-    Plugging this in \eqref{eq:fdbckContrCanon}, it is easy to see that the resulting representation is:
+    \noindent Substituting this in \eqref{eq:fdbckContrCanon}, it is easy to see that the resulting representation is:
     \begin{align} \label{eq:SSFdbckControlCanon}
     \begin{cases}
         \dot{\bm{z}}(t) = \begin{bmatrix}
@@ -1553,21 +1555,21 @@ Details for the proof of this theorem can be found in \textbf{[reference]}. An e
     \end{cases}
     ,\end{align} 
     
-    \noindent whose characteristic polynomial is now described by the designed coefficients to yield the desirable eigenvalues. Since $\tilde{\bm{A}}_{cl}$ and $\bm{A}_{cl}$ shares the same set of eigenvalues, it is concluded that it is possible to assign the system poles directly through matrix $\tilde{\bm{K}}$.
+    \noindent whose characteristic polynomial is now described by the designed coefficients that yield the desirable eigenvalues. Since $\tilde{\bm{A}}_{cl}$ and $\bm{A}_{cl}$ shares the same set of eigenvalues, it can be concluded that it is possible to assign the system poles directly through matrix $\tilde{\bm{K}}$.
 \end{proof}
 
-Notice, from that procedure, that an ``original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). This theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. This result is still preserved for MIMO systems, although the design of $\bm{K}$ is not so straightforward since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
+Notice that an ``original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). The theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. The result is preserved for MIMO systems, although the design of $\bm{K}$ is not as straightforward, since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
 
-Using the parameters from Definition \ref{def:responseParameters}, the positions of the closed-loop system poles can be evaluated given desirable operations, and the matrix $\bm{K}$ can be hand-designed to meet these requirements. This method is known as the \textit{Pole-Placement method} for control synthesis. The algorithm below summarizes a simple procedure of designing an appropriate feedback gain matrix given desirable pole positions.
+Using the parameters from Definition \ref{def:responseParameters}, the positions of the closed-loop system poles can be designed given desirable operations, and the matrix $\bm{K}$ can be hand-designed to meet these requirements. This method is known as the \textit{Pole-Placement method} for control synthesis. Algorithm \ref{alg:stateFeedback} summarizes a simple procedure of designing an appropriate feedback gain matrix, given desirable pole positions.
 
-\begin{algorithm}[ht]
-    \caption{Pole-Placement Method for SISO Systems}    
+\begin{algorithm}[ht] 
+    \caption{Pole-Placement Method for SISO Systems} \label{alg:stateFeedback}
     \SetAlgoLined
     \SetKwInOut{Input}{Input}
     \SetKwInOut{Output}{Output}
     
-    \Input{state-space model $(\bm{A}, B)$ and a set of $n$ desired eigenvalues $\bm{\lambda}^*$.}
-    \Output{feedback gain matrix $\bm{K}$.}
+    \Input{State-space model $(\bm{A}, B)$ and a set of $n$ desired eigenvalues $\bm{\lambda}^*$.}
+    \Output{Feedback gain matrix $\bm{K}$.}
     \vskip0.25cm
     
     Calculate $[\alpha_1, \alpha_2, ..., \alpha_n]$ as the coefficients of the polynomial $\Delta(s) = det(s\bm{I} - \bm{A})$;
@@ -1585,14 +1587,18 @@ Using the parameters from Definition \ref{def:responseParameters}, the positions
     
     Let $\tilde{\bm{K}} = \begin{bmatrix} \alpha_1 - \tilde{\alpha}_1 & \alpha_2 - \tilde{\alpha}_2 & \cdots & \alpha_n - \tilde{\alpha}_n \end{bmatrix}$;
     
-    Return $\bm{K} = \tilde{\bm{K}} \bm{P}$
+    Return $\bm{K} = \tilde{\bm{K}} \bm{P}$;
 \end{algorithm} 
 
-Albeit being a simples formula, this method can be used in several applications to yield controllers capable of matching performance requisites. Of course, the designer must take into account that, besides the eigenvalue assignment allows for the whole complex plane, a careless choice of eigenvalues could result in unpractical controllers, with very aggressive or oscillatory input signals. For this reason, it is necessary some knowledge of the instruments limits before designing the matrix $\bm{K}$.
+Albeit being a simple formula, Pole-Placement can be used in several applications to yield controllers capable of achieve performance requirements. Of course, the designer must take into account that, although the eigenvalue assignment allows for the whole complex plane, a careless choice of eigenvalues could result in controllers requesting very aggressive or oscillatory input signals. For this reason, it is necessary some knowledge of the instruments limits before designing the matrix $\bm{K}$.
 
 \section{Regulation and Reference Tracking}
 
-When discussing controller synthesis it is also necessary to account for which objective this device is expected to fulfill. In this case, there are two main classifications of controllers based on the operation that they impose to the system: regulators and tracking (or servo) controllers. In the case of state-feedback, these two classes of controllers differs only by what type of reference signal $\bm{r}(t)$, for an operation in a time interval $t \in [t_0, t_f]$, the system is expected to follow. The following statements gives a formal definition of a controller for regulation:
+When discussing controller synthesis it is also necessary to account for the objective that the device is expected to fulfill. There exists two modes of operation that the controller may require for the system: regulation and reference tracking. In the case of state-feedback, these two classes of controllers differs only by what type of reference signal $\bm{r}(t)$, for an operation in a time interval $t \in [t_0, t_f]$, the system is expected to follow. 
+
+\subsubsection{Regulator Problem}
+
+The following statements gives a formal definition of a controller for regulation:
 
 \begin{boxed-definition}{(Regulator)} \label{def:regulator}
     If a state-feedback controller has to make a system follows the reference $\bm{r}(t) = \bm{0}$, as $t \to \infty$, it is said to be a \textit{regulator}. In this case, the closed-loop state equation and equivalent solutions reduces to the following:
@@ -1605,27 +1611,52 @@ When discussing controller synthesis it is also necessary to account for which o
     .\end{align}
 \end{boxed-definition}
 
-Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives, as is the case of reactor systems: a zero-state means that no chemical substances are being produced. However, it is common to have linear systems that are   linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}, meaning that the regulator actually is to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state point $\bm{x}_o$ and reject disturbances. For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
-\begin{equation} \label{eq:isoSys02Rep}
-\begin{matrix}
-    \bm{A} = \begin{bmatrix} 
-        -5.93  &      0 \\
-        \hfill 0.83   &  -4.70 
-    \end{bmatrix} & b = \begin{bmatrix} 3.81 \\ -1.09 \end{bmatrix}
-\end{matrix}    
-.\end{equation}
+Of course, if the feedback gain matrix impose that all poles of the system are in the left-half plane, the closed-loop is stable and the natural response will eventually converge to zero (Theorem \ref{th:BIBOStab}). Therefore, all stable feedback controllers are able to impose regulation to a system, and the characteristics of the transient response can be fully determined by the matrix $\bm{K}$. These type of controllers are used to make systems goes from nonzero initial states to the zero-state $\bm{x}(t) = \bm{0}$ and stays there, meaning that the the controller can also be used to reject disturbances. Now, one may wonder if this operation is too restrictive in the sense that the zero-state is not the desirable state in many control objectives. However, it is common to have linear systems that are linearized versions of nonlinear models, using the approximation from Theorem \ref{th:linearization}. In these cases, the regulator actually has to impose $\Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o = \bm{0}$, i.e., drives the system to the steady-state point $\bm{x}_o$ and reject disturbances. 
 
+\begin{boxed-example}{} \label{ex:regulator01}
+	For the sake of illustration, considers the first system of \eqref{eq:isoSys02}, repeated here:
+	\begin{equation} \label{eq:isoSys02Rep}
+	\begin{matrix}
+	    \bm{A} = \begin{bmatrix} 
+	        -5.93  &      0 \\
+	        \hfill 0.83   &  -4.70 
+	    \end{bmatrix} &; & b = \begin{bmatrix} 3.81 \\ -1.09 \end{bmatrix}
+	\end{matrix}    
+	.\end{equation}
+	
+	\noindent It is easy to verify that this system is controllable, since its controllability matrix is full-rank. In this case, consider the gains $\bm{K}_1 = [-0.993, 1.221]$, $\bm{K}_2 = [0.782, 0.549]$ and $\bm{K}_3 = [0.81, 5.20]$ to yield regulator controllers. The correspondent closed-loop systems $\bm{A}^{(i)}_{cl}$ for each $i$-th controller are given as:
+	\begin{equation}
+	\begin{matrix}
+		\bm{A}^{(1)}_{cl} = \begin{bmatrix} 
+	        -2.144 &  -4.651 \\
+		   -0.257 & -3.355
+	    \end{bmatrix}; & 
+	    \bm{A}^{(2)}_{cl} = \begin{bmatrix} 
+	        -8.906 & -2.092 \\
+    		\phantom{-}1.692 & -4.093
+	    \end{bmatrix}; &
+	    \bm{A}^{(3)}_{cl} = \begin{bmatrix} 
+	        -9.014 & -19.812 \\
+    		\phantom{-}1.723 & \phantom{-}1.014
+	    \end{bmatrix} &
+	\end{matrix}
+	.\end{equation}
+	
+	\noindent Since the open-loop system was obtained by the linearized model in \eqref{eq:isoReact01} for $\bm{x}_o = [6.19, 1.09]^T$ and $u_o = 3.03$, the regulator will impose the zero-state $\Delta \bm{x} = \bm{0}$ which actually means imposing $\bm{x}(t) = [6.19, 1.09]^T$ as $t \to \infty$. 
+\end{boxed-example}
 
-Since this system was obtained by the linearized model in \eqref{eq:isoReact01} for $\bm{x}_o = [6.19, 1.09]^T$ and $u_o = 3.03$, the regulator will impose the zero-state $\Delta \bm{x} = \bm{0}$ which actually means imposing $\bm{x}(t) = [6.19, 1.09]^T$ as $t \to \infty$. A simulation is shown in Fig. \ref{fig:regulator01} for three different regulators, considering initial state $\delta \bm{x}(t) = \bm{0} - \bm{x}_o$ and vertically correcting the response and input signal by $\bm{x}_o$ and $\bm{u}_o$, respectively.
+The responses of the three closed-loop systems calculated in Example \ref{ex:regulator01} Fig. \ref{fig:regulator01}. The simulations assumed initial state $\Delta \bm{x}(t) = \bm{0} - \bm{x}_o$, and the response and input signal were vertically corrected by $\bm{x}_o$ and $\bm{u}_o$, respectively. Notice that, as expected, the feedback gains $\bm{K}_i$ can effectively change the system behavior, even to cause pseudo-periodic responses.
 
-\begin{figure}[ht]
-    \centering
+\begin{figure}[ht] \centering
     \includegraphics[width=\textwidth]{chapter3/report_ch3_1}
-    \caption{Simulation of three closed-loop systems showing the input signal (left) and state responses (right) for gains $K_1 = [-0.99, 1.22]$, $K_2 = [0.78, 0.55]$ and $K_3 = [0.81, 5.20]$. The reference signal is indicated by the black dashed line.}
+    
+    \caption{Simulation of three closed-loop systems from Example \ref{ex:regulator01} showing the input signal (left) and state responses (right).}
     \label{fig:regulator01}
 \end{figure}
 
-In contrast, the control objective could be to follow a non-constant signal $\bm{r}(t)$, or to follow a constant signal different from the zero-state, giving rise to the tracking or servomechanism controllers. A more complete discussion is needed in such cases, since there is a possibility that state-feedback is not capable of actually performing this tracking. To understand this question, consider, for simplicity, that the system must follow a constant reference $\bm{r}(t) = a$. Consider, now, an Input-Output conversion of a closed-loop SISO State-Space model, which from \eqref{eq:SSFdbckControlCanon} directly results in the transfer function:
+\subsubsection{Reference Tracking Problem}
+
+In contrast, the control objective could be to follow a non-constant signal $\bm{r}(t)$, or to follow a constant signal different from the zero-state, giving rise to the tracking or servomechanism controllers. A more complete discussion is needed in such cases, since there is a possibility that state-feedback is not capable of actually perform the tracking. To understand this question, consider, for simplicity, that the system must follow a constant reference $\bm{r}(t) = a$. Consider, now, an Input-Output conversion of a closed-loop SISO State-Space model, which from \eqref{eq:SSFdbckControlCanon} directly results in the transfer function:
 \begin{equation}
     G(s) = \cfrac{Y(s)}{R(s)} = \cfrac{\beta_1 s^{n-1} + \beta_2 s^{n-2} + \cdots + \beta_{n-1} s + \beta_n}{s^{n} + \tilde{\alpha}_1 s^{n-1} + \tilde{\alpha}_2 s^{n-2} + \cdots + \tilde{\alpha}_{n-1} s + \tilde{\alpha}_n}
 .\end{equation}
@@ -1638,7 +1669,7 @@ From that formulation it is clear that the response $Y(s) = G(s)R(s)$ will yield
 \noindent which allows for perfect asymptotically tracking in all cases but when $\beta_n = 0$. This same reasoning can easily be extended to MIMO systems (the gain $F$ turns into a matrix). In the case of non-constant references, the same intuition could still be used, but the analysis and design of $F$ becomes more complex \textbf{[reference]}. This, however, allows for the definition of tracking controllers.
 
 \begin{boxed-definition}{(Tracking Controllers)} \label{def:tracking}
-    If a state-feedback controller has to make a system track any step reference $\bm{r}(t) \neq \bm{0}$, as $t \to \infty$, it is said to be a \textit{tracking controller}. In this case, one has to apply the \textit{feedforward gain} $F$ to correct the reference as $\tilde{\bm{r}}(t) = \bm{F}\bm{r}(t)$, resulting in the following closed-loop state equation and equivalent solution:
+    If a state-feedback controller has to make a system track any step reference $\bm{r}(t) \neq \bm{0}$, as $t \to \infty$, it is said to be a \textit{tracking controller}. In this case, one has to apply the \textit{feedforward gain} $\bm{F}$ to adapt the reference as $\tilde{\bm{r}}(t) = \bm{F}\bm{r}(t)$, resulting in the following closed-loop state equation and equivalent solution:
     \begin{align}
     \begin{matrix*}[l]
     \textbf{State Equation:} \hfill & & \textbf{Lagrange solution:} \hfill \\
@@ -1648,9 +1679,9 @@ From that formulation it is clear that the response $Y(s) = G(s)R(s)$ will yield
     .\end{align}
 \end{boxed-definition}
 
-Despite being a feasible solution, there are still problems with this definition of tracking controllers. For instance, if the system is subject to a \textit{constant additive disturbance}, which as not anticipated in the model, the resulting operation will not yield a perfect tracking. 
+Despite being a feasible solution, there are still problems with this definition of tracking controllers. For instance, if the system is subject to a \textit{constant additive disturbance}, which has not been included in the model, the resulting operation will not yield a perfect tracking. 
 
-The problem of the previous formulation for a tracking controller is that it is not robust to actions that happens outside the model. A direct cause of this is the fact that the feedforward gain $\bm{F}$ does not benefits from the real-time corrective action of the state-feedback, but rather is calculated \textit{off-line} using the model properties. Therefore, a way to ensure a more robust operation could be to insert real-time information about the tracking error directly to the feedback corrective action. With this motivation, a new formulation of the tracking controller is given below.
+The problem of the previous formulation for a tracking controller is that it is not robust to actions that happens outside the model. A direct cause of this is the fact that the feedforward gain $\bm{F}$ does not benefit from the real-time corrective action of the state-feedback, but rather is calculated \textit{off-line} using the model properties. Therefore, a way to ensure a more robust operation could be to insert real-time information about the tracking error directly to the feedback corrective action. With this motivation, a new formulation of the tracking controller is given below.
 
 \begin{boxed-definition}{(Robust Tracking Controllers)} \label{def:robustTracking}
     Given a State-space system and augmented state $\bm{x}_a(t)$ defined as:

@@ -15,9 +15,9 @@ clc; clear all; close all;
 
 % Sets the Default Renderer to tbe the Painters
 set(0, 'DefaultFigureRenderer', 'painters');
+addpath("utils")
 
 % Some colors
-load('data/ccmap.mat');
 cpal = [209 17 65;    % 1 - Metro Red
         0 177 89;     % 2 - Metro Green
         0 174 219;    % 3 - Metro Blue
@@ -61,27 +61,30 @@ A_cl = {ss(A-B*K{1}, zeros(size(B)), C, D), ss(A-B*K{2}, zeros(size(B)), C, D), 
 Delta_x = [lsim(A_cl{1}, r, t, -x_o), lsim(A_cl{2}, r, t, -x_o), lsim(A_cl{3}, r, t, -x_o)];
 
 % - Visualization of the Simulation
-figure(1);
-subplot(2,2,2), plot(t, r+x_o(1), 'k--'), hold on
-subplot(2,2,4), plot(t, r+x_o(2), 'k--'),  hold on
+figure(1); clf
+[ha, pos] = tight_subplot(2,2,[.02 .1],[.1 .01],[.1 .01]);
+
+axes(ha(2)), plot(t, r+x_o(1), 'k--'), hold on
+axes(ha(4)), plot(t, r+x_o(2), 'k--'),  hold on
 
 for i = 1:3
-    subplot(1,2,1)
-    plot(t, (r - K{i}*Delta_x(:, 2*i-1:2*i)')+ u_o, 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    axes(ha(1))
+    plot(t, (r - K{i}*Delta_x(:, 2*i-1:2*i)')+ u_o, 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
     
-    subplot(2,2,2)
-    plot(t, Delta_x(:,2*i-1)+x_o(1), 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    axes(ha(2))
+    plot(t, Delta_x(:,2*i-1)+x_o(1), 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
     
-    subplot(2,2,4)
-    plot(t, Delta_x(:,2*i)+x_o(2), 'linewidth', 1.5, 'color', cpal(5+i, :)); hold on;
+    axes(ha(4))
+    plot(t, Delta_x(:,2*i)+x_o(2), 'linewidth', 1, 'color', cpal(5+i, :)); hold on;
 end
 
-subplot(1,2,1), ylabel("u = (\Delta u + u_{o})"), xlabel("Time (s)"), legend(["K_1", "K_2", "K_3"])
-subplot(2,2,2), ylabel("x_1 = (\Delta x_1 + x_{o1}) (mol/l)")
-subplot(2,2,4), ylim([-inf, x_o(2)+1]), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (s)")
+axes(ha(1)), ylabel("u = (\Delta u + u_{o}) (1/min)"), xlabel("Time (min)"), legend(["K_1", "K_2", "K_3"])
+axes(ha(2)), ylabel("x_1 = (\Delta x_1 + x_{o1}) (mol/l)"), ytickformat("%.1f"), set(gca, "XTickLabel", []);
+axes(ha(4)), ylim([-inf, x_o(2)+1]), ylabel("x_2 = (\Delta x_2 + x_{o2}) (mol/l)"), xlabel("Time (min)")
+axes(ha(3)), set(gca,'Visible','off')
 
 % - Exporting the Visualization to an Image
-figname = "report_codes\figs\report_ch3_1";
+figname = "report_codes/figs/report_ch3_1";
 fig = gcf; fig.PaperPositionMode = 'auto'; 
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
