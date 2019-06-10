@@ -51,12 +51,12 @@ exo_cstr.sizeY      =  2 ;
 %%
 % = Simulation Parameters = %
 % - Time and Initial States
-t = (0:0.01:7.99)'; T = numel(t);
-x_0 = xe;
+t = (0:0.001:0.4)'; T = numel(t);
+x_0 = xe .* [0 0 1 1];
 
 % - Reference Signal
-r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
-%r = ones(2,T).*[xe(2); xe(3)];
+%r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
+r = ones(2,T).*[xe(2); xe(3)];
 
 % - Noise and Disturbance signals
 w = mvnrnd([0; 0; 0; 0], diag([.4 .4 .5 .5]), T);  % Process Noise
@@ -67,23 +67,24 @@ W = [ zeros(1,T);
 
 tFrac = floor(T/4);
 sFrac = round(T*0.02);
-W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
-W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
-W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
-W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
-
-W(1*tFrac:1*tFrac+sFrac,2) = -3;
-W(2*tFrac:2*tFrac+sFrac,2) = +2;
-W(3*tFrac:3*tFrac+sFrac,2) = +3;
-W(4*tFrac:4*tFrac+sFrac,2) = -2;
+W(100:150,1) = -xe(1)*50;
+% W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
+% W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
+% W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
+% W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
+% 
+% W(1*tFrac:1*tFrac+sFrac,2) = -3;
+% W(2*tFrac:2*tFrac+sFrac,2) = +2;
+% W(3*tFrac:3*tFrac+sFrac,2) = +3;
+% W(4*tFrac:4*tFrac+sFrac,2) = -2;
   
 % = Controller and Estimator Definitions = %
-controller.type = "lqgi";
+controller.type = "lqr";
 
 controller.oper.xe = xe'; controller.oper.ue = ue';
 controller.N = T;
 
-controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 1e2 1e-1]); %diag([1, 1, 1, 1]);
+controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2)]); %diag([1, 1, 1, 1]);
 controller.R = diag([1/(1^2), 1/(300^2)]);
     
 controller.Q_k = diag(diag(cov(w)));

@@ -36,7 +36,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -111,7 +111,7 @@
 \newcounter{boxed-theorem}
 \makeatletter
 \newenvironment{boxed-theorem}[1]
-{\colorlet{shadecolor}{pastelBlue2!10} \begin{shaded} \begin{theorem}{#1}}
+{\colorlet{shadecolor}{pastelBlue2!5} \begin{shaded} \begin{theorem}{#1}}
 {\end{theorem} \end{shaded}}
 
 \newcounter{boxed-lemma}
@@ -129,7 +129,7 @@
 \newcounter{boxed-example}
 \makeatletter
 \newenvironment{boxed-example}[1]
-{\colorlet{shadecolor}{pastelRed!20} \begin{shaded} \begin{example}{#1}}
+{\colorlet{shadecolor}{pastelRed!15} \begin{shaded} \begin{example}{#1}}
 {\end{example} \end{shaded}}
 
 % ---------------------------------------------------------------
@@ -3315,7 +3315,7 @@ This system is comprised by a tank containing a dilute solution of cyclopentadie
 \end{matrix*} \right.
 .\end{align}
 
-Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and $K_3(T)$ are function of the temperature inside the tank, and they are assumed to follow the Arrhenius equation in the form:
+Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and $K_3(T)$ are function of the temperature inside the tank, and they are assumed to follow the Arrhenius equation:
 \begin{equation}
 	K_{i}(T) = K_{i0} e^{\frac{-E_i / R}{T+273.15}}
 \end{equation}
@@ -3408,11 +3408,11 @@ This chapter presents the results of the experiments described in the last chapt
 The behavior of the process is accessed directly by simulating the nonlinear model presented at \eqref{eq:engellModel}. The main goal is to observe how the system responds to variations in each of its manipulated variables. In the first simulation, shown in Fig. \ref{fig:dynamics01}, the process is started at the steady-state condition, and then a pulse is applied to the liquid inflow to the tank. 
 
 \begin{figure}[ht] \centering
-	\begin{tikzpicture}	[node distance=0.7cm]
+	\begin{tikzpicture}	[minimum height=0.1em, node distance=0.7cm]
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics01}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, minimum height=1.75em, above of=plot, xshift=0.65cm, node distance=4.2cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
@@ -3452,14 +3452,12 @@ The behavior of the process is accessed directly by simulating the nonlinear mod
 
 The simulation shows that both compounds $A$ and $B$ grows together when there is an increase in the input flow-rate, in which case the first exhibits a greater response than the other. Of course, this conclusion is direct from the fact that the input carries concentrations of this very same chemical. In respect to the temperatures, notice that, since the process is non-isothermal, the temperatures raised together with the increase in the reagents concentrations. Given that the temperature of the liquid inflow is actually lower than the tank temperature at the steady-state, it is possible to relate the increase in the temperature directly to the occurrence of the chemical reactions. This fact characterizes the process as an exothermic process, as it can be also noted from the first-principles model.
 
-The second simulation was performed similarly, but applying a negative pulse to the jacket cooling capacity. The result is shown in Fig. \ref{fig:dynamics02}. As expected, the change in the cooling capacity affects the temperatures inside the reactor tank and inside the cooling jacket. The visualization also shows that the change in the temperature slightly changed the concentration of the substances inside the reactor. Therefore, it is possible to consider an indirect effect of this manipulated variable to these system variables.
-
-\begin{figure}[ht] \centering
+\begin{figure}[t] \centering
 		\begin{tikzpicture}	[node distance=0.7cm]
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics02}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, minimum height=1.75em, above of=plot, xshift=0.65cm, node distance=4.2cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
@@ -3497,14 +3495,16 @@ The second simulation was performed similarly, but applying a negative pulse to 
 	\label{fig:dynamics02}
 \end{figure}
 
-Now, the goal was to visualize if it is possible to increase the concentration of the chemicals through the reactions, while maintaining the tank temperature close to the steady-state value. For this reason, the last simulation considers a pulse to increase the input flow-rate while another pulse increases the magnitude of the cooling capacity. The result of this simulation is shown at Fig. \ref{fig:dynamics03}. Note that the tank temperature remained restricted to values closer to the steady-state point, whereas the concentrations were increased by the flow-rate input. Therefore, the possibility of increasing the production of a chemical without breaking safety constraints holds.
+The second simulation was performed similarly, but applying a negative pulse to the jacket cooling capacity. The result is shown in Fig. \ref{fig:dynamics02}. As expected, the change in the cooling capacity affects the temperatures inside the reactor tank and inside the cooling jacket. The visualization also shows that the change in the temperature slightly changed the concentration of the substances inside the reactor. Therefore, it is possible to consider an indirect effect of this manipulated variable to these system variables.
+
+Now, the goal was to visualize if it is possible to increase the concentration of the chemicals through the reactions, while maintaining the tank temperature close to the steady-state value. For this reason, the last simulation considers a pulse to increase the input flow-rate while another pulse increases the magnitude of the cooling capacity. The result of this simulation is shown at Fig. \ref{fig:dynamics03}. Note that the tank temperature remained restricted to values closer to the steady-state point, whereas the concentrations were increased by the flow-rate input. Thus, the possibility of increasing the production of a chemical without breaking safety constraints holds.
 
 \begin{figure}[ht] \centering
 		\begin{tikzpicture}	[node distance=0.7cm]
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics03}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, minimum height=1.75em, above of=plot, xshift=0.65cm, node distance=4.2cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
@@ -3653,7 +3653,7 @@ In order to demonstrate that the linear model is a valid approximation of the no
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/linear01}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.7\textwidth] (legendBox) {};
+			\node[block, minimum height=1.75em, above of=plot, xshift=0.65cm, node distance=4.2cm, minimum width=0.7\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
@@ -3847,6 +3847,14 @@ The use of optimal controllers greatly reduces the complexity of the controller 
 
 This work also emphasizes the possibility of formulating more advances techniques, within the scope of optimal control, to achieve better results. As future work, there is the necessity to decouple the control and estimator sample time from the continuous-time in which the real system operates, providing a more realistic configuration of feedback control loops. Additionally, non-linear state estimation techniques should be explored to solve the linearized Kalman filter limitation, and constrained optimal controllers should be explored to mathematically ensure that the hard constraints of the system are being respected.
 
+% Bibliography
+% ---------------------------------------------------------------
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliographystyle{apalike}
+\bibliography{citations}
+
 % A - Apêndice A
 % ---------------------------------------------------------------
 \clearpage
@@ -3894,14 +3902,6 @@ This work also emphasizes the possibility of formulating more advances technique
 	\end{split}
 	\end{equation}
 \end{boxed-lemma}
-
-% Bibliography
-% ---------------------------------------------------------------
-\clearpage
-\addcontentsline{toc}{chapter}{Bibliography}
-
-\bibliographystyle{apalike}
-\bibliography{citations}
 
 % ---------------------------------------------------------------
 % End document
