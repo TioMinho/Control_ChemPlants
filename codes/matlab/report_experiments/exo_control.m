@@ -78,12 +78,12 @@ W = [ zeros(1,T);
 % W(4*tFrac:4*tFrac+sFrac,2) = -2;
   
 % = Controller and Estimator Definitions = %
-controller.type = "ekf-lqri";
+controller.type = "lqgi";
 
 controller.oper.xe = xe'; controller.oper.ue = ue';
 controller.N = T;
 
-controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 0.5 0]); %diag([1, 1, 1, 1]);
+controller.Q = diag([1/(2^2) 1/(2^2) 1/(1^2) 1/(10^2) 1e2 1e-1]); %diag([1, 1, 1, 1]);
 controller.R = diag([1/(1^2), 1/(300^2)]);
     
 controller.Q_k = diag(diag(cov(w)));

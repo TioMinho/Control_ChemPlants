@@ -195,8 +195,8 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
         % == LINEAR QUADRATIC GAUSSIAN REGULATOR WITH INTEGRAL ACTION ==,
         elseif(strcmpi(controller.type, 'lqgi'))
             % Augments the state auxiliary vector in time and updates the initial conditions
-            x_a(:,1) = r(:,1) - C*(x_0'-xe);
-%             x(:,1) = x_hat(:,1);
+            x_a(:,1) = r(:,1) - C*(x_0');
+            x(:,1) = x_hat(:,1);
 
             % Augment the state and input matrices
             A_i = [A, zeros(nx, ny);
@@ -218,17 +218,18 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
                 u(:,i) = - K{i} * [x_hat(:,i); x_a(:,i)];
 
                 % Simulates the actual plant (represented by the nonlinear model)
-                if exist('W', 'var')
-                    [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
-                else
-                    [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
-                end
-                
-                x(:, i+1) = y_aux(end, :);
-                x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1)-xe)+z(:,i));
+%                 if exist('W', 'var')
+%                     [~, y_aux] = odeSolver(model.model_W, t(i:i+1), [u(:,i) + ue; W(:,i)], x(:,i), 100);
+%                 else
+%                     [~, y_aux] = odeSolver(model.model,   t(i:i+1),  u(:,i) + ue,          x(:,i), 100);
+%                 end
+%                 
+%                 x(:, i+1) = y_aux(end, :);
+%                 x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1)-xe)+z(:,i));
 
-%               aux = lsim(ss(A,B,eye(size(A)),zeros(size(B))), repmat(u(:,i), [1 100]), linspace(t(i),t(i+1),100), x(:,i), 'zoh');
-%               x(:,i+1) = aux(end,:);
+              aux = lsim(ss(A,B,eye(size(A)),zeros(size(B))), repmat(u(:,i), [1 100]), linspace(t(i),t(i+1),100), x(:,i), 'zoh');
+              x(:,i+1) = aux(end,:);
+              x_a(:, i+1) = x_a(:, i) + ( r(:,i+1) - C*(x(:,i+1))+z(:,i));
 
                 % Define the closed-loop matrices
                 A_cl = (A - Ke{i}*C);
@@ -236,7 +237,7 @@ function [ tout, yout, xout, uout ] = simulate( varargin )
 
                 % Simulates the linear model
                 sys = ss(A_cl, B_cl, eye(size(A_cl)), zeros(size(B_cl)));
-                aux = lsim(sys, repmat([u(:,i); C*(x(:,i)-xe)+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
+                aux = lsim(sys, repmat([u(:,i); C*(x(:,i))+z(:,i)], [1 100]), linspace(t(i),t(i+1),100), x_hat(:,i), 'zoh');
                 x_hat(:, i+1) = aux(end, :);
             end
            

@@ -81,8 +81,10 @@
 \tikzstyle{input} = [coordinate]
 \tikzstyle{output} = [coordinate]
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\tikzstyle{mcInput} = [draw, rectangle, line width=0.5mm, minimum width=2em, minimum height=2em, fill=black!10]
-\tikzstyle{mcCircle} = [draw, circle, line width=0.5mm, minimum width=2em, minimum height=2em, fill=white]
+\tikzstyle{mcCircle} = [draw, circle, line width=0.5mm, minimum width=3em, minimum height=3em, fill=white]
+\tikzstyle{mcInput} = [draw, rectangle, line width=0.5mm, minimum width=3em, minimum height=3em, fill=black!10]
+\tikzstyle{mcCircleX} = [draw=myBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
+\tikzstyle{mcCircleY} = [draw=myBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
 
 % --------------------------------------------------------------------
 % Definitions
@@ -104,6 +106,12 @@
 \newenvironment{boxed-theorem}[1]
 {\colorlet{shadecolor}{pastelBlue2!10} \begin{shaded} \begin{theorem}{#1}}
 {\end{theorem} \end{shaded}}
+
+\newcounter{boxed-lemma}
+\makeatletter
+\newenvironment{boxed-lemma}[1]
+{\colorlet{shadecolor}{pastelPurple!10} \begin{shaded} \begin{lemma}{#1}}
+{\end{lemma} \end{shaded}}
 
 \newcounter{boxed-definition}
 \makeatletter
@@ -2558,20 +2566,23 @@ A detailed proof of this result can be found in \textbf{[reference]}. The possib
 
 \section{Optimal State Estimators}
 
-The state-vector $\bm{x}(t)$ for a time $t$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but is also inaccessible in practice. In the last chapter, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem by the design of an observer gain $\bm{L}$. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design issues that the Pole-Placement method does, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations.
+The state-vector $\bm{x}(t)$ is a necessary information to calculate $\bm{u}(t)$ in state-feedback controllers, but may also be inaccessible in practice. In Chapter 3, a deterministic observer, namely the Luenberger observer, was derived to deal with this problem. Despite being possible to utilize the Luenberger observer together with optimal controllers, this method suffers from the same design limitations of the Pole-Placement method, since they are dual problems. Therefore, this section develops an optimal state estimation approach which, from the estimation nature of the problem, relies on a statistical interpretation of the dynamical system and its observations. 
 
-First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \bm{R} \rightarrow \bm{R}^{n}$ and $\bm{v} : \bm{R} \rightarrow \bm{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be white Gaussian noises, i.e., $\bm{w}_k \sim \mathcal{N}(0, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(0, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, then it is possible to motivate a stochastic formulation of the linear State-Space model.
+\subsubsection{General State Estimators}
 
-\begin{boxed-definition}{(Stochastic Discrete State-Space)} \label{def:stochSS}
-    Given an additive process noise $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive measurement noise $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic version of a discrete-time State-Space model is given by the equations:
+First of all, consider a system perturbed by disturbances in the state-response and in the measurements, respectively $\bm{w} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ and $\bm{v} : \mathbb{R} \rightarrow \mathbb{R}^{p}$. This configuration is illustrated at Fig. \ref{fig:optSE01}. If these disturbances are assumed to be zero-mean Gaussian variables, i.e., $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ where $\bm{Q}_{kf}$ and $\bm{R}_{kf}$ are covariances matrices of appropriate sizes, then it is possible to motivate a stochastic formulation of the linear State-Space model. For the sake of simplicity, the discussion is focused on the discrete-time case. 
+
+\begin{boxed-definition}{(Stochastic Discrete-Time State-Space)} \label{def:stochSS}
+    Given an additive process noise variable $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ with covariance $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$ and an additive measurement noise variable $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$ with covariance $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$, the stochastic discrete-time State-Space model is given by the equations:
     \begin{align}
-    \begin{cases}
-        \hfill \bm{x}_{k+1} &= \bm{A}_d \bm{x}_k + \bm{B}_d \bm{u}_k + \bm{w}_k \\
-        \hfill \bm{y}_k &= \bm{C}_d \bm{x}_k + \bm{v}_k 
-    \end{cases}
-    .\end{align}
+    \left\{ \begin{matrix*}[l]
+        \bm{x}_{k+1} = \bm{A}_d \bm{x}_k + \bm{B}_d \bm{u}_k + \bm{w}_k \\
+        \bm{y}_{k\phantom{+1}} = \bm{C}_d \bm{x}_k + \bm{v}_k 
+    \end{matrix*} \right.
+    ,\end{align}
+    
+    \noindent for the initial condition $\bm{x}_0 \sim p(\bm{x}_0)$.
 \end{boxed-definition}
-
 
 \begin{figure}[ht]
     \centering
@@ -2612,202 +2623,233 @@ First of all, consider a system perturbed by disturbances in the state-response 
     \label{fig:optSE01}
 \end{figure}
 
-With this formulation, the noises can actually represent both the effect of external disturbances and the uncertainty about the model accuracy in respect to the physical system. This is important since the dynamical models, even those developed by the first-principle methodology, are not guaranteed to be the absolute true representation of a dynamical system or process. The motivation for a discussion over a discrete State-Space model is to facilitate the interpretation of the statistical properties over finite data sample collections. Since it is always possible to convert a continuous-time State-Space into a discrete-time State-Space \textbf{[reference]}, this discussion can be easily extended to more general cases, and results for continuous-time systems will be addressed. 
+With this formulation, the noise variables can actually represent both the effect of external disturbances and the model uncertainty. This is important because dynamical models, even those developed according to a first-principle methodology, are not the true representation of the actual dynamical system or process. The motivation for a discussion of only a discrete State-Space model is to facilitate the interpretation of the statistical properties of the model. 
 
-A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises are Gaussian, both variables $\bm{x}_k \sim \mathcal{N}(\mu_{x_k}, \Sigma_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\mu_{y_k}, \Sigma_{y_k})$ are Gaussian, since this distribution is closed to linear operations \textbf{[reference]}. For this reason, a state and output trajectory over a discrete time interval is a collection of random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
+A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises variables are assumed to have a Gaussian distribution, both variables $\bm{x}_k \sim \mathcal{N}(\bm{\mu}_{x_k}, \bm{\Sigma}_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\bm{\mu}_{y_k}, \bm{\Sigma}_{y_k})$ are also Gaussian, where $\bm{\mu}_{x_k},\bm{\mu}_{y_k}$ are their respective mean vectors and $\bm{\Sigma}_{x_k},\bm{\Sigma}_{y_k}$ are the respective covariance matrices. This is because this distribution is closed to linear operations \textbf{[reference]}. For this reason, each state and output trajectory over a discrete time interval is a collection of time-indexed random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
 
 \begin{boxed-definition}{(Gaussian Process)} \label{def:gaussianProcess}
-    Given a Gaussian process defined as a time-series collection of random variables between a discrete time interval:
+    Given a Gaussian process defined as a collection of random variables:
     \begin{equation}
-        \bm{X} = \left\{ \bm{x}_k \sim \mathcal{N}(\mu_{\bm{x}_k}, \Sigma_{\bm{x}_k}) ; k \in [0, K] \right\}
+        \bm{X} = \left\{ \bm{x}_k \sim \mathcal{N}(\mu_{\bm{x}_k}, \Sigma_{\bm{x}_k}) ; k \in [0,1,\cdots,K] \right\}
     .\end{equation}
     
-    If this data is obtained from a causal system, the joint probability of the random variables is modeled as:
-    \begin{equation}
+    \noindent In the case that the variables represents states of a causal system, the joint probability of the random variables can be modeled as:
+    \begin{equation} \label{eq:markovProp01}
         p(\bm{X}) = p(\bm{x}_0, \bm{x}_1, \cdots, \bm{x}_K) = \prod_{k=0}^K p(\bm{x}_k | \bm{x}_{k-1}, \cdots, \bm{x}_1, \bm{x}_0)
     .\end{equation}
 \end{boxed-definition}
 
-Using this definition, the dynamic response $bm{x}_{k+1}$ of a system for a time instant $k+1$, given its trajectory until the actual state $bm{x}_{k}$, is given by the conditional probability $p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0)$. One can assume, however, that an actual state stores enough information from the past states to unequivocally determine the state response, so that the conditional probability can be restated as:
+The defined joint probability $p(\bm{x}_0, \cdots, \bm{x}_K)$ is interpreted as the probability of a specific state trajectory to occur. The conditional probability $p(\bm{x}_k | \bm{x}_{k-1}, \cdots, \bm{x}_0)$ states that the probability associated with a random state variable $\bm{x}_k$ can be conditioned on the state trajectory $(\bm{x}_{k-1}, \cdots, \bm{x}_0)$ from the previous time instants. These two probabilities can be related through the well-known \textit{Chain Rule of Probability}, which, in the context of stochastic processes, is a realization of the \textit{Markov Property} \textbf{[reference]}. A nice property of Gaussian distributions is that the joint and condition distribution of Gaussian random variables are still Gaussian \textbf{[reference]}.
+
+
+\subsubsection{Kalman Filter}
+
+The dynamic response $\bm{x}_{k+1}$ of a system for a time instant $k+1$, given its trajectory until the actual state $\bm{x}_{k}$, is given by the conditional probability $p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0)$. One can assume, however, that the an actual state stores enough information from the state trajectory until that point, that is possible to determine the next state response directly through its probability. Therefore, the conditional probability could be restated as:
 \begin{equation}
     p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0) =  p(\bm{x}_{k+1} | \bm{x}_{k})
 .\end{equation}
 
-This assumption is known as the \textit{Markov property}, and a process that exhibits this property is known as a Markov process \textbf{[reference]}. With this formulation, is always possible to marginalize the probability distribution of a single random variable $\bm{x}_{k+1}$ given a probability distribution over the initial state $\bm{x}_0$, which are related through the discrete Chapman-Kolmogorov equation:
+A process that exhibits this property is known as a First-Order Markov process \textbf{[reference]}. With this formulation, it is always possible to marginalize the probability distribution of a random variable $\bm{x}_{k+1}$ given the initial state $\bm{x}_0$, which are related through the equation:
 \begin{equation}
     p(\bm{x}_{k+1}) =  p(\bm{x}_{k+1} | \bm{x}_{k}) p(\bm{x}_{k} | \bm{x}_{k-1}) \cdots p(\bm{x}_{1} | \bm{x}_{0})p(\bm{x}_0) = p(\bm{x}_0) \prod_{i=0}^k p(\bm{x}_{i+1} | \bm{x}_{i})
 .\end{equation}
 
+\noindent Combining this assumption with Definition \ref{def:gaussianProcess}, in order to describe a Gauss-Markov Process, and using the model from Definition \ref{def:stochSS} it is possible to describe a stochastic dynamical system as the following probabilistic State-Space model.
 
-Combining this assumption with Definition \ref{def:gaussianProcess}, in order to describe a Gaussian-Markov Process, and using the model from Definition \ref{def:stochSS} it is possible to completely define a stochastic dynamical system in respect to the random variables probabilities.
-
-\begin{boxed-definition}{(Hidden Markov Model)} \label{def:HMM}
-    Given a stochastic State-Space model as in Definition \ref{def:stochSS}, and assuming the Markov property, a \textit{Hidden Markov Model} for this dynamical system at a time instant $k$ is defined through the two distributions:
+\begin{boxed-definition}{(Controlled Hidden Markov Model)} \label{def:HMM}
+    Given a stochastic State-Space model as in Definition \ref{def:stochSS}, and assuming the Markov property, a \textit{Controlled Hidden Markov Model} for this dynamical system at a time instant $k$ is defined through the two distributions:
     \begin{align}
     \begin{cases}
         p(\bm{x}_{k} | \bm{x}_{k-1}, \bm{u}_{k-1}) & \text{(Transition Distribution)} \\
         p(\bm{y}_{k} | \bm{x}_{k}) & \text{(Emission Distribution)}
     \end{cases}
-    .\end{align}
+    ,\end{align}
     
-    Furthermore, since the noises $\bm{w}_k$ and $\bm{v}_k$ are white Gaussian noises, these distributions are modeled as the Normal conditional distributions:
+    \noindent for the initial condition given by $p(\bm{x}_0)$. Furthermore, since the noises $\bm{w}_k$ and $\bm{v}_k$ are zero-mean Gaussian noises, these distributions are modeled as the Normal conditional distributions:
     \begin{align}
-    \begin{cases}
-        p(\bm{x}_{k} | \bm{x}_{k-1}) &= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
-        \hfill p(\bm{y}_{k} | \bm{x}_{k}) &= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf})
-    \end{cases}
+    \left\{ \begin{matrix*}[l]
+        p(\bm{x}_{k} | \bm{x}_{k-1}) = \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
+         p(\bm{y}_{k} | \bm{x}_{k})\phantom{_{-1}} = \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf}) \hfill
+    \end{matrix*} \right.
     .\end{align}
 \end{boxed-definition}
 
-A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ at each time instance is a latent variable whose actual value is not known, but can be observed through the emission variable $\bm{y}_k$. This raises the problem of state estimation as a common inference problem in engineering applications known as the \textit{filtering}, which consists on infer the actual value of $\bm{x}_k$ given the entire history of observations $\bm{y}_0, \cdots, \bm{y}_k$ and control actions $\bm{u}_0, \cdots, \bm{u}_k$. Thus, the actual state can be obtained through the distribution:
+A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ actual value is never known (since it is a latent variable), but can be observed through the emission variable $\bm{y}_k$, under the assumption that system model is perfectly known. This raises the problem of state estimation as a common inference problem known as the \textit{filtering}, which consists on determining statistically the actual value of $\bm{x}_k$ given the observations $\bm{y}_0, \cdots, \bm{y}_k$ and control actions $\bm{u}_0, \cdots, \bm{u}_k$. Thus, the state can be obtained through the distribution:
 \begin{equation}
     p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k-1}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \bm{u}_{k-2}, \cdots, \bm{u}_0)
 ,\end{equation}
 
-\noindent from where a representative value, such as the expected value $\mathbb{E}\left[ p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0) \right]$ can be selected as the value used by the controller to determine an action.
+\noindent from which a representative value, such as the expected value $\mathbb{E}\left[ p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0) \right]$ can be selected.
 
 \begin{figure}[ht]
     \centering
     \resizebox{!}{!}{
-    \begin{tikzpicture}[auto, node distance=1.75cm,>=latex', scale=0.2]
+    \begin{tikzpicture}[auto, node distance=1.9cm,>=latex', scale=0.2]
         % Nodes
         \node [mcInput] (u0) {$u_0$};
-        \node [mcCircle, below of=u0] (x0) {$x_0$};
-        \node [mcCircle, below of=x0] (y0) {$y_0$};
+        \node [mcCircleX, below of=u0] (x0) {$x_0$};
+        \node [mcCircleY, below of=x0] (y0) {$y_0$};
         
         \node [mcInput, right of=u0] (u1) {$u_1$};
-        \node [mcCircle, below of=u1] (x1) {$x_1$};
-        \node [mcCircle, below of=x1] (y1) {$y_1$};
+        \node [mcCircleX, below of=u1] (x1) {$x_1$};
+        \node [mcCircleY, below of=x1] (y1) {$y_1$};
         
         \node [text width=2em, right of=x1] (cdots1) {$\cdots$};    
         
-        \node [mcCircle, right of=cdots1] (xi) {$x_i$};     
-        \node [mcInput, above of=xi] (ui) {$u_i$};
-        \node [mcCircle, below of=xi] (yi) {$y_i$};
+		\node [mcCircleX, right of=cdots1] (xi1) {$x_{k-1}$};     
+        \node [mcInput, above of=xi1] (ui1) {$u_{k-1}$};
+        \node [mcCircleY, below of=xi1] (yi1) {$y_{k-1}$};        
         
-        \node [text width=2em, right of=xi] (cdots2) {$\cdots$};
+        \node [mcCircleX, right of=xi1] (xi2) {$x_{k}$};     
+        \node [mcInput, above of=xi2] (ui2) {$u_{k}$};
+        \node [mcCircleY, below of=xi2] (yi2) {$y_{k}$};
         
-        \node [mcCircle, right of=cdots2] (xk) {$x_k$};
-        \node [mcCircle, below of=xk] (yk) {$y_k$};
+		\node [mcCircleX, right of=xi2] (xi3) {$x_{k+1}$};     
+        \node [mcInput, above of=xi3] (ui3) {$u_{k+1}$};
+        \node [mcCircleY, below of=xi3] (yi3) {$y_{k+1}$};        
+        
+        \node [text width=2em, right of=xi3] (cdots2) {$\cdots$};
+        
+        \node [mcCircleX, right of=cdots2] (xk) {$x_K$};
+        \node [mcCircleY, below of=xk] (yk) {$y_K$};
         
         % Lines
-        \draw [->] (u0) -- (x1);
-        \draw [->] (u1) -- (cdots1);
-        \draw [->] (ui) -- (cdots2);
+        \draw [->,line width=.5mm] (u0) -- (x1);
+        \draw [->,line width=.5mm] (u1) -- (cdots1);
+        \draw [->,line width=.5mm] (ui1) -- (xi2);
+        \draw [->,line width=.5mm] (ui2) -- (xi3);
+        \draw [->,line width=.5mm] (ui3) -- (cdots2);
         
-        \draw [->] (x0) -- (x1);
-        \draw [->] (x1) -- (cdots1);
-        \draw [->] (cdots1) -- (xi);
-        \draw [->] (xi) -- (cdots2);
-        \draw [->] (cdots2) -- (xk);
-        
-        \draw [->] (x0) -- (y0);
-        \draw [->] (x1) -- (y1);
-        \draw [->] (xi) -- (yi);
-        \draw [->] (xk) -- (yk);
-        
+        \draw [->,line width=.5mm] (x0) -- (x1);
+        \draw [->,line width=.5mm] (x1) -- (cdots1);
+        \draw [->,line width=.5mm] (cdots1) -- (xi1);
+        \draw [->,line width=.5mm] (xi1) -- (xi2);
+        \draw [->,line width=.5mm] (xi2) -- (xi3);
+        \draw [->,line width=.5mm] (xi3) -- (cdots2);
+        \draw [->,line width=.5mm] (cdots2) -- (xk);
+       
+        \draw [->,line width=.5mm] (x0) -- (y0);
+        \draw [->,line width=.5mm] (x1) -- (y1);
+        \draw [->,line width=.5mm] (xi1) -- (yi1);
+        \draw [->,line width=.5mm] (xi2) -- (yi2);
+        \draw [->,line width=.5mm] (xi3) -- (yi3);
+        \draw [->,line width=.5mm] (xk) -- (yk);
     \end{tikzpicture} 
     }
-    \caption{A Hidden Markov Model for a discrete-time system, where the shaded boxes indicates that the inputs are not random variables.}
+    \caption{A Controlled Hidden Markov Model for a discrete-time system, where the shaded boxes indicates that the inputs are not random variables.}
     \label{fig:HMM01}
 \end{figure}
 
 There are several approaches to solve the filtering and other related problems in statistical state estimation \textbf{[reference-Sarkka]}, but the most popular method has been the Kalman filter \textbf{[reference]} which is discussed below for a discrete-time system.
 
 \begin{boxed-theorem}{(Kalman Filter)} \label{th:kalmanFilter}
-    Given a Hidden Markov Model as in Definition \ref{def:HMM} and initial state distribution $\bm{x}_0 \sim \mathcal{N}(\bm{m}_0, \bm{P}_0)$, the filtering distribution can be solved in closed-form as:
+    Given a Controlled Hidden Markov Model as in Definition \ref{def:HMM} and initial state distribution $\bm{x}_0 \sim \mathcal{N}(\bar{x}_0, \bm{P}_0)$, the filtering distribution can be solved in closed-form as:
     \begin{equation}
-        p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0)  = \mathcal{N}(\hat{\bm{x}}_k, \bm{P}_k)
+        p(\bm{x}_k | \bm{y}_{k}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \cdots, \bm{u}_0)  = \mathcal{N}(\bar{\bm{x}}_k, \bm{P}_k)
     ,\end{equation}   
     
-    \noindent where the mean $\bm{m}_k$ and covariance $\bm{P}_k$ are recursively computed through the prediction and update steps below:
-    \begin{align}
-    \begin{matrix*}[l]
-    \textbf{Predict Step:} & & & \textbf{Update Step:} \\ \\
-    \hat{\bar{\bm{x}}}_k = \bm{A} \hat{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1} & & & \bm{K}_k = \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1} \\
-    \bar{\bm{P}}_k = \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q_{kf}} & & & \hat{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bm{K}_k(\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k)\ \\
-    & & & \bm{P}_k = \bar{\bm{P}}_k - \bm{K}_k (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T) \bm{K}_k^T
-    \end{matrix*}   
-    .\end{align}
+    \noindent where $\bar{x}_k$, which denotes the mean of $\bm{x}_k$, and covariance $\bm{P}_k$ are recursively computed through the prediction and update steps below.
+    \begin{itemize}
+    	\item Prediction Step:
+    	\begin{align}
+	    \begin{matrix*}[l]
+		    \hat{\bar{\bm{x}}}_k = \bm{A} \bar{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1},  \\
+		    \hat{\bm{P}}_k = \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q_{kf}}.
+		\end{matrix*}
+		\end{align}
+		
+		\item Update Step:
+		\begin{align}
+	    \begin{matrix*}[l] 
+		    \bm{K}_k = \hat{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \hat{\bm{P}}_k \bm{C}^T)^{-1} ,\\
+		    \bar{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bm{K}_k(\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k), \\
+		    \bm{P}_k = \hat{\bm{P}}_k - \bm{K}_k (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T) \bm{K}_k^T.
+	    \end{matrix*}   
+	    \end{align}
+	    \end{itemize}
 \end{boxed-theorem}
 
 \begin{proof}
     Consider the transition and emission distributions given as:
     \begin{align}
-    \begin{cases}
-        p(\bm{x}_{k} | \bm{x}_{k-1}) &= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
-        \hfill p(\bm{y}_{k} | \bm{x}_{k}) &= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf})
-    \end{cases}
+    \left\{ \begin{matrix*}[l]
+        p(\bm{x}_{k} | \bm{x}_{k-1}) = \mathcal{N}(\bm{x}_k | \bm{A}\bar{\bm{x}}_{k-1} + \bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \\
+         p(\bm{y}_{k} | \bm{x}_{k})\phantom{_{-1}} = \mathcal{N}(\bm{y}_k | \bm{C}\bar{\bm{x}}_{k}, \bm{R}_{kf}) \hfill
+    \end{matrix*} \right.
     .\end{align}
     
-    Consider, now, the joint distribution of $\left( \bm{x}_{k-1}, \bm{x}_k \right)$ conditioned on measurement history $\left( \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1} \right)$. Since the joint and condition distributions between two Gaussians distributions are themselves Gaussian, this density can be expressed as:
+    \noindent Consider, now, the distribution of $\left( \bm{x}_{k-1}, \bm{x}_k \right)$ conditioned on measurements $\left( \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1} \right)$. Since the joint and condition distributions of a Gaussian are themselves Gaussian, this density can be expressed as:
     \begin{align}
     \begin{split}
         p(\bm{x}_k, \bm{x}_{k-1} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) &= p(\bm{x}_k | \bm{x}_{k-1}) p(\bm{x}_{k-1} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) \\
-        &= \mathcal{N}(\bm{x}_k | \bm{A}\bm{x}_{k-1}+\bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \mathcal{N}(\bm{x}_{k-1} | \hat{\bm{x}}_{k-1}, \bm{P}_{k-1}) \\
-        &= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k-1} \\ \bm{x}_{k} \end{bmatrix}    \right| \left. \begin{bmatrix} \hat{\bm{x}}_{k-1} \\ \bm{A}\bm{x}_{k-1}+\bm{B}\bm{u}_{k-1} \end{bmatrix}, \begin{bmatrix} \bm{P}_{k-1} & \bm{P}_{k-1} \bm{A}^T  \\ \bm{A} \bm{P}_{k-1} & \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf} \end{bmatrix}  \right)
+        &= \mathcal{N}(\bm{x}_k | \bm{A}\bar{\bm{x}}_{k-1}+\bm{B}\bm{u}_{k-1}, \bm{Q}_{kf}) \mathcal{N}(\bm{x}_{k-1} | \bar{\bm{x}}_{k-1}, \bm{P}_{k-1}) \\
+        &= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k-1} \\ \bm{x}_{k} \end{bmatrix}    \right| \left. \begin{bmatrix} \bar{\bm{x}}_{k-1} \\ \bm{A}\bar{\bm{x}}_{k-1}+\bm{B}\bm{u}_{k-1} \end{bmatrix}, \begin{bmatrix} \bm{P}_{k-1} & \bm{P}_{k-1} \bm{A}^T  \\ \bm{A} \bm{P}_{k-1} & \bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf} \end{bmatrix}  \right).
     \end{split}
-    .\end{align}
+    \end{align}
     
     Marginalizing the joint distribution, it is possible to obtain the distribution of $\bm{x}_k$ conditioned in the measurement history as:
     \begin{equation}
-        p(\bm{x}_k | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}( \underbrace{\bm{A} \bm{x}_{k-1} + \bm{B} \bm{u}_{k-1}}_{\hat{\bar{\bm{x}}}_k}, \underbrace{\bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf}}_{\bar{\bm{P}}_k} )
+        p(\bm{x}_k | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}( \underbrace{\bm{A} \bar{\bm{x}}_{k-1} + \bm{B} \bm{u}_{k-1}}_{\hat{\bar{\bm{x}}}_k}, \underbrace{\bm{A} \bm{P}_{k-1} \bm{A}^T + \bm{Q}_{kf}}_{\hat{\bm{P}}_k} )
     ,\end{equation}
     
-    \noindent which completes the \textit{prediction step} of the Kalman filter. For the update step, consider the joint distribution between $(\bm{x}_k, \bm{y}_k)$, the actual state and actual measurement:
+    \noindent which completes the \textit{prediction step} of the Kalman filter. For the update step, consider the joint distribution between $(\bm{x}_k, \bm{y}_k)$, the actual state and actual measurement, which applying Lemma \ref{le:jointGauss} results in:
     \begin{align}
     \begin{split}
         p(\bm{x}_k, \bm{y}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) &= p(\bm{y}_k | \bm{x}_{k}) p(\bm{x}_{k} | \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) \\
-        &= \mathcal{N}(\bm{y}_k | \bm{C}\bm{x}_{k}, \bm{R}_{kf}) \mathcal{N}(\bm{x}_{k} | \bar{\hat{\bm{x}}}_k, \bar{\bm{P}}_k) \\
-        &= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k} \\ \bm{y}_{k} \end{bmatrix}  \right| \left. \begin{bmatrix} \bar{\hat{\bm{x}}}_k \\ \bm{C}\bar{\hat{\bm{x}}}_k \end{bmatrix}, \begin{bmatrix} \bar{\bm{P}}_k & \bar{\bm{P}}_k \bm{C}^T  \\ \bm{C} \bar{\bm{P}}_k & \bm{C} \bar{\bm{P}}_k \bm{C}^T + \bm{R}_{kf} \end{bmatrix}   \right)
+        &= \mathcal{N}(\bm{y}_k | \bm{C}\bar{\bm{x}}_{k}, \bm{R}_{kf}) \mathcal{N}(\bm{x}_{k} | \hat{\bar{\bm{x}}}_k, \hat{\bm{P}}_k) \\
+        &= \mathcal{N}\left( \begin{bmatrix} \bm{x}_{k} \\ \bm{y}_{k} \end{bmatrix}  \right| \left. \begin{bmatrix} \hat{\bar{\bm{x}}}_k \\ \bm{C}\hat{\bar{\bm{x}}}_k \end{bmatrix}, \begin{bmatrix} \hat{\bm{P}}_k & \hat{\bm{P}}_k \bm{C}^T  \\ \bm{C} \hat{\bm{P}}_k & \bm{C} \hat{\bm{P}}_k \bm{C}^T + \bm{R}_{kf} \end{bmatrix}   \right).
     \end{split}
-    .\end{align}
+    \end{align}
     
-    Therefor, the filtering distribution can be obtained as:
+    Therefore, using Lemma \ref{le:condGauss}, the filtering distribution can be obtained as:
     \begin{align}
-        p(\bm{x}_k | \bm{y}_k, \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}(\bm{x}_k | \hat{\bm{x}}_k, \bm{P}_k)
+        p(\bm{x}_k | \bm{y}_k, \bm{y}_0, \bm{y}_1, \cdots, \bm{y}_{k-1}) = \mathcal{N}(\bm{x}_k | \bar{\bm{x}}_k, \bm{P}_k)
     ,\end{align}
 
     \noindent where $\hat{\bm{x}}_k$ and $\bm{P}_k$ are the computations of the update step, given as:
     \begin{align}
     \begin{cases}
-        \hat{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1}(\bm{y}_k - \bm{C}\bm{x}_k) \\
-        \bm{P}_k = \bar{\bm{P}}_k - \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1} \bm{C} \bar{\bm{P}}_k
+        \bar{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \hat{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \hat{\bm{P}}_k \bm{C}^T)^{-1}(\bm{y}_k - \bm{C}\hat{\bar{\bm{x}}}_k) \\
+        \bm{P}_k = \hat{\bm{P}}_k - \hat{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \hat{\bm{P}}_k \bm{C}^T)^{-1} \bm{C} \hat{\bm{P}}_k
     \end{cases}
     .\end{align}
     
-    Finally, making $\bm{K}_k = \bar{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \bar{\bm{P}}_k \bm{C}^T)^{-1}$ establishes the theorem.
+    \noindent Finally, making $\bm{K}_k = \hat{\bm{P}}_k \bm{C}^T (\bm{R}_{kf} + \bm{C} \hat{\bm{P}}_k \bm{C}^T)^{-1}$ concludes the proof.
 \end{proof}
 
-Notice that the Kalman filter solution implies that an ``open-loop" estimation of the system, $\hat{\bar{\bm{x}}}_k$, can be corrected by the equation:
+Notice that the Kalman filter solution implies that an ``open-loop" estimation of the mean of the states, $\hat{\bar{\bm{x}}}_k$, can be corrected by the equation:
 \begin{equation}
-    \hat{\bm{x}}_k =\hat{\bar{\bm{x}}}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k)
+    \bar{\bm{x}}_k = \hat{\bar{\bm{x}}}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k)
 ,\end{equation}
 
 \noindent which, by expanding $\hat{\bar{\bm{x}}}_k$, results in a similar state-equation expression for a system with a deterministic observer as defined earlier, but for a time-varying gain $\bm{K}_k$:
 \begin{equation}
 \begin{split}
-    \hat{\bm{x}}_k &= \bm{A} \hat{\bar{\bm{x}}}_k + \bm{B} \bm{u}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k) \\
-    &= \left( \bm{A} - \bm{K}_k \bm{C} \right) \hat{\bar{\bm{x}}}_k + \bm{B} \bm{u}_k + \bm{K}_k \bm{y}_k
+    \bar{\bm{x}}_k &= \bm{A} \bar{\bm{x}}_k + \bm{B} \bm{u}_k + \bm{K}_k (\bm{y}_k - \bm{C} \hat{\bar{\bm{x}}}_k) \\
+    &= \left( \bm{A} - \bm{K}_k \bm{C} \right) \bar{\bm{x}}_k + \bm{B} \bm{u}_k + \bm{K}_k \bm{y}_k
 \end{split}
 .\end{equation}
 
-Notice that, despite the similarity with Luenberger observers, the Kalman gain has the advantage that the gain matrix $\bm{K}_k$ is not resulting from a designer procedure but rather from solving an inference problem whose only additional information needed are the covariances $\bm{Q}_{kf}$ and $\bm{R}_{kf}$, which can be assumed or estimated. In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for minimizing the expectation of the error between the measurements and actual state response, given as:
+Notice that, despite the similarity with Luenberger observers, the Kalman gain has the advantage that the gain matrix $\bm{K}_k$ is not resulting from a designer procedure but rather from solving an inference problem whose only additional information needed are the covariances $\bm{Q}_{kf}$ and $\bm{R}_{kf}$, which can be assumed or estimated. 
+
+\subsubsection{Controller-Estimator Duality}
+
+In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for iteratively minimizing the trace of the covariance matrix $\bm{P}_k$ [reference], which is given as:
 \begin{equation}
-    \bm{J} = \mathbb{E}\left[ (\bm{x}_k - \hat{\bm{x}}_k)(\bm{x}_k - \hat{\bm{x}}_k)^T \right]
+    \bm{P}_k = \mathbb{E}\left[ (\bm{x}_k - \bar{\bm{x}}_k)(\bm{x}_k - \bar{\bm{x}}_k)^T \right]
 .\end{equation}
 
-Since this method minimizes some cost function, it is indeed an optimal estimator. In fact, the Kalman filter can be formulated through an optimal control formulation, which motivates the development of a continuous-time version of this estimator, as shown below.
+\noindent Since this method minimizes some cost function, it is indeed an optimal estimator. In fact, the Kalman filter can be formulated through an optimal control formulation, which motivates the development of a continuous-time version of this estimator, as shown below.
 
 \begin{boxed-theorem}{(Kalman-Bucy Filter)} \label{th:kalmanBucy}
-    Consider a continuous-time State-Space linear system subject to additive process noise $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and measurement noise $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, where the covariances $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$  and $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$ represents the \emph{power spectral density} of the noises.   In this case, for an estimated state $\hat{\bm{x}}(t)$ at time $t$, the error covariance:
+    Consider a continuous-time State-Space linear system subject to additive process noise variable $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and measurement noise variable $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, where the covariances $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$  and $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$ represents the \emph{power spectral density} of the noises. In this case, for an estimated state $\bar{\bm{x}}(t)$ at time $t$, the error covariance:
     \begin{equation}
-        \bm{J}(\bm{x}, \hat{\bm{x}}, t) = \mathbb{E}\left\{ [\bm{x}(t) - \hat{\bm{x}}(t)][\bm{x}(t) - \hat{\bm{x}}(t)]^T \right\}
+        \bm{J}(\bm{x}, \bar{\bm{x}}, t) = \mathbb{E}\left\{ [\bm{x}(t) - \bar{\bm{x}}(t)][\bm{x}(t) - \bar{\bm{x}}(t)]^T \right\}
     \end{equation}
     
-    \noindent is minimized by $\hat{\bm{x}}(t)$ obtained through the system:
+    \noindent is minimized by $\bar{\bm{x}}(t)$ obtained through the system:
     \begin{equation}
-        \dot{\hat{\bm{x}}}(t) = \bm{A} \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{K}_{e}(t) \left( \bm{y}(t) - \bm{C} \hat{\bm{x}}(t) \right)
+        \dot{\bar{\bm{x}}}(t) = \bm{A} \bar{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{K}_{e}(t) \left( \bm{y}(t) - \bm{C} \bar{\bm{x}}(t) \right)
     ,\end{equation}
     
     \noindent where $\bm{K}_e(t) = \bm{P}_e(t)\bm{C}\bm{R}^{-1}$, being $\bm{P}_e(t)$ the solution of the Riccati differential matrix equation:
@@ -2822,7 +2864,7 @@ A detailed proof of this theorem can be found in \textbf{[reference]}. The formu
 
 \section{Linear Quadratic Gaussian (LQG)}
 
-This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and an estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. In this illustration, the open-loop system can represent either a mathematical model (possibly non-linear and time-varying) being simulated or a physical system whose output is only measured through some sensor device. 
+This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and an estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. 
 
 \begin{figure}[ht]
     \centering
@@ -2892,7 +2934,7 @@ This chapter presented formulation for controllers and state estimators that are
 The control configuration that connects an optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
 
 \begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
-    Consider a stochastic system in State-Space representation:
+    Consider a stochastic system in State-Space representation just as in Definition \ref{def:stochSS}, rewritten below:
 	\begin{align}
     \begin{cases}
         \hfill \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) \\
@@ -2900,12 +2942,12 @@ The control configuration that connects an optimal control action of a Linear Qu
     \end{cases}
     ,\end{align}
     
-     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is reconstructed from a Kalman-Bucy filter and whose input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
+     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is determined by a Kalman-Bucy filter and whose optimal input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
     \begin{align} \label{eq:lqg01}
         \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{K}_e(t) \bm{y}(t) 
     ,\end{align}
     
-    \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solves the Riccati differential equations:
+    \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solve the Riccati differential equations:
     \begin{align}
     \begin{cases}
         -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
@@ -2913,7 +2955,7 @@ The control configuration that connects an optimal control action of a Linear Qu
     \end{cases}
     \end{align}
     
-    \noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$.
+    \noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$, respectively.
 \end{boxed-definition}
 
 Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
@@ -2944,47 +2986,53 @@ The LQG controller can also be used for tracking non-constant references, given 
     \end{cases}
 .\end{align}
 
-For the sake of illustration, consider the same system as controlled in \eqref{eq:isoSys02Rep}. Consider, now, that it is perturbed by noises $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, with covariances:
-\begin{equation}
-	\begin{matrix}
-		\bm{Q}_{kf} = \begin{bmatrix}
-			0.2741  &  0.0036 \\
-		    0.0036  &  0.0024
-		\end{bmatrix} & \bm{R}_{kf} = 0.233
-	\end{matrix}
-.\end{equation}
+\begin{boxed-example}{} \label{ex:lqg01}
+	For the sake of illustration, consider the same system as in Example \ref{ex:regulator01}. Consider, now, that it is perturbed by noises $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, with covariances:
+	\begin{equation}
+		\begin{matrix}
+			\bm{Q}_{kf} = \begin{bmatrix}
+				0.001  &  0.001 \\
+			    0.001  &  0.001
+			\end{bmatrix} & \bm{R}_{kf} = 0.001
+		\end{matrix}
+	.\end{equation}
+	
+	\noindent A LQG controllers for reference tracking is obtained by solving the controller Ricatti differential equation for weights $\bm{Q} = \texttt{diag}(10, 10, 1)$ and $\bm{R} = 0.1$, considering the terminal weight $\bm{P}(T) = \bm{Q}$. The estimator is solved forward in time for initial condition $\bm{P}_e(t_0) = \bm{Q}_{kf}$. 
+\end{boxed-example}
 
-\noindent A pair of LQG controllers for tracking are obtained by augmenting the system and solving the controller Ricatti differential equation for weights in the form $\bm{Q} = diag(\alpha_1, \alpha_2, \alpha_3)$ and $\bm{R} = \beta$, for terminal weight $\bm{P}(T) = \bm{Q}$. The estimator is solved forward in time for initial condition $\bm{P}_e(t_0) = \bm{Q}_{kf}$. The resulting simulations are shown in Fig. \ref{fig:lqg02}, demonstrating how the controller can be more or less aggressive given the choice of weighting matrices.
+The resulting simulations from Example \ref{ex:lqg01} are shown in Fig. \ref{fig:lqg02}. Notice that, since the integral action is now calculated over the observations, which are noisy, the controller produced a noisy input signal. The reference tracking was still achieved, but with very oscillatory behavior. A solution to this problem could be using the integral action as a feedback over an output signal obtained from the estimated states, which are probably smoother. Another solution would be to use a \textit{smoothing filter} directly to the input signal to avoid this oscillatory action.
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=\textwidth]{chapter4/report_ch4_1}
-	\caption{Simulation of the LQG controllers showing the input signal (up) and correspondent state response (down). The markers denotes the observations from the real system. The control on the left was solved for $\bm{Q}^{(1)} = \text{diag}(20, 20, 5000)$ and $\bm{R}^{(1)} = 75$, and the controller on the right was solved for $\bm{Q}^{(2)} = \text{diag}(1, 1, 10000)$ and $\bm{R}^{(2)} = 20$.}
+	\includegraphics[width=0.9\textwidth]{chapter4/report_ch4_1}
+	\caption{Simulation of the LQG controllers showing the input signal (left) and correspondent actual state responses (right). The dots denotes represents the measurements from the real system.}
 	\label{fig:lqg02}
 \end{figure}
 
 \section{Stability and Robustness Analysis}
 
-In the last chapter, the poles of the feedback controlled system where directly assigned from the pole-placement method. In this chapter, however, the controllers were results of optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented. 
+In the last chapter, the poles of the feedback controlled system where arbitrarily assigned using the pole-placement method. In this chapter, however, the controllers result from optimization procedures, so it is necessary to discuss whether or not these controllers are stable and robust given the criteria already presented. 
+
+\subsubsection{Stability}
 
 First of all, the stability of the closed-loop system via Linear Quadratic Regulator is discussed. One might conclude that, since this controller is obtained from an optimization process, the resulting controller can not be unstable. Consider, however, the popular counter-intuition: consider a scalar system $\dot{x}(t) = x(t) + u(t)$, with $R = 1$ and $Q = 0$, such that its associated LQR cost function is:
 \begin{equation}
     J(x,u,t_0) = \int_{t_0}^{\infty} u^2(t) dt
 .\end{equation}
 
-In this case, the optimal control action is always $u(t) = 0$, for $t \in [t_0, \infty]$. However, this control action results in the system $\dot{x}(t) = x(t)$ which is clearly BIBO unstable. Therefore, there are conditions in whether the optimization process results in a stable or unstable closed-loop system, as shown by the following theorem.
+In this case, the optimal control action is always $u(t) = 0$, for $t \in [t_0, \infty]$. However, this control action results in the system $\dot{x}(t) = x(t)$ which is clearly BIBO unstable. Therefore, there are conditions under which the optimization process may result in a stable or unstable closed-loop system, as shown by the following theorem.
 
 \begin{boxed-theorem}{(LQR Assymptoptic Stability)} \label{th:lqrStab}
     Consider the infinite-horizon Linear Quadratic Regulator as defined in Theorem \ref{th:infiniteLQR}. If the system is observable, then the closed-loop matrix $\bm{A}_{cl} = (\bm{A} - \bm{B}\bm{K}) = (\bm{A} - \bm{B}\bm{R}^{-1}\bm{B}^T\bm{P})$ is BIBO stable.
 \end{boxed-theorem}
 
 \begin{proof}
-    Consider, without loss of generalization, that $\bm{Q} = \bm{C}^T \bm{C}$, which is still positive definite. In this case $\bm{C} = \bm{Q}^{1/2}$, which is nonsingular and the observability assumption holds. Furthermore, consider the LQR cost function given an optimal input trajectory $\bm{u}^* : \mathbb{R} \rightarrow \mathbb{R}^r$:
+    Consider, without loss of generality, that $\bm{Q} = \bm{C}^T \bm{C}$, which is still positive definite. In this case $\bm{C} = \bm{Q}^{1/2}$, given that $\bm{Q}^{1/2} \bm{Q}^{1/2} = \bm{C}$, which is a nonsingular matrix and the observability assumption holds. Furthermore, consider the LQR cost function given an optimal input trajectory $\bm{u}^* : \mathbb{R} \rightarrow \mathbb{R}^r$:
     \begin{equation} \label{eq:lqrStab01}
     J(\bm{x},\bm{u}^*,t_0) = \int_{t_0}^{\infty} \left( \bm{x}^T (\bm{C}^T \bm{C}) \bm{x} + (\bm{u}^*)^T \bm{R} \bm{u}^* \right) dt = \int_{t_0}^{\infty} \left( \bm{y}^T \bm{y} + (\bm{u}^*)^T \bm{R} \bm{u}^* \right) dt
 .\end{equation}
 
-The optimal output trajectory resulting from this control action is given by $\bm{y}^*(t) = \bm{C} \bm{x}^*(t)$, where $\bm{x}^*(t)$ is the correspondent optimal state trajectory. Since $\bm{u}^*(t)$ was obtained by solving the algebraic Riccati equation on Theorem \ref{th:infiniteLQR}, a well-known result is that the optimal cost function is bounded:
+The optimal output trajectory resulting from this control action is given by $\bm{y}^*(t) = \bm{C} \bm{x}^*(t)$, where $\bm{x}^*(t)$ is the corresponding optimal state trajectory. Since $\bm{u}^*(t)$ was obtained by solving the algebraic Riccati equation on Theorem \ref{th:infiniteLQR}, a well-known result is that the optimal cost function is bounded:
 \begin{equation}
     \bm{V}^*(\bm{x}, t_0) \leq \bm{x}^T(t_0) \bm{P} \bm{x}(t_0)
 ,\end{equation}
@@ -2992,7 +3040,9 @@ The optimal output trajectory resulting from this control action is given by $\b
 \noindent and, therefore, \eqref{eq:lqrStab01} must also be bounded. This is only possible if $\bm{y}^*(t) \to 0$ and $\bm{u}^*(t) \to 0$ as $t \to \infty$, which, since the system is observable, directly implies $\bm{x}^*(t) \to 0$ as $t \to \infty$, concluding that the system is BIBO stable.
 \end{proof}
 
-Notice that, in contrast to the Pole-Placement method where the stability must be explicitly determined by the designer, the LQR controller can guarantee a stable closed-loop system directly by the observability property, even when the open-loop system is unstable. Since the BIBO stability (Definition \ref{def:BIBOStab}) discusses the magnitude of a system response as $t \to \infty$, the results are derived for infinite-horizon LQR. Despite of this, it is also possible to interpret some notion of stable response for finite-horizon LQR, since the cost function is always bounded by the optimal cost as conditioned by the Hamilton-Jacobi equation.
+Notice that, in contrast to the Pole-Placement method where the stability must be explicitly defined through the assignment of the eigenvalues, the LQR controller guarantees a stable closed-loop system directly, as long as the system is observable, even when the open-loop system is unstable. Since the BIBO stability (Definition \ref{def:BIBOStab}) discusses the magnitude of a system response as $t \to \infty$, the results are derived for infinite-horizon LQR. Despite of this, it is also possible to interpret some notion of stable response for finite-horizon LQR, since the cost function is always bounded by the optimal cost as conditioned by the Hamilton-Jacobi equation.
+
+\subsubsection{Robustness}
 
 Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of an unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
 
@@ -3701,95 +3751,52 @@ a
 % A - Apêndice A
 % ---------------------------------------------------------------
 \clearpage
-\addcontentsline{toc}{chapter}{Appendix A - Proof of Theorems}
-\chapter*{Appendix A - Proof of Theorems}
+\addcontentsline{toc}{chapter}{Appendix A - Properties of Gaussian Distributions}
+\chapter*{Appendix A - Properties of Gaussian Distributions}
 
-\section*{Chapter 2}
+\begin{boxed-definition}{(Gaussian Distribution)} \label{def:gauss}
+	A random variable $\bm{x} \in \mathbb{R}^n$ has a Gaussian distribution with mean $\bm{\mu} \in \mathbb{R}^n$ and covariance $\bm{\Sigma} \in \mathbb{R}^{n \times n}$, denoted as $\bm{x} \sim \mathcal{N}(\bm{x}|\bm{\mu}, \bm{\Sigma})$, if its probability density is described as:
+	\begin{equation}
+		\mathcal{N}(\bm{x}|\bm{\mu}, \bm{\Sigma}) = \cfrac{1}{(2\pi)^{n/2} | \bm{\Sigma} |^{1/2}} exp \left\{-\cfrac{1}{2} (\bm{x} - \bm{\mu})^T \Sigma^{-1} (\bm{x} - \bm{\mu}) \right\}
+	,\end{equation}
+	
+	\noindent where $| \bm{\Sigma} |$ denotes the determinant of $\bm{\Sigma}$.
+\end{boxed-definition}
 
-\begin{proof}{\textbf{(Theorem \ref{th:exoReactSys01})}}
-    Considering that the reactions obeys the Arrhenius equation, the dynamical model for the non-isothermal reactor is a direct application of Example \ref{ex:isoReactSys01} when assuming that the kinetics are in the form:
-    \begin{equation}
-        K_{XY} = K_{XY}(T) = K_{XY} e^{-\frac{E_{XY}}{T}} 
-    ,\end{equation}
-    
-    \noindent with $T$ being the temperature in Kelvins and $E_{XY}$ being the activation energy needed for a reaction $X \rightarrow Y$ to occur.
+\begin{boxed-lemma}{(Joint distribution of Gaussians)} \label{le:jointGauss}
+	Consider the random variables $\bm{x} \in \mathbb{R}^n$ and $\bm{y} \in \mathbb{R}^m$, which have the Gaussian distributions
+	\begin{equation}
+		\begin{matrix*}[l]
+			p(\bm{x})\phantom{|x} = \mathcal{N}(\bm{\mu}, \bm{\Sigma}), \hfill \\
+			p(\bm{y}|\bm{x}) = \mathcal{N}(\bm{A} \bm{x} + \bm{u}, \bm{L}),
+		\end{matrix*}
+	\end{equation}
+	
+	\noindent then the distribution of $(\bm{x}, \bm{y})$ and the marginal distribution of $\bm{y}$ are given as:
+	\begin{equation}
+	\begin{split}
+		p\left( \begin{bmatrix} \bm{x} \\ \bm{y} \end{bmatrix} \right) &= \mathcal{N}\left( \left. \begin{bmatrix} \bm{x} \\ \bm{y} \end{bmatrix} \right| \begin{bmatrix} \bm{\mu} \\ \bm{A} \bm{\mu} + \bm{u} \end{bmatrix}, \begin{bmatrix} \bm{\Sigma} & \bm{\Sigma} \bm{A}^T \\ \bm{A} \bm{\Sigma} & \bm{A} \bm{\Sigma} \bm{A}^T + \bm{L} \end{bmatrix} \right), \\
+		p(\bm{y})  &= \mathcal{N} \left( \bm{A} \bm{\mu} + u, \bm{A} \bm{\Sigma} \bm{A}^T + \bm{L} \right).
+	\end{split}			
+	\end{equation}
+\end{boxed-lemma}
 
-    In respect to the change in temperatures, the model is obtained by an analysis of the conservation of heat, an energy that obeys this principle: 
-    \begin{equation} \label{eq:jacket01}
-        \begin{pmatrix}
-            \text{Accumulation} \\ \text{of heat}
-        \end{pmatrix} = \begin{pmatrix}
-            \text{Heat entering} \\ \text{the System}
-        \end{pmatrix} - \begin{pmatrix}
-            \text{Heat leaving} \\ \text{the System}
-        \end{pmatrix}
-    .\end{equation}
-    
-    Consider the temperature inside the reactor. Since the system is closed, and involved by the heating/cooling system, this quantity is a result of a change in heat given by the flow of fluid entering and leaving the system, the direct transfer of heat by conduction from the contact with the cooling/heating system and the entropy contribution from the reactions. In this case, the conservation law becomes:  
-    \begin{equation}
-    \begin{split}
-        \begin{pmatrix}
-            \text{Accumulation} \\ \text{of heat}
-        \end{pmatrix} &= \begin{pmatrix}
-            \text{Heat entering} \\ \text{the System}
-        \end{pmatrix} - \begin{pmatrix}
-            \text{Heat leaving} \\ \text{the System}
-        \end{pmatrix} \\
-         &= \begin{pmatrix}
-            \text{Heat transfer} \\ \text{from mass-flow}
-        \end{pmatrix} + \begin{pmatrix}
-            \text{Heat transfer} \\ \text{from regulator}
-        \end{pmatrix} + \begin{pmatrix}
-            \text{Entropy} \\ \text{contribution} \\ \text{from reactions}
-        \end{pmatrix}
-    \end{split}
-    .\end{equation}
-    
-    From Fourier's law \textbf{[seek reference]}, the transfer of heat by convection between the fluids, $h_{conv}$ , and by the conduction between the systems, $h_{cond}$, obeys the proportionality:
-    \begin{equation}
-        \begin{matrix}
-            h_{conv} \sim T_{in} - T_{out} & & h_{cond} \sim T_C - T
-        \end{matrix}
-    .\end{equation}      
-    
-    The entropy contribution from a reaction $\alpha X \rightarrow \beta Y$, denoted as $S_{XY}$, is proportional to the concentration of $\rho_X$ consumed multiplied by the energy that it liberates or absorbs:
-    \begin{equation}
-        S_{XY} \sim K_{XY} e^{-\frac{E_{XY}}{T}} (\rho_X)^{\alpha} \Delta H_{XY}
-    .\end{equation}
-
-    All the proportionality can be turned into equalities by imposing real constant factors that are calculated without the dynamical variables. In the case of the heat transfer by convection, the change in temperature is directly given by the ratio of volume entering the system. Plugging all together, and summing the entropy contribution from each reaction, the  accumulation of heat is modeled as:
-    \begin{equation}
-        \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \sum_{\alpha A \rightarrow \beta X} K_{AX} e^{-\frac{E_{AX}}{T}} (\rho_A)^{\alpha} \Delta H_{AX}
-    .\end{equation}
-    
-    Consider the heating/cooling system involving the reactor system. From the choice of design of this apparatus, it is possible to directly manipulate the temperature of its material using a cooling/heating capacity $Q$ up to a real factor of $\gamma$. Similar to the temperature inside the container, there is the conduction of heat between the healing/cooling system and the walls of the container for the reactor. Therefore, the model of heat accumulation for this quantity is given by:
-    \begin{equation}
-        \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C)
-    .\end{equation}
-\end{proof}
-
-
-
-\begin{proof}{\textbf{(Theorem \ref{th:transFun01})}}
-    Applying the Laplace transform in both sides of the equation, and using some properties of this operator, the result is:
-
-    \begin{equation} 
-    \begin{split}
-        \mathcal{L} \left\{\alpha_n \cfrac{d^n y(t)}{dt^n} + \cdots + \alpha_{1} \cfrac{d y(t)}{dt} + \alpha_{0} y(t) \right\}  &= \mathcal{L} \left\{ \beta_m \cfrac{d^m u(t)}{dt^m} + \cdots + \beta_{1} \cfrac{d u(t)}{dt} + \beta_{0} u(t) \right \}  \\
-        \alpha_0 Y(s) + \sum_{i=1}^{n} \alpha_i \left(s^i Y(s) - \sum^{i-1}_{j = 0} s^j \cfrac{d^j y(0^-)}{dt^j} \right) &= \beta_0 U(s) + \sum_{k=1}^{m} \beta_i \left(s^i U(s) - \sum^{k-1}_{l = 0} s^l \cfrac{d^l u(0^-)}{dt^l} \right)
-    \end{split}
-    .\end{equation}
-    
-    By the assumption that all the initial conditions are zero, $y(0^-) = u(0^-) = 0$: 
-    \begin{equation} 
-        \alpha_0 Y(s) + \sum_{i=1}^{n} \alpha_i s^i Y(s) = \beta_0 U(s) + \sum_{k=1}^{m} \beta_i s^i U(s)
-    .\end{equation}
-    
-    Factoring the left side by $\bm{Y}(s)$ and the right side by $\bm{U}(s)$, and doing some basic algebra, the transfer function $G(s)$, between these variables is:
-    \begin{equation} 
-     G(s) = \cfrac{Y(s)}{U(s)} = \cfrac{\beta_m s^m + \beta_{m-1} s^{m-1} + \cdots + \beta_{1} s + \beta_0}{\alpha_n s^n + \alpha_{n-1} s^{n-1} + \cdots + \alpha_{1} s + \alpha_0}
-    .\end{equation}
-\end{proof}
+\begin{boxed-lemma}{(Conditional distribution of Gaussians)} \label{le:condGauss}
+	Consider the random variables $\bm{x} \in \mathbb{R}^n$ and $\bm{y} \in \mathbb{R}^m$, which have the joint Gaussian distribution
+	\begin{equation}
+		p\left( \begin{bmatrix} \bm{x} \\ \bm{y} \end{bmatrix} \right) = \mathcal{N}\left( \left. \begin{bmatrix} \bm{x} \\ \bm{y} \end{bmatrix} \right| \begin{bmatrix} \bm{\mu}_{x} \\ \bm{\mu}_{y} \end{bmatrix}, \begin{bmatrix} \bm{\Sigma}_{xx} & \bm{\Sigma}_{xy} \\ \bm{\Sigma}_{xy}^T & \bm{\Sigma}_{yy} \end{bmatrix} \right),
+	\end{equation}
+	
+	\noindent then the marginal and conditional distributions of $\bm{x}$ and $\bm{y}$ are given as:
+	\begin{equation}
+	\begin{split}
+		p(\bm{x}) &= \mathcal{N}(\bm{x} | \bm{\mu}_{x}, \bm{\Sigma}_{xx}), \\
+		p(\bm{y}) &= \mathcal{N}(\bm{y} | \bm{\mu}_{y}, \bm{\Sigma}_{yy}), \\
+		p(\bm{x}|\bm{y}) &= \mathcal{N}(\bm{x} | \bm{\mu}_x + \bm{\Sigma}_{xy} \bm{\Sigma}_{yy}^{-1} (\bm{y} - \bm{\mu}_y), \bm{\Sigma}_{xx} - \bm{\Sigma}_{xy} \bm{\Sigma}_{yy}^{-1} \bm{\Sigma}_{xy}^T), \\
+		p(\bm{y}|\bm{x}) &= \mathcal{N}(\bm{y} | \bm{\mu}_y + \bm{\Sigma}_{xy}^T \bm{\Sigma}_{xx}^{-1} (\bm{x} - \bm{\mu}_x), \bm{\Sigma}_{yy} - \bm{\Sigma}_{xy}^T \bm{\Sigma}_{xx}^{-1} \bm{\Sigma}_{xy}).
+	\end{split}
+	\end{equation}
+\end{boxed-lemma}
 
 % ---------------------------------------------------------------
 % End document

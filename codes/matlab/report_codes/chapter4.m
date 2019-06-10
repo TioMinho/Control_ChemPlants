@@ -15,9 +15,9 @@ clc; clear all; close all;
 
 % Sets the Default Renderer to tbe the Painters
 set(0, 'DefaultFigureRenderer', 'painters');
+addpath("utils")
 
 % Some colors
-load('data/ccmap.mat');
 cpal = [209 17 65;    % 1 - Metro Red
         0 177 89;     % 2 - Metro Green
         0 174 219;    % 3 - Metro Blue
@@ -41,16 +41,18 @@ run models/iso_model.m
 % Linear Model Index
 idx = 25;
 % Time
-t = (0:0.1:19.9)'; T = numel(t);
+t = (0:0.05:59.95)'; T = numel(t);
 % Initial Conditions
 ue = iso_cstr.oper.U(idx,:); xe = iso_cstr.oper.X(idx,:);
+controller.oper.ue = ue; controller.oper.xe = xe';
+x_0 = xe;
 
 % Reference Signal
-r = [ones(1,T/4)*xe(2) ones(1,T/4)*xe(2)-0.5 ones(1,T/4)*xe(2)+0.8 ones(1,T/4)*xe(2)+0.4];
+r = [ones(1,T/4)*xe(2) ones(1,T/4)*xe(2)-0.2 ones(1,T/4)*xe(2)+0.2 ones(1,T/4)*xe(2)];
 
-% Disturbance signal
-w = randn(T, 2) .* [0.5 0.05];      % Process Noise
-z = randn(T, 1) .* 0.1;      % Measurement Noise
+% Noise signal
+w = mvnrnd([0; 0], diag([.001 .001]), T);
+z = mvnrnd([0], diag([0.001]), T);      
 
 % Linear Model
 A = iso_cstr.ss_model.A(idx);   B = iso_cstr.ss_model.B(idx);
@@ -61,40 +63,49 @@ iso_cstr.ss_model.D = [0];
 iso_cstr.sizeY      =  1 ;
 
 % Controller and Observer
-Q = cell(2); R = cell(2);
-Q{1} = diag([20, 20, 5e3]); Q{2} = diag([1, 1, 1e4]);
-R{1} = 75; R{2} = 20;
+controller.type = "lqgi";
+controller.Q = diag([10, 10, 1]);
+controller.R = 1e-1; 
 
-L = [0; 0];
+controller.Q_k = diag(diag(cov(w)));
+controller.R_k = diag(diag(cov(z))); 
 
 % - Simulation of the Outputs
-xout = cell(2); yout = cell(2); uout = cell(2);
-for i=1:2
-    [~, yout{i}, xout{i}, uout{i}] = simulate(iso_cstr, idx, t, r, xe, 'lqgi', Q{i}, R{i}, numel(t), L, w, z);
-    xout{i} = xout{i} + xe';
-    yout{i} = yout{i} + xe';
-    uout{i} = uout{i} + ue;
-end
+[~, yout, xout, uout] = simulate(iso_cstr, t, r, x_0, "control", controller, 'noise', [w z]);
+xout = xout + xe'; 
+yout = yout + xe'; 
+uout = uout + ue';
 
 % - Visualization of the Simulation
-figure(1);
-for i=1:2
-    subplot(2,2,i)
-    plot(t, uout{i}, 'linewidth', 1.5, 'color', cpal(5+i,:));
+figure(1);clf
+[ha, pos] = tight_subplot(2,2,[.03 .1],[.1 .01],[.1 .01]);
 
-    subplot(2,2,2+i) 
-    plot(t, r, 'linestyle', '--', 'color', 'black'); hold on;
-    s = scatter(t, xout{i}(2,:), 'x', 'MarkerEdgeColor', cpal(5+i,:)); s.MarkerEdgeAlpha = 0.6; hold on;
-    plot(t, yout{i}(2,:), 'linewidth', 1.5, 'linestyle', '-', 'color', cpal(5+i,:)); hold on;     
-    xlabel("Time (min)")
-end
+axes(ha(1))
+plot(t, uout(1,:), 'linewidth', 1, 'color', [0.2 0.2 0.2]); hold on
+xlabel("Time (min)")
+ylabel("u = \Delta u + u_o (1/min)")
 
-subplot(2,2,1), ylabel("u = \Delta u + u_o")
-subplot(2,2,3), ylabel("x_2 = \Delta x_2 + x_{o2} (mol/l)")
+axes(ha(2))
+plot(t, r(1,:), 'linewidth', 1, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
+plot(t, yout(2,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(6,:)); hold on;
+s = scatter(t, xout(2,:)+z(:,1)', '.', 'MarkerEdgeColor', cpal(6,:)); hold on;     
+s.MarkerFaceAlpha = 0.4;
+s.MarkerEdgeAlpha = 0.4;
+plot(t, xout(2,:), 'linewidth', 1, 'color', cpal(6,:)); hold on;
+set(ha(2), "XTickLabel", [])
+ylabel("x_2 = \Delta x_2 + x_{o2} (mol/l)")
+
+axes(ha(4))
+plot(t, yout(1,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(6,:)); hold on;
+plot(t, xout(1,:), 'linewidth', 1, 'color', cpal(6,:)); hold on;
+xlabel("Time (min)")
+ylabel("x_1 = \Delta x_1 + x_{o1} (mol/l)")
+
+axes(ha(3)), set(gca,'Visible','off')
 
 % - Exporting the Visualization to an Image
 figname = "report_codes/figs/report_ch4_1";
-fig = gcf; fig.PaperPositionMode = 'auto'; 
+fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [10 5];
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
