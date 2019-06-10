@@ -51,31 +51,31 @@ exo_cstr.sizeY      =  2 ;
 %%
 % = Simulation Parameters = %
 % - Time and Initial States
-t = (0:0.02:10.58)'; T = numel(t);
+t = (0:0.01:7.99)'; T = numel(t);
 x_0 = xe;
 
 % - Reference Signal
-r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 1*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
+r = [ones(1,floor(T/10))*xe(2) xe(2)+0.1*square(linspace(0, 2*pi-.005, T-2*floor(T/10))) ones(1,floor(T/10))*xe(2); xe(3)*ones(1,T); ];
 %r = ones(2,T).*[xe(2); xe(3)];
 
 % - Noise and Disturbance signals
-w = mvnrnd([0; 0; 0; 0], diag([.001 .001 .001 .001]), T);  % Process Noise
+w = mvnrnd([0; 0; 0; 0], diag([.4 .4 .5 .5]), T);  % Process Noise
 z = mvnrnd([0; 0], diag([0.0001, 0.01]), T);            % Measurement Noise
 
 W = [ zeros(1,T); 
       zeros(1,T)]'; %mvnrnd([0; 0; 0], diag([0.01, 0.01, 0.1]), T);
 
-% tFrac = floor(T/4);
-% sFrac = round(T*0.02);
-% W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
-% W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
-% W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
-% W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
-% 
-% W(1*tFrac:1*tFrac+sFrac,2) = -3;
-% W(2*tFrac:2*tFrac+sFrac,2) = +2;
-% W(3*tFrac:3*tFrac+sFrac,2) = +3;
-% W(4*tFrac:4*tFrac+sFrac,2) = -2;
+tFrac = floor(T/4);
+sFrac = round(T*0.02);
+W(1*tFrac:1*tFrac+sFrac,1) = -0.6;
+W(2*tFrac:2*tFrac+sFrac,1) = +0.5;
+W(3*tFrac:3*tFrac+sFrac,1) = +0.6;
+W(4*tFrac:4*tFrac+sFrac,1) = -0.5;
+
+W(1*tFrac:1*tFrac+sFrac,2) = -3;
+W(2*tFrac:2*tFrac+sFrac,2) = +2;
+W(3*tFrac:3*tFrac+sFrac,2) = +3;
+W(4*tFrac:4*tFrac+sFrac,2) = -2;
   
 % = Controller and Estimator Definitions = %
 controller.type = "lqgi";
@@ -225,81 +225,95 @@ end
 
 %%
 % - Visualization of the Simulation
-foldername = "data/simulations/nice/lqri/";
+foldername = "data/simulations/nice/lqr/";
 folder = dir(foldername);
 files = {folder.name}; files = files(3:end);
 for name = files
     try
     load(foldername+name)
+    
+    
+    %%
     T = numel(exp_param.t);
-
-    clf
-    [ha, pos] = tight_subplot(3,2,[.01 .1],[.1 .01],[.1 .01]);
+    fs = 18;
+    figure(1); clf
+    [ha, pos] = tight_subplot(3,2,[.02 .1],[.1 .01],[.1 .01]);
     
     axes(ha(1))
     plot(exp_param.t, exp_param.uout(1,:), 'linewidth', 1, 'color', [0.2 0.2 0.2]); hold on
     set(ha(1), "XTickLabel", [])
+    set(ha(1), "FontSize", fs)
+    ytickformat("%.1f")
     
     axes(ha(2))
     plot(exp_param.t, exp_param.uout(2,:), 'linewidth', 1, 'color', [0.2 0.2 0.2]); hold on
     set(ha(2), "XTickLabel", [])
+    set(ha(2), "FontSize", fs)
     
     axes(ha(3))
     plot(exp_param.t, exp_param.r(1,:), 'linewidth', 1, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-%     plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(18,:)); hold on;
-%     s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', '.', 'MarkerEdgeColor', cpal(18,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.4;
-%     s.MarkerEdgeAlpha = 0.4;
+    plot(exp_param.t, exp_param.yout(2,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(18,:)); hold on;
+    s = scatter(exp_param.t, exp_param.xout(2,:)+exp_param.z(:,1)', '.', 'MarkerEdgeColor', cpal(18,:)); hold on;     
+    s.MarkerFaceAlpha = 0.4;
+    s.MarkerEdgeAlpha = 0.4;
     plot(exp_param.t, exp_param.xout(2,:), 'linewidth', 1, 'color', cpal(18,:)); hold on;
-    ylabel("Concentration - \rho_B (^o C)")
-    ylim([min(exp_param.xout(2,:))-0.05 max(exp_param.xout(2,:))+0.05])
+    ylabel("\rho_B (mol/l)")
+%     ylim([min(exp_param.xout(2,:))-0.05 max(exp_param.xout(2,:))+0.05])
     set(ha(3), "XTickLabel", [])
+    set(ha(3), "FontSize", fs)
     
     axes(ha(5))
-%     plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold on;
+    plot(exp_param.t, exp_param.yout(1,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold on;
     plot(exp_param.t, exp_param.xout(1,:), 'linewidth', 1, 'color', cpal(17,:)); hold on;
-    ylabel("Concentration - \rho_A (^o C)")
+    ylabel("\rho_A (mol/l)")
     xlabel("Time (hr)")
-    ylim([min(exp_param.xout(1,:))-0.05 max(exp_param.xout(1,:))+0.05])
+%     ylim([min(exp_param.xout(1,:))-0.05 max(exp_param.xout(1,:))+0.05])
+    set(ha(5), "FontSize", fs)
     
     axes(ha(4))
     plot(exp_param.t, exp_param.r(2,:), 'linewidth', 1, 'linestyle', '--', 'color', [0.3 0.3 0.3]); hold on;
-%     plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on;
-%     s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', '.', 'MarkerEdgeColor', cpal(16,:)); hold on;     
-%     s.MarkerFaceAlpha = 0.4;
-%     s.MarkerEdgeAlpha = 0.4;
+    plot(exp_param.t, exp_param.yout(3,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on;
+    s = scatter(exp_param.t, exp_param.xout(3,:)+exp_param.z(:,2)', '.', 'MarkerEdgeColor', cpal(16,:)); hold on;     
+    s.MarkerFaceAlpha = 0.4;
+    s.MarkerEdgeAlpha = 0.4;
     plot(exp_param.t, exp_param.xout(3,:), 'linewidth', 1, 'color', cpal(16,:)); hold on;     
-    ylabel("Temperature - Reactor (^o C)")
-    ylim([min(exp_param.xout(3,:))-0.5 max(exp_param.xout(3,:))+0.5])
+    ylabel("T (^o C)")
+%     ylim([min(exp_param.xout(3,:))-0.5 max(exp_param.xout(3,:))+0.5])
     set(ha(4), "XTickLabel", [])
+    set(ha(4), "FontSize", fs)
+    ytickformat("%.1f")
     
     axes(ha(6))
-%     plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(15,:)); hold on;
+    plot(exp_param.t, exp_param.yout(4,:), 'linestyle', '--', 'linewidth', 1, 'color', cpal(15,:)); hold on;
     plot(exp_param.t, exp_param.xout(4,:), 'linewidth', 1, 'color', cpal(15,:)); hold on;     
-    ylim([min(exp_param.xout(4,:))-0.5 max(exp_param.xout(4,:))+0.5])
-    ylabel("Temperature - Coolant (^o C)")
+%     ylim([min(exp_param.xout(4,:))-0.5 max(exp_param.xout(4,:))+0.5])
+    ylabel("T_C (^o C)")
     xlabel("Time (hr)")
+    set(ha(6), "FontSize", fs)
+    ytickformat("%.1f")
 
     axes(ha(1))
     plot(exp_param.t, ones(1,T)*35, 'r:', 'linewidth', 1), hold on
     plot(exp_param.t, ones(1,T)*5, 'r:', 'linewidth', 1)
-    ylabel("Input Flow-Rate (1/hr)")
-%     ylim([min(exp_param.uout(1,:)), max(exp_param.uout(1,:))])
+    ylabel("q (1/hr)")
     ylim([4, 36])
+    set(ha(1), "FontSize", fs)
     
     axes(ha(2))
     plot(exp_param.t, ones(1,T)*0, 'r:', 'linewidth', 1), hold on
     plot(exp_param.t, ones(1,T)*-8500, 'r:', 'linewidth', 1)
-    ylabel("Cooling Capacity (kJ/hr)")
-%     ylim([min(exp_param.uout(2,:)), max(exp_param.uout(2,:))])
+    ylabel("Q (kJ/hr)")
     ylim([-8700, 200])
+    set(ha(2), "FontSize", fs)
     
     timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
     figname = "report_experiments/figs/exoSim_control_" + char(timeNow);
-    fig = gcf; fig.PaperPositionMode = 'auto'; 
-    print('-bestfit', figname, '-dpdf', '-r300')
-    system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
-    
+    fig = gcf; 
+    fig.PaperUnits = "centimeters"; 
+    xSize = 1600; ySize = 900; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
+    fig.Position = [xLeft yTop xSize ySize];
+    print(fig, figname, '-depsc2')
+    %%
     pause
     
     catch err
@@ -308,6 +322,20 @@ for name = files
     end
 end
 
+
+%%
+t = exp_param.t; T = numel(t);
+r = exp_param.r;
+x_0 = exp_param.x_0;
+w = exp_param.w;
+z = exp_param.z;
+controller = exp_param.controller;
+
+sum((exp_param.r - exp_param.xout(2:3,:)).^2, 2)
+sum(abs(exp_param.r - exp_param.xout(2:3,:)), 2)
+
+sum(((exp_param.r - exp_param.xout(2:3,:)).*t').^2, 2)
+sum(abs((exp_param.r - exp_param.xout(2:3,:)).*t'), 2)
 
 %%
 foldername = "data/simulations/";

@@ -1,7 +1,7 @@
 % ---------------------------------------------------------------
 % Preamble
 % ---------------------------------------------------------------
-\documentclass[a4paper,11pt,header=plain,tocpage=prefix]{book}
+\documentclass[a4paper,11pt]{book}
 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -9,7 +9,7 @@
 \usepackage[protrusion=true,expansion=true]{microtype} 
 \usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools,bigints}
 \usepackage{rotating}
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=red]{hyperref}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=green]{hyperref}
 \usepackage[all]{hypcap}
 \usepackage{color, xcolor}
 \usepackage{listings}
@@ -21,11 +21,12 @@
 \usepackage{siunitx}
 \usepackage{tikz, pgfplots}
 \usepackage{framed}
+\usepackage{tabularx}
+\usepackage{afterpage}
 
 \numberwithin{figure}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{table}{chapter}
-
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -35,7 +36,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -90,6 +91,12 @@
 % Definitions
 % --------------------------------------------------------------------
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}} 
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
 
 \makeatletter                       
 \def\printtitle{
@@ -183,6 +190,54 @@
 
     {\normalsize    \textsc{Fortaleza -- Cear\'{a} \\%
      2019}}
+\end{center}
+	
+\afterpage{\blankpage}	
+	
+%-----------------------------------------------------------------------------------------%
+%----------------------------------INTERNAL COVER-----------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\thispagestyle{empty}%
+\begin{center}
+    \includegraphics[width=2.5cm]{logo_ufc} \\%
+    \textsc{
+    Universidade Federal do Cear{\'a} \\%
+    Departamento de Engenharia de Teleinform{\'a}tica \\%
+    Curso de Gradua\c{c}{\~a}o em Engenharia de Teleinform{\'a}tica\\
+    }
+    \null\vfill%%
+    \vspace{.5cm}%
+    {\LARGE         \textbf{\uppercase{Optimal Control: An application to a non-isothermal continuous reactor}}\\}
+
+    \null\vfill%%
+    \vspace{.5cm}%
+    {\normalsize    \textbf{Autor} \\%
+                    \textbf{Otacílio Bezerra Leite Neto}} \\%
+
+    \null\vfill%%
+    \vspace{.25cm}%
+    {\normalsize    \textbf{Orientador} \\%
+                    \upshape{Prof. Dr. Francesco Corona}} \\%
+
+	\null\vfill%%
+    \vspace{.25cm}%
+	{\normalsize    \textbf{Co-orientador} \\%
+                    \upshape{Profa. Dra. Michela Mulas}} \\%
+
+
+    \null\vfill%%
+    \vspace{.25cm}%
+    \begin{tabularx}{\textwidth}{XX}
+
+    & \emph{Trabalho de Conclus\~ao de Curso submetido {\`a} Coordena\c{c}{\~a}o do Programa de Gradua\c{c}{\~a}o em Engenharia de Computa\c{c}\~{a}o da Universidade Federal do Cear{\'a}
+    como parte dos requisitos para a obten\c{c}\~{a}o do grau de \textbf{Bacharel em Engenharia de Computa\c{c}\~{a}o}.} \\%
+    \end{tabularx}
+
+    \null\vfill%%
+    \vspace{.25cm}%
+
+    {\normalsize    \textsc{Fortaleza -- Cear\'{a} \\%
+                            2019}}
 \end{center}
 
 %-----------------------------------------------------------------------------------------%
@@ -297,9 +352,9 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 	\label{fig:intro02}
 \end{figure}
 
-The configuration shown in the upper left of Fig. \ref{fig:intro02}, known as the \textit{Open-Loop Controller}, calculates the action as a function $u(t) = \pi(r, t)$, given an initial condition $y(t_0) = y_0$. In this case, the controller does not observe the output $y(t)$, and relies on the model to guarantee that the system is driven to the reference. Of course, if there are any external disturbances acting on this configuration, or if the model is not reliable enough, it is not possible to guarantee that the requirements are met. Thus, these type of controllers are not suitable for critical applications, and its use is restricted to systems where deviance from the desired reference can be tolerated. \textbf{[reference]}
+The configuration shown in the upper left of Fig. \ref{fig:intro02}, known as the \textit{Open-Loop Controller}, calculates the action as a function $u(t) = \pi(r, t)$, given an initial condition $y(t_0) = y_0$. In this case, the controller does not observe the output $y(t)$, and relies on the model to guarantee that the system is driven to the reference. Of course, if there are any external disturbances acting on this configuration, or if the model is not reliable enough, it is not possible to guarantee that the requirements are met. Thus, these type of controllers are not suitable for critical applications, and its use is restricted to systems where deviance from the desired reference can be tolerated. 
 
-In contrast, the configuration in the lower right of Fig. \ref{fig:intro02}, known as the \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \textbf{[reference]}
+In contrast, the configuration in the lower right of Fig. \ref{fig:intro02}, known as the \textit{Closed-Loop Controller} or \textit{Feedback Controller}, calculates the action as a function $u(t) = \pi(e, t)$, where $e(t) = r(t) - y(t)$ is the error between the reference and the actual response. Now, the controller will observe the system output, trough some sensor device, and compares it to the desired reference in order to calculate a \textit{corrective action}. This feedback property can make the system reject disturbances while still driving it to the desired reference. Thus, the Feedback Controller became the most popular choice of controller configuration in industry for a wide range of applications, even for critical ones.  \cite{Syrmos:1997}.
 
 \section{Chemical reactor Systems}
 
@@ -387,11 +442,11 @@ When the process is non-isothermal, the occurrence of a reaction contributes to 
 
 \section{Motivation}
 
-The use of automatic controllers to impose a desired behaviour to physical systems is a practice ubiquitous in many engineering fields. In the last years, the price of digital computers have been dropping while their performance have been growing. Consequently, digital controllers have became the central key in developments in important and innovative fields such as aeronautics \textbf{[reference]}, autonomous driving \textbf{[reference]} and several industrial applications \textbf{[reference]}. In parallel, this theory is also useful to understand and bring inspiration from nature itself since, for instance, the mechanisms for temperature regulation observed in vertebrate animals behave as a feedback controller \cite{Heller:1978}.
+The use of automatic controllers to impose a desired behaviour to physical systems is a practice ubiquitous in many engineering fields. In the last years, the price of digital computers have been dropping while their performance have been growing. Consequently, digital controllers have became the central key in developments in important and innovative fields such as aeronautics \cite{Eren:2017, Goerzen:2009, Wang:2015}, autonomous driving \cite{Gonzalez:2016, Falcone:2007, Cairano:2014} and several industrial applications \cite{JoeQin:2003, Tang:2016, Holenda:2008, Lucia:2013}. In parallel, this theory is also useful to understand and bring inspiration from nature itself since, for instance, feedback controller characteristics were observed in the mechanisms for temperature regulation observed in vertebrate animals \cite{Heller:1978} and in \cite{Todorov:2002}.
 
-Most recent developments in Control Theory focus on using Feedback Controllers to achieve \textit{Robust and Optimal Control} \textbf{[reference]}. This theory accounts for the design of controllers that deals with uncertainty, either from the model or from the observation of the system, and are able to achieve the control objectives in a \textit{optimal manner}. Despite being a few decades old, these fields have gained a lot of interest in the last years thanks to recent results in \textit{Machine Learning} theory, particularly in \textit{Reinforcement Learning}, which have been successful in applying optimization techniques for controlling artificial agents in environments loaded with uncertainty \textbf{[reference]}.
+Most recent developments in Control Theory focus on using Feedback Controllers to achieve \textit{Robust and Optimal Control}. This theory accounts for the design of controllers that deals with uncertainty, either from the model or from the observation of the system, and are able to achieve the control objectives in a \textit{optimal manner}. Despite being a few decades old, these fields have gained a lot of interest in the last years thanks to recent results in \textit{Machine Learning} theory, particularly in \textit{Reinforcement Learning}, which have been successful in applying optimization techniques for controlling artificial agents in environments loaded with uncertainty \cite{Sutton:2018, Mnih:2015}.
 
-Furthermore, the specific application of controlling chemical reactor systems brings benefits from the fact that this class of dynamical system are present in most biological and industrial processes \textbf{[reference]}. In general, controllers can be used to guarantee safety constraints, maximize productivity and minimize the use of resources, in such a way that could not be achieved without automatic and high performing machinery. The inherent complexity and uncertainty existent in these systems also poses this control problem as a challenging research field still open to be explored.
+Furthermore, the specific application of controlling chemical reactor systems brings benefits from the fact that this class of dynamical system are present in many important biological and industrial processes, such as wastewater treatment \cite{Mulas:2015, Gupta:2012}. In general, controllers can be used to guarantee safety constraints, maximize productivity and minimize the use of resources, in such a way that could not be achieved without automatic and high performing machinery. The inherent complexity and uncertainty existent in these systems also poses this control problem as a challenging research field still open to be explored.
 
 \section{Objectives}
 
@@ -565,9 +620,9 @@ When discussing non-isothermal processes, it is also common to discuss heating o
     \end{split}
     .\end{equation}
     
-    It is well known, from Fourier's law \textbf{[seek reference]}, that the transfer of heat by conduction between the reactor and the coolant/heater, in their respective contact interfaces, is proportional to $(T_C - T)$, where $T_C$ represents the temperature of the latter. Moreover, another identifiable source of heat transfer consists in the fluid flow entering and leaving the system. Similarly for the conduction, this heat contribution should also be proportional to $(T_{in} - T_{out})$, where $T_{in}$ and $T_{out}$ are respectively the temperature of the fluid entering and leaving the reactor.
+    It is well known, from Fourier's law \cite{Bergman:2018}, that the transfer of heat by conduction between the reactor and the coolant/heater, in their respective contact interfaces, is proportional to $(T_C - T)$, where $T_C$ represents the temperature of the latter. Moreover, another identifiable source of heat transfer consists in the fluid flow entering and leaving the system. Similarly for the conduction, this heat contribution should also be proportional to $(T_{in} - T_{out})$, where $T_{in}$ and $T_{out}$ are respectively the temperature of the fluid entering and leaving the reactor.
     
-    The entropy contribution from a reaction $\alpha X \rightarrow \beta Y$, denoted as $S_{XY}$, is proportional to the concentration of $\rho_X$ consumed, or produced, by the reactions multiplied by the energy that it liberates or absorbs \textbf{[reference]}:
+    The entropy contribution from a reaction $\alpha X \rightarrow \beta Y$, denoted as $S_{XY}$, is proportional to the concentration of $\rho_X$ consumed, or produced, by the reactions multiplied by the energy that it liberates or absorbs, as stated by the Hess' Law \cite{Atkins:2011}:
     \begin{equation}
         S_{XY} \sim K_{XY} e^{-\frac{E_{XY}}{T}} (\rho_X)^{\alpha} \Delta H_{XY}
     .\end{equation}
@@ -945,7 +1000,7 @@ First of all, it is necessary to access some properties of the matrix $\bm{A}$, 
 .\end{equation} 
 \end{boxed-definition}
 
-This matrix is central to the computation of the system time response, since it can directly relate the initial state of a system to any other state forward in time \textbf{[reference?]}. Moreover, the exponential of a matrix is not a trivial operation. However, the fact that the State-Space matrix $\bm{A}$ is always a square matrix results in the following properties for the State-Transition matrix, stated below.
+This matrix is central to the computation of the system time response, since it can directly relate the initial state of a system to any other state forward in time. Moreover, the exponential of a matrix is not a trivial operation. However, the fact that the State-Space matrix $\bm{A}$ is always a square matrix results in the following properties for the State-Transition matrix, stated below.
 
 \begin{boxed-theorem}{} \label{th:stateTransMProp}
     Consider a matrix exponential as in Definition \ref{def:stateTransM}, for a matrix $\bm{A}  \in \mathbb{R}^{n \times n}$. Then, the following properties holds:
@@ -1395,9 +1450,9 @@ Similarly to the controllability property, there are several ways to analyze the
     The system is observable if and only if $\bm{\mathcal{O}}$ has full column rank.
 \end{boxed-theorem}   
 
-The interpretation of this theorem follows the same intuition of before: if the matrix $\bm{\mathcal{O}}$ has full column rank, then it can be used as a basis to span a subspace with the same dimension as the State-Space. In fact, the proof of both theorems follows the same procedures and there is a direct relationship between controllability and observability, known as the Theorem of Duality \textbf{[reference]}.
+The interpretation of this theorem follows the same intuition of before: if the matrix $\bm{\mathcal{O}}$ has full column rank, then it can be used as a basis to span a subspace with the same dimension as the State-Space. In fact, the proof of both theorems follows the same procedures and there is a direct relationship between controllability and observability, known as the Theorem of Duality.
 
-The concepts of controllability and observability just presented, together with the conditions to fulfill these properties, were first introduced by \cite{Kalman:1960}. The geometrical interpretations of both theorems may suggest a practical solution for the cases where a system is uncontrollable or unobservable. In the first case, the solution would be to add specific actuators to the system, in the condition that they are linearly independent between themselves and the ones actually in operation. The same procedure can be done to solve the unobservable problem, but adding more sensors instead. Those procedures would change the matrices $\bm{B}$ and $\bm{C}$ and could ensure the necessary conditions in matrices $\bm{\mathcal{C}}$ and $\bm{\mathcal{O}}$. Of course, the implementation of such instrumentation may not be practical, due to technical or economical constraints. In the case which these additional devices are not feasible, one is restricted to control and/or observe only a subspace of the state variables.
+The concepts of controllability, observability and their duality, together with the conditions to fulfill these properties, were first introduced by \cite{Kalman:1960}. The geometrical interpretations of both theorems may suggest a practical solution for the cases where a system is uncontrollable or unobservable. In the first case, the solution would be to add specific actuators to the system, in the condition that they are linearly independent between themselves and the ones actually in operation. The same procedure can be done to solve the unobservable problem, but adding more sensors instead. Those procedures would change the matrices $\bm{B}$ and $\bm{C}$ and could ensure the necessary conditions in matrices $\bm{\mathcal{C}}$ and $\bm{\mathcal{O}}$. Of course, the implementation of such instrumentation may not be practical, due to technical or economical constraints. In the case which these additional devices are not feasible, one is restricted to control and/or observe only a subspace of the state variables.
 
 \section{Response Analysis in the Frequency Domain}
 
@@ -1569,7 +1624,7 @@ Clearly, the inclusion of a feedback controller in the loop is equivalent to tra
     .\end{align}
 \end{boxed-theorem} 
 
-Details for the proof of this theorem can be found in \textbf{[reference]}. An equivalent result can be proved for MIMO systems \textbf{[reference]}, but the result is cumbersome and does not highlight the main results for the state-feedback. Using the canonical form just presented, it is possible to discuss an important result for the state feedback controller.
+Details for the proof of this theorem can be found in \cite{Chen:1998}. An equivalent result can be provided for MIMO systems, but the result is cumbersome and does not highlight the main results for the state-feedback. Using the canonical form just presented, it is possible to discuss an important result for the state feedback controller.
 
 \begin{boxed-theorem}{(Pole-Placement Method)} \label{th:polePlace}
     If a system in State-Space representation is controllable, then by state feedback using a gain matrix $\bm{K} \in \mathbb{R}^{r \times n}$ the eigenvalues of $\bm{A}_{cl}=\bm{A}-\bm{B}\bm{K}$, the poles of the closed-loop system, can be placed arbitrarily in the complex plane, as long as complex conjugate eigenvalues are assigned in pairs.
@@ -1614,7 +1669,7 @@ Details for the proof of this theorem can be found in \textbf{[reference]}. An e
     \noindent whose characteristic polynomial is now described by the designed coefficients that yield the desirable eigenvalues. Since $\tilde{\bm{A}}_{cl}$ and $\bm{A}_{cl}$ shares the same set of eigenvalues, it can be concluded that it is possible to assign the system poles directly through matrix $\tilde{\bm{K}}$.
 \end{proof}
 
-Notice that an ``original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). The theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. The result is preserved for MIMO systems, although the design of $\bm{K}$ is not as straightforward, since it is not unique for a desired set of eigenvalues in this case \textbf{[reference]}. 
+Notice that an ``original" feedback gain matrix can be obtained as $\bm{K} = \tilde{\bm{K}} \bm{P}$ and still yield the same eigenvalues assignment directly in $\bm{A}_{cl}$ (since $\bm{P}$ is just a linear transformation). The theorem has the direct result that, under full-state feedback, the transient response of a linear system can be completely determined by including a controller, which is described by this matrix $\bm{K}$. The result is preserved for MIMO systems, although the design of $\bm{K}$ is not as straightforward, since it is not unique for a desired set of eigenvalues in this case \cite{Moore:1975}. 
 
 Using the parameters from Definition \ref{def:responseParameters}, the positions of the closed-loop system poles can be designed given desirable operations, and the matrix $\bm{K}$ can be hand-designed to meet these requirements. This method is known as the \textit{Pole-Placement method} for control synthesis. Algorithm \ref{alg:stateFeedback} summarizes a simple procedure of designing an appropriate feedback gain matrix, given desirable pole positions.
 
@@ -1722,7 +1777,7 @@ From that formulation it is clear that the response $Y(s) = G(s)R(s)$ will yield
     G(0) F = 1 \Rightarrow F = \cfrac{\tilde{\alpha}_n}{\beta_n}
 ,\end{equation}
 
-\noindent which allows for perfect asymptotically tracking in all cases but when $\beta_n = 0$. This same reasoning can easily be extended to MIMO systems (the gain $F$ turns into a matrix). In the case of non-constant references, the same intuition could still be used, but the analysis and design of $F$ becomes more complex \textbf{[reference]}. This, however, allows for the definition of tracking controllers.
+\noindent which allows for perfect asymptotically tracking in all cases but when $\beta_n = 0$. This same reasoning can easily be extended to MIMO systems (the gain $F$ turns into a matrix). In the case of non-constant references, the same intuition could still be used, but the design of $F$ becomes more complex since it would be clearly time-varying. This, however, allows for the definition of tracking controllers.
 
 \begin{boxed-definition}{(Tracking Controllers)} \label{def:tracking}
     If a state-feedback controller has to make a system track any step reference $\bm{r}(t) \neq \bm{0}$, as $t \to \infty$, it is said to be a \textit{tracking controller}. In this case, one has to apply the \textit{feedforward gain} $\bm{F}$ to adapt the reference as $\tilde{\bm{r}}(t) = \bm{F}\bm{r}(t)$, resulting in the following closed-loop state equation and equivalent solution:
@@ -1885,7 +1940,7 @@ Notice that state-equation for closed-loop of this new augmented system is resul
 
 Although the result was only shown for the SISO case, the main intuition still holds in the MIMO case, but the equations become cumbersome. Basically, if the augmented matrices are controllable, the robust tracking can be achieved by the same formulation. 
 
-A possible intuition on how this system performs robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem02} has the same form of a basic regulator, except from the term $\bm{B} \bm{K}_a$ which is a linear function of $\bm{x}_a(t)$. Because of this, a control action will always be requested whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal. When $\bm{x}_a(t) = \bm{0}$, the equation reduces to a simple regulator. A more quantitative analysis on why this controller yields both robust tracking and disturbance rejection can be found in \textbf{[reference]}. 
+A possible intuition on how this system performs robust tracking and disturbance rejection can be taken from the fact that the first row of \eqref{eq:augmentedSystem02} has the same form of a basic regulator, except from the term $\bm{B} \bm{K}_a$ which is a linear function of $\bm{x}_a(t)$. Because of this, a control action will always be requested whenever $\bm{x}_a(t) \neq \bm{0}$, i.e., when there is an error between the reference and the output signal. When $\bm{x}_a(t) = \bm{0}$, the equation reduces to a simple regulator. A more quantitative analysis on tracking State-Space controllers can be found in \cite{Franklin:2018}. 
 
 \begin{boxed-example}{}
 	For the sake of illustration, consider the same system used in \eqref{eq:isoSys02Rep}. Unfortunately, the augmented version of this \textit{single-input multiple-output} (SIMO) formulation is not controllable. However, the SISO version obtained by letting $C = \begin{bmatrix} 0, 1 \end{bmatrix}$ obeys Theorem \ref{th:augmentedCtrb} and has no zeros at $s=0$. Thus, a robust tracking controller can be designed by state-feedback. Consider the gains $\tilde{K}_1 = [-0.99, 1.22, -25]$, $\tilde{K}_2 = [0.78, 0.55, -25]$ and $\tilde{K}_3 = [0.81, 5.20, -50]$. The correspondent closed-loop systems $tilde{\bm{A}}^{(i)}_{cl}$ for each $i$-th controller are given as:
@@ -2000,7 +2055,7 @@ The observer system works as a parallel system that is simulated alongside the a
 \end{boxed-theorem} 
 
 \begin{proof}
-    Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \textbf{[reference]} if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design     a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $\bm{K}$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ proves the theorem.
+    Consider that a State-Space with matrices $(\bm{A}, \bm{C})$ is observable. From the Duality Theorem \cite{Chen:1998}, if the pair $(\bm{A}, \bm{C})$ is observable then the pair $(\bm{A}^T, \bm{C}^T)$ is controllable. In this case, it is possible to design a gain matrix $\bm{K}$ to assign the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ in any desirable points in the complex space. Since the eigenvalues of a matrix are invariant to the transpose operation, the design of $\bm{K}$ can also place the eigenvalues of the matrix $(\tilde{\bm{A}}_{obs})^T = \bm{A} - \bm{K}^T \bm{C}$. Therefore, making $\bm{L} = \bm{K}^T$ proves the theorem.
 \end{proof}
 
 The procedure stated in this proof highlights the similarities between existing closed-loop observers, such as the Luenberger observer, and closed-loop controllers, such as the state-feedback. Basically, the same design considerations that concerns state-feedback are important in the design of the observer gain $\bm{L}$. For instance, the eigenvalues of $\tilde{\bm{A}}_{obs} = \bm{A}^T - \bm{C}^T \bm{K}$ can be assigned such that the time evolution of the error $\bm{e}(t)$ has a desirable time constant, damping coefficient or natural frequency. In conclusion, the state-vector $\bm{x}(t)$ can be reconstructed by using an observer gain such that each eigenvalue of $\bm{A}_{obs}$ is on the left-half side of the complex plane. 
@@ -2093,7 +2148,7 @@ A schematic for this formulation of feedback from estimated states is shown Fig.
     \label{fig:observer02}
 \end{figure}
 
-Notice, now, that the formulation just defined imposes that the dynamics of the estimated state $\hat{\bm{x}}(t)$ is dependent both in $\bm{K}$ and $\bm{L}$, which are arbitrary matrices chosen by the control designer. This leads to the possible conclusion that the choice of $\bm{K}$ is now restricted by the effect that it will produce in the choice of $\bm{L}$, which is not true. The following theorem, known as the Separation Principle \textbf{[reference]}, states that design of these two gains are independent.
+Notice, now, that the formulation just defined imposes that the dynamics of the estimated state $\hat{\bm{x}}(t)$ is dependent both in $\bm{K}$ and $\bm{L}$, which are arbitrary matrices chosen by the control designer. This leads to the possible conclusion that the choice of $\bm{K}$ is now restricted by the effect that it will produce in the choice of $\bm{L}$, which is not true. The following theorem, known as the Separation Principle, states that design of these two gains are independent.
 
 \begin{boxed-theorem}{(Separation Principle)} \label{th:separationPrinciple}
     Given a system in State-Space with a Luenberger observer of gain $\bm{L}$ and state-feedback controller of gain $\bm{K}$, the closed-loop eigenvalues contributions of $(\bm{A} - \bm{B}\bm{K})$ are independent from those of $(\bm{A} - \bm{L}\bm{C})$.
@@ -2181,7 +2236,7 @@ The last section introduces the first considerations into applying state-feedbac
     \label{fig:properties01}
 \end{figure}
 
-Using block diagram algebra and Theorem \ref{th:SSToIO}, it is possible to associate a forward-path transfer function $\bm{G}_{f}(s)$ given as \textbf{[reference]}:
+Using block diagram algebra and Theorem \ref{th:SSToIO}, it is possible to associate a forward-path transfer function $\bm{G}_{f}(s)$ given as \cite{Moore:1990}:
 \begin{equation} \label{eq:fdbckForwardTrnsfer}
     \bm{G}_{f}(s) = -\bm{K}^T G(s) =  -\bm{K}^{T} \left(s \bm{I} - \bm{A} \right)^{-1} B 
 .\end{equation}
@@ -2203,7 +2258,7 @@ Additionally, it is possible to define a stability criterion through a Nyquist d
     Consider a system with feedforward transfer function as defined in \eqref{eq:fdbckForwardTrnsfer}. Now, let $P$ and $Z$ be respectively the number of poles of $G_{f}(s)$ and zeros of $1 + G_{f}(s)$ that are in the right-half plane. In this case, the Nyquist contour shall clockwise encircle the point $s = -1$ a number of times $N$ such that $N = Z - P$.
 \end{boxed-theorem}
 
-A detailed proof of both criterion can be found in \textbf{[reference]}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}. However, their graphical nature allows for an easy understanding of how disturbances can affect the stability of state-feedback systems. For instance, a system subject to a sinusoidal disturbance of constant magnitude, but with the same frequency as the natural frequency of the system, will show a response with higher magnitude for the phase crossover frequency than the one visualized in the Bode plot. This phenomenon is widely known in Physics as ``resonance". Therefore, the influence of disturbances can inflict instability to a stable system.
+A detailed proof of both criterion can be found in \cite{Nise:2015}. The introduction of these stability evaluation techniques may seem redundant, given that the closed-loop BIBO stability can still be characterized from Theorem \ref{th:BIBOStab}. However, their graphical nature allows for an easy understanding of how disturbances can affect the stability of state-feedback systems. For instance, a system subject to a sinusoidal disturbance of constant magnitude, but with the same frequency as the natural frequency of the system, will show a response with higher magnitude for the phase crossover frequency than the one visualized in the Bode plot. This phenomenon is widely known in Physics as ``resonance". Therefore, the influence of disturbances can inflict instability to a stable system.
 
 Of course, not all disturbances observed in real operations are strong enough to bring any reasonable stable controller to an unstable condition. However, depending on the choice of the gain $\bm{K}$, some closed-loop systems can be more prone to these undesired problems than others. This motivates the discussion on stability margins.
 
@@ -2221,7 +2276,7 @@ Of course, not all disturbances observed in real operations are strong enough to
     \noindent where $\omega_{gc}$ is the \textit{gain crossover frequency} such that $| T(j\omega_{gc}) | = 0 dB$ (or the angle when a Nyquist diagram crosses the unit circle centered at $s = 0$). 
 \end{boxed-definition}
 
-A graphical representation of these margins, for both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the one from last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. Despite the fact that high gain controllers are usually beneficial for performance requirements, it is clear that they also can lead to disastrous operations in uncertain environments \textbf{[reference]}. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
+A graphical representation of these margins, for both Bode plots and Nyquist diagrams is shown in Fig. \ref{fig:properties03}, for the same system as the one from last figure. If a closed-loop system has small Gain Margin, it is clear that its stability is not robust to gain uncertainties, while a small Phase Margins implies that its stability is not robust to time delay uncertainties in the control actions. From this motivation, the use of high-gain controllers have been a working example of how to achieve robust control \cite{Khalil:2005, Mahmoud:2002}, but is usually challenging for the instrumentation in real-world operations. Therefore, the design of state-feedback gains must account for these quantities, and a trade-off between performance and robustness is always necessary for this formulation. 
 
 \begin{figure}
     \centering
@@ -2298,7 +2353,7 @@ This chapter introduces the vast field of optimal control and optimal estimation
 
 The last chapter introduced the notion of controller synthesis as an engineering procedure to be done ``by hand" from a designer with some knowledge about the system and the control environment. This approach, despite being very popular and practical, is rather time-consuming and demands the designer to consider what are the best pole locations given some hard specifications. In addition to that, the design techniques previously presented becomes more involving when applied to MIMO systems. Thus, a more general and automatic procedure to control synthesis is desirable.
 
-With this motivation, the concept of \textit{Optimal Control} \textbf{[references]} was introduced as an alternative strategy for controlling dynamical systems. Optimal controllers determines the necessary action by minimizing a cost function (or maximizing a reward function). These formulations produces feedback controllers that autonomously requires optimal input signals given a desired objective and possible restrictions, begin easily generalized to different systems \textbf{[reference]}.
+With this motivation, the concept of \textit{Optimal Control} \cite{Moore:1990, Kirk:1998, Liberzon:2012, Bertsekas:2017} was introduced as an alternative strategy for controlling dynamical systems. Optimal controllers determines the necessary action by minimizing a cost function (or maximizing a reward function). These formulations produces feedback controllers that autonomously requires optimal input signals given a desired objective and possible restrictions, begin easily generalized to different systems.
 
 \begin{boxed-definition}{(Optimal Control)} \label{def:optimalControl}
 Given a system in State-Space formulation, with state signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $\bm{u}	(t) \in \mathbb{R}^r$, for any time $t$, is optimal if an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ can be found as:
@@ -2309,7 +2364,7 @@ Given a system in State-Space formulation, with state signal $\bm{x} : \mathbb{R
 \noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
 \end{boxed-definition}
 
-Note that this optimization can be converted to maximizing a function $V(\cdot)$ by evaluating $V(\cdot) = -J(\cdot)$. Thus, this document will only refers to optimization as minimizing some cost function. The problem of finding an optimal control law, or optimal control policy, $\pi^*(\cdot)$ depends on the choice of the cost function $J(\cdot)$, and several optimization techniques can be used to determine the value of $\bm{u}(t)$ that achieve its minimum. This problem differs from standard optimization problems because it is dependent of time, there can be a decision variable and it is constrained by the dynamics of the model and by the optimal policy action. Solutions to this optimization can be obtained from several methods \textbf{[references]}. The approach used in this work focus on Dynamic Programming \textbf{[reference]}.
+Note that this optimization can be converted to maximizing a function $V(\cdot)$ by evaluating $V(\cdot) = -J(\cdot)$. Thus, this document will only refers to optimization as minimizing some cost function. The problem of finding an optimal control law, or optimal control policy, $\pi^*(\cdot)$ depends on the choice of the cost function $J(\cdot)$, and several optimization techniques can be used to determine the value of $\bm{u}(t)$ that achieve its minimum. This problem differs from standard optimization problems because it is dependent of time, there can be a decision variable and it is constrained by the dynamics of the model and by the optimal policy action. Solutions to this optimization can be obtained from several methods, however, this work specifically focus on the concept of Dynamic Programming, first introduced by \cite{Bellman:1954}.
 
 To facilitate the discussion and analysis of optimal controllers, consider a subclass of these controllers (that is still very general) defined below by a specific choice of functional for the cost function.
 
@@ -2331,7 +2386,7 @@ This formulation presents a notion of optimizing for a sequence of control actio
 \end{matrix*}
 .\end{align}
 
-Now, the discussion turns to how to solve this general problem. In this work, the solution for the optimal control will follow the dynamic programming formulation as in \textbf{[reference]}. The first necessary effort, then, is to define an important partial differential equation known as the Hamilton-Jacobi equation.
+Now, the discussion turns to how to solve this general problem. In this work, the solution for the optimal control will follow a dynamic programming formulation. The first necessary effort, then, is to define an important partial differential equation known as the Hamilton-Jacobi equation, given below.
 
 \begin{boxed-theorem}{(Hamilton-Jacobi equation)} \label{th:hamiltonJacobi}
     Consider a finite-horizon cost function in the form of Definition \ref{def:finiteHorizonOC}, for a system described by the state-equation $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$, restated as:
@@ -2387,7 +2442,7 @@ Now, the discussion turns to how to solve this general problem. In this work, th
     To prove the theorem it remains to derive the boundary condition. This result, however, is direct from the form of the cost function, since $V^*(\bm{x}, T) = l_f(\bm{x}(T))$ can not be changed through any more control action inside the time horizon.
 \end{proof}
 
-The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition at $t = T$ to the beginning of the horizon at $t = t_0$. This results from the fact that the last action $u(T)$ depends only on $l_f(\cdot)$, so it can be directly calculated for a desired final state $\bm{x}(T)$ and used to calculate the remaining optimal costs backward in time. This recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \textbf{[reference]} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman (HJB) equation. An illustration of this principle is shown in Fig. \ref{fig:generalOC01}
+The Hamilton-Jacobi equation implies that finite-horizon optimal controllers can be optimized in a recursive manner, starting from the boundary condition at $t = T$ to the beginning of the horizon at $t = t_0$. This results from the fact that the last action $u(T)$ depends only on $l_f(\cdot)$, so it can be directly calculated for a desired final state $\bm{x}(T)$ and used to calculate the remaining optimal costs backward in time. This recursive property, directly evidenced in \eqref{eq:HJERecursive}, is a statement of the Bellman's Principle of Optimality \cite{Bellman:1954} and, for this reason, the Hamilton-Jacobi equation in the context of optimal control theory is known as the Hamilton-Jacobi-Bellman (HJB) equation. An illustration of this principle is shown in Fig. \ref{fig:generalOC01}
 
 \begin{figure}[ht]
     \centering
@@ -2444,7 +2499,7 @@ The last section introduced a general condition for solving a finite-horizon opt
     \noindent where is assumed that $\bm{Q},\bm{Q}_f  \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
 \end{boxed-definition}
 
-The LQR optimal controller was first introduced in \textbf{[reference]} and has been a foundation of optimal control theory ever since. From an engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. From a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is desirable since quadratic optimization problems have been widely studied in the literature \textbf{[reference]}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
+The LQR optimal controller was a major breakthrough in the development of optimal control theory \cite{Bryson:1996}, and has been a foundation for more complex systems ever since. From an engineering point of view, this choice of cost function has the advantage that it breaks the controller design to simply choose matrices $\bm{Q}$ and $\bm{R}$ as a trade-off between performance and actuator restrictions. From a mathematical point of view, the cost function has the advantage of being a quadratic function of the state and input signals, which is desirable since quadratic optimization problems have been widely studied in the literature \cite{Boyd:2004}. Now, it is necessary to develop a solution for the Hamilton-Jacobi equation in the light of this formulation. First of all, consider the following theorem.
 
 \begin{boxed-theorem}{} \label{th:costQuadraForm}
     Consider a continuous cost function $V : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ given by the LQR cost function defined in Definition \ref{def:lqr} for a linear system. The optimal cost $V^*(\bm{x}, t)$ has the quadratic form:
@@ -2535,7 +2590,7 @@ This theorem shows that the fact that the cost function $V(\bm{x}, \bm{u}, t)$ i
 \noindent Finally, the terminal condition is direct from the fact that $V^*(\bm{x}, T) = \bm{x}^T(T) \bm{Q}_f \bm{x}(T)$.
 \end{proof}
 
-A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the action can be calculated analytically. Several others optimal controllers may offer performance improvements, but usually depends on iterative optimization procedures, which can be computationally expensive to calculate for high-dimensional systems. Furthermore, the time complexity of the LQR control action computation is governed by the solution of the Riccati differential equation which can be done very efficiently \textbf{[reference]}.
+A closed-form solution for the LQR problem makes this controller a very appealing solution in several applications, since not only it is an optimal controller but the action can be calculated analytically. Several others optimal controllers may offer performance improvements, but usually depends on iterative optimization procedures, which can be computationally expensive to calculate for high-dimensional systems. Furthermore, the time complexity of the LQR control action computation is governed by the solution of the Riccati differential equation which can be done very efficiently \cite{Davison:1973, Opanuga:2015}.
 
 Now, consider the optimal control action $\bm{u}^*(t)$. Applying this action to a linear system in State-Space representation results in the following state-equation:
 \begin{equation}
@@ -2610,7 +2665,7 @@ To conclude the section, it is also worth mentioning that, for the LQR cost func
     .\end{equation}
 \end{boxed-theorem}
 
-A detailed proof of this result can be found in \textbf{[reference]}. The possibility for an infinite-horizon LQR is desirable in the sense that it doesn't restrict the operation to a fixed time interval, however, the resulting optimal controller suffers from a worst performance when compared to finite-time horizon controllers.
+A detailed proof of this result can be found in \cite{Moore:1990}. The possibility for an infinite-horizon LQR is desirable in the sense that it doesn't restrict the operation to a fixed time interval, however, the resulting optimal controller suffers from a worst performance when compared to finite-time horizon controllers.
 
 \section{Optimal State Estimators}
 
@@ -2673,7 +2728,7 @@ First of all, consider a system perturbed by disturbances in the state-response 
 
 With this formulation, the noise variables can actually represent both the effect of external disturbances and the model uncertainty. This is important because dynamical models, even those developed according to a first-principle methodology, are not the true representation of the actual dynamical system or process. The motivation for a discussion of only a discrete State-Space model is to facilitate the interpretation of the statistical properties of the model. 
 
-A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises variables are assumed to have a Gaussian distribution, both variables $\bm{x}_k \sim \mathcal{N}(\bm{\mu}_{x_k}, \bm{\Sigma}_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\bm{\mu}_{y_k}, \bm{\Sigma}_{y_k})$ are also Gaussian, where $\bm{\mu}_{x_k},\bm{\mu}_{y_k}$ are their respective mean vectors and $\bm{\Sigma}_{x_k},\bm{\Sigma}_{y_k}$ are the respective covariance matrices. This is because this distribution is closed to linear operations \textbf{[reference]}. For this reason, each state and output trajectory over a discrete time interval is a collection of time-indexed random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process (GP) \textbf{[reference]}.
+A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and $\bm{v}_k$ are random variables, $\bm{x}_k$ and $\bm{y}_k$ are also random variables. More precisely, since the noises variables are assumed to have a Gaussian distribution, both variables $\bm{x}_k \sim \mathcal{N}(\bm{\mu}_{x_k}, \bm{\Sigma}_{x_k})$ and $\bm{y}_k \sim \mathcal{N}(\bm{\mu}_{y_k}, \bm{\Sigma}_{y_k})$ are also Gaussian, where $\bm{\mu}_{x_k},\bm{\mu}_{y_k}$ are their respective mean vectors and $\bm{\Sigma}_{x_k},\bm{\Sigma}_{y_k}$ are the respective covariance matrices. This is because the Gaussian distribution is closed to linear operations. For this reason, each state and output trajectory over a discrete time interval is a collection of time-indexed random variables following the Gaussian distribution, i.e., a stochastic process known as a Gaussian Process \cite{Rasmussen:2006}.
 
 \begin{boxed-definition}{(Gaussian Process)} \label{def:gaussianProcess}
     Given a Gaussian process defined as a collection of random variables:
@@ -2687,7 +2742,7 @@ A direct result from Definition \ref{def:stochSS} is that, since $\bm{w}_k$ and 
     .\end{equation}
 \end{boxed-definition}
 
-The defined joint probability $p(\bm{x}_0, \cdots, \bm{x}_K)$ is interpreted as the probability of a specific state trajectory to occur. The conditional probability $p(\bm{x}_k | \bm{x}_{k-1}, \cdots, \bm{x}_0)$ states that the probability associated with a random state variable $\bm{x}_k$ can be conditioned on the state trajectory $(\bm{x}_{k-1}, \cdots, \bm{x}_0)$ from the previous time instants. These two probabilities can be related through the well-known \textit{Chain Rule of Probability}, which, in the context of stochastic processes, is a realization of the \textit{Markov Property} \textbf{[reference]}. A nice property of Gaussian distributions is that the joint and condition distribution of Gaussian random variables are still Gaussian \textbf{[reference]}.
+The defined joint probability $p(\bm{x}_0, \cdots, \bm{x}_K)$ is interpreted as the probability of occurring a specific state trajectory. The conditional probability $p(\bm{x}_k | \bm{x}_{k-1}, \cdots, \bm{x}_0)$ states that the probability associated with a random state variable $\bm{x}_k$ can be conditioned on the state trajectory $(\bm{x}_{k-1}, \cdots, \bm{x}_0)$ from the previous time instants. These two probabilities can be related through the well-known \textit{Chain Rule of Probability}, which, in the context of stochastic processes, is a realization of the \textit{Markov Property} \cite{Stratonovich:1968}. A nice property of Gaussian distributions, in this context, is that the joint and condition distribution of Gaussian random variables are still Gaussian \cite{Sheldon:2010}.
 
 
 \subsubsection{Kalman Filter}
@@ -2697,7 +2752,7 @@ The dynamic response $\bm{x}_{k+1}$ of a system for a time instant $k+1$, given 
     p(\bm{x}_{k+1} | \bm{x}_{k}, \cdots, \bm{x}_1, \bm{x}_0) =  p(\bm{x}_{k+1} | \bm{x}_{k})
 .\end{equation}
 
-A process that exhibits this property is known as a First-Order Markov process \textbf{[reference]}. With this formulation, it is always possible to marginalize the probability distribution of a random variable $\bm{x}_{k+1}$ given the initial state $\bm{x}_0$, which are related through the equation:
+A process that exhibits this property is known as a First-Order Markov process. With this formulation, it is always possible to marginalize the probability distribution of a random variable $\bm{x}_{k+1}$ given the initial state $\bm{x}_0$, which are related through the equation:
 \begin{equation}
     p(\bm{x}_{k+1}) =  p(\bm{x}_{k+1} | \bm{x}_{k}) p(\bm{x}_{k} | \bm{x}_{k-1}) \cdots p(\bm{x}_{1} | \bm{x}_{0})p(\bm{x}_0) = p(\bm{x}_0) \prod_{i=0}^k p(\bm{x}_{i+1} | \bm{x}_{i})
 .\end{equation}
@@ -2722,7 +2777,7 @@ A process that exhibits this property is known as a First-Order Markov process \
     .\end{align}
 \end{boxed-definition}
 
-A Hidden-Markov Model is a statistical interpretation of dynamical system that is well-known in the literature \textbf{[reference?]}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ actual value is never known (since it is a latent variable), but can be observed through the emission variable $\bm{y}_k$, under the assumption that system model is perfectly known. This raises the problem of state estimation as a common inference problem known as the \textit{filtering}, which consists on determining statistically the actual value of $\bm{x}_k$ given the observations $\bm{y}_0, \cdots, \bm{y}_k$ and control actions $\bm{u}_0, \cdots, \bm{u}_k$. Thus, the state can be obtained through the distribution:
+A Hidden-Markov Model is a statistical interpretation of dynamical systems that is well-known in the literature \cite{Barber:2012}. An illustration of the dependence between these variables as a graphical model is depicted in Fig. \ref{fig:HMM01}. Notice that, in this formulation, the state-vector $\bm{x}_k$ actual value is never known (since it is a latent variable), but can be observed through the emission variable $\bm{y}_k$, under the assumption that system model is perfectly known. This raises the problem of state estimation as a common inference problem known as the \textit{filtering}, which consists on determining statistically the actual value of $\bm{x}_k$ given the observations $\bm{y}_0, \cdots, \bm{y}_k$ and control actions $\bm{u}_0, \cdots, \bm{u}_k$. Thus, the state can be obtained through the distribution:
 \begin{equation}
     p(\bm{x}_k | \bm{y}_{k}, \bm{y}_{k-1}, \cdots, \bm{y}_0, \bm{u}_{k-1}, \bm{u}_{k-2}, \cdots, \bm{u}_0)
 ,\end{equation}
@@ -2788,7 +2843,7 @@ A Hidden-Markov Model is a statistical interpretation of dynamical system that i
     \label{fig:HMM01}
 \end{figure}
 
-There are several approaches to solve the filtering and other related problems in statistical state estimation \textbf{[reference-Sarkka]}, but the most popular method has been the Kalman filter \textbf{[reference]} which is discussed below for a discrete-time system.
+There are several approaches to solve the filtering and other related problems in statistical state estimation \cite{Sarkka:2013}, but the most popular method has been the Kalman filter, presented in the seminal paper \cite{KalmanF:1960}. The discrete formulation for a linear Kalman Filter is given below.
 
 \begin{boxed-theorem}{(Kalman Filter)} \label{th:kalmanFilter}
     Given a Controlled Hidden Markov Model as in Definition \ref{def:HMM} and initial state distribution $\bm{x}_0 \sim \mathcal{N}(\bar{x}_0, \bm{P}_0)$, the filtering distribution can be solved in closed-form as:
@@ -2882,7 +2937,7 @@ Notice that, despite the similarity with Luenberger observers, the Kalman gain h
 
 \subsubsection{Controller-Estimator Duality}
 
-In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for iteratively minimizing the trace of the covariance matrix $\bm{P}_k$ [reference], which is given as:
+In addition to that, it can be shown that the recursive steps that solves the filtering problem are also responsible for iteratively minimizing the trace of the covariance matrix $\bm{P}_k$, which is given as:
 \begin{equation}
     \bm{P}_k = \mathbb{E}\left[ (\bm{x}_k - \bar{\bm{x}}_k)(\bm{x}_k - \bar{\bm{x}}_k)^T \right]
 .\end{equation}
@@ -2908,11 +2963,38 @@ In addition to that, it can be shown that the recursive steps that solves the fi
     \noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
 \end{boxed-theorem}
 
-A detailed proof of this theorem can be found in \textbf{[reference]}. The formulation of an optimal state estimator further emphasizes the duality between controllers and observers. Notice that the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves the exact same Riccati differential equation as the one in Theorem \ref{th:LQRAction}, but forward in time for matrices $\bm{A}^T$ and $\bm{C}^T$ instead of $\bm{A}$ and $\bm{B}$. Notice, however, that these filters are not limited to a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. Another direct result of the duality is that is possible to derive an estimator considering $t_0 \to -\infty$, which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$ \textbf{[reference]}.
+A detailed proof of this theorem can be found in \cite{Crassidis:2011}. The formulation of an optimal state estimator further emphasizes the duality between controllers and observers. Notice that the gain $\bm{K}_e(t)$ of a Kalman-Bucy filter depends on a matrix $\bm{P}_e(t)$ that solves the exact same Riccati differential equation as the one in Theorem \ref{th:LQRAction}, but forward in time for matrices $\bm{A}^T$ and $\bm{C}^T$ instead of $\bm{A}$ and $\bm{B}$. Notice, however, that these filters are not limited to a terminal time $T$, since the boundary condition only requires information on the initial time $t_0 > -\infty$, which implies that they could also be used in forward infinite-horizon operations. Another direct result of the duality is that is possible to derive an estimator considering $t_0 \to -\infty$, which, as in Theorem \ref{th:infiniteLQR}, results in a time-invariant filter with gain $K_e$.
 
 \section{Linear Quadratic Gaussian (LQG)}
 
 This chapter presented formulation for controllers and state estimators that are optimal, in the sense that they minimize some cost function based on information about the model and measurements. In the previous chapter, the Theorem \ref{th:separationPrinciple} stated that a controller and an estimator can be designed separately, and a resulting control by feedback of estimated states is always feasible. In this section, a similar configuration is shown for optimal control and estimation operations, as depicted in Fig. \ref{fig:lqg01}. 
+
+The control configuration that connects an optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a \textit{Linear Quadratic Gaussian} (LQG) controller. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. A formal definition is given below.
+
+\begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
+    Consider a stochastic system in State-Space representation just as in Definition \ref{def:stochSS}, rewritten below:
+	\begin{align}
+    \begin{cases}
+        \hfill \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) \\
+        \hfill \bm{y}(t) &= \bm{C} \bm{x}(t) + \bm{v}(t)
+    \end{cases}
+    ,\end{align}
+    
+     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is determined by a Kalman-Bucy filter and whose optimal input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
+    \begin{align} \label{eq:lqg01}
+        \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{K}_e(t) \bm{y}(t) 
+    ,\end{align}
+    
+    \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solve the Riccati differential equations:
+    \begin{align}
+    \begin{cases}
+        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
+        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
+    \end{cases}
+    \end{align}
+    
+    \noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$, respectively.
+\end{boxed-definition}
 
 \begin{figure}[ht]
     \centering
@@ -2979,33 +3061,6 @@ This chapter presented formulation for controllers and state estimators that are
     \label{fig:lqg01}
 \end{figure}
 
-The control configuration that connects an optimal control action of a Linear Quadratic Regulator together with the estimation states from a Kalman filter (or Kalman-Bucy filter) is know as a Linear Quadratic Gaussian (LQG) controller \textbf{[reference]}. Since the controller is independent of the estimator, it is also possible to include integral action to the configuration, as shown in the block diagram, presenting this architecture as a general configuration that can deal with a broad range of applications. Because of the stochastic nature of the estimation and the optimal procedure of the control, this configuration is central to the field of Stochastic Optimal Control \textbf{[reference?]}. A formal definition is given below.
-
-\begin{boxed-definition}{(Linear Quadratic Gaussian)} \label{def:lqg}
-    Consider a stochastic system in State-Space representation just as in Definition \ref{def:stochSS}, rewritten below:
-	\begin{align}
-    \begin{cases}
-        \hfill \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) \\
-        \hfill \bm{y}(t) &= \bm{C} \bm{x}(t) + \bm{v}(t)
-    \end{cases}
-    ,\end{align}
-    
-     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is determined by a Kalman-Bucy filter and whose optimal input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
-    \begin{align} \label{eq:lqg01}
-        \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{K}_e(t) \bm{y}(t) 
-    ,\end{align}
-    
-    \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solve the Riccati differential equations:
-    \begin{align}
-    \begin{cases}
-        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
-        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
-    \end{cases}
-    \end{align}
-    
-    \noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$, respectively.
-\end{boxed-definition}
-
 Notice that another advantage of this controller-estimator configuration is that the solution for both Riccati differential equations does not depends on the states at any time $\bm{x}(t)$, with the exception of the boundary condition $\bm{P}_e(t_0)$ which can in any case be obtained before the system operation. Therefore, the values for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$, and consequently $\bm{K}(t)$ and $\bm{K}_e(t)$, for $t \in [t_0, T]$, can be evaluated beforehand and then applied in the on-line operation.
 
 The LQG controller can also be used for tracking non-constant references, given that the system can be augmented while maintaining controllability. The augmented system is used to calculate the controller gains $\bm{K}(t)$ using Definition \ref{def:lqServo}, while the estimator gains $\bm{K}_e(t)$ are optimized through the original system. Given that it can optimally solve both the regulator and tracking problems, while still accounting for uncertainty in the system, the Linear Quadratic Gaussian poses as a high performing multi-purpose controller. The resulting augmented system can be represented by the closed-loop state equation:
@@ -3052,7 +3107,7 @@ The resulting simulations from Example \ref{ex:lqg01} are shown in Fig. \ref{fig
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.9\textwidth]{chapter4/report_ch4_1}
+	\includegraphics[width=\textwidth]{chapter4/report_ch4_1}
 	\caption{Simulation of the LQG controllers showing the input signal (left) and correspondent actual state responses (right). The dots denotes represents the measurements from the real system.}
 	\label{fig:lqg02}
 \end{figure}
@@ -3092,7 +3147,7 @@ Notice that, in contrast to the Pole-Placement method where the stability must b
 
 \subsubsection{Robustness}
 
-Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \textbf{[reference]}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of an unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
+Now, the discussion turns to the robustness properties of these optimal controllers. It can be shown that the LQR has a gain margin $GM = \infty$ and a phase margin $PM \geq \ang{60}$ \cite{Moore:1990}. This assumption can be verified from a visual inspection of the Nyquist plot, as shown in Fig. \ref{fig:lqrProperties01}. The reason for these values comes from the fact that the Nyquist diagram of an optimal regulator never crosses the unit circle centered at $s = -1$ (implied by the Return Difference Equality). Therefore, the diagram never crosses the point $s = -1$ no matter how much the gain $K$ is changed, which establishes the infinite gain margin. In addition, the angle that the closest permissible point of an unit circle centered in $s = 0$ makes with the point $s = -1$ is exactly $\ang{60}$, which establishes the lower bound on the gain phase.
 
 \begin{figure}[ht]
 	\centering
@@ -3101,7 +3156,7 @@ Now, the discussion turns to the robustness properties of these optimal controll
 	\label{fig:lqrProperties01}
 \end{figure}
 
-Of course, there is no physical support of saying that a controller device exhibits an infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \textbf{[reference]} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
+Of course, there is no physical support of saying that a controller device exhibits an infinite gain margin, since there is always uncertainty about the model, the instrumentation and the environment. However, the fact that the mathematical model displays infinite gain margin allows for the assumption that the physical controller will have an extremely large margin. In fact, the uncertainty just mentioned is the main motivation into using optimal state estimators to reconstruct the state-vector from data, and it was shown by \cite{Doyle:1978} that an optimal controller-estimator configuration, i.e., the Linear Quadratic Gaussian, has no guaranteed margins.
 
 %% 5 - Receding Horizon Optimal Control
 %% ---------------------------------------------------------------
@@ -3240,11 +3295,17 @@ Of course, there is no physical support of saying that a controller device exhib
 \clearpage
 \chapter{Methodology}
 
-This chapter details the methodology used in order to attest the discussion presented until now. The experiments were performed in a simulated environment, using the MATLAB software \textbf{[reference]} as the framework to compute such simulations. The results obtained are presented and discussed in the next chapter.   
+This chapter details the methodology used in order to attest the discussion presented until now. The experiments were performed in a simulated environment, using the \cite{MATLAB:2018} software as the framework to compute such simulations. The results obtained are presented and discussed in the next chapter.   
 
 \section{Non-Isothermal Continuous Stirred Tank}
 
-The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by \textbf{[reference-Engel]}. This system is a realization of a class of processes that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactor systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control \textbf{[reference]}. 
+The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by \cite{Klatt:1998}. This system is a realization of a class of processes that characterize a wide range of industrial applications, hence being considered a classical benchmark for reactor systems. In particular, the system proposed for the experiment is a multiple-input multiple-output (MIMO) system which is highly nonlinear, with non-minimum phase behavior and unmeasurable states, thus makes it very challenging to control. A schematic of this system is shown in Fig. \ref{fig:methodology01}. 
+
+\begin{figure}[ht] \centering
+	\includegraphics[scale=0.75]{chapter6/exoCSTR}
+	\caption{The non-isothermal continuous stirred tank reactor proposed.}
+	\label{fig:methodology01}
+\end{figure}
 
 This system is comprised by a tank containing a dilute solution of cyclopentadiene ($\textbf{C}_5 \textbf{H}_6$), which suffers reactions together with water molecules and together with the side-products of these reactions. The reaction scheme follows the same Van de Vusse scheme explored earlier in this report:
 \begin{align}
@@ -3259,13 +3320,7 @@ Since the reaction is non-isothermal, the kinetics rates $K_1(T)$, $K_2(T)$ and 
 	K_{i}(T) = K_{i0} e^{\frac{-E_i / R}{T+273.15}}
 \end{equation}
 
-In order to control the temperature, ensuring some safety constraints to the process, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario also assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$. The schematic of this operation is shown in Fig. \ref{fig:methodology01}. 
-
-\begin{figure}[ht] \centering
-	\includegraphics[scale=0.75]{chapter6/exoCSTR}
-	\caption{The non-isothermal continuous stirred tank reactor proposed.}
-	\label{fig:methodology01}
-\end{figure}
+In order to control the temperature, ensuring some safety constraints to the process, a coolant system is coupled to the tank reactor to perform heat exchange by conduction. This scenario also assumes that only the concentration of chemical $\textbf{C}_5 \textbf{H}_7 \textbf{OH}$ and the temperature inside the tank can be measured. Additionally, the liquid inflow into the tank carries only the chemical $\textbf{C}_5 \textbf{H}_6$ with a concentration $\rho^{(A)}_{in}$ and temperature $T_{in}$.
 
 A nonlinear dynamical model, which was obtained from the first principles approach, is proposed to represent the evolution of the important states:
 \begin{align} \label{eq:engellModel}
@@ -3344,51 +3399,51 @@ The simulation results are mainly analyzed through graphical visualizations of t
 \clearpage
 \chapter{Results and Discussion}
 
-a
+This chapter presents the results of the experiments described in the last chapter. The sections starts by presenting the simulation of the dynamical model and analyzing its properties. After that, several optimal controllers are formulated and simulated in closed-loop conditions, both for regulation and tracking. The control simulations are grouped accordingly to the control objective that they impose to the system.
 
 \section{Dynamical Analysis}
 
 \subsection{Nonlinear model simulation}
 
-The behavior of the process is accessed directly by simulating the nonlinear model presented at \eqref{eq:engellModel}. The main goal is to observe how the system responds to variations in each of its manipulated variables. In the first simulation, shown in Fig. \ref{fig:dynamics01}, the process is started at the steady-state condition, and then a pulse is applied to the liquid inflow to the tank. The response in each system is shown at the right side of the figure, where the states relating concentrations and the ones relating temperatures are grouped in different plots. The dashed lines represents the response of for compounds $C$ and $D$, which are not given by the proposed model, but can easily be equated following the first-principles approach.
+The behavior of the process is accessed directly by simulating the nonlinear model presented at \eqref{eq:engellModel}. The main goal is to observe how the system responds to variations in each of its manipulated variables. In the first simulation, shown in Fig. \ref{fig:dynamics01}, the process is started at the steady-state condition, and then a pulse is applied to the liquid inflow to the tank. 
 
 \begin{figure}[ht] \centering
 	\begin{tikzpicture}	[node distance=0.7cm]
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics01}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
 		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 	\end{tikzpicture}	
 
 	\caption{Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a pulse change in the input flow-rate.}
@@ -3404,38 +3459,38 @@ The second simulation was performed similarly, but applying a negative pulse to 
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics02}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
 		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 	\end{tikzpicture}	
 	
 	\caption{Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a pulse change in the cooling capacity.}
@@ -3449,38 +3504,38 @@ Now, the goal was to visualize if it is possible to increase the concentration o
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/dynamics03}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5cm, minimum width=0.91\textwidth] (legendBox) {};
+			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.91\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
 		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 	\end{tikzpicture}	
 	
 	\caption{Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a change in the input flow-rate and cooling capacity.}
@@ -3556,10 +3611,10 @@ Regarding the matrices $\bm{C}$ and $\bm{D}$, recall that only the variables $\r
 The linear model presented in \eqref{eq:exoLinSS01} is an approximation of the nonlinear model for any point in the state space, given that it is a steady-state point. To obtain feasible linearization points, the differential equation system is evaluated for all points where $\dot{\rho_A} = \dot{\rho_B} =\dot{T} =\dot{T_c} = 0$. To solve this system, the input variables are selected to be the interval defined by the physical variable restrictions. The result is shown in Fig. \ref{fig:ssValues} for the two measured variables. In this work, it is assumed the steady-state point given by $\bm{x}_o = [1.235, 0.90, 134.14, 128.95]^T$ and $\bm{x}_o = [18.83, -4495.7]^T$, indicated in the figure by a white cross.
 
 \begin{figure}[ht] \centering
-	\begin{subfigure}{0.45\textwidth}
+	\begin{subfigure}{0.46\textwidth}
 		\includegraphics[width=\textwidth]{chapter7/ssValues01}
 	\end{subfigure} \hfill
-	\begin{subfigure}{0.45\textwidth}
+	\begin{subfigure}{0.46\textwidth}
 		\includegraphics[width=\textwidth]{chapter7/ssValues02}
 	\end{subfigure}
 	
@@ -3598,28 +3653,28 @@ In order to demonstrate that the linear model is a valid approximation of the no
 		\node (plot) {\includegraphics[width=\textwidth]{chapter7/linear01}};
 		
 		\begin{scope}[on background layer]
-			\node[block, above of=plot, xshift=0.65cm, node distance=5.5cm, minimum width=0.7\textwidth] (legendBox) {};
+			\node[block, above of=plot, xshift=0.65cm, node distance=4.5cm, minimum width=0.7\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
 		\node at (legendBox.west) [xshift=0.6cm]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1.5cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1.5pt] (legendStart) -- (label);
+		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
 	\end{tikzpicture}	
 	
 	\caption{Simulation of both the nonlinear and linearized State-Space models. The nonlinear response is represented by the dashed lines.}
@@ -3671,22 +3726,21 @@ Moreover, the last property of the system to be accessed concerns the observabil
 
 \subsection{Regulation}
 
-The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01}. The simulation started with an initial state $x_1(0) = x_2(0) = 0$ (or, equivalently, $\Delta x_1(0) = -x_{1o}$ and $\Delta x_2(0) = -x_{2o}$) while maintaining the states $x_3$ and $x_4$ at the steady-state value. The goal of this simulation was to represent the scenario where the solution in the tank does not actually contain any concentration of the reagents or products. This scenario, thus, requires that the controller ``starts" the process by providing the flow of reagent necessary to achieve the desirable steady-state concentration of the controlled product. Notice that the resulting reactions will change the temperature inside the tank, requiring also that the controller manipulates the cooling capacity in order to control the reactor temperature.
-
+The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01}. The simulation started with initial condition $x_1(0) = x_2(0) = 0$ (or, equivalently, $\Delta x_1(0) = -x_{1o}$ and $\Delta x_2(0) = -x_{2o}$) while maintaining the states $x_3$ and $x_4$ at the steady-state value. The goal of this simulation was to represent the scenario where the solution in the tank does not actually contain any concentration of the reagents or products. This scenario, thus, requires that the controller ``starts" the process by providing the flow of reagent necessary to achieve the desirable steady-state concentration of the controlled product. 
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqr01}
 	
-	\caption{a}
+	\caption{Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point.}
 	\label{fig:lqr01}
 \end{figure}
 
-As expected, the controller momentarily increases the input flow-rate in order to accelerate the production of compound $B$, returning to the steady-state value to achieve the desired reference. Notice that the input flow-rate does not grow further in the first minutes in order to avoid overshoots, which occurs in the results presented but with small magnitude. In respect to the reactor temperature, the controller was able to respond to the sudden change by decreasing the absolute value of the cooling capacity, causing the coolant to increase its temperature and, consequently, returns the reactor temperature to the reference. Therefore, the simulation shows that the proposed optimal controller is able to drive the process to a desired constant reference in an optimal manner, not causing overshoots and/or oscillations, in a small amount of time.
+Notice that the resulting reactions will change the temperature inside the tank, requiring also that the controller manipulates the cooling capacity in order to control the reactor temperature. As expected, the controller momentarily increases the input flow-rate in order to accelerate the production of compound $B$, returning to the steady-state value to achieve the desired reference. Notice that the input flow-rate does not grow further in the first minutes in order to avoid overshoots, which occurs in the results presented but with small magnitude. In respect to the reactor temperature, the controller was able to respond to the sudden change by decreasing the absolute value of the cooling capacity, causing the coolant to increase its temperature and, consequently, returns the reactor temperature to the reference. Therefore, the simulation shows that the proposed optimal controller is able to drive the process to a desired constant reference in an optimal manner, not causing overshoots and/or oscillations, in a small amount of time.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqr02}
 	
-	\caption{a}
+	\caption{Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.}
 	\label{fig:lqr02}
 \end{figure}	
 
@@ -3702,40 +3756,41 @@ Until now, the experiments were done assuming that the optimal controller had di
 \end{matrix}
 \end{equation}
 
-The covariance matrix of the noise $\bm{w}(t)$ tries represents the uncertainty of the non-linear model behavior in respect to the linearized model, while the covariance matrix of $\bm{z}(t)$ aims to represent realistic limitation of measurement devices in respect to these variables. Initially, it is assumed that the Kalman-Bucy estimator can accurately estimate these covariances before optimizing each estimator gain $\bm{K}_e(t)$. The simulation results, for the scenario of starting the process, is shown in Fig. \ref{fig:lqg01}.
+The covariance matrix of the noise $\bm{w}(t)$ tries represents the uncertainty of the non-linear model behavior in respect to the linearized model, while the covariance matrix of $\bm{z}(t)$ aims to represent realistic limitation of measurement devices in respect to these variables. Initially, it is assumed that the Kalman-Bucy estimator can accurately estimate these covariances before optimizing each estimator gain $\bm{K}_e(t)$. The simulation results, for the scenario of starting the process, is shown in Fig. \ref{fig:lqg01Sim}.
  
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqg01}
-	\caption{a}
-	\label{fig:lqg01}
+	\caption{Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point.}
+	\label{fig:lqg01Sim}
 \end{figure}
 
 The estimation of the covariance matrices gave the estimator enough information to accurately reconstruct the state vector from the observations. As it can be seen in the visualizations, this control-estimation operation is very similar to the one shown in Fig. \ref{fig:lqr01}, when the states were directly known. It is visible, however, a slightly greater peak value for the cooling capacity in this case. Thus, the LQG controller proved to be optimal even for in realistic configurations.
 
-Furthermore, the same controller was also evaluated for the case where disturbances in the system variables are present. In this experiment, the same disturbance signal used in the LQR simulation is provided to the observed system. The results are shown in Fig. \ref{fig:lqg02}.
+Furthermore, the same controller was also evaluated for the case where disturbances in the system variables are present. In this experiment, the same disturbance signal used in the LQR simulation is provided to the observed system. The results are shown in Fig. \ref{fig:lqg02Sim}.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqg02}
-	\caption{a}
-	\label{fig:lqg02}
+	\caption{Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.}
+	\label{fig:lqg02Sim}
 \end{figure}	
 
 Doing a comparison with Fig. \ref{fig:lqr01}, it seems that the system responses are very similar. However, the controller in this case performed less aggressively, which resulted in a more damped response for the concentrations, in the beginning of the operation. The corrective actions for the disturbances were also smoother than of those before, and they are barely visible in the scale of the visualization. Finally, the performance metrics for the discussed controllers are displayed in Table \ref{tb:lqrMetrics}.
 
-\begin{table}[ht]
-	\centering
-	\begin{tabular}{l | c c | c c c c}
-		\textbf{Controller} & $\bm{Q}_{\Delta}$ & $\bm{R}_{\Delta}$ & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
-		\hline
-		$LQR_1$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
-		$LQR_2$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
-		$LQR_3$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
-		$LQR_4$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
-	\end{tabular}
-	
-	\caption{•}
-	\label{tb:lqrMetrics}
-\end{table}
+%\begin{table}[h]
+%	\centering
+%	\begin{tabular}{l | c c | c c c c}
+%		\textbf{Type} & $\bm{Q}_{\Delta}$ & $\bm{R}_{\Delta}$ & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
+%		\hline
+%		$LQR_1$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.26 \\ 82.92 \end{pmatrix}$ & $\begin{pmatrix} 12.27 \\ 60.70 \end{pmatrix}$	& $\begin{pmatrix} 0.001 \\ 0.104 \end{pmatrix}$ & $\begin{pmatrix} 0.26 \\ 2.83 \end{pmatrix}$ \\
+%		$LQG_1$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.27 \\  137.08 \end{pmatrix}$ & $\begin{pmatrix} 14.76 \\ 134.57 \end{pmatrix}$	& $\begin{pmatrix} 0.03 \\ 24.53 \end{pmatrix}$ & $\begin{pmatrix} 1.96 \\ 51.13 \end{pmatrix}$ \\
+%		\hline
+%		$LQR_2$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.27 \\  137.08 \end{pmatrix}$ & $\begin{pmatrix} 14.76 \\ 134.57 \end{pmatrix}$	& $\begin{pmatrix} 0.03 \\ 24.53 \end{pmatrix}$ & $\begin{pmatrix} 1.96 \\ 51.13 \end{pmatrix}$ \\
+%		$LQG_2$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
+%	\end{tabular}
+%	
+%	\caption{Comparison between the LQR and LQG controllers obtained for regulation. The second pair comprises the simulations where the system was subjected to disturbances.}
+%	\label{tb:lqrMetrics}
+%\end{table}
 
 \subsection{Tracking}
 
@@ -3744,7 +3799,7 @@ Now, the experiments for controllers that track non-constant references is prese
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqri01}
 	
-	\caption{a}
+	\caption{Simulation of the LQR controller with Integral Action for reference tracking.}
 	\label{fig:lqri01}
 \end{figure}
 
@@ -3757,7 +3812,7 @@ Following the same case of the previous subsection, the same controller was used
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqri02}
 	
-	\caption{a}
+	\caption{Simulation of the LQR controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.}
 	\label{fig:lqri02}
 \end{figure}	
 
@@ -3767,7 +3822,7 @@ In the direction for a more realistic scenario, the same reference tracking just
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi01}
-	\caption{a}
+	\caption{Simulation of the LQG controller with Integral Action for reference tracking.}
 	\label{fig:lqgi01}
 \end{figure}
 
@@ -3777,7 +3832,7 @@ For completeness, the same tracking objective was simulated for the case of dist
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi02}
-	\caption{a}
+	\caption{Simulation of the LQG controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.}
 	\label{fig:lqgi02}
 \end{figure}	
 
