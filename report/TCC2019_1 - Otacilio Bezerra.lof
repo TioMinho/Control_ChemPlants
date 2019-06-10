@@ -1,0 +1,51 @@
+\babel@toc {english}{}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces The schematic of a simple Mass-Spring-Damper system and its dynamical response to being forced by an unitary constant force.\relax }}{2}{figure.caption.4}% 
+\contentsline {figure}{\numberline {1.2}{\ignorespaces The two most popular configurations for connecting controllers to dynamical systems. \relax }}{2}{figure.caption.5}% 
+\contentsline {figure}{\numberline {1.3}{\ignorespaces General graphical representations of common chemical reactor systems.\relax }}{4}{figure.caption.6}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Schematic representations of industrial reactor tanks for (a) a simple isothermal process and (b) a non-isothermal process with heating/cooling system.\relax }}{9}{figure.caption.7}% 
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Graphical interpretation of (a) Input-Output models and (b) State-Spaces models.\relax }}{12}{figure.caption.8}% 
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Comparison between the nonlinear and linear response of the reactor system.\relax }}{17}{figure.caption.10}% 
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Simulation of the total response decomposition for the two first states of the model from \textup {\hbox {\mathsurround \z@ \normalfont (\ignorespaces \ref {eq:isoReact01}\unskip \@@italiccorr )}}. Each state response is shown separately (left) and together into a trajectory visualization (right), in which the steady-state point is indicated by a circle.\relax }}{20}{figure.caption.11}% 
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Simulation of the state-transition matrix $e^{\bm {A} t}$ from Example \ref {ex:stateTrans} for $t \in [0, 1.5]$.\relax }}{22}{figure.caption.12}% 
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Simulation of the state-transition matrix $e^{\bm {A} t}$ from Example \ref {ex:stateTrans02} for $t \in [0,50]$.\relax }}{23}{figure.caption.13}% 
+\contentsline {figure}{\numberline {2.7}{\ignorespaces One-state forced response of the two systems from \textup {\hbox {\mathsurround \z@ \normalfont (\ignorespaces \ref {eq:isoSys02}\unskip \@@italiccorr )}}.\relax }}{24}{figure.caption.14}% 
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Eigenvalues of a system and the forced response associated with their modes.\relax }}{25}{figure.caption.15}% 
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Stability of forced responses given the positions of the system poles.\relax }}{29}{figure.caption.17}% 
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Illustration of the steady-state response of LTI systems to sinusoidal inputs.\relax }}{31}{figure.caption.20}% 
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Visualization of the two-states system in \textup {\hbox {\mathsurround \z@ \normalfont (\ignorespaces \ref {eq:IOSys01}\unskip \@@italiccorr )}} in Bode plots (left) and Nyquist diagrams (right). The blue and orange lines represents the states $x_1$ and $x_2$, respectively.\relax }}{32}{figure.caption.21}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Block diagram of a state-feedback closed-loop system.\relax }}{34}{figure.caption.22}% 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Simulation of three closed-loop systems from Example \ref {ex:regulator01} showing the input signal (left) and state responses (right).\relax }}{37}{figure.caption.24}% 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Block diagram of a state-feedback closed-loop system with integral action.\relax }}{39}{figure.caption.26}% 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Simulation of three closed-loop systems showing the input signal (left) and state response (right) for reference tracking. The reference signal is indicated by the black dashed line.\relax }}{41}{figure.caption.27}% 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Block diagram of a State-Space system with Luenberger observer.\relax }}{42}{figure.caption.28}% 
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Block diagram of a state-feedback closed-loop system with integral action and Luenberger observer.\relax }}{44}{figure.caption.29}% 
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Simplified block diagram of a perturbed state-feedback closed-loop.\relax }}{45}{figure.caption.30}% 
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Stability margins visualizations given Bode plots (left) and Nyquist diagrams (right) of closed-loop dynamical systems.\relax }}{47}{figure.caption.31}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Illustration of the Bellman's Principle of Optimality for a system with discrete set of states for a discrete time evolution. Each column represents a time instance and each node represents a possible state. The straight lines represents state transitions given an action with associated costs, whereas the curves represents the trajectory from that state to the terminal state with associated optimal cost. The optimal trajectory between the initial and terminal state is shown in red.\relax }}{52}{figure.caption.32}% 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Block diagram of a stochastic discrete State-Space system.\relax }}{57}{figure.caption.37}% 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces A Controlled Hidden Markov Model for a discrete-time system, where the shaded boxes indicates that the inputs are not random variables.\relax }}{59}{figure.caption.39}% 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Block diagram of a Linear Quadratic Gaussian control configuration.\relax }}{62}{figure.caption.41}% 
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Simulation of the LQG controllers showing the input signal (left) and correspondent actual state responses (right). The dots denotes represents the measurements from the real system.\relax }}{63}{figure.caption.42}% 
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Nyquist diagram of a single state system with an open-loop unstable pole but which is closed-loop stable. The gain calculated by a LQR stabilizing controller never crosses the unit circle centered at $s = -1 + j0$.\relax }}{65}{figure.caption.45}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces The non-isothermal continuous stirred tank reactor proposed.\relax }}{68}{figure.caption.46}% 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a pulse change in the input flow-rate.\relax }}{71}{figure.caption.49}% 
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a pulse change in the cooling capacity.\relax }}{72}{figure.caption.50}% 
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a change in the input flow-rate and cooling capacity.\relax }}{73}{figure.caption.51}% 
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Visualization of the steady-state values for the linearized model.\relax }}{74}{figure.caption.53}% 
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Simulation of both the nonlinear and linearized State-Space models. The nonlinear response is represented by the dashed lines.\relax }}{75}{figure.caption.54}% 
+\contentsline {figure}{\numberline {6.6}{\ignorespaces a\relax }}{77}{figure.caption.57}% 
+\contentsline {figure}{\numberline {6.7}{\ignorespaces a\relax }}{78}{figure.caption.58}% 
+\contentsline {figure}{\numberline {6.8}{\ignorespaces a\relax }}{79}{figure.caption.59}% 
+\contentsline {figure}{\numberline {6.9}{\ignorespaces a\relax }}{80}{figure.caption.60}% 
+\contentsline {figure}{\numberline {6.10}{\ignorespaces a\relax }}{82}{figure.caption.63}% 
+\contentsline {figure}{\numberline {6.11}{\ignorespaces a\relax }}{83}{figure.caption.64}% 
+\contentsline {figure}{\numberline {6.12}{\ignorespaces a\relax }}{84}{figure.caption.65}% 
+\contentsline {figure}{\numberline {6.13}{\ignorespaces a\relax }}{85}{figure.caption.66}% 
+\addvspace {10\p@ }
+\addvspace {10\p@ }

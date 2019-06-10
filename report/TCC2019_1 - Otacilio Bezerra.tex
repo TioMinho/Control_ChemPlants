@@ -1,7 +1,7 @@
 % ---------------------------------------------------------------
 % Preamble
 % ---------------------------------------------------------------
-\documentclass[a4paper,11pt]{book}
+\documentclass[a4paper,11pt,header=plain,tocpage=prefix]{book}
 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -35,7 +35,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -146,25 +146,73 @@
 % ---------------------------------------------------------------
 % Maketitle
 % ---------------------------------------------------------------
-\thispagestyle{empty}       % Remove page numbering on this page
-
-\printtitle                 % Print the title data as defined above
-    \vfill
-\printauthor                % Print the author data as defined above
-\newpage
+%\thispagestyle{empty}       % Remove page numbering on this page
+%
+%\printtitle                 % Print the title data as defined above
+%    \vfill
+%\printauthor                % Print the author data as defined above
+%\newpage
 
 % ---------------------------------------------------------------
 % Begin document
 % ---------------------------------------------------------------
-% Set page numbering to begin on this page
+
+%-----------------------------------------------------------------------------------------%
+%----------------------------------EXTERNAL COVER-----------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\thispagestyle{empty}
+\begin{center}
+    \includegraphics[width=2.5cm]{logo_ufc} \\%
+    \textsc{
+    Universidade Federal do Cear\'{a} \\%
+    Departamento de Engenharia de Teleinform\'{a}tica \\%
+    Curso de Gradua\c{c}\~{a}o em Engenharia de Computa\c{c}\~{a}o\\
+    }
+
+    \null\vfill%%
+    \vspace{.5cm}%
+        {\LARGE         \textbf{\uppercase{Optimal Control: An application to a non-isothermal continuous reactor}}\\}
+
+    \null\vfill%%
+    \vspace{.5cm}%
+
+    {\normalsize    \textbf{Otacílio Bezerra Leite Neto}} \\%
+
+    \null\vfill%%
+    \vspace{.25cm}%
+
+    {\normalsize    \textsc{Fortaleza -- Cear\'{a} \\%
+     2019}}
+\end{center}
+
+%-----------------------------------------------------------------------------------------%
+%--------------------------------------SUMMARY--------------------------------------------%
+%-----------------------------------------------------------------------------------------%
 \thispagestyle{empty}   
+\frontmatter
 \setcounter{secnumdepth}{1}
 \setcounter{tocdepth}{1}
 \tableofcontents
+\newpage
+
+%-----------------------------------------------------------------------------------------%
+%--------------------------------------FIGURAS--------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\addcontentsline{toc}{chapter}{List of Figures}%
+\listoffigures%
+\newpage
+
+%-----------------------------------------------------------------------------------------%
+%--------------------------------------TABELAS--------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\addcontentsline{toc}{chapter}{List of Tables}%
+\listoftables
+\newpage
 
 % 1 - Introduction
 % ---------------------------------------------------------------
 \clearpage
+\mainmatter
 \setcounter{page}{1}
 \chapter{Introduction}
 
@@ -3738,29 +3786,23 @@ For completeness, the same tracking objective was simulated for the case of dist
 \clearpage
 \chapter{Conclusion}
 
-a
+This work has presented a self-contained mathematical framework to model and control chemical reactor systems, focusing on optimal control techniques. In this document, several results were presented and discussed in order to provide a complete understanding of the concepts and methods explored. The discussed methods were applied to a given model of a challenging real-world chemical reactor, which consists of a non-isothermal process following the Van de Vusse reaction scheme. The experiments have shown that optimal control is a feasible solution when the controller has direct access to the internal states of the system, but performed worse when the states are not accessible but estimated. The control simulations, however, still produced practical results that are realistic in respect to real plant of such processes.
 
-% Bibliography
-% ---------------------------------------------------------------
-\clearpage
-\addcontentsline{toc}{chapter}{Bibliography}
+The use of optimal controllers greatly reduces the complexity of the controller synthesis procedure, while ensuring an optimal operation. The methods presented can still be expanded to more complex formulations, which would allow for better performance in more adverse cases. Specifically, more advanced state estimation techniques can be considered to mitigate the problem of reference tracking, determining the integral action through an estimate of the controlled variables.
 
-\bibliographystyle{apalike}
-\bibliography{citations}
+This work also emphasizes the possibility of formulating more advances techniques, within the scope of optimal control, to achieve better results. As future work, there is the necessity to decouple the control and estimator sample time from the continuous-time in which the real system operates, providing a more realistic configuration of feedback control loops. Additionally, non-linear state estimation techniques should be explored to solve the linearized Kalman filter limitation, and constrained optimal controllers should be explored to mathematically ensure that the hard constraints of the system are being respected.
 
 % A - Apêndice A
 % ---------------------------------------------------------------
 \clearpage
-\addcontentsline{toc}{chapter}{Appendix A - Properties of Gaussian Distributions}
-\chapter*{Appendix A - Properties of Gaussian Distributions}
+\appendix
+\chapter{Properties of Gaussian Distributions}
 
 \begin{boxed-definition}{(Gaussian Distribution)} \label{def:gauss}
 	A random variable $\bm{x} \in \mathbb{R}^n$ has a Gaussian distribution with mean $\bm{\mu} \in \mathbb{R}^n$ and covariance $\bm{\Sigma} \in \mathbb{R}^{n \times n}$, denoted as $\bm{x} \sim \mathcal{N}(\bm{x}|\bm{\mu}, \bm{\Sigma})$, if its probability density is described as:
 	\begin{equation}
 		\mathcal{N}(\bm{x}|\bm{\mu}, \bm{\Sigma}) = \cfrac{1}{(2\pi)^{n/2} | \bm{\Sigma} |^{1/2}} exp \left\{-\cfrac{1}{2} (\bm{x} - \bm{\mu})^T \Sigma^{-1} (\bm{x} - \bm{\mu}) \right\}
-	,\end{equation}
-	
-	\noindent where $| \bm{\Sigma} |$ denotes the determinant of $\bm{\Sigma}$.
+	.\end{equation}
 \end{boxed-definition}
 
 \begin{boxed-lemma}{(Joint distribution of Gaussians)} \label{le:jointGauss}
@@ -3797,6 +3839,14 @@ a
 	\end{split}
 	\end{equation}
 \end{boxed-lemma}
+
+% Bibliography
+% ---------------------------------------------------------------
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliographystyle{apalike}
+\bibliography{citations}
 
 % ---------------------------------------------------------------
 % End document
