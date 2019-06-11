@@ -51,19 +51,20 @@ t = (0:0.01:1)'; T = numel(t); sT = floor(T/3);
 X_0 = [xe 2.4192 0.2730];
 % Input Signal
 U = [ones(1,sT)*ue(1) ones(1,sT)*ue(1)*1.6 ones(1,T-2*sT)*ue(1)
-     ones(1,sT)*ue(2) ones(1,sT)*ue(2)*1 ones(1,T-2*sT)*ue(2)];   
+     ones(1,sT)*ue(2) ones(1,sT)*ue(2)*1.6 ones(1,T-2*sT)*ue(2)];   
  
 % Simulation of the Outputs
 [~, y] = simulate(exo_cstr.sysVar, t, U, X_0);
     
 % Visualization
-figure(1); clf
+figure(1); clf; fs = 18;
 [ha, pos] = tight_subplot(2,2,[.03 .1],[.1 .01],[.1 .01]);
 
 axes(ha(1)), plot(t, U(1,:), 'linewidth', 1, 'color', [0.3 0.3 0.3])
 ylabel("Flow-rate (1/hr)")
 ylim([min(U(1,:))-0.5, max(U(1,:))+0.5])
 set(ha(1), 'XTickLabel', [])
+% set(ha(1), "FontSize", fs)
 
 axes(ha(2))
 plot(t, y(1, :), 'linewidth', 1, 'color', cpal(11,:)); hold on
@@ -72,20 +73,26 @@ plot(t, y(5, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(13,:)); hold o
 plot(t, y(6, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(14,:));
 ylabel("Concentration (mol/l)")
 set(ha(2),'XTickLabel', [])
+% set(ha(2), "FontSize", fs)
 
 axes(ha(3)), plot(t, U(2,:), 'linewidth', 1, 'color', [0.3 0.3 0.3])
 xlabel("Time (hr)"), ylabel("Cooling Capacity (kJ/hr)")
 ylim([min(U(2,:))-500, max(U(2,:))+500])
+% set(ha(3), "FontSize", fs)
 
 axes(ha(4)), 
 plot(t, y(3, :), 'linewidth', 1, 'color', cpal(17,:)); hold on
 plot(t, y(4, :), 'linewidth', 1, 'color', cpal(16,:));
-xlabel("Time (hr)"), ylabel("Temperatures (ÂºC)")
+xlabel("Time (hr)"), ylabel("Temperatures (ºC)")
+% set(ha(4), "FontSize", fs)
 
 % - Exporting the Visualization to an Image
 timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
 figname = "report_experiments/figs/exoSim_dynamics_" + char(timeNow);
-fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [10 5];
+fig = gcf; 
+fig.PaperUnits = "centimeters"; 
+xSize = 1600; ySize = 600; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
+fig.Position = [xLeft yTop xSize ySize];
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
@@ -194,12 +201,15 @@ plot(t, y(3, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold o
 plot(t, y(4, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on
 plot(t, y_lin(:, 3), 'linestyle', '-', 'linewidth', 1, 'color', cpal(17,:)); hold on
 plot(t, y_lin(:, 4), 'linestyle', '-', 'linewidth', 1, 'color', cpal(16,:));
-xlabel("Time (hr)"), ylabel("Temperatures (ÂºC)")
+xlabel("Time (hr)"), ylabel("Temperatures (ºC)")
 
 % - Exporting the Visualization to an Image
 timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
 figname = "report_experiments/figs/exoSim_dynamics_" + char(timeNow);
-fig = gcf; fig.PaperPositionMode = 'auto'; 
+fig = gcf; 
+fig.PaperUnits = "centimeters"; 
+xSize = 1600; ySize = 600; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
+fig.Position = [xLeft yTop xSize ySize];
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 

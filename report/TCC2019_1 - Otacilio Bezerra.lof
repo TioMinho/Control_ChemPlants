@@ -39,13 +39,13 @@
 \contentsline {figure}{\numberline {6.3}{\ignorespaces Non-linear simulation showing the manipulated variables (left) and correspondent response of the system variables (right) for a change in the input flow-rate and cooling capacity.\relax }}{73}{figure.caption.51}% 
 \contentsline {figure}{\numberline {6.4}{\ignorespaces Visualization of the steady-state values for the linearized model.\relax }}{74}{figure.caption.53}% 
 \contentsline {figure}{\numberline {6.5}{\ignorespaces Simulation of both the nonlinear and linearized State-Space models. The nonlinear response is represented by the dashed lines.\relax }}{75}{figure.caption.54}% 
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point.\relax }}{77}{figure.caption.57}% 
-\contentsline {figure}{\numberline {6.7}{\ignorespaces Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.\relax }}{78}{figure.caption.58}% 
-\contentsline {figure}{\numberline {6.8}{\ignorespaces Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point.\relax }}{79}{figure.caption.59}% 
-\contentsline {figure}{\numberline {6.9}{\ignorespaces Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.\relax }}{80}{figure.caption.60}% 
-\contentsline {figure}{\numberline {6.10}{\ignorespaces Simulation of the LQR controller with Integral Action for reference tracking.\relax }}{81}{figure.caption.62}% 
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point.\relax }}{76}{figure.caption.57}% 
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.\relax }}{77}{figure.caption.58}% 
+\contentsline {figure}{\numberline {6.8}{\ignorespaces Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point.\relax }}{78}{figure.caption.59}% 
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.\relax }}{79}{figure.caption.60}% 
+\contentsline {figure}{\numberline {6.10}{\ignorespaces Simulation of the LQR controller with Integral Action for reference tracking.\relax }}{80}{figure.caption.62}% 
 \contentsline {figure}{\numberline {6.11}{\ignorespaces Simulation of the LQR controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.\relax }}{81}{figure.caption.63}% 
-\contentsline {figure}{\numberline {6.12}{\ignorespaces Simulation of the LQG controller with Integral Action for reference tracking.\relax }}{82}{figure.caption.64}% 
+\contentsline {figure}{\numberline {6.12}{\ignorespaces Simulation of the LQG controller with Integral Action for reference tracking.\relax }}{81}{figure.caption.64}% 
 \contentsline {figure}{\numberline {6.13}{\ignorespaces Simulation of the LQG controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.\relax }}{82}{figure.caption.65}% 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
