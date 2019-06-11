@@ -3615,7 +3615,7 @@ Regarding the matrices $\bm{C}$ and $\bm{D}$, recall that only the variables $\r
 \end{matrix}
 \end{equation} 
 
-The linear model presented in \eqref{eq:exoLinSS01} is an approximation of the nonlinear model for any point in the state space, given that it is a steady-state point. To obtain feasible linearization points, the differential equation system is evaluated for all points where $\dot{\rho_A} = \dot{\rho_B} =\dot{T} =\dot{T_c} = 0$. To solve this system, the input variables are selected to be the interval defined by the physical variable restrictions. The result is shown in Fig. \ref{fig:ssValues} for the two measured variables. In this work, it is assumed the steady-state point given by $\bm{x}_o = [1.235, 0.90, 134.14, 128.95]^T$ and $\bm{x}_o = [18.83, -4495.7]^T$, indicated in the figure by a white cross.
+The linear model presented in \eqref{eq:exoLinSS01} is an approximation of the nonlinear model for any point in the state space, given that it is a steady-state point. To obtain feasible linearization points, the differential equation system is evaluated for all points where $\dot{\rho_A} = \dot{\rho_B} =\dot{T} =\dot{T_c} = 0$. To solve this system, the input variables are selected to be the interval defined by the physical variable restrictions. The result is shown in Fig. \ref{fig:ssValues} for the two controlled variables, given the manipulated variables. In this work, it is assumed the steady-state point given by $\bm{x}_o = [1.23, 0.90, 134.14, 128.95]^T$ and $\bm{x}_o = [18.83, -4495.7]^T$, indicated in the figure by a white cross.
 
 \begin{figure}[ht] \centering
 	\begin{subfigure}{0.46\textwidth}
@@ -3625,7 +3625,7 @@ The linear model presented in \eqref{eq:exoLinSS01} is an approximation of the n
 		\includegraphics[width=\textwidth]{chapter7/ssValues02}
 	\end{subfigure}
 	
-	\caption{Visualization of the steady-state values for the linearized model.}
+	\caption{Heat-map visualization of the steady-state values for the linearized model for the concentration of $B$ (left) and the tank temperature (right).}
 	\label{fig:ssValues}
 \end{figure}
 
