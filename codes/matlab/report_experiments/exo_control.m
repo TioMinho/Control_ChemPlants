@@ -306,14 +306,14 @@ for name = files
     ylabel("Q (kJ/hr)")
     ylim([-8700, 200])
     set(ha(2), "FontSize", fs)
-    
-    timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
-    figname = "report_experiments/figs/exoSim_control_" + char(timeNow);
-    fig = gcf; 
-    fig.PaperUnits = "centimeters"; 
-    xSize = 1600; ySize = 900; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
-    fig.Position = [xLeft yTop xSize ySize];
-    print(fig, figname, '-depsc2')
+%     
+%     timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
+%     figname = "report_experiments/figs/exoSim_control_" + char(timeNow);
+%     fig = gcf; 
+%     fig.PaperUnits = "centimeters"; 
+%     xSize = 1600; ySize = 900; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
+%     fig.Position = [xLeft yTop xSize ySize];
+%     print(fig, figname, '-depsc2')
     %%
     pause
     
@@ -332,11 +332,13 @@ w = exp_param.w;
 z = exp_param.z;
 controller = exp_param.controller;
 
-sum((exp_param.r - exp_param.xout(2:3,:)).^2, 2)
-sum(abs(exp_param.r - exp_param.xout(2:3,:)), 2)
+plot(t, exp_param.xout(2,:))
 
-sum(((exp_param.r - exp_param.xout(2:3,:)).*t').^2, 2)
-sum(abs((exp_param.r - exp_param.xout(2:3,:)).*t'), 2)
+errors = [sum((exp_param.r - exp_param.xout(2:3,:)).^2, 2)';
+            sum(abs(exp_param.r - exp_param.xout(2:3,:)), 2)';
+            sum(((exp_param.r - exp_param.xout(2:3,:)).*t').^2, 2)';
+            sum(abs((exp_param.r - exp_param.xout(2:3,:)).*t'), 2)';];
+round(errors,4)'
 
 %%
 foldername = "data/simulations/";

@@ -9,7 +9,7 @@
 \usepackage[protrusion=true,expansion=true]{microtype} 
 \usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools,bigints}
 \usepackage{rotating}
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, anchorcolor=blue, citecolor=green]{hyperref}
+\usepackage{hyperref}
 \usepackage[all]{hypcap}
 \usepackage{color, xcolor}
 \usepackage{listings}
@@ -36,7 +36,7 @@
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{example}{Example}[chapter]
 
-\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
+%\newwatermark[allpages,color=red!15,angle=45,scale=5,xpos=-1cm,ypos=2cm]{DRAFT}
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -62,6 +62,13 @@
 \definecolor{myGreen}{rgb}{0, 0.53, 0.27}
 \definecolor{myBlue}{rgb}{0, 0.34, 0.91}
 
+\definecolor{plotBlue}{rgb}{0, 0.4470, 0.7410}
+\definecolor{plotRed}{rgb}{0.6350, 0.0780, 0.1840}
+
+\definecolor{UFCBlue}{RGB}{0, 83, 134}
+\definecolor{UFCGreen}{RGB}{0, 146, 62}
+\definecolor{UFCOrange}{RGB}{231, 120, 19}
+
 \definecolor{pastelRed}{RGB}{255,189,189}
 \definecolor{pastelBlue}{RGB}{201,201,255}
 \definecolor{pastelBlue2}{RGB}{27,133,184}
@@ -70,6 +77,7 @@
 \definecolor{pastelGreen2}{RGB}{85,158,131}
 \definecolor{pastelYellow}{RGB}{195,203,113}
 
+\hypersetup{colorlinks=true, linkcolor=myBlue!60!black, urlcolor=plotBlue, anchorcolor=plotBlue, citecolor=myRed!60!black}
 
 % --------------------------------------------------------------------
 % Tikz Macros
@@ -203,7 +211,7 @@
     \textsc{
     Universidade Federal do Cear{\'a} \\%
     Departamento de Engenharia de Teleinform{\'a}tica \\%
-    Curso de Gradua\c{c}{\~a}o em Engenharia de Teleinform{\'a}tica\\
+    Curso de Gradua\c{c}{\~a}o em Engenharia de Computa\c{c}\~{a}o\\
     }
     \null\vfill%%
     \vspace{.5cm}%
@@ -3563,7 +3571,6 @@ The discussion throughout the document focused on control design methods for lin
 .\end{equation}
 
 By evaluating the derivative of each differential state equation in relation to each state variable, the obtained Jacobian is
-
 \begin{equation} \label{eq:exoLinSS01}
 	\bm{A} = \begin{bmatrix}
 		-u_{1o} - K_1(x_{3o}) - 2K_3(x_{3o}) x_{1o} & 0 & \cfrac{K_1(x_{3o})}{d x_{3o}} x_{1e} + \cfrac{K_3(x_{3o})}{d x_{3o}} x_{1o}^2 & 0 \\ \\
@@ -3692,7 +3699,7 @@ In order to demonstrate that the linear model is a valid approximation of the no
 
 \subsection{Linearized model properties}
 
-Considering a State-Space realization, it is possible to access the system properties. First of all, the BIBO stability of the system was determined through the poles location in the complex plane. In the case of \eqref{eq:exoReact01}, the eigenvalues of $\bm{A}$ were calculated as $\bm{\lambda} = [-16.79, -54.84, -86.33, -121.01]$, which are all in right-hand side of the plane, i.e., $\text{Re}[\lambda_i]$, $\forall i \in [1,4]$. It is possible to conclude that, in the light of this model, the system is stable and does not require a special design for stabilizing controllers.
+Considering a State-Space realization, it is possible to access the system properties. First of all, the BIBO stability of the system was determined through the poles location in the complex plane. In the case of \eqref{eq:exoReact01}, the eigenvalues of $\bm{A}$ were calculated as $\bm{\lambda} = [-16.79, -54.84, -86.33, -121.01]$, which are all in right-hand side of the plane, i.e., $\text{Re}[\lambda_i]$, $\forall i \in [1,4]$. It is possible to conclude that, in the light of this model, the system is stable.
 
 The next property to be accessed consists in the controllability of the system. Using the definition, the controllability matrix of this model was calculated as:
 \begin{equation}
@@ -3726,113 +3733,150 @@ Moreover, the last property of the system to be accessed concerns the observabil
 
 \subsection{Regulation}
 
-The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01}. The simulation started with initial condition $x_1(0) = x_2(0) = 0$ (or, equivalently, $\Delta x_1(0) = -x_{1o}$ and $\Delta x_2(0) = -x_{2o}$) while maintaining the states $x_3$ and $x_4$ at the steady-state value. The goal of this simulation was to represent the scenario where the solution in the tank does not actually contain any concentration of the reagents or products. This scenario, thus, requires that the controller ``starts" the process by providing the flow of reagent necessary to achieve the desirable steady-state concentration of the controlled product. 
+The results for the controllers arrangements are now presented. The first controller simulated was the Linear Quadratic Regulator (LQR), as shown in Fig. \ref{fig:lqr01}. The simulation started with initial condition $x_1(0) = x_2(0) = 0$ (or, equivalently, $\Delta x_1(0) = -x_{1o}$ and $\Delta x_2(0) = -x_{2o}$) while maintaining the states $x_3$ and $x_4$ at the steady-state value. The goal of this simulation was to represent the scenario where the solution in the tank does not actually contain any concentration of the reagents or products. This scenario, thus, requires that the controller ``starts" the process by providing the flow of reagent necessary to achieve the desirable steady-state concentration of the controlled product. The weights used, regarding the LQR cost function, were: 
+\begin{equation} \label{eq:exp01}
+\begin{matrix}
+   \bm{Q} = \begin{bmatrix} 0.25 & 0 & 0 & 0 \\ 0 & 0.5 & 0 & 0 \\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 0.01 \end{bmatrix} &; & \bm{R} = \begin{bmatrix} 0.25 & 0 \\ 0 & 1.1e-5 \end{bmatrix}
+\end{matrix}
+.\end{equation} 
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqr01}
 	
-	\caption{Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point.}
+	\caption{Simulation of the $LQR_1$ controller for ``starting" the tank reactor to the steady-state point. The reference is indicated by the black dashed lines, and the manipulated variables restrictions are indicated by the red dotted lines.}
 	\label{fig:lqr01}
 \end{figure}
 
 Notice that the resulting reactions will change the temperature inside the tank, requiring also that the controller manipulates the cooling capacity in order to control the reactor temperature. As expected, the controller momentarily increases the input flow-rate in order to accelerate the production of compound $B$, returning to the steady-state value to achieve the desired reference. Notice that the input flow-rate does not grow further in the first minutes in order to avoid overshoots, which occurs in the results presented but with small magnitude. In respect to the reactor temperature, the controller was able to respond to the sudden change by decreasing the absolute value of the cooling capacity, causing the coolant to increase its temperature and, consequently, returns the reactor temperature to the reference. Therefore, the simulation shows that the proposed optimal controller is able to drive the process to a desired constant reference in an optimal manner, not causing overshoots and/or oscillations, in a small amount of time.
 
+Further testing the capabilities of this controller, the same experiment was considered, but while subjecting the system to disturbances in some system variables. Specifically, disturbances were applied to the inflow concentration and temperature, $\rho^{(A)}_{in}$ and $T_{in}$, respectively, to represent the scenario where the fluid entering the tank is perturbed by previous processes or by instrumentation limitations. To simulate these cases, pulse signals of values $w_1 = \pm 0.5$ and $w_2 = \pm 2$ were applied to the nominal value of the inflow concentration and temperature, respectively. Each pulse starts at a time value that is an odd multiple of $\lfloor T/4 \rfloor$ and lasts for $0.02T$ hours, where $T$ is the the total size of the control horizon. The results are shown in Fig. \ref{fig:lqr02}.
+
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqr02}
 	
-	\caption{Simulation of the LQR controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.}
+	\caption{Simulation of the $LQR_2$ controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables. }
 	\label{fig:lqr02}
 \end{figure}	
 
-To further test the capabilities of this controller, the same control objective was considered, but while subjecting the actual system to disturbances in the system variables. Specifically, disturbances were applied to the inflow concentration and temperature, $\rho^{(A)}_{in}$ and $T_{in}$, respectively, to represent the scenario where the fluid entering the tank could be perturbed by previous processes or by instrumentation limitations. To simulate these cases, pulse signals of values $w_1 = \pm 0.5$ and $w_2 = \pm 2$ were applied to the nominal value of the inflow concentration and temperature, respectively. Each pulse starts at an odd multiple of $\lfloor T/4 \rfloor$ and lasts for $0.02T$ hours, where $T$ is the length of the simulation time vector, i.e., the total size of the control horizon. The simulation results are shown in Fig. \ref{fig:lqr02}.
+First of all, it was observed that the control horizon had to be increased in order to allow the feedback controller to perceive the disturbance and corrects the system response accordingly. As a direct result of the larger horizon, the controller performed more aggressively at the first minutes. Despite of this, the input signals did not violated the defined constraints for the manipulated variables. It was observed that the regulator is capable of react to the disturbances and provide a corrective action to return to the steady-state point. 
 
-First of all, it was observed that the control horizon had to be increased in order to allow the feedback controller to perceive the disturbance and corrects the system response accordingly. As a direct result of the larger horizon, the controller performed more aggressively at the first minutes. Despite of this, the input signals did not violated the defined constraints for the manipulated variables, indicated at the visualization by the red dotted lines. It was observed that the regulator is capable of react to the disturbances and provide a corrective action to return to the steady-state point. 
-
-Until now, the experiments were done assuming that the optimal controller had direct access to the real system states. In a more realistic scenario, the states can only be reconstructed through noisy measurements of the system output. A Linear Quadratic Gaussian (LQG) controller is proposed to deal with this limitation, considering the same control objectives of the previous experiments. In the next simulations it was assumed a process noise $\bm{w} : \mathbb{R} \rightarrow \mathbb{R}^{4}$ and measurement noise $\bm{z} : \mathbb{R} \rightarrow \mathbb{R}^{2}$ described by the following Gaussian distributions:
+Until now, the experiments were done assuming that the optimal controller had direct access to the real system states. In a more realistic scenario, the states can only be reconstructed through noisy measurements. A Linear Quadratic Gaussian (LQG) controller is proposed to deal with this limitation, considering the same control objectives of the previous experiments and using the same weighting matrices as in \eqref{eq:exp01}. In the experiments it was assumed a process noise $\bm{w} : \mathbb{R} \rightarrow \mathbb{R}^{4}$ and measurement noise $\bm{z} : \mathbb{R} \rightarrow \mathbb{R}^{2}$ described by the Gaussian distributions:
 \begin{equation}
 \begin{matrix}
-	\bm{w}(t) \sim \mathcal{N}\left( \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.1 & 0 & 0 & 0 \\ 0 & 0.1 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \\ 0 & 0 & 0 & 0.1 \end{bmatrix} \right) & 
-\bm{z}(t) \sim \mathcal{N}\left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.0001 & 0 \\ 0 & 0.1 \end{bmatrix} \right)
+	\bm{w}(t) \sim \mathcal{N}\left( \left. \begin{bmatrix} x_1(t) \\ x_2(t) \\ x_3(t) \\ x_4(t) \end{bmatrix} \right| \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.1 & 0 & 0 & 0 \\ 0 & 0.1 & 0 & 0 \\ 0 & 0 & 0.1 & 0 \\ 0 & 0 & 0 & 0.1 \end{bmatrix} \right) & 
+\bm{z}(t) \sim \mathcal{N}\left( \left. \begin{bmatrix} u_1(t) \\ u_2(t) \end{bmatrix} \right| \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.0001 & 0 \\ 0 & 0.1 \end{bmatrix} \right)
 \end{matrix}
 \end{equation}
 
-The covariance matrix of the noise $\bm{w}(t)$ tries represents the uncertainty of the non-linear model behavior in respect to the linearized model, while the covariance matrix of $\bm{z}(t)$ aims to represent realistic limitation of measurement devices in respect to these variables. Initially, it is assumed that the Kalman-Bucy estimator can accurately estimate these covariances before optimizing each estimator gain $\bm{K}_e(t)$. The simulation results, for the scenario of starting the process, is shown in Fig. \ref{fig:lqg01Sim}.
+The covariance matrix of the noise $\bm{w}(t)$ tries to represent the uncertainty of the non-linear model behavior in respect to the linearized model, while the covariance matrix of $\bm{z}(t)$ aims to represent realistic limitation of measurement devices in respect to these variables. It is assumed that the Kalman-Bucy estimator can estimate these covariances fairly accurately, before optimizing each estimator gain $\bm{K}_e(t)$. The simulation results, for the scenario of starting the process, is shown in Fig. \ref{fig:lqg01Sim}.
  
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqg01}
-	\caption{Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point.}
+	\caption{Simulation of the $LQG_1$ controller for ``starting" the tank reactor to the steady-state point. The dots represents the measurements of the output variables, and the colored dashed lines represents the state estimations.}
 	\label{fig:lqg01Sim}
 \end{figure}
 
-The estimation of the covariance matrices gave the estimator enough information to accurately reconstruct the state vector from the observations. As it can be seen in the visualizations, this control-estimation operation is very similar to the one shown in Fig. \ref{fig:lqr01}, when the states were directly known. It is visible, however, a slightly greater peak value for the cooling capacity in this case. Thus, the LQG controller proved to be optimal even for in realistic configurations.
-
-Furthermore, the same controller was also evaluated for the case where disturbances in the system variables are present. In this experiment, the same disturbance signal used in the LQR simulation is provided to the observed system. The results are shown in Fig. \ref{fig:lqg02Sim}.
+The estimation of the covariance matrices gave the estimator enough information to accurately reconstruct the state vector from the observations. As it can be seen in the visualizations, this control-estimation operation is very similar to the one shown in Fig. \ref{fig:lqr01}, when the states were directly known. Thus, the LQG controller proved to be optimal for this more realistic situation. Furthermore, the same controller was also evaluated for the case where disturbances in the system variables are present. In this experiment, the same disturbance signal used in the LQR simulation is provided to the system. The results are shown in Fig. \ref{fig:lqg02Sim}. The system responses are very similar. However, the corrective actions for the disturbances were smoother and are barely visible in the scale of the visualization. Finally, a summary of the results in this subsection are displayed at Table \ref{tb:lqrMetrics}.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqg02}
-	\caption{Simulation of the LQG controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.}
+	\caption{Simulation of the $LQG_2$ controller for ``starting" the tank reactor to the steady-state point, but subjected to two disturbances pulses in the system variables.}
 	\label{fig:lqg02Sim}
 \end{figure}	
 
-Doing a comparison with Fig. \ref{fig:lqr01}, it seems that the system responses are very similar. However, the controller in this case performed less aggressively, which resulted in a more damped response for the concentrations, in the beginning of the operation. The corrective actions for the disturbances were also smoother than of those before, and they are barely visible in the scale of the visualization. 
-
-%\begin{table}[h]
-%	\centering
-%	\begin{tabular}{l | c c | c c c c}
-%		\textbf{Type} & $\bm{Q}_{\Delta}$ & $\bm{R}_{\Delta}$ & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
-%		\hline
-%		$LQR_1$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.26 \\ 82.92 \end{pmatrix}$ & $\begin{pmatrix} 12.27 \\ 60.70 \end{pmatrix}$	& $\begin{pmatrix} 0.001 \\ 0.104 \end{pmatrix}$ & $\begin{pmatrix} 0.26 \\ 2.83 \end{pmatrix}$ \\
-%		$LQG_1$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.27 \\  137.08 \end{pmatrix}$ & $\begin{pmatrix} 14.76 \\ 134.57 \end{pmatrix}$	& $\begin{pmatrix} 0.03 \\ 24.53 \end{pmatrix}$ & $\begin{pmatrix} 1.96 \\ 51.13 \end{pmatrix}$ \\
-%		\hline
-%		$LQR_2$ & $\begin{bmatrix} 0.25 & 0.25 & 1.00 & 0.01 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1.1e-5 \end{bmatrix}$ & $\begin{pmatrix} 7.27 \\  137.08 \end{pmatrix}$ & $\begin{pmatrix} 14.76 \\ 134.57 \end{pmatrix}$	& $\begin{pmatrix} 0.03 \\ 24.53 \end{pmatrix}$ & $\begin{pmatrix} 1.96 \\ 51.13 \end{pmatrix}$ \\
-%		$LQG_2$ & $\begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}$ & $\begin{bmatrix} 1 & 1 \end{bmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$	& $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ & $\begin{pmatrix} 1 \\ 1 \end{pmatrix}$ \\
-%	\end{tabular}
-%	
-%	\caption{Comparison between the LQR and LQG controllers obtained for regulation. The second pair comprises the simulations where the system was subjected to disturbances.}
-%	\label{tb:lqrMetrics}
-%\end{table}
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{c | c c c c}
+		\textbf{Controller} & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
+		\hline
+		$LQR_1$  & $\begin{bmatrix} 7.2678 \\ 82.9199 \end{bmatrix}$ & $\begin{bmatrix} 12.2719   \\ 60.6988 \end{bmatrix}$ & $\begin{bmatrix} 0.0015 \\ 0.1045 \end{bmatrix}$ & $\begin{bmatrix} 0.2592 \\ 2.8347 \end{bmatrix}$ \\
+		$LQG_1$ & $\begin{bmatrix} 7.2765 \\ 67.6334 \end{bmatrix}$ & $\begin{bmatrix} 12.0436   \\ 48.4748 \end{bmatrix}$	& $\begin{bmatrix} 0.0015 \\ 0.0596 \end{bmatrix}$ & $\begin{bmatrix} 0.2299 \\ 1.7535 \end{bmatrix}$ \\
+		$LQR_2$ & $\begin{bmatrix} 7.2713 \\ 137.0858 \end{bmatrix}$ & $\begin{bmatrix} 14.7600 \\  134.5661 \end{bmatrix}$	& $\begin{bmatrix} 0.0270 \\ 24.5280 \end{bmatrix}$ & $\begin{bmatrix} 1.9614 \\ 51.1356 \end{bmatrix}$ \\	
+		$LQG_2$ & $\begin{bmatrix} 7.3481 \\ 155.0745 \end{bmatrix}$ & $\begin{bmatrix} 15.1579  \\ 160.7632 \end{bmatrix}$ & $\begin{bmatrix} 0.0270 \\ 32.2785 \end{bmatrix}$ & $\begin{bmatrix} 2.0193 \\ 65.5359 \end{bmatrix}$ \\
+	\end{tabular}
+	
+	\caption{Comparison between the LQR and LQG controllers obtained. The pair $(LQR_2, LQG_2)$ comprises the simulations in which the system was subjected to disturbances.}
+	\label{tb:lqrMetrics}
+\end{table}
 
 \subsection{Tracking}
 
-Now, the experiments for controllers that track non-constant references is presented. As in the previous subsection, the first controller simulated consists in the Linear Quadratic Regulator with Integral Action (LQRI), also known as Linear Quadratic Servo (LQ-Servo). The simulations starts with initial states equal to the steady-state values. The proposed scenario for this controller is to increase and then decrease the amount of compound $B$ that is produced, while maintaining the reactor temperature at a constant value. For the concentration control, the reference signal is comprised by a sequence of step functions which varies from approximately $12\%$ of the operation value, which is a realistic set-point change in such processes. The results of the simulation are shown in Fig. \ref{fig:lqri01}.
+Now, the experiments for controllers that track non-constant references is presented. As in the previous subsection, the first controller simulated consists in the Linear Quadratic Regulator with Integral Action (LQRI), also known as Linear Quadratic Servo (LQ-Servo). The simulations starts with initial states equal to the steady-state values. The weights used were the same from \eqref{eq:exp01}, but including the weights for the augmented states: 
+\begin{equation}
+\begin{matrix}
+   \bm{Q} = \begin{bmatrix} 0.25 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0.5 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0\\ 0 & 0 & 0 & 0.01 & 0 & 0 \\ 0 & 0 & 0 & 0 & 10 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0.5 \end{bmatrix} &; & \bm{R} = \begin{bmatrix} 0.16 & 0 \\ 0 & 1e-6 \end{bmatrix}
+\end{matrix}
+.\end{equation} 
+
+The proposed scenario for this controller is to increase and then decrease the amount of compound $B$ that is produced, while maintaining the reactor temperature at a constant value. For the concentration control, the reference signal is comprised by a sequence of step functions which varies from approximately $12\%$ of the operation value, which is a realistic set-point change in such processes. The results of the simulation are shown in Fig. \ref{fig:lqri01}.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqri01}
 	
-	\caption{Simulation of the LQR controller with Integral Action for reference tracking.}
+	\caption{Simulation of the $LQRI_1$ for reference tracking.}
 	\label{fig:lqri01}
 \end{figure}
 
-After the introduction of the integral action, two more weights were needed to be selected for the controller optimization. As expected, the MIMO case actually imposes a trade-off between reaching the reference for the concentration and for the temperature, in the case that they do not represent a valid steady-state. Therefore, the choices of weights to the integral action has to take in account the fact that an aggressive set-point tracking may result in oscillatory, or even unstable, systems. To avoid these situations, the weights were selected to cause a smooth tracking, and the control horizon was expanded to allow the controller to operate for more hours. 
+After the introduction of the integral action, two more weights were needed to be selected for the controller optimization. The MIMO case implies a trade-off between reaching the reference for the concentration and for the temperature, in the case that they do not represent a valid steady-state. Therefore, the choices of weights to the integral action has to take in account the fact that an aggressive set-point tracking may result in oscillatory, or even unstable, systems. To avoid these situations, the weights were selected to cause a smooth tracking, and the control horizon was expanded to allow the controller to operate for more hours. 
 
 Despite the mentioned difficulties, the controller was able to drive the system as close as possible to the reference, while still obeying the manipulated variables constraints. Notice that, in the moments were the reference changes, the change in the concentration resulted in a momentarily change in the temperature, which is promptly corrected by the feedback action of the controller. This change, however, is very small and the temperature remained within an interval of $0.5ºC$ around the reference signal, which is an excellent result. Another nice response observed in the visualization comprises in the change in the coolant temperature, which follows closely the shape of the change in the cooling capacity. In the last simulations, this variable evolved in a similar manner to the reactor temperature, but, in this case, the first was directly manipulated to allow for the latter to stay at the steady-state value.
 
-Following the same case of the previous subsection, the same controller was used to simulate a closed-loop operation in the case when disturbances to the real system are occurring. In this case, a pulse signal is applied to the same variables as in the last case, but for each time instant multiple of $\lfloor T/4 \rfloor$ with a duration of $0.02T$, which is a longer step in this case since $T$ is greater. The results are presented at Fig. \ref{fig:lqri02}. 
+Following the same case of the previous subsection, the same controller was used to simulate a closed-loop operation in the case when disturbances to the real system are occurring. In this case, a pulse signal is applied to the same variables as in the last case, but for each time instant multiple of $\lfloor T/4 \rfloor$ with a duration of $0.02T$, which is a longer step in this case since $T$ is greater. The results are presented at Fig. \ref{fig:lqri02}. The first interesting phenomena to notice is that the system responded more aggressively to the disturbances that occurred between the time interval $t \in [0.8, 4]$ for which $r(t) = 1$, when compared to the disturbances occurring in the interval $t \in [4, 7.2]$ for which $r(t) = 0.8$. This is expected from the fact that the system has non-linear terms associated with the concentration $\rho_A$, which is greater at the first interval. The controller, however, was able to correct the disturbances and drive the system back to the reference.
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqri02}
 	
-	\caption{Simulation of the LQR controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.}
+	\caption{Simulation of the $LQRI_2$ controller for reference tracking, but subjected to three pulse of disturbances in the system variables.}
 	\label{fig:lqri02}
 \end{figure}	
 
-The first interesting phenomena to notice is that the system responded more aggressively to the disturbances that occurred between the time interval $t \in [0.8, 4]$ for which $r(t) = 1$, when compared to the disturbances occurring in the interval $t \in [4, 7.2]$ for which $r(t) = 0.8$. This is expected from the fact that the system has non-linear terms associated with the concentration $\rho_A$, which is greater at the first interval. The controller, however, was able to correct the disturbances and drive the system back to the reference in both cases, exhibiting a smoother response in the latter.
+In the direction for a more realistic scenario, the same reference tracking just proposed was used together with a Linear Quadratic Gaussian, augmented with integral action, to perform the feedback over the estimated states. In this case, a different weighting for the augmented states were modified to still result in a similar operation to the one in Fig. \ref{fig:lqr01} and \ref{fig:lqr02}.
+\begin{equation}
+\begin{matrix}
+   \bm{Q} = \begin{bmatrix} 0.25 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0.5 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0\\ 0 & 0 & 0 & 0.01 & 0 & 0 \\ 0 & 0 & 0 & 0 & 100 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0.1 \end{bmatrix} &; & \bm{R} = \begin{bmatrix} 1 & 0 \\ 0 & 1.1e-5 \end{bmatrix}
+\end{matrix}
+.\end{equation} 
 
-In the direction for a more realistic scenario, the same reference tracking just proposed was used together with a Linear Quadratic Gaussian, augmented with integral action, to perform the feedback over the estimated states. In this case, the integral of the error was calculated directly from the noise measurements, rather from an output calculated from the estimated states. The process and measurement noises used were the same as in the regulation case, and the covariance matrices were estimated directly from the noise signals. The resulting operation is displayed at Fig. \ref{fig:lqg01}.
+In this case, the process and measurement noises used, $\bm{w} : \mathbb{R} \rightarrow \mathbb{R}^{4}$ and $\bm{z} : \mathbb{R} \rightarrow \mathbb{R}^{2}$, respectively, are described by the Gaussian distributions:
+\begin{equation}
+\begin{matrix}
+	\bm{w}(t) \sim \mathcal{N}\left( \left. \begin{bmatrix} x_1(t) \\ x_2(t) \\ x_3(t) \\ x_4(t) \end{bmatrix} \right| \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.4 & 0 & 0 & 0 \\ 0 & 0.4 & 0 & 0 \\ 0 & 0 & 0.5 & 0 \\ 0 & 0 & 0 & 0.5 \end{bmatrix} \right) & 
+\bm{z}(t) \sim \mathcal{N}\left( \left. \begin{bmatrix} u_1(t) \\ u_2(t) \end{bmatrix} \right| \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0.0001 & 0 \\ 0 & 0.01 \end{bmatrix} \right)
+\end{matrix}
+.\end{equation}
+
+\noindent The greater values for the covariance $\bm{Q}_k$ of the covariance noise reflects the fact that the estimator becomes more uncertain about the system when it follows a reference signal far from the steady-state value. The resulting operation is displayed at Fig. \ref{fig:lqgi01}. 
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi01}
-	\caption{Simulation of the LQG controller with Integral Action for reference tracking.}
+	\caption{Simulation of the $LQGI_1$ controller for reference tracking.}
 	\label{fig:lqgi01}
 \end{figure}
 
-The first difference noted was the fact that the weights for the augmented states for the LQG controller actually needed a value of greater magnitude than those used for the LQR case. Despite of this, the information on the covariances were enough to allow for an accurate estimation of the real system states, and the control performed was very similar to that obtained when directly accessing the system real states, just as expected. However, it is noticeable that the input signals yielded by the controller were actually smoother and resulted in an apparent better tracking. This can be explained by the fact that the assignment of weights for the augmented states allowed for a better trade-off between the concentration and temperature tracking, resulting in a smaller deviance.
+The first difference noted was the fact that the weights for the augmented states for the LQG controller actually needed a value of greater magnitude than those used for the LQR case to be able to yield the same results. There are two important phenomena to emphasize in this result. First of all, the input signals requested from the controller are not smooth, resulting in a oscillatory behavior in the actual response of the system (and in the Kalman-Bucy filter state estimations). This is resulting for the fact, as noted in Example \ref{ex:lqg01}, that the integral action is calculated using the measurements of the system output, which are noisy. In addition to this, the Kalman-Bucy filter was not able to effectively reconstruct the real states in the cases for the references that are far from the linearization steady-state point. It is visible that the estimates have an offset when the system reaches the steady-state after tracking those references. In contrast, the estimate is far accurate when the real response is close to the linearization steady-state point, as evidenced in the temperature responses. This phenomena is resulting from the fact that the Kalman-Bucy filter is modeled from a linearized realization of the non-linear system, exhibiting the same limitations as were observed in Fig. \ref{fig:linResp01}.
 
-For completeness, the same tracking objective was simulated for the case of disturbances actuating on the real system, just as in the previous cases, as shown in Fig. \ref{fig:lqgi02}. The resulting control was actually similar to the case observed from directly accessing the states. This fact proves the feasibility of using controller-estimator configurations for reference tracking control, even in the presence of disturbances to the process. 
+The two problems just mentioned are somehow connected. A possible solution for the oscillatory input could be to use the state estimates and the linearized State-Space model to produce an output estimate; and then use it to calculate the integral action. Since the matrix $\bm{Q}_k$, estimated from the noise covariances, can be underestimated so that the Kalman-Bucy model is considered less uncertain and the estimations are less oscillatory. However, the limitation of the linear Kalman-Bucy filter will result in a poor reference tracking, in respect to the non-linear system response, if the estimated states are used in the integral action. A feasible solution, in this case, would be to explore more performing state estimators for non-linear systems.
+
+For the sake of completeness, the same tracking objective was simulated for the case of disturbances actuating on the real system, just as in the previous cases, as shown in Fig. \ref{fig:lqgi02}. The resulting control shows a more aggressive response in respect to the previous case, but it was still able to correct the disturbance and track the system to the reference. This fact proves the feasibility of using controller-estimator configurations for reference tracking control. Finally, a summary of the results in this subsection are displayed at Table \ref{tb:lqriMetrics}.
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{c | c c c c}
+		\textbf{Controller} & \textbf{ISE} & \textbf{IAE} & \textbf{ITSE} & \textbf{ITAE} \\
+		\hline
+		$LQRI_1$  & $\begin{bmatrix} 0.5929  \\  2.0197 \end{bmatrix}$ & $\begin{bmatrix} 7.4300  \\ 15.1220 \end{bmatrix}$ & $\begin{bmatrix} 9.0789  \\ 33.7962 \end{bmatrix}$ & $\begin{bmatrix} 23.1565  \\ 49.4736 \end{bmatrix}$ \\
+		$LQGI_1$ & $\begin{bmatrix}  0.5060 \\  11.5765 \end{bmatrix}$ & $\begin{bmatrix}  7.0710 \\  47.5308 \end{bmatrix}$ & $\begin{bmatrix}  8.1233 \\ 214.0017 \end{bmatrix}$ & $\begin{bmatrix} 25.0444 \\ 189.6191 \end{bmatrix}$ \\
+		$LQRI_2$ & $\begin{bmatrix} 0.7860  \\ 167.4390 \end{bmatrix}$ & $\begin{bmatrix} 10.1643  \\ 128.4992 \end{bmatrix}$ & $\begin{bmatrix} 11.6943  \\ 2059.6345 \end{bmatrix}$ & $\begin{bmatrix} 32.7671  \\ 450.4048 \end{bmatrix}$ \\
+		$LQGI_2$ & $\begin{bmatrix} 0.8902	\\ 687.4735 \end{bmatrix}$ & $\begin{bmatrix} 12.6788	\\ 322.6335 \end{bmatrix}$ & $\begin{bmatrix} 17.1311	\\ 11317.1011 \end{bmatrix}$ & $\begin{bmatrix} 50.5231	\\ 1274.8359 \end{bmatrix}$ \\
+	\end{tabular}
+	
+	\caption{Comparison between the LQRI and LQGI controllers. The pair $(LQRI_2, LQGI_2)$ comprises the simulations in which the system was subjected to disturbances.}
+	\label{tb:lqriMetrics}
+\end{table}
 
 \begin{figure}[ht] \centering
 	\includegraphics[width=\textwidth]{chapter7/lqgi02}
-	\caption{Simulation of the LQG controller with Integral Action for reference tracking, but subjected to three pulse of disturbances in the system variables.}
+	\caption{Simulation of the $LQGI_2$ controller for reference tracking, but subjected to three pulse of disturbances in the system variables.}
 	\label{fig:lqgi02}
 \end{figure}	
 
