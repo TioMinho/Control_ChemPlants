@@ -29,15 +29,15 @@ octave-workspace
 
 # Latex Temporary Files #
 #########################
-report/*.log
-report/*.aux
-report/*.bbl
-report/*.blg
-report/*.dvi
-report/*.out
-report/*.synctex.gz
-report/*.toc
-report/*.xwm
+report/*/*.log
+report/*/*.aux
+report/*/*.bbl
+report/*/*.blg
+report/*/*.dvi
+report/*/*.out
+report/*/*.synctex.gz
+report/*/*.toc
+report/*/*.xwm
 
 # Mac OS strange folders #
 ##########################

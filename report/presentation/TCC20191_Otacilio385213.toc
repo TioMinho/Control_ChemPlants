@@ -1,0 +1,20 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Contextualization}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{Problem Definition}{5}{0}{1}
+\beamer@sectionintoc {2}{Dynamical System Analysis}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Mathematical Models for Chemical Reactors}{7}{0}{2}
+\beamer@subsectionintoc {2}{2}{General Properties of Dynamical Models}{8}{0}{2}
+\beamer@subsectionintoc {2}{3}{Experiments}{9}{0}{2}
+\beamer@sectionintoc {3}{State-Feedback Controllers}{10}{0}{3}
+\beamer@subsectionintoc {3}{1}{Definitions}{11}{0}{3}
+\beamer@subsectionintoc {3}{2}{Regulation vs. Tracking}{12}{0}{3}
+\beamer@sectionintoc {4}{Optimal Control}{13}{0}{4}
+\beamer@subsectionintoc {4}{1}{Formulation}{14}{0}{4}
+\beamer@subsectionintoc {4}{2}{Linear Quadratic (LQ) Controllers}{15}{0}{4}
+\beamer@subsectionintoc {4}{3}{Simulations}{16}{0}{4}
+\beamer@sectionintoc {5}{Optimal State Estimation}{17}{0}{5}
+\beamer@subsectionintoc {5}{1}{Formulation}{18}{0}{5}
+\beamer@subsectionintoc {5}{2}{Kalman Filter and LQG Controllers}{19}{0}{5}
+\beamer@subsectionintoc {5}{3}{Simulations}{20}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{21}{0}{6}
