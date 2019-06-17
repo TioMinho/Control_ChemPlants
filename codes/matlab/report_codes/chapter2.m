@@ -97,7 +97,7 @@ system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 x_o = y(1:2,end);
 
 % - Real simulation parameters
-t = (0:0.1:1)';      
+t = (0:0.01:1)';      
 U = ones(1,numel(t)) * 3;
 U_zero = zeros(1,numel(t));
 
@@ -131,10 +131,10 @@ xlabel("Time (min)")
 ylim([-1, 3.5])
 
 % - Exporting the Visualization to an Image
-figname = "report_codes/figs/report_ch2_2_1";
-fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 3];
-print('-bestfit', figname, '-dpdf', '-r300')
-system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+% figname = "report_codes/figs/report_ch2_2_1";
+% fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 3];
+% print('-bestfit', figname, '-dpdf', '-r300')
+% system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 
 figure(2); clf
@@ -142,25 +142,27 @@ figure(2); clf
 axes(ha(1))
 scatter(y_lin(end,1), y_lin(end,2), 'ko')
 z = zeros(size(t));
-surface([y_lin(:,1) y_lin(:,1)]',[y_lin(:,2) y_lin(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',1.5); hold on
-surface([y_lin_nat(:,1) y_lin_nat(:,1)]',[y_lin_nat(:,2) y_lin_nat(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',1, 'LineStyle', '--'); hold on
-surface([y_lin_forc(:,1) y_lin_forc(:,1)]',[y_lin_forc(:,2) y_lin_forc(:,2)]',[z z]',[t t]',...
-        'facecol','no', 'edgecol','interp', 'linew',1, 'LineStyle', ':');
-colormap jet
-c = colorbar;
-c.Label.String = 'Time (min)';
+for l = 1:numel(t)
+    surface([y_lin(1:l,1) y_lin(1:l,1)]',[y_lin(1:l,2) y_lin(1:l,2)]',[z(1:l) z(1:l)]',[t(1:l) t(1:l)]',...
+             'edgecol','interp', 'linew',1.5); hold on
+    surface([y_lin_nat(1:l,1) y_lin_nat(1:l,1)]',[y_lin_nat(1:l,2) y_lin_nat(1:l,2)]',[z(1:l) z(1:l)]',[t(1:l) t(1:l)]',...
+             'edgecol','interp', 'linew',1, 'LineStyle', '--'); hold on
+    surface([y_lin_forc(1:l,1) y_lin_forc(1:l,1)]',[y_lin_forc(1:l,2) y_lin_forc(1:l,2)]',[z(1:l) z(1:l)]',[t(1:l) t(1:l)]',...
+             'edgecol','interp', 'linew',1, 'LineStyle', ':');
+    colormap jet
+    c = colorbar;
+    c.Label.String = 'Time (min)';
 
-ylabel("\Delta x_2 (mol/l)")
-xlabel("\Delta x_1 (mol/l)")
-grid
+    ylabel("\Delta x_2 (mol/l)")
+    xlabel("\Delta x_1 (mol/l)")
+    drawnow
+end
 
 % - Exporting the Visualization to an Image
-figname = "report_codes/figs/report_ch2_2_2";
-fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 4];
-print('-bestfit', figname, '-dpdf', '-r300')
-system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+% figname = "report_codes/figs/report_ch2_2_2";
+% fig = gcf; fig.PaperPositionMode = 'auto'; fig.PaperSize = [4 4];
+% print('-bestfit', figname, '-dpdf', '-r300')
+% system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 
 %% Figure 2.5 %%

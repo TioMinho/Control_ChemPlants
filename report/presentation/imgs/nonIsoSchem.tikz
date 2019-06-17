@@ -1,0 +1,16 @@
+\begin{tikzpicture}[auto, node distance=3cm, >=latex']
+	\node [input] (input1) {};
+	\node [input, below of=input1, node distance=1.5em] (input2) {};
+	\node [input, below of=input2, node distance=1.5em] (input3) {};
+	\node [block, right of=input2, minimum width=8em, minimum height=5em] (system) {{\large \bfseries System}};
+	\node [output, right of=system] (output2) {};
+	\node [output, above of=output2, node distance=1.5em] (output1) {};		
+	\node [output, below of=output2, node distance=1.5em] (output3) {};
+	
+	\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathbb{R}^{(1)}  & \overset{K_{11}(T)}{\longrightarrow} & \cdots & \overset{K_{1n}(T)}{\longrightarrow} &  \mathcal{P}^{(1)} & & \Delta H_1 \\ \vdots &  & \vdots &  & \vdots  & &  \\ \mathbb{R}^{(N)} &  \overset{K_{n1}(T)}{\longrightarrow} & \cdots & \overset{K_{nn}(T)}{\longrightarrow} & \mathcal{P}^{(N)}  & & \Delta H_n \\ \end{matrix} \right.$};				
+	
+	\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (input1-|system.west);
+	\draw[->, line width=0.5mm] (input3) -- node[pos=0.1]{Heat Capacity} (input3-|system.west);
+	\draw[<-, line width=0.5mm] (output1) -- node[pos=0.1,yshift=1.5em]{Products} (output1-|system.east);
+	\draw[<-, line width=0.5mm] (output3) -- node[pos=0.1,yshift=1.5em]{Temperature} (output3-|system.east);
+\end{tikzpicture}

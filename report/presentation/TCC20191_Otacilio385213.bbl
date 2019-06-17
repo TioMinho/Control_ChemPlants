@@ -1,0 +1,44 @@
+\begin{thebibliography}{}
+
+\bibitem[{Cairano} et~al., 2014]{Cairano:2014}
+{Cairano}, S.~D., {Bernardini}, D., {Bemporad}, A., and {Kolmanovsky}, I.~V.
+  (2014).
+\newblock Stochastic mpc with learning for driver-predictive vehicle control
+  and its application to hev energy management.
+\newblock {\em IEEE Transactions on Control Systems Technology},
+  22(3):1018--1031.
+
+\bibitem[Eren et~al., 2017]{Eren:2017}
+Eren, U., Prach, A., Koçer, B.~B., Raković, S.~V., Kayacan, E., and
+  Açıkmeşe, B. (2017).
+\newblock Model predictive control in aerospace systems: Current state and
+  opportunities.
+\newblock {\em Journal of Guidance, Control, and Dynamics}, 40(7):1541--1566.
+
+\bibitem[Gupta et~al., 2012]{Gupta:2012}
+Gupta, V.~K., Ali, I., Saleh, T.~A., Nayak, A., and Agarwal, S. (2012).
+\newblock Chemical treatment technologies for waste-water recycling—an
+  overview.
+\newblock {\em RSC Adv.}, 2:6380--6388.
+
+\bibitem[Klatt and Engell, 1998]{Klatt:1998}
+Klatt, K.-U. and Engell, S. (1998).
+\newblock Gain-scheduling trajectory control of a continuous stirred tank
+  reactor.
+\newblock {\em Computers \& Chemical Engineering}, 22(4-5):491--502.
+
+\bibitem[Mulas et~al., 2015]{Mulas:2015}
+Mulas, M., Tronci, S., Corona, F., Haimi, H., Lindell, P., Heinonen, M.,
+  Vahala, R., and Baratti, R. (2015).
+\newblock Predictive control of an activated sludge process: An application to
+  the viikinmäki wastewater treatment plant.
+\newblock {\em Journal of Process Control}, 35:89 -- 100.
+
+\bibitem[Tang et~al., 2016]{Tang:2016}
+Tang, X., Rupp, B., Yang, Y., Edwards, T.~D., Grover, M.~A., and Bevan, M.~A.
+  (2016).
+\newblock Optimal feedback controlled assembly of perfect crystals.
+\newblock {\em ACS Nano}, 10(7):6791--6798.
+\newblock PMID: 27387146.
+
+\end{thebibliography}

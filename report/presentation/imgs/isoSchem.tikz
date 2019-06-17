@@ -1,0 +1,10 @@
+\begin{tikzpicture}[auto, node distance=3cm, >=latex']
+	\node [input] (input1) {};
+	\node [block, right of=input1, minimum width=8em, minimum height=5em] (system) {{\large \bfseries System}};
+	\node [output, right of=system] (output) {};
+	
+	\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathbb{R}^{(1)}  & \overset{K_{11}}{\longrightarrow} & \cdots & \overset{K_{1n}}{\longrightarrow} &  \mathcal{P}^{(1)} \\ \vdots &  & \vdots &  & \vdots \\ \mathbb{R}^{(N)} &  \overset{K_{n1}}{\longrightarrow} & \cdots & \overset{K_{nn}}{\longrightarrow} & \mathcal{P}^{(N)} \\\end{matrix} \right.$};		
+	
+	\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (system);
+	\draw[->, line width=0.5mm] (system) -- node[pos=0.9]{Products} (output);
+\end{tikzpicture}

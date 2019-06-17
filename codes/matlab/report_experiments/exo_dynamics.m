@@ -96,7 +96,7 @@ fig.Position = [xLeft yTop xSize ySize];
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Model Non-Linear Simulation - Disturbed %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Simulation Parameters
@@ -146,19 +146,19 @@ print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Model Linearized Simulation %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % - Simulation Parameters
 % Time
-t = (0:0.1:10)'; T = numel(t);
+t = (0:0.06:10)'; T = numel(t);
 
 % Initial Conditions
 U_ss = [18.83 -4495.7]; X_ss = [1.235 0.9 134.14 128.95];
 
 % Input Signal
-U = [ones(1,floor(T/4))*U_ss(1) U_ss(1)+sin(linspace(0,2*pi,T-2*floor(T/4)))*-12 ones(1,floor(T/4))*U_ss(1);
-     ones(1,floor(T/4))*U_ss(2) U_ss(2)+sin(linspace(0,2*pi,T-2*floor(T/4)))*-1000 ones(1,floor(T/4))*U_ss(2)];
+U = [ones(1,floor(T/10))*U_ss(1) U_ss(1)+sin(linspace(0,2*pi,T-2*floor(T/10)))*-12 ones(1,floor(T/10))*U_ss(1);
+     ones(1,floor(T/10))*U_ss(2) U_ss(2)+sin(linspace(0,2*pi,T-2*floor(T/10)))*-1000 ones(1,floor(T/10))*U_ss(2)];
 
 U = U + randn(2,T) .* (0.0*U_ss');
  
@@ -212,6 +212,104 @@ xSize = 1600; ySize = 600; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
 fig.Position = [xLeft yTop xSize ySize];
 print('-bestfit', figname, '-dpdf', '-r300')
 system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
+
+%% Visualization - Animated
+figure(1); clf
+[ha, pos] = tight_subplot(2,2,[.03 .1],[.1 .01],[.1 .01]);
+
+axes(ha(1)), plot(t, U(1,:), 'linewidth', 1, 'color', [0.3 0.3 0.3])
+ylabel("Flow-rate (1/hr)")
+ylim([min(U(1,:))-1, max(U(1,:))+1])
+set(ha(1), "XTickLabel", [])
+
+axes(ha(2))
+plot(t, y(1, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(11,:)); hold on
+plot(t, y(2, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(12,:)); hold on
+plot(t, y_lin(:, 1), 'linestyle', '-', 'linewidth', 1, 'color', cpal(11,:)); hold on
+plot(t, y_lin(:, 2), 'linestyle', '-', 'linewidth', 1, 'color', cpal(12,:));
+ylabel("Concentration (mol/l)")
+set(ha(2), "XTickLabel", [])
+
+axes(ha(3)), plot(t, U(2,:), 'linewidth', 1, 'color', [0.3 0.3 0.3])
+ylabel("Cooling Capacity (kJ/hr)")
+ylim([min(U(2,:))-250, max(U(2,:))+250])
+xlabel("Time (hr)")
+
+axes(ha(4)), 
+plot(t, y(3, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold on
+plot(t, y(4, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on
+plot(t, y_lin(:, 3), 'linestyle', '-', 'linewidth', 1, 'color', cpal(17,:)); hold on
+plot(t, y_lin(:, 4), 'linestyle', '-', 'linewidth', 1, 'color', cpal(16,:));
+xlabel("Time (hr)"), ylabel("Temperatures (ºC)")
+
+figure(2); 
+vidfile = VideoWriter('testmovie.mp4','MPEG-4');
+open(vidfile);
+z = zeros(size(t));
+for l = 1:numel(t)
+    clf; [ha, pos] = tight_subplot(2,2,[.1 .1],[.1 .01],[.1 .01]);
+    l_inf = max(1, l-numel(t)*0.2);
+
+    axes(ha(1)), plot(t(1:l), U(1,1:l), 'linewidth', 1, 'color', [0.3 0.3 0.3])
+    ylabel("Flow-rate (1/hr)")
+    ylim([min(U(1,:))-1, max(U(1,:))+1])
+    set(ha(1), "XTickLabel", [])
+
+    axes(ha(2)), plot(t(1:l), U(2,1:l), 'linewidth', 1, 'color', [0.3 0.3 0.3])
+    ylabel("Cooling Capacity (kJ/hr)")
+    ylim([min(U(2,:))-250, max(U(2,:))+250])
+    xlabel("Time (hr)")
+
+    
+    axes(ha(3))
+    scatter(xe(1), xe(2), 'ko'), hold on
+    surface([y(1,l_inf:l)' y(1,l_inf:l)']',[y(2,l_inf:l)' y(2,l_inf:l)']',[z(l_inf:l) z(l_inf:l)]',[t(l_inf:l) t(l_inf:l)]',...
+             'edgecol','interp', 'linew', 1); hold on
+    surface([y_lin(l_inf:l,1) y_lin(l_inf:l,1)]',[y_lin(l_inf:l,2) y_lin(l_inf:l,2)]',[z(l_inf:l) z(l_inf:l)]',[t(l_inf:l) t(l_inf:l)]',...
+             'edgecol','interp', 'linew',1, 'LineStyle', '--'); 
+    colormap jet
+    c = colorbar("NorthOutside");
+    c.Label.String = 'Time (hr)';
+
+    ylabel("\Delta x_2 (mol/l)")
+    xlabel("\Delta x_1 (mol/l)")
+    
+    xlim([min(y(1,:))-0.1 max(y(1,:))+0.1])
+    ylim([min(y(2,:))-0.05 max(y(2,:))+0.05])
+    
+    
+    axes(ha(4))
+    scatter(xe(3), xe(4), 'ko'), hold on
+    surface([y(3,l_inf:l)' y(3,l_inf:l)']',[y(4,l_inf:l)' y(4,l_inf:l)']',[z(l_inf:l) z(l_inf:l)]',[t(l_inf:l) t(l_inf:l)]',...
+             'edgecol','interp', 'linew', 1); hold on
+    surface([y_lin(l_inf:l,3) y_lin(l_inf:l,3)]',[y_lin(l_inf:l,4) y_lin(l_inf:l,4)]',[z(l_inf:l) z(l_inf:l)]',[t(l_inf:l) t(l_inf:l)]',...
+             'edgecol','interp', 'linew',1, 'LineStyle', '--'); 
+    colormap jet
+    c = colorbar("NorthOutside");
+    c.Label.String = 'Time (hr)';
+
+    ylabel("\Delta x_2 (mol/l)")
+    xlabel("\Delta x_1 (mol/l)")
+    
+    xlim([min(y(3,:))-1 max(y(3,:))+1])
+    ylim([min(y(4,:))-1 max(y(4,:))+1])
+    
+    
+    drawnow
+    F(l) = getframe(gcf); 
+    writeVideo(vidfile,F(l));
+end
+close(vidfile);
+
+% - Exporting the Visualization to an Image
+% timeNow = datetime('now', 'TimeZone', 'local', 'Format', 'dMMMy_HHmmssZ');
+% figname = "report_experiments/figs/exoSim_dynamics_" + char(timeNow);
+% fig = gcf; 
+% fig.PaperUnits = "centimeters"; 
+% xSize = 1600; ySize = 600; xLeft = (21-xSize)/2; yTop = (30-ySize)/2;
+% fig.Position = [xLeft yTop xSize ySize];
+% print('-bestfit', figname, '-dpdf', '-r300')
+% system("pdfcrop " + figname + ".pdf " + figname + ".pdf");
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Steady-State Points Visualization %%

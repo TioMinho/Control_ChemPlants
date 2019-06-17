@@ -3,7 +3,7 @@
 \contentsline {chapter}{List of Tables}{v}{chapter*.2}% 
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}% 
 \contentsline {section}{\numberline {1.1}Control Systems Engineering}{1}{section.1.1}% 
-\contentsline {section}{\numberline {1.2}Chemical reactor Systems}{3}{section.1.2}% 
+\contentsline {section}{\numberline {1.2}Chemical Reactor Systems}{3}{section.1.2}% 
 \contentsline {section}{\numberline {1.3}Motivation}{4}{section.1.3}% 
 \contentsline {section}{\numberline {1.4}Objectives}{5}{section.1.4}% 
 \contentsline {section}{\numberline {1.5}Chapters Organization}{5}{section.1.5}% 
@@ -48,7 +48,7 @@
 \contentsline {subsection}{Linearized model properties}{75}{section*.55}% 
 \contentsline {section}{\numberline {6.2}Optimal Control}{76}{section.6.2}% 
 \contentsline {subsection}{Regulation}{76}{section*.56}% 
-\contentsline {subsection}{Tracking}{78}{section*.61}% 
-\contentsline {chapter}{\numberline {7}Conclusion}{83}{chapter.7}% 
-\contentsline {chapter}{Bibliography}{84}{chapter.7}% 
-\contentsline {chapter}{\numberline {A}Properties of Gaussian Distributions}{89}{appendix.A}% 
+\contentsline {subsection}{Tracking}{79}{section*.62}% 
+\contentsline {chapter}{\numberline {7}Conclusion}{85}{chapter.7}% 
+\contentsline {chapter}{Bibliography}{86}{chapter.7}% 
+\contentsline {chapter}{\numberline {A}Properties of Gaussian Distributions}{91}{appendix.A}% 

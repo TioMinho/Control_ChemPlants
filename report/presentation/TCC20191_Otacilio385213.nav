@@ -15,81 +15,133 @@
 \headcommand {\beamer@subsectionentry {0}{1}{2}{5}{Problem Definition}}
 \headcommand {\slideentry {1}{2}{1}{5/5}{Problem Definition}{0}}
 \headcommand {\beamer@framepages {5}{5}}
-\headcommand {\beamer@sectionpages {3}{5}}
-\headcommand {\beamer@subsectionpages {5}{5}}
-\headcommand {\sectionentry {2}{Dynamical System Analysis}{6}{Dynamical System Analysis}{0}}
-\headcommand {\slideentry {2}{0}{1}{6/6}{}{0}}
+\headcommand {\slideentry {1}{2}{2}{6/6}{Problem Definition}{0}}
 \headcommand {\beamer@framepages {6}{6}}
-\headcommand {\beamer@subsectionpages {6}{6}}
-\headcommand {\beamer@subsectionentry {0}{2}{1}{7}{Mathematical Models for Chemical Reactors}}
-\headcommand {\slideentry {2}{1}{1}{7/7}{Mathematical Models for Chemical Reactors}{0}}
+\headcommand {\beamer@sectionpages {3}{6}}
+\headcommand {\beamer@subsectionpages {5}{6}}
+\headcommand {\sectionentry {2}{Dynamical System Analysis}{7}{Dynamical System Analysis}{0}}
+\headcommand {\slideentry {2}{0}{1}{7/7}{}{0}}
 \headcommand {\beamer@framepages {7}{7}}
 \headcommand {\beamer@subsectionpages {7}{7}}
-\headcommand {\beamer@subsectionentry {0}{2}{2}{8}{General Properties of Dynamical Models}}
-\headcommand {\slideentry {2}{2}{1}{8/8}{General Properties of Dynamical Models}{0}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{8}{Dynamical Models for Chemical Reactors}}
+\headcommand {\slideentry {2}{1}{1}{8/8}{Dynamical Models for Chemical Reactors}{0}}
 \headcommand {\beamer@framepages {8}{8}}
-\headcommand {\beamer@subsectionpages {8}{8}}
-\headcommand {\beamer@subsectionentry {0}{2}{3}{9}{Experiments}}
-\headcommand {\slideentry {2}{3}{1}{9/9}{Experiments}{0}}
+\headcommand {\slideentry {2}{1}{2}{9/9}{Dynamical Models for Chemical Reactors}{0}}
 \headcommand {\beamer@framepages {9}{9}}
-\headcommand {\beamer@sectionpages {6}{9}}
-\headcommand {\beamer@subsectionpages {9}{9}}
-\headcommand {\sectionentry {3}{State-Feedback Controllers}{10}{State-Feedback Controllers}{0}}
-\headcommand {\slideentry {3}{0}{1}{10/10}{}{0}}
+\headcommand {\slideentry {2}{1}{3}{10/10}{Dynamical Models for Chemical Reactors}{0}}
 \headcommand {\beamer@framepages {10}{10}}
-\headcommand {\beamer@subsectionpages {10}{10}}
-\headcommand {\beamer@subsectionentry {0}{3}{1}{11}{Definitions}}
-\headcommand {\slideentry {3}{1}{1}{11/11}{Definitions}{0}}
+\headcommand {\beamer@subsectionpages {8}{10}}
+\headcommand {\beamer@subsectionentry {0}{2}{2}{11}{General Properties of State-Space Models}}
+\headcommand {\slideentry {2}{2}{1}{11/11}{General Properties of State-Space Models}{0}}
 \headcommand {\beamer@framepages {11}{11}}
 \headcommand {\beamer@subsectionpages {11}{11}}
-\headcommand {\beamer@subsectionentry {0}{3}{2}{12}{Regulation vs. Tracking}}
-\headcommand {\slideentry {3}{2}{1}{12/12}{Regulation vs. Tracking}{0}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{12}{Experiments}}
+\headcommand {\slideentry {2}{3}{1}{12/12}{Experiments}{0}}
 \headcommand {\beamer@framepages {12}{12}}
-\headcommand {\beamer@sectionpages {10}{12}}
-\headcommand {\beamer@subsectionpages {12}{12}}
-\headcommand {\sectionentry {4}{Optimal Control}{13}{Optimal Control}{0}}
-\headcommand {\slideentry {4}{0}{1}{13/13}{}{0}}
+\headcommand {\slideentry {2}{3}{2}{13/13}{Experiments}{0}}
 \headcommand {\beamer@framepages {13}{13}}
-\headcommand {\beamer@subsectionpages {13}{13}}
-\headcommand {\beamer@subsectionentry {0}{4}{1}{14}{Formulation}}
-\headcommand {\slideentry {4}{1}{1}{14/14}{Formulation}{0}}
+\headcommand {\slideentry {2}{3}{3}{14/14}{Experiments}{0}}
 \headcommand {\beamer@framepages {14}{14}}
-\headcommand {\beamer@subsectionpages {14}{14}}
-\headcommand {\beamer@subsectionentry {0}{4}{2}{15}{Linear Quadratic (LQ) Controllers}}
-\headcommand {\slideentry {4}{2}{1}{15/15}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\slideentry {2}{3}{4}{15/15}{Experiments}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\beamer@subsectionpages {15}{15}}
-\headcommand {\beamer@subsectionentry {0}{4}{3}{16}{Simulations}}
-\headcommand {\slideentry {4}{3}{1}{16/16}{Simulations}{0}}
+\headcommand {\beamer@sectionpages {7}{15}}
+\headcommand {\beamer@subsectionpages {12}{15}}
+\headcommand {\sectionentry {3}{State-Feedback Controllers}{16}{State-Feedback Controllers}{0}}
+\headcommand {\slideentry {3}{0}{1}{16/16}{}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\beamer@sectionpages {13}{16}}
 \headcommand {\beamer@subsectionpages {16}{16}}
-\headcommand {\sectionentry {5}{Optimal State Estimation}{17}{Optimal State Estimation}{0}}
-\headcommand {\slideentry {5}{0}{1}{17/17}{}{0}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{17}{Definitions}}
+\headcommand {\slideentry {3}{1}{1}{17/17}{Definitions}{0}}
 \headcommand {\beamer@framepages {17}{17}}
-\headcommand {\beamer@subsectionpages {17}{17}}
-\headcommand {\beamer@subsectionentry {0}{5}{1}{18}{Formulation}}
-\headcommand {\slideentry {5}{1}{1}{18/18}{Formulation}{0}}
+\headcommand {\slideentry {3}{1}{2}{18/18}{Definitions}{0}}
 \headcommand {\beamer@framepages {18}{18}}
-\headcommand {\beamer@subsectionpages {18}{18}}
-\headcommand {\beamer@subsectionentry {0}{5}{2}{19}{Kalman Filter and LQG Controllers}}
-\headcommand {\slideentry {5}{2}{1}{19/19}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\slideentry {3}{1}{3}{19/19}{Definitions}{0}}
 \headcommand {\beamer@framepages {19}{19}}
-\headcommand {\beamer@subsectionpages {19}{19}}
-\headcommand {\beamer@subsectionentry {0}{5}{3}{20}{Simulations}}
-\headcommand {\slideentry {5}{3}{1}{20/20}{Simulations}{0}}
+\headcommand {\beamer@subsectionpages {17}{19}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{20}{Regulation vs. Tracking}}
+\headcommand {\slideentry {3}{2}{1}{20/20}{Regulation vs. Tracking}{0}}
 \headcommand {\beamer@framepages {20}{20}}
-\headcommand {\beamer@sectionpages {17}{20}}
-\headcommand {\beamer@subsectionpages {20}{20}}
-\headcommand {\sectionentry {6}{Conclusion}{21}{Conclusion}{0}}
-\headcommand {\slideentry {6}{0}{1}{21/21}{}{0}}
+\headcommand {\slideentry {3}{2}{2}{21/21}{Regulation vs. Tracking}{0}}
 \headcommand {\beamer@framepages {21}{21}}
-\headcommand {\slideentry {6}{0}{2}{22/22}{}{0}}
+\headcommand {\beamer@sectionpages {16}{21}}
+\headcommand {\beamer@subsectionpages {20}{21}}
+\headcommand {\sectionentry {4}{Optimal Control}{22}{Optimal Control}{0}}
+\headcommand {\slideentry {4}{0}{1}{22/22}{}{0}}
 \headcommand {\beamer@framepages {22}{22}}
-\headcommand {\slideentry {6}{0}{3}{23/23}{}{0}}
+\headcommand {\beamer@subsectionpages {22}{22}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{23}{Formulation}}
+\headcommand {\slideentry {4}{1}{1}{23/23}{Formulation}{0}}
 \headcommand {\beamer@framepages {23}{23}}
-\headcommand {\beamer@partpages {1}{23}}
-\headcommand {\beamer@subsectionpages {21}{23}}
-\headcommand {\beamer@sectionpages {21}{23}}
-\headcommand {\beamer@documentpages {23}}
-\headcommand {\gdef \inserttotalframenumber {21}}
+\headcommand {\slideentry {4}{1}{2}{24/24}{Formulation}{0}}
+\headcommand {\beamer@framepages {24}{24}}
+\headcommand {\slideentry {4}{1}{3}{25/25}{Formulation}{0}}
+\headcommand {\beamer@framepages {25}{25}}
+\headcommand {\slideentry {4}{1}{4}{26/26}{Formulation}{0}}
+\headcommand {\beamer@framepages {26}{26}}
+\headcommand {\beamer@subsectionpages {23}{26}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{27}{Linear Quadratic (LQ) Controllers}}
+\headcommand {\slideentry {4}{2}{1}{27/27}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {27}{27}}
+\headcommand {\slideentry {4}{2}{2}{28/28}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {28}{28}}
+\headcommand {\slideentry {4}{2}{3}{29/29}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {29}{29}}
+\headcommand {\beamer@subsectionpages {27}{29}}
+\headcommand {\beamer@subsectionentry {0}{4}{3}{30}{Simulations}}
+\headcommand {\slideentry {4}{3}{1}{30/30}{Simulations}{0}}
+\headcommand {\beamer@framepages {30}{30}}
+\headcommand {\slideentry {4}{3}{2}{31/31}{Simulations}{0}}
+\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\slideentry {4}{3}{3}{32/32}{Simulations}{0}}
+\headcommand {\beamer@framepages {32}{32}}
+\headcommand {\slideentry {4}{3}{4}{33/33}{Simulations}{0}}
+\headcommand {\beamer@framepages {33}{33}}
+\headcommand {\beamer@sectionpages {22}{33}}
+\headcommand {\beamer@subsectionpages {30}{33}}
+\headcommand {\sectionentry {5}{Optimal State Estimation}{34}{Optimal State Estimation}{0}}
+\headcommand {\slideentry {5}{0}{1}{34/34}{}{0}}
+\headcommand {\beamer@framepages {34}{34}}
+\headcommand {\beamer@subsectionpages {34}{34}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{35}{Formulation}}
+\headcommand {\slideentry {5}{1}{1}{35/35}{Formulation}{0}}
+\headcommand {\beamer@framepages {35}{35}}
+\headcommand {\slideentry {5}{1}{2}{36/36}{Formulation}{0}}
+\headcommand {\beamer@framepages {36}{36}}
+\headcommand {\slideentry {5}{1}{3}{37/37}{Formulation}{0}}
+\headcommand {\beamer@framepages {37}{37}}
+\headcommand {\beamer@subsectionpages {35}{37}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{38}{Kalman Filter and LQG Controllers}}
+\headcommand {\slideentry {5}{2}{1}{38/38}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@framepages {38}{38}}
+\headcommand {\slideentry {5}{2}{2}{39/39}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@framepages {39}{39}}
+\headcommand {\slideentry {5}{2}{3}{40/40}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@framepages {40}{40}}
+\headcommand {\beamer@subsectionpages {38}{40}}
+\headcommand {\beamer@subsectionentry {0}{5}{3}{41}{Simulations}}
+\headcommand {\slideentry {5}{3}{1}{41/41}{Simulations}{0}}
+\headcommand {\beamer@framepages {41}{41}}
+\headcommand {\slideentry {5}{3}{2}{42/42}{Simulations}{0}}
+\headcommand {\beamer@framepages {42}{42}}
+\headcommand {\slideentry {5}{3}{3}{43/43}{Simulations}{0}}
+\headcommand {\beamer@framepages {43}{43}}
+\headcommand {\slideentry {5}{3}{4}{44/44}{Simulations}{0}}
+\headcommand {\beamer@framepages {44}{44}}
+\headcommand {\beamer@sectionpages {34}{44}}
+\headcommand {\beamer@subsectionpages {41}{44}}
+\headcommand {\sectionentry {6}{Conclusion}{45}{Conclusion}{0}}
+\headcommand {\slideentry {6}{0}{1}{45/45}{}{0}}
+\headcommand {\beamer@framepages {45}{45}}
+\headcommand {\slideentry {6}{0}{2}{46/46}{}{0}}
+\headcommand {\beamer@framepages {46}{46}}
+\headcommand {\slideentry {6}{0}{3}{47/47}{}{0}}
+\headcommand {\beamer@framepages {47}{47}}
+\headcommand {\slideentry {6}{0}{3}{47/48}{}{0}}
+\headcommand {\beamer@framepages {47}{48}}
+\headcommand {\slideentry {6}{0}{4}{49/49}{}{0}}
+\headcommand {\beamer@framepages {49}{49}}
+\headcommand {\beamer@partpages {1}{49}}
+\headcommand {\beamer@subsectionpages {45}{49}}
+\headcommand {\beamer@sectionpages {45}{49}}
+\headcommand {\beamer@documentpages {49}}
+\headcommand {\gdef \inserttotalframenumber {47}}

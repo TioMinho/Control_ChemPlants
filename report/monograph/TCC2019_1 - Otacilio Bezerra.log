@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.5.11)  10 JUN 2019 22:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2019.5.11)  17 JUN 2019 04:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -328,7 +328,6 @@ Now handling font encoding PD1 ...
 (c:/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 4393.
 Package hyperref Info: Hyper figures OFF on input line 4519.
 Package hyperref Info: Link nesting OFF on input line 4524.
 Package hyperref Info: Hyper index ON on input line 4527.
@@ -351,7 +350,7 @@ Package hyperref Info: Hyper figures OFF on input line 6380.
 Package hyperref Info: Link nesting OFF on input line 6385.
 Package hyperref Info: Hyper index ON on input line 6388.
 Package hyperref Info: backreferencing OFF on input line 6395.
-Package hyperref Info: Link coloring ON on input line 6398.
+Package hyperref Info: Link coloring OFF on input line 6400.
 Package hyperref Info: Link coloring with OCG OFF on input line 6405.
 Package hyperref Info: PDF/A mode OFF on input line 6410.
 LaTeX Info: Redefining \ref on input line 6450.
@@ -1273,6 +1272,8 @@ Package: afterpage 2014/10/28 v1.08 After-Page Package (DPC)
 (c:/texlive/2019/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/02/27 1.8b listings language file
 )
+Package hyperref Info: Option `colorlinks' set `true' on input line 80.
+
 (c:/texlive/2019/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
 braryshapes.code.tex
 File: tikzlibraryshapes.code.tex 2019/02/02 v3.1.1 (3.1.1)
@@ -1370,22 +1371,22 @@ File: tikzlibraryfit.code.tex 2019/02/02 v3.1.1 (3.1.1)
  (./TCC2019_1 - Otacilio Bezerra.aux)
 \openout1 = `"TCC2019_1 - Otacilio Bezerra.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 152.
-LaTeX Font Info:    ... okay on input line 152.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
 
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1420,7 +1421,7 @@ LaTeX Font Info:    ... okay on input line 152.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 152.
+LaTeX Info: Redefining \microtypecontext on input line 160.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1464,7 +1465,7 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring ON on input line 152.
+Package hyperref Info: Link coloring ON on input line 160.
 
 (c:/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -1474,9 +1475,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count368
 )
-LaTeX Info: Redefining \ref on input line 152.
-LaTeX Info: Redefining \pageref on input line 152.
-LaTeX Info: Redefining \nameref on input line 152.
+LaTeX Info: Redefining \ref on input line 160.
+LaTeX Info: Redefining \pageref on input line 160.
+LaTeX Info: Redefining \nameref on input line 160.
 
 (./TCC2019_1 - Otacilio Bezerra.out) (./TCC2019_1 - Otacilio Bezerra.out)
 \@outlinefile=\write5
@@ -1498,16 +1499,16 @@ ABD: EveryShipout initializing macros
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.16} into 
 your preamble.
- on input line 152.
+ on input line 160.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 152.
+LaTeX Font Info:    Try loading font information for U+msa on input line 160.
 (c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 (c:/texlive/2019/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 152.
+LaTeX Font Info:    Try loading font information for U+msb on input line 160.
 
 (c:/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1531,13 +1532,13 @@ Package epstopdf Info: Source file: <imgs/logo_ufc.eps>
 (epstopdf)                    size: 124191 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/logo_ufc-eps-converte
 d-to.pdf imgs/logo_ufc.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
 <imgs/logo_ufc-eps-converted-to.pdf, id=146, 314.17375pt x 381.425pt>
 File: imgs/logo_ufc-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/logo_ufc-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/logo_ufc-eps-converted-to.pdf  used on input line
- 172.
+ 180.
 (pdftex.def)             Requested size: 71.13188pt x 86.35818pt.
 Package epstopdf Info: Source file: <imgs/logo_ufc.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
@@ -1547,29 +1548,21 @@ Package epstopdf Info: Source file: <imgs/logo_ufc.eps>
 (epstopdf)                    size: 124191 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/logo_ufc-eps-converte
 d-to.pdf imgs/logo_ufc.eps>
-(epstopdf)             \includegraphics on input line 202.
+(epstopdf)             \includegraphics on input line 210.
 Package epstopdf Info: Output file is already uptodate.
 File: imgs/logo_ufc-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/logo_ufc-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/logo_ufc-eps-converted-to.pdf  used on input line
- 202.
+ 210.
 (pdftex.def)             Requested size: 71.13188pt x 86.35818pt.
-LaTeX Font Info:    Try loading font information for OT1+bch on input line 236.
+ [1
 
-
-(c:/texlive/2019/texmf-dist/tex/latex/psnfss/ot1bch.fd
-File: ot1bch.fd 2004/10/18 font definitions for OT1/bch.
-)
-(c:/texlive/2019/texmf-dist/tex/latex/microtype/mt-bch.cfg
-File: mt-bch.cfg 2007/03/03 v1.5 microtype config. file: Bitstream Charter (RS)
-
-) [1{c:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
-
- <./imgs/logo_ufc-eps-converted-to.pdf>]pdfTeX warning (ext4): destination with
- the same identifier (name{page.1}) has been already used, duplicate ignored
+{c:/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./imgs/logo_ufc
+-eps-converted-to.pdf>]pdfTeX warning (ext4): destination with the same identif
+ier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.236     \null
+l.244     \null
                \vfill%% [1] [2] (./TCC2019_1 - Otacilio Bezerra.toc [1
 
 
@@ -1579,7 +1572,7 @@ l.236     \null
 
 
 [2] (./TCC2019_1 - Otacilio Bezerra.lof
-Underfull \vbox (badness 1242) has occurred while \output is active []
+Underfull \vbox (badness 2547) has occurred while \output is active []
 
  [3
 
@@ -1588,7 +1581,14 @@ Underfull \vbox (badness 1242) has occurred while \output is active []
 \openout7 = `"TCC2019_1 - Otacilio Bezerra.lof"'.
 
 
-[4] (./TCC2019_1 - Otacilio Bezerra.lot)
+[4] (./TCC2019_1 - Otacilio Bezerra.lot
+Overfull \hbox (15.30891pt too wide) in paragraph at lines 10--10
+ [][] [][][]\OT1/cmr/m/n/10.95 (-20) Comparison be-tween the LQR and LQG con-tr
+ollers ob-tained. The pair $(\OML/cmm/m/it/10.95 LQR[]; LQG[]\OT1/cmr/m/n/10.95
+ (-20) )$ 
+ []
+
+)
 \tf@lot=\write8
 \openout8 = `"TCC2019_1 - Otacilio Bezerra.lot"'.
 
@@ -1603,24 +1603,24 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.293 
+l.301 
        [1
 
 ]
-<imgs/chapter1/massSpringDamper.pdf, id=379, 302.12875pt x 157.58875pt>
+<imgs/chapter1/massSpringDamper.pdf, id=386, 302.12875pt x 157.58875pt>
 File: imgs/chapter1/massSpringDamper.pdf Graphic file (type pdf)
 <use imgs/chapter1/massSpringDamper.pdf>
 Package pdftex.def Info: imgs/chapter1/massSpringDamper.pdf  used on input line
- 296.
+ 304.
 (pdftex.def)             Requested size: 199.30698pt x 103.95839pt.
-<imgs/chapter1/massSpringDamperPlot.pdf, id=380, 225.84375pt x 131.49126pt>
+<imgs/chapter1/massSpringDamperPlot.pdf, id=387, 225.84375pt x 131.49126pt>
 File: imgs/chapter1/massSpringDamperPlot.pdf Graphic file (type pdf)
 <use imgs/chapter1/massSpringDamperPlot.pdf>
 Package pdftex.def Info: imgs/chapter1/massSpringDamperPlot.pdf  used on input 
-line 297.
+line 305.
 (pdftex.def)             Requested size: 212.89546pt x 123.95892pt.
 
-Overfull \hbox (0.69916pt too wide) in paragraph at lines 348--349
+Overfull \hbox (0.69916pt too wide) in paragraph at lines 356--357
 [][] 
  []
 
@@ -1628,7 +1628,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.358 
+l.366 
        [2 <./imgs/chapter1/massSpringDamper.pdf> <./imgs/chapter1/massSpringDam
 perPlot.pdf>] [3] [4] [5] [6
 
@@ -1636,130 +1636,130 @@ perPlot.pdf>] [3] [4] [5] [6
 ]
 Chapter 2.
 
-Overfull \hbox (5.71599pt too wide) detected at line 484
+Overfull \hbox (5.71599pt too wide) detected at line 492
 [][] [] \OT1/cmr/m/n/10.95 = [] \OMS/cmsy/m/n/10.95 ^^@ [] \OML/cmm/m/it/10.95 
 :
  []
 
 
-Overfull \hbox (2.79576pt too wide) detected at line 509
+Overfull \hbox (2.79576pt too wide) detected at line 517
 []
  []
 
 
-Overfull \hbox (3.04167pt too wide) in alignment at lines 508--509
+Overfull \hbox (3.04167pt too wide) in alignment at lines 516--517
 [] []
  []
 
 [7]
-Overfull \hbox (2.79576pt too wide) detected at line 554
+Overfull \hbox (2.79576pt too wide) detected at line 562
 []
  []
 
 
-Overfull \hbox (3.04167pt too wide) in alignment at lines 553--554
+Overfull \hbox (3.04167pt too wide) in alignment at lines 561--562
 [] []
  []
 
 [8]
-<imgs/chapter2/tank01.pdf, id=524, 372.39125pt x 275.0275pt>
+<imgs/chapter2/tank01.pdf, id=531, 372.39125pt x 275.0275pt>
 File: imgs/chapter2/tank01.pdf Graphic file (type pdf)
 <use imgs/chapter2/tank01.pdf>
-Package pdftex.def Info: imgs/chapter2/tank01.pdf  used on input line 579.
+Package pdftex.def Info: imgs/chapter2/tank01.pdf  used on input line 587.
 (pdftex.def)             Requested size: 221.95676pt x 163.93085pt.
-<imgs/chapter2/tank02.pdf, id=525, 371.3875pt x 271.0125pt>
+<imgs/chapter2/tank02.pdf, id=532, 371.3875pt x 271.0125pt>
 File: imgs/chapter2/tank02.pdf Graphic file (type pdf)
 <use imgs/chapter2/tank02.pdf>
-Package pdftex.def Info: imgs/chapter2/tank02.pdf  used on input line 583.
+Package pdftex.def Info: imgs/chapter2/tank02.pdf  used on input line 591.
 (pdftex.def)             Requested size: 221.95676pt x 161.97191pt.
  [9 <./imgs/chapter2/tank01.pdf> <./imgs/chapter2/tank02.pdf
 
 pdfTeX warning: pdflatex.exe (file ./imgs/chapter2/tank02.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
 >] [10] [11]
-<imgs/chapter2/model01.pdf, id=608, 245.91875pt x 92.345pt>
+<imgs/chapter2/model01.pdf, id=615, 245.91875pt x 92.345pt>
 File: imgs/chapter2/model01.pdf Graphic file (type pdf)
 <use imgs/chapter2/model01.pdf>
-Package pdftex.def Info: imgs/chapter2/model01.pdf  used on input line 714.
+Package pdftex.def Info: imgs/chapter2/model01.pdf  used on input line 722.
 (pdftex.def)             Requested size: 172.14194pt x 64.64104pt.
-<imgs/chapter2/model02.pdf, id=609, 245.91875pt x 92.345pt>
+<imgs/chapter2/model02.pdf, id=616, 245.91875pt x 92.345pt>
 File: imgs/chapter2/model02.pdf Graphic file (type pdf)
 <use imgs/chapter2/model02.pdf>
-Package pdftex.def Info: imgs/chapter2/model02.pdf  used on input line 719.
+Package pdftex.def Info: imgs/chapter2/model02.pdf  used on input line 727.
 (pdftex.def)             Requested size: 172.14194pt x 64.64104pt.
  [12 <./imgs/chapter2/model01.pdf> <./imgs/chapter2/model02.pdf
 
 pdfTeX warning: pdflatex.exe (file ./imgs/chapter2/model02.pdf): PDF inclusion:
  multiple pdfs with page group included in a single page
 >] [13]
-Overfull \hbox (3.38281pt too wide) detected at line 795
+Overfull \hbox (3.38281pt too wide) detected at line 803
 []
  []
 
 [14] [15] [16]
-<imgs/chapter2/linResp_1_1.pdf, id=718, 549.05125pt x 143.53625pt>
+<imgs/chapter2/linResp_1_1.pdf, id=725, 549.05125pt x 143.53625pt>
 File: imgs/chapter2/linResp_1_1.pdf Graphic file (type pdf)
 <use imgs/chapter2/linResp_1_1.pdf>
-Package pdftex.def Info: imgs/chapter2/linResp_1_1.pdf  used on input line 972.
+Package pdftex.def Info: imgs/chapter2/linResp_1_1.pdf  used on input line 980.
 
 (pdftex.def)             Requested size: 407.66833pt x 106.57652pt.
 
-Overfull \hbox (7.29922pt too wide) in paragraph at lines 974--975
+Overfull \hbox (7.29922pt too wide) in paragraph at lines 982--983
 [][] 
  []
 
-<imgs/chapter2/linResp_1_2.pdf, id=719, 552.0625pt x 239.89626pt>
+<imgs/chapter2/linResp_1_2.pdf, id=726, 552.0625pt x 239.89626pt>
 File: imgs/chapter2/linResp_1_2.pdf Graphic file (type pdf)
 <use imgs/chapter2/linResp_1_2.pdf>
-Package pdftex.def Info: imgs/chapter2/linResp_1_2.pdf  used on input line 977.
+Package pdftex.def Info: imgs/chapter2/linResp_1_2.pdf  used on input line 985.
 
 (pdftex.def)             Requested size: 407.66833pt x 177.15805pt.
 [17 <./imgs/chapter2/linResp_1_1.pdf> <./imgs/chapter2/linResp_1_2.pdf>]
 [18]
-<imgs/chapter2/linResp_2_1.pdf, id=756, 229.85875pt x 208.78pt>
+<imgs/chapter2/linResp_2_1.pdf, id=763, 229.85875pt x 208.78pt>
 File: imgs/chapter2/linResp_2_1.pdf Graphic file (type pdf)
 <use imgs/chapter2/linResp_2_1.pdf>
-Package pdftex.def Info: imgs/chapter2/linResp_2_1.pdf  used on input line 1071
+Package pdftex.def Info: imgs/chapter2/linResp_2_1.pdf  used on input line 1079
 .
 (pdftex.def)             Requested size: 208.36827pt x 189.2701pt.
-<imgs/chapter2/linResp_2_2.pdf, id=757, 274.02374pt x 228.855pt>
+<imgs/chapter2/linResp_2_2.pdf, id=764, 274.02374pt x 228.855pt>
 File: imgs/chapter2/linResp_2_2.pdf Graphic file (type pdf)
 <use imgs/chapter2/linResp_2_2.pdf>
-Package pdftex.def Info: imgs/chapter2/linResp_2_2.pdf  used on input line 1074
+Package pdftex.def Info: imgs/chapter2/linResp_2_2.pdf  used on input line 1082
 .
 (pdftex.def)             Requested size: 226.48395pt x 189.1534pt.
  [19] [20 <./imgs/chapter2/linResp_2_1.pdf> <./imgs/chapter2/linResp_2_2.pdf>]
-<imgs/chapter2/stateTrans01.pdf, id=932, 565.11125pt x 277.035pt>
+<imgs/chapter2/stateTrans01.pdf, id=939, 565.11125pt x 277.035pt>
 File: imgs/chapter2/stateTrans01.pdf Graphic file (type pdf)
 <use imgs/chapter2/stateTrans01.pdf>
-Package pdftex.def Info: imgs/chapter2/stateTrans01.pdf  used on input line 114
-6.
+Package pdftex.def Info: imgs/chapter2/stateTrans01.pdf  used on input line 115
+4.
 (pdftex.def)             Requested size: 452.9679pt x 222.06369pt.
  [21] [22 <./imgs/chapter2/stateTrans01.pdf>]
-<imgs/chapter2/stateTrans02.pdf, id=961, 567.11874pt x 277.035pt>
+<imgs/chapter2/stateTrans02.pdf, id=968, 567.11874pt x 277.035pt>
 File: imgs/chapter2/stateTrans02.pdf Graphic file (type pdf)
 <use imgs/chapter2/stateTrans02.pdf>
-Package pdftex.def Info: imgs/chapter2/stateTrans02.pdf  used on input line 121
-8.
+Package pdftex.def Info: imgs/chapter2/stateTrans02.pdf  used on input line 122
+6.
 (pdftex.def)             Requested size: 452.9679pt x 221.28166pt.
-<imgs/chapter2/forcedResponse.pdf, id=967, 569.12625pt x 196.735pt>
+<imgs/chapter2/forcedResponse.pdf, id=974, 569.12625pt x 196.735pt>
 File: imgs/chapter2/forcedResponse.pdf Graphic file (type pdf)
 <use imgs/chapter2/forcedResponse.pdf>
 Package pdftex.def Info: imgs/chapter2/forcedResponse.pdf  used on input line 1
-240.
+248.
 (pdftex.def)             Requested size: 452.9679pt x 156.58968pt.
  [23 <./imgs/chapter2/stateTrans02.pdf>] [24 <./imgs/chapter2/forcedResponse.pd
 f>]
-<imgs/chapter2/eigen01.pdf, id=991, 572.1375pt x 217.81375pt>
+<imgs/chapter2/eigen01.pdf, id=998, 572.1375pt x 217.81375pt>
 File: imgs/chapter2/eigen01.pdf Graphic file (type pdf)
 <use imgs/chapter2/eigen01.pdf>
-Package pdftex.def Info: imgs/chapter2/eigen01.pdf  used on input line 1268.
+Package pdftex.def Info: imgs/chapter2/eigen01.pdf  used on input line 1276.
 (pdftex.def)             Requested size: 452.9679pt x 172.44652pt.
  [25 <./imgs/chapter2/eigen01.pdf>] [26] [27] [28]
-<imgs/chapter2/stability01.pdf, id=1032, 563.10374pt x 213.79875pt>
+<imgs/chapter2/stability01.pdf, id=1039, 563.10374pt x 213.79875pt>
 File: imgs/chapter2/stability01.pdf Graphic file (type pdf)
 <use imgs/chapter2/stability01.pdf>
-Package pdftex.def Info: imgs/chapter2/stability01.pdf  used on input line 1394
+Package pdftex.def Info: imgs/chapter2/stability01.pdf  used on input line 1402
 .
 (pdftex.def)             Requested size: 452.9679pt x 171.98203pt.
  [29 <./imgs/chapter2/stability01.pdf>] [30]
@@ -1772,22 +1772,22 @@ f>
 (epstopdf)                    size: 20365 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter2/freq01_1-eps
 -converted-to.pdf imgs/chapter2/freq01_1.eps>
-(epstopdf)             \includegraphics on input line 1466.
+(epstopdf)             \includegraphics on input line 1474.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter2/freq01_1-eps-converted-to.pdf, id=1069, 179.67125pt x 95.35625pt
+<imgs/chapter2/freq01_1-eps-converted-to.pdf, id=1076, 179.67125pt x 95.35625pt
 >
 File: imgs/chapter2/freq01_1-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter2/freq01_1-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter2/freq01_1-eps-converted-to.pdf  used on i
-nput line 1466.
+nput line 1474.
 (pdftex.def)             Requested size: 98.81947pt x 52.44609pt.
-<imgs/chapter2/freq01_2.pdf, id=1070, 302.12875pt x 85.31876pt>
+<imgs/chapter2/freq01_2.pdf, id=1077, 302.12875pt x 85.31876pt>
 File: imgs/chapter2/freq01_2.pdf Graphic file (type pdf)
 <use imgs/chapter2/freq01_2.pdf>
-Package pdftex.def Info: imgs/chapter2/freq01_2.pdf  used on input line 1470.
+Package pdftex.def Info: imgs/chapter2/freq01_2.pdf  used on input line 1478.
 (pdftex.def)             Requested size: 181.27864pt x 51.19164pt.
 
-Overfull \hbox (9.14864pt too wide) in paragraph at lines 1470--1471
+Overfull \hbox (9.14864pt too wide) in paragraph at lines 1478--1479
  [][] 
  []
 
@@ -1800,24 +1800,24 @@ f>
 (epstopdf)                    size: 37913 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter2/freq01_3-eps
 -converted-to.pdf imgs/chapter2/freq01_3.eps>
-(epstopdf)             \includegraphics on input line 1475.
+(epstopdf)             \includegraphics on input line 1483.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter2/freq01_3-eps-converted-to.pdf, id=1071, 179.67125pt x 95.35625pt
+<imgs/chapter2/freq01_3-eps-converted-to.pdf, id=1078, 179.67125pt x 95.35625pt
 >
 File: imgs/chapter2/freq01_3-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter2/freq01_3-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter2/freq01_3-eps-converted-to.pdf  used on i
-nput line 1475.
+nput line 1483.
 (pdftex.def)             Requested size: 98.81947pt x 52.44609pt.
-<imgs/chapter2/freq02_1.pdf, id=1077, 358.33875pt x 376.40625pt>
+<imgs/chapter2/freq02_1.pdf, id=1084, 358.33875pt x 376.40625pt>
 File: imgs/chapter2/freq02_1.pdf Graphic file (type pdf)
 <use imgs/chapter2/freq02_1.pdf>
-Package pdftex.def Info: imgs/chapter2/freq02_1.pdf  used on input line 1496.
+Package pdftex.def Info: imgs/chapter2/freq02_1.pdf  used on input line 1504.
 (pdftex.def)             Requested size: 208.36827pt x 218.87863pt.
-<imgs/chapter2/freq02_2.pdf, id=1078, 359.3425pt x 374.39874pt>
+<imgs/chapter2/freq02_2.pdf, id=1085, 359.3425pt x 374.39874pt>
 File: imgs/chapter2/freq02_2.pdf Graphic file (type pdf)
 <use imgs/chapter2/freq02_2.pdf>
-Package pdftex.def Info: imgs/chapter2/freq02_2.pdf  used on input line 1499.
+Package pdftex.def Info: imgs/chapter2/freq02_2.pdf  used on input line 1507.
 (pdftex.def)             Requested size: 212.89546pt x 221.81882pt.
 [31 <./imgs/chapter2/freq01_1-eps-converted-to.pdf> <./imgs/chapter2/freq01_2.p
 df> <./imgs/chapter2/freq01_3-eps-converted-to.pdf>] [32 <./imgs/chapter2/freq0
@@ -1827,66 +1827,71 @@ Chapter 3.
 
 
 ] [34] [35] [36]
-<imgs/chapter3/report_ch3_1.pdf, id=1262, 550.055pt x 307.1475pt>
+<imgs/chapter3/report_ch3_1.pdf, id=1269, 550.055pt x 307.1475pt>
 File: imgs/chapter3/report_ch3_1.pdf Graphic file (type pdf)
 <use imgs/chapter3/report_ch3_1.pdf>
-Package pdftex.def Info: imgs/chapter3/report_ch3_1.pdf  used on input line 176
-2.
+Package pdftex.def Info: imgs/chapter3/report_ch3_1.pdf  used on input line 177
+0.
 (pdftex.def)             Requested size: 452.9679pt x 252.9405pt.
- [37 <./imgs/chapter3/report_ch3_1.pdf>] [38] [39]
-Underfull \vbox (badness 1163) detected at line 1966
+ [37 <./imgs/chapter3/report_ch3_1.pdf>] [38]
+
+LaTeX Warning: Reference `fig:tracking02' on page 39 undefined on input line 18
+45.
+
+[39]
+Underfull \vbox (badness 1163) detected at line 1974
  []
 
 
 Underfull \vbox (badness 1577) has occurred while \output is active []
 
  [40]
-<imgs/chapter3/report_ch3_2.pdf, id=1311, 559.08875pt x 215.80624pt>
+<imgs/chapter3/report_ch3_2.pdf, id=1318, 559.08875pt x 215.80624pt>
 File: imgs/chapter3/report_ch3_2.pdf Graphic file (type pdf)
 <use imgs/chapter3/report_ch3_2.pdf>
 Package pdftex.def Info: imgs/chapter3/report_ch3_2.pdf  used on input line 197
-1.
+9.
 (pdftex.def)             Requested size: 452.9679pt x 174.85149pt.
 
 [41 <./imgs/chapter3/report_ch3_2.pdf>] [42] [43] [44]
-Overfull \hbox (4.60716pt too wide) in paragraph at lines 2234--2234
+Overfull \hbox (4.60716pt too wide) in paragraph at lines 2242--2242
 [][]$\OML/cmm/b/it/10.95 D[]$  
  []
 
 
-Overfull \hbox (4.46133pt too wide) in paragraph at lines 2234--2234
+Overfull \hbox (4.46133pt too wide) in paragraph at lines 2242--2242
 [][]$\OML/cmm/b/it/10.95 D[]$  
  []
 
 
-LaTeX Warning: Command \textordmasculine invalid in math mode on input line 225
-2.
+LaTeX Warning: Command \textordmasculine invalid in math mode on input line 226
+0.
 
 [45]
 
 LaTeX Warning: Command \textordmasculine invalid in math mode on input line 227
-1.
+9.
 
 [46]
-<imgs/chapter3/report_ch3_3_1.pdf, id=1381, 483.8075pt x 399.4925pt>
+<imgs/chapter3/report_ch3_3_1.pdf, id=1388, 483.8075pt x 399.4925pt>
 File: imgs/chapter3/report_ch3_3_1.pdf Graphic file (type pdf)
 <use imgs/chapter3/report_ch3_3_1.pdf>
 Package pdftex.def Info: imgs/chapter3/report_ch3_3_1.pdf  used on input line 2
-285.
+293.
 (pdftex.def)             Requested size: 217.42265pt x 179.53223pt.
 
-Overfull \hbox (7.29921pt too wide) in paragraph at lines 2294--2295
+Overfull \hbox (7.29921pt too wide) in paragraph at lines 2302--2303
 [][] 
  []
 
-<imgs/chapter3/report_ch3_3_2.pdf, id=1382, 477.785pt x 389.455pt>
+<imgs/chapter3/report_ch3_3_2.pdf, id=1389, 477.785pt x 389.455pt>
 File: imgs/chapter3/report_ch3_3_2.pdf Graphic file (type pdf)
 <use imgs/chapter3/report_ch3_3_2.pdf>
 Package pdftex.def Info: imgs/chapter3/report_ch3_3_2.pdf  used on input line 2
-299.
+307.
 (pdftex.def)             Requested size: 217.42265pt x 177.22606pt.
 
-Overfull \hbox (7.29921pt too wide) in paragraph at lines 2310--2311
+Overfull \hbox (7.29921pt too wide) in paragraph at lines 2318--2319
 [][] 
  []
 
@@ -1897,7 +1902,7 @@ Overfull \hbox (7.29921pt too wide) in paragraph at lines 2310--2311
 ]
 Chapter 4.
 [49]
-Overfull \hbox (15.6346pt too wide) in paragraph at lines 2380--2381
+Overfull \hbox (15.6346pt too wide) in paragraph at lines 2388--2389
 []\OT1/cmr/m/n/10.95 (-20) This for-mu-la-tion presents a no-tion of op-ti-miz-
 ing for a se-quence of con-trol ac-tions $[\OML/cmm/b/it/10.95 u\OT1/cmr/m/n/10
 .95 (-20) (\OML/cmm/m/it/10.95 t[]\OT1/cmr/m/n/10.95 (-20) )\OML/cmm/m/it/10.95
@@ -1906,7 +1911,7 @@ T1/cmr/m/n/10.95 (-20) )]$
  []
 
 [50] [51] [52] [53] [54] [55]
-Overfull \hbox (2.02821pt too wide) in paragraph at lines 2724--2724
+Overfull \hbox (2.02821pt too wide) in paragraph at lines 2732--2732
 [][]$\OML/cmm/m/it/10.95 w[]$  
  []
 
@@ -1915,35 +1920,35 @@ Underfull \vbox (badness 4647) has occurred while \output is active []
 
  [57]
 [58]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 2856
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 2864
 .
  (c:/texlive/2019/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 2856.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 2864.
 
 
-Overfull \hbox (5.34167pt too wide) detected at line 2891
+Overfull \hbox (5.34167pt too wide) detected at line 2899
 []
  []
 
 [59] [60] [61] [62]
-<imgs/chapter4/report_ch4_1.pdf, id=1606, 644.4075pt x 312.16624pt>
+<imgs/chapter4/report_ch4_1.pdf, id=1613, 644.4075pt x 312.16624pt>
 File: imgs/chapter4/report_ch4_1.pdf Graphic file (type pdf)
 <use imgs/chapter4/report_ch4_1.pdf>
 Package pdftex.def Info: imgs/chapter4/report_ch4_1.pdf  used on input line 311
-0.
+8.
 (pdftex.def)             Requested size: 452.9679pt x 219.43419pt.
 
 Underfull \vbox (badness 4779) has occurred while \output is active []
 
  [63 <./imgs/chapter4/report_ch4_1.pdf>] [64]
-<imgs/chapter4/report_ch4_2.pdf, id=2847, 473.77pt x 442.65375pt>
+<imgs/chapter4/report_ch4_2.pdf, id=2854, 473.77pt x 442.65375pt>
 File: imgs/chapter4/report_ch4_2.pdf Graphic file (type pdf)
 <use imgs/chapter4/report_ch4_2.pdf>
-Package pdftex.def Info: imgs/chapter4/report_ch4_2.pdf  used on input line 315
-4.
+Package pdftex.def Info: imgs/chapter4/report_ch4_2.pdf  used on input line 316
+2.
 (pdftex.def)             Requested size: 307.94685pt x 287.72151pt.
  [65 <./imgs/chapter4/report_ch4_2.pdf>]
 [66
@@ -1951,33 +1956,33 @@ Package pdftex.def Info: imgs/chapter4/report_ch4_2.pdf  used on input line 315
 
 ]
 Chapter 5.
-<imgs/chapter6/exoCSTR.pdf, id=2970, 361.35pt x 302.12875pt>
+<imgs/chapter6/exoCSTR.pdf, id=2977, 361.35pt x 302.12875pt>
 File: imgs/chapter6/exoCSTR.pdf Graphic file (type pdf)
 <use imgs/chapter6/exoCSTR.pdf>
-Package pdftex.def Info: imgs/chapter6/exoCSTR.pdf  used on input line 3305.
+Package pdftex.def Info: imgs/chapter6/exoCSTR.pdf  used on input line 3313.
 (pdftex.def)             Requested size: 271.01184pt x 226.596pt.
 [67 <./imgs/chapter6/exoCSTR.pdf>]
 
-LaTeX Warning: Command \textordmasculine invalid in math mode on input line 334
-9.
+LaTeX Warning: Command \textordmasculine invalid in math mode on input line 335
+7.
 
 
 LaTeX Warning: Command \textordmasculine invalid in math mode on input line 335
-0.
+8.
 
 
-LaTeX Warning: Command \textordmasculine invalid in math mode on input line 335
-3.
+LaTeX Warning: Command \textordmasculine invalid in math mode on input line 336
+1.
 
 [68] [69] [70
 
 
 ]
 Chapter 6.
-<imgs/chapter7/dynamics01.pdf, id=3039, 552.0625pt x 222.8325pt>
+<imgs/chapter7/dynamics01.pdf, id=3046, 552.0625pt x 222.8325pt>
 File: imgs/chapter7/dynamics01.pdf Graphic file (type pdf)
 <use imgs/chapter7/dynamics01.pdf>
-Package pdftex.def Info: imgs/chapter7/dynamics01.pdf  used on input line 3412.
+Package pdftex.def Info: imgs/chapter7/dynamics01.pdf  used on input line 3420.
 
 (pdftex.def)             Requested size: 452.9679pt x 182.84283pt.
 Missing character: There is no ; in font nullfont!
@@ -1987,15 +1992,15 @@ Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (7.29922pt too wide) in paragraph at lines 3447--3448
+Overfull \hbox (7.29922pt too wide) in paragraph at lines 3455--3456
  [][] 
  []
 
 [71 <./imgs/chapter7/dynamics01.pdf>]
-<imgs/chapter7/dynamics02.pdf, id=3049, 552.0625pt x 220.825pt>
+<imgs/chapter7/dynamics02.pdf, id=3056, 552.0625pt x 220.825pt>
 File: imgs/chapter7/dynamics02.pdf Graphic file (type pdf)
 <use imgs/chapter7/dynamics02.pdf>
-Package pdftex.def Info: imgs/chapter7/dynamics02.pdf  used on input line 3457.
+Package pdftex.def Info: imgs/chapter7/dynamics02.pdf  used on input line 3465.
 
 (pdftex.def)             Requested size: 452.9679pt x 181.19559pt.
 Missing character: There is no ; in font nullfont!
@@ -2005,14 +2010,14 @@ Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (7.29922pt too wide) in paragraph at lines 3492--3493
+Overfull \hbox (7.29922pt too wide) in paragraph at lines 3500--3501
  [][] 
  []
 
-<imgs/chapter7/dynamics03.pdf, id=3052, 552.0625pt x 220.825pt>
+<imgs/chapter7/dynamics03.pdf, id=3059, 552.0625pt x 220.825pt>
 File: imgs/chapter7/dynamics03.pdf Graphic file (type pdf)
 <use imgs/chapter7/dynamics03.pdf>
-Package pdftex.def Info: imgs/chapter7/dynamics03.pdf  used on input line 3504.
+Package pdftex.def Info: imgs/chapter7/dynamics03.pdf  used on input line 3512.
 
 (pdftex.def)             Requested size: 452.9679pt x 181.19559pt.
 Missing character: There is no ; in font nullfont!
@@ -2022,39 +2027,39 @@ Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (7.29922pt too wide) in paragraph at lines 3539--3540
+Overfull \hbox (7.29922pt too wide) in paragraph at lines 3547--3548
  [][] 
  []
 
 
-Overfull \hbox (1.993pt too wide) detected at line 3574
+Overfull \hbox (1.993pt too wide) detected at line 3581
 [][]\OML/cmm/b/it/10.95 A \OT1/cmr/m/n/10.95 = [] \OML/cmm/m/it/10.95 ;
  []
 
 [72 <./imgs/chapter7/dynamics02.pdf>] [73 <./imgs/chapter7/dynamics03.pdf>]
-<imgs/chapter7/ssValues01.pdf, id=3077, 501.875pt x 377.41pt>
+<imgs/chapter7/ssValues01.pdf, id=3084, 501.875pt x 377.41pt>
 File: imgs/chapter7/ssValues01.pdf Graphic file (type pdf)
 <use imgs/chapter7/ssValues01.pdf>
-Package pdftex.def Info: imgs/chapter7/ssValues01.pdf  used on input line 3615.
+Package pdftex.def Info: imgs/chapter7/ssValues01.pdf  used on input line 3622.
 
 (pdftex.def)             Requested size: 208.36827pt x 156.69708pt.
-<imgs/chapter7/ssValues02.pdf, id=3078, 501.875pt x 377.41pt>
+<imgs/chapter7/ssValues02.pdf, id=3085, 501.875pt x 377.41pt>
 File: imgs/chapter7/ssValues02.pdf Graphic file (type pdf)
 <use imgs/chapter7/ssValues02.pdf>
-Package pdftex.def Info: imgs/chapter7/ssValues02.pdf  used on input line 3618.
+Package pdftex.def Info: imgs/chapter7/ssValues02.pdf  used on input line 3625.
 
 (pdftex.def)             Requested size: 208.36827pt x 156.69708pt.
-<imgs/chapter7/linear01.pdf, id=3080, 556.0775pt x 222.8325pt>
+<imgs/chapter7/linear01.pdf, id=3087, 556.0775pt x 222.8325pt>
 File: imgs/chapter7/linear01.pdf Graphic file (type pdf)
 <use imgs/chapter7/linear01.pdf>
-Package pdftex.def Info: imgs/chapter7/linear01.pdf  used on input line 3653.
+Package pdftex.def Info: imgs/chapter7/linear01.pdf  used on input line 3660.
 (pdftex.def)             Requested size: 452.9679pt x 181.51677pt.
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 
-Overfull \hbox (7.29922pt too wide) in paragraph at lines 3678--3679
+Overfull \hbox (7.29922pt too wide) in paragraph at lines 3685--3686
  [][] 
  []
 
@@ -2068,14 +2073,15 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqr01.eps>
 (epstopdf)                    size: 14381 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqr01-eps-co
 nverted-to.pdf imgs/chapter7/lqr01.eps>
-(epstopdf)             \includegraphics on input line 3732.
+(epstopdf)             \includegraphics on input line 3744.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqr01-eps-converted-to.pdf, id=3113, 1153.30875pt x 664.4825pt>
+<imgs/chapter7/lqr01-eps-converted-to.pdf, id=3120, 1153.30875pt x 664.4825pt>
 File: imgs/chapter7/lqr01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqr01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqr01-eps-converted-to.pdf  used on inpu
-t line 3732.
+t line 3744.
 (pdftex.def)             Requested size: 452.9679pt x 260.98232pt.
+ [76 <./imgs/chapter7/lqr01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqr02.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
 (epstopdf)                    size: 147639 bytes
@@ -2084,15 +2090,15 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqr02.eps>
 (epstopdf)                    size: 26638 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqr02-eps-co
 nverted-to.pdf imgs/chapter7/lqr02.eps>
-(epstopdf)             \includegraphics on input line 3741.
+(epstopdf)             \includegraphics on input line 3755.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqr02-eps-converted-to.pdf, id=3114, 1142.2675pt x 664.4825pt>
+<imgs/chapter7/lqr02-eps-converted-to.pdf, id=3134, 1142.2675pt x 664.4825pt>
 File: imgs/chapter7/lqr02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqr02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqr02-eps-converted-to.pdf  used on inpu
-t line 3741.
+t line 3755.
 (pdftex.def)             Requested size: 452.9679pt x 263.49683pt.
- [76 <./imgs/chapter7/lqr01-eps-converted-to.pdf>]
+
 [77 <./imgs/chapter7/lqr02-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqg01.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
@@ -2102,13 +2108,13 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqg01.eps>
 (epstopdf)                    size: 38189 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqg01-eps-co
 nverted-to.pdf imgs/chapter7/lqg01.eps>
-(epstopdf)             \includegraphics on input line 3762.
+(epstopdf)             \includegraphics on input line 3774.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqg01-eps-converted-to.pdf, id=3138, 1153.30875pt x 664.4825pt>
+<imgs/chapter7/lqg01-eps-converted-to.pdf, id=3148, 1153.30875pt x 664.4825pt>
 File: imgs/chapter7/lqg01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqg01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqg01-eps-converted-to.pdf  used on inpu
-t line 3762.
+t line 3774.
 (pdftex.def)             Requested size: 452.9679pt x 260.98232pt.
 Package epstopdf Info: Source file: <imgs/chapter7/lqg02.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
@@ -2118,14 +2124,15 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqg02.eps>
 (epstopdf)                    size: 102915 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqg02-eps-co
 nverted-to.pdf imgs/chapter7/lqg02.eps>
-(epstopdf)             \includegraphics on input line 3772.
+(epstopdf)             \includegraphics on input line 3782.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqg02-eps-converted-to.pdf, id=3141, 1142.2675pt x 664.4825pt>
+<imgs/chapter7/lqg02-eps-converted-to.pdf, id=3152, 1142.2675pt x 664.4825pt>
 File: imgs/chapter7/lqg02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqg02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqg02-eps-converted-to.pdf  used on inpu
-t line 3772.
+t line 3782.
 (pdftex.def)             Requested size: 452.9679pt x 263.49683pt.
+ [78 <./imgs/chapter7/lqg01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqri01.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
 (epstopdf)                    size: 215233 bytes
@@ -2135,20 +2142,21 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqri01.eps>
 (epstopdf)                    size: 38304 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqri01-eps-c
 onverted-to.pdf imgs/chapter7/lqri01.eps>
-(epstopdf)             \includegraphics on input line 3800.
+(epstopdf)             \includegraphics on input line 3814.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqri01-eps-converted-to.pdf, id=3144, 1145.27875pt x 664.4825pt>
+<imgs/chapter7/lqri01-eps-converted-to.pdf, id=3164, 1145.27875pt x 664.4825pt>
 
 File: imgs/chapter7/lqri01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqri01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqri01-eps-converted-to.pdf  used on inp
-ut line 3800.
+ut line 3814.
 (pdftex.def)             Requested size: 452.9679pt x 262.80737pt.
- [78 <./imgs/chapter7/lqg01-eps-converted-to.pdf>]
 
-LaTeX Warning: Command \textordmasculine invalid in math mode on input line 380
-8.
 
+LaTeX Warning: Command \textordmasculine invalid in math mode on input line 382
+2.
+
+[79 <./imgs/chapter7/lqg02-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqri02.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
 (epstopdf)                    size: 217344 bytes
@@ -2158,16 +2166,16 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqri02.eps>
 (epstopdf)                    size: 39699 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqri02-eps-c
 onverted-to.pdf imgs/chapter7/lqri02.eps>
-(epstopdf)             \includegraphics on input line 3813.
+(epstopdf)             \includegraphics on input line 3827.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqri02-eps-converted-to.pdf, id=3157, 1145.27875pt x 664.4825pt>
+<imgs/chapter7/lqri02-eps-converted-to.pdf, id=3177, 1145.27875pt x 664.4825pt>
 
 File: imgs/chapter7/lqri02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqri02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqri02-eps-converted-to.pdf  used on inp
-ut line 3813.
+ut line 3827.
 (pdftex.def)             Requested size: 452.9679pt x 262.80737pt.
-[79 <./imgs/chapter7/lqg02-eps-converted-to.pdf>]
+ [80 <./imgs/chapter7/lqri01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqgi01.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
 (epstopdf)                    size: 429663 bytes
@@ -2177,15 +2185,16 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqgi01.eps>
 (epstopdf)                    size: 161651 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqgi01-eps-c
 onverted-to.pdf imgs/chapter7/lqgi01.eps>
-(epstopdf)             \includegraphics on input line 3824.
+(epstopdf)             \includegraphics on input line 3851.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqgi01-eps-converted-to.pdf, id=3168, 1145.27875pt x 664.4825pt>
+<imgs/chapter7/lqgi01-eps-converted-to.pdf, id=3191, 1145.27875pt x 664.4825pt>
 
 File: imgs/chapter7/lqgi01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqgi01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqgi01-eps-converted-to.pdf  used on inp
-ut line 3824.
+ut line 3851.
 (pdftex.def)             Requested size: 452.9679pt x 262.80737pt.
+ [81 <./imgs/chapter7/lqri02-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/chapter7/lqgi02.eps>
 (epstopdf)                    date: 2019-06-10 21:50:13
 (epstopdf)                    size: 431274 bytes
@@ -2195,79 +2204,85 @@ Package epstopdf Info: Source file: <imgs/chapter7/lqgi02.eps>
 (epstopdf)                    size: 161328 bytes
 (epstopdf)             Command: <repstopdf --outfile=imgs/chapter7/lqgi02-eps-c
 onverted-to.pdf imgs/chapter7/lqgi02.eps>
-(epstopdf)             \includegraphics on input line 3834.
+(epstopdf)             \includegraphics on input line 3878.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/chapter7/lqgi02-eps-converted-to.pdf, id=3170, 1145.27875pt x 664.4825pt>
+<imgs/chapter7/lqgi02-eps-converted-to.pdf, id=3206, 1145.27875pt x 664.4825pt>
 
 File: imgs/chapter7/lqgi02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/chapter7/lqgi02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/chapter7/lqgi02-eps-converted-to.pdf  used on inp
-ut line 3834.
+ut line 3878.
 (pdftex.def)             Requested size: 452.9679pt x 262.80737pt.
- [80 <./imgs/chapter7/lqri01-eps-converted-to.pdf>] [81 <./imgs/chapter7/lqri02
--eps-converted-to.pdf> <./imgs/chapter7/lqgi01-eps-converted-to.pdf>] [82 <./im
-gs/chapter7/lqgi02-eps-converted-to.pdf>]
-Chapter 7.
-[83
 
-
-] (./TCC2019_1 - Otacilio Bezerra.bbl [84
-
-
-] [85] [86] [87]) [88]
-Appendix A.
-[89
+[82 <./imgs/chapter7/lqgi01-eps-converted-to.pdf>] [83 <./imgs/chapter7/lqgi02-
+eps-converted-to.pdf>] [84
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3910.
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 3910.
+Chapter 7.
+[85] (./TCC2019_1 - Otacilio Bezerra.bbl [86
+
+
+] [87] [88] [89]) [90]
+Appendix A.
+[91
+
+
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3954.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 3954.
  (./TCC2019_1 - Otacilio Bezerra.xwm) (./TCC2019_1 - Otacilio Bezerra.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3910.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3910.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3954.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3954.
 
 Package rerunfilecheck Info: File `"TCC2019_1 - Otacilio Bezerra".out' has not 
 changed.
-(rerunfilecheck)             Checksum: E1CDE98A461AEA988E5B2CE049061EE8;2377.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3910.
+(rerunfilecheck)             Checksum: 8A382D0089496E6FCF5142C348137CDE;2377.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3954.
  ) 
 Here is how much of TeX's memory you used:
- 53879 strings out of 492616
- 1193234 string characters out of 6133219
- 1523505 words of memory out of 5000000
- 56325 multiletter control sequences out of 15000+600000
- 560849 words of font info for 186 fonts, out of 8000000 for 9000
+ 53727 strings out of 492616
+ 1190904 string characters out of 6133219
+ 1510368 words of memory out of 5000000
+ 56174 multiletter control sequences out of 15000+600000
+ 558918 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 71i,30n,100p,1271b,999s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2019/texm
-f-dist/fonts/type1/bitstrea/charter/bchb8a.pfb><c:/texlive/2019/texmf-dist/font
-s/type1/public/amsfonts/cm/cmbsy10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmbx10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmbx12.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.
-pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/
-texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2
-019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2019/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2019/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2019/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmmib10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c
-:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2
-019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2019/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsl10.pfb><c:/texlive/2019/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy6.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-i10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb><c
-:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive
-/2019/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/201
-9/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "TCC2019_1 - Otacilio Bezerra.pdf" (98 pages, 2335683 bytes).
-
+ 61i,30n,100p,1397b,999s stack positions out of 5000i,500n,10000p,200000b,80000s
+<c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb><c:/te
+xlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/201
+9/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2019/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2019/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbxti10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmcsc10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmex10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pf
+b><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texl
+ive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2019/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2019/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2019/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr9.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb
+><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texl
+ive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2019/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2019/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2019/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmti8.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmtt10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/
+symbols/msam10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/symb
+ols/msbm10.pfb>
+Output written on "TCC2019_1 - Otacilio Bezerra.pdf" (100 pages, 2331656 bytes)
+.
 PDF statistics:
- 3436 PDF objects out of 3580 (max. 8388607)
- 3087 compressed objects within 31 object streams
- 517 named destinations out of 1000 (max. 500000)
- 35831 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 3460 PDF objects out of 3580 (max. 8388607)
+ 3109 compressed objects within 32 object streams
+ 525 named destinations out of 1000 (max. 500000)
+ 35319 words of extra memory for PDF output out of 35830 (max. 10000000)
 
