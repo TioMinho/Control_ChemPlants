@@ -1,46 +1,15 @@
-This is BibTeX, Version 0.99d (TeX Live 2019/W32TeX)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: TCC20191_Otacilio385213.aux
-The style file: apalike.bst
-Database file #1: citations.bib
-You've used 6 entries,
-            1935 wiz_defined-function locations,
-            522 strings with 5202 characters,
-and the built_in function-call counts, 3030 in all, are:
-= -- 281
-> -- 173
-< -- 1
-+ -- 62
-- -- 62
-* -- 296
-:= -- 535
-add.period$ -- 19
-call.type$ -- 6
-change.case$ -- 61
-chr.to.int$ -- 6
-cite$ -- 6
-duplicate$ -- 84
-empty$ -- 188
-format.name$ -- 70
-if$ -- 578
-int.to.chr$ -- 1
-int.to.str$ -- 0
-missing$ -- 6
-newline$ -- 34
-num.names$ -- 18
-pop$ -- 47
-preamble$ -- 1
-purify$ -- 61
-quote$ -- 0
-skip$ -- 62
-stack$ -- 0
-substring$ -- 229
-swap$ -- 6
-text.length$ -- 0
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 36
-warning$ -- 0
-while$ -- 19
-width$ -- 0
-write$ -- 82
+[0] Config.pm:304> INFO - This is Biber 2.12
+[0] Config.pm:307> INFO - Logfile is 'TCC20191_Otacilio385213.blg'
+[35] biber:315> INFO - === seg jun 17, 2019, 17:01:40
+[60] Biber.pm:371> INFO - Reading 'TCC20191_Otacilio385213.bcf'
+[144] Biber.pm:889> INFO - Found 4 citekeys in bib section 0
+[163] Biber.pm:4093> INFO - Processing section 0
+[176] Biber.pm:4254> INFO - Looking for bibtex format file 'citations.bib' for section 0
+[180] bibtex.pm:1523> INFO - LaTeX decoding ...
+[278] bibtex.pm:1340> INFO - Found BibTeX data source 'citations.bib'
+[357] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[357] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[357] Biber.pm:3921> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[358] Biber.pm:3927> INFO - No sort tailoring available for locale 'en-US'
+[364] bbl.pm:636> INFO - Writing 'TCC20191_Otacilio385213.bbl' with encoding 'UTF-8'
+[367] bbl.pm:739> INFO - Output to TCC20191_Otacilio385213.bbl

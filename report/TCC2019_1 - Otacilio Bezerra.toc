@@ -1,0 +1,54 @@
+\babel@toc {english}{}
+\contentsline {chapter}{List of Figures}{iii}{chapter*.1}% 
+\contentsline {chapter}{List of Tables}{v}{chapter*.2}% 
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Control Systems Engineering}{1}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Chemical reactor Systems}{3}{section.1.2}% 
+\contentsline {section}{\numberline {1.3}Motivation}{4}{section.1.3}% 
+\contentsline {section}{\numberline {1.4}Objectives}{5}{section.1.4}% 
+\contentsline {section}{\numberline {1.5}Chapters Organization}{5}{section.1.5}% 
+\contentsline {chapter}{\numberline {2}Dynamical System Analysis}{7}{chapter.2}% 
+\contentsline {section}{\numberline {2.1}First Principles Models}{7}{section.2.1}% 
+\contentsline {section}{\numberline {2.2}Canonical Representations for Dynamical Models}{11}{section.2.2}% 
+\contentsline {section}{\numberline {2.3}Response Analysis in the Time Domain}{18}{section.2.3}% 
+\contentsline {section}{\numberline {2.4}Similarity Transformations}{25}{section.2.4}% 
+\contentsline {section}{\numberline {2.5}Stability, Controlability and Observability}{28}{section.2.5}% 
+\contentsline {subsubsection}{Stability}{28}{section*.16}% 
+\contentsline {subsubsection}{Controllability}{29}{section*.18}% 
+\contentsline {subsubsection}{Observability}{30}{section*.19}% 
+\contentsline {section}{\numberline {2.6}Response Analysis in the Frequency Domain}{31}{section.2.6}% 
+\contentsline {chapter}{\numberline {3}Controller Synthesis}{33}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}State Feedback Controllers}{33}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}Regulation and Reference Tracking}{36}{section.3.2}% 
+\contentsline {subsubsection}{Regulator Problem}{36}{section*.23}% 
+\contentsline {subsubsection}{Reference Tracking Problem}{37}{section*.25}% 
+\contentsline {section}{\numberline {3.3}Deterministic State Observers}{41}{section.3.3}% 
+\contentsline {section}{\numberline {3.4}Properties of State-Feedback Controllers}{45}{section.3.4}% 
+\contentsline {chapter}{\numberline {4}Optimal Control and Estimation}{49}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Formulation}{49}{section.4.1}% 
+\contentsline {section}{\numberline {4.2}Linear Quadratic (LQ) Controllers}{52}{section.4.2}% 
+\contentsline {subsubsection}{Regulation}{52}{section*.33}% 
+\contentsline {subsubsection}{Reference Tracking}{55}{section*.34}% 
+\contentsline {subsubsection}{Infinite-Horizon LQ Controllers}{56}{section*.35}% 
+\contentsline {section}{\numberline {4.3}Optimal State Estimators}{56}{section.4.3}% 
+\contentsline {subsubsection}{General State Estimators}{56}{section*.36}% 
+\contentsline {subsubsection}{Kalman Filter}{58}{section*.38}% 
+\contentsline {subsubsection}{Controller-Estimator Duality}{60}{section*.40}% 
+\contentsline {section}{\numberline {4.4}Linear Quadratic Gaussian (LQG)}{61}{section.4.4}% 
+\contentsline {section}{\numberline {4.5}Stability and Robustness Analysis}{64}{section.4.5}% 
+\contentsline {subsubsection}{Stability}{64}{section*.43}% 
+\contentsline {subsubsection}{Robustness}{65}{section*.44}% 
+\contentsline {chapter}{\numberline {5}Methodology}{67}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Non-Isothermal Continuous Stirred Tank}{67}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Simulation}{68}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Results and Discussion}{71}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Dynamical Analysis}{71}{section.6.1}% 
+\contentsline {subsection}{Nonlinear model simulation}{71}{section*.48}% 
+\contentsline {subsection}{Linearized model realization and simulation}{72}{section*.52}% 
+\contentsline {subsection}{Linearized model properties}{75}{section*.55}% 
+\contentsline {section}{\numberline {6.2}Optimal Control}{76}{section.6.2}% 
+\contentsline {subsection}{Regulation}{76}{section*.56}% 
+\contentsline {subsection}{Tracking}{79}{section*.62}% 
+\contentsline {chapter}{\numberline {7}Conclusion}{85}{chapter.7}% 
+\contentsline {chapter}{Bibliography}{86}{chapter.7}% 
+\contentsline {chapter}{\numberline {A}Properties of Gaussian Distributions}{91}{appendix.A}% 

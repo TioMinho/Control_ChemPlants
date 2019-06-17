@@ -24,6 +24,7 @@
 
 \RequirePackage{tikz}
 \RequirePackage{calc}
+\RequirePackage{hanging}
 
 %----------------------------------------------------------------------------------------------------------------------------------
 
@@ -103,6 +104,15 @@
    {
                \setbeamercolor{Feather}{use={structure,palette sidebar primary},fg=palette sidebar primary.fg,bg=structure.fg}
     }
+
+%----------------------------------------------------------------------------------------------------------------------------------
+
+ % footnote
+
+	\setbeamertemplate{footnote}{%
+	  \hangpara{2em}{1}%
+	  \makebox[2em][l]{\insertfootnotemark}\footnotesize\insertfootnotetext\par%
+	}
 
 %----------------------------------------------------------------------------------------------------------------------------------
 
@@ -213,9 +223,9 @@
 %% calculate end position
 
                 \ifx\beamer@rotationcw\undefined% counterclockwise rotation
-                \pgfmathsetmacro{\progress}{320*\insertframestartpage/\inserttotalframenumber}; %%% 220 covers the entire circle, while 360 it goes twice 
+                \pgfmathsetmacro{\progress}{270*\insertframestartpage/\inserttotalframenumber}; %%% 220 covers the entire circle, while 360 it goes twice 
                 \else% clockwise rotation
-                \pgfmathsetmacro{\progress}{-320*\insertframestartpage/\inserttotalframenumber}; 
+                \pgfmathsetmacro{\progress}{-270*\insertframestartpage/\inserttotalframenumber}; 
                 \fi
 
 %----------------------------------------------------------------------------------------------------------------------------------

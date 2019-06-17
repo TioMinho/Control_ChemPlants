@@ -20,7 +20,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage[protrusion=true,expansion=true]{microtype} 
-\usepackage{amsmath,amsfonts,amsthm,amssymb,bm}
+\usepackage{amsmath,amsfonts,amsthm,amssymb,bm,mathdots,mathtools,bigints}
 \usepackage{color, xcolor}
 \usepackage{listings}
 \usepackage[document]{ragged2e}
@@ -32,6 +32,10 @@
 \usepackage{environ}
 \usepackage{tikz, pgfplots}
 \usepackage{framed}
+
+\usepackage{biblatex}
+\addbibresource{citations.bib}
+
 
 \lstset{
     backgroundcolor=\color[rgb]{0.86,0.88,0.93},
@@ -116,6 +120,25 @@
 \newcommand{\tend}[1]{\hbox{\oalign{$\bm{#1}$\crcr\hidewidth$\scriptscriptstyle\bm{\sim}$\hidewidth}}}
 \newcommand{\tenq}[1]{\hbox{\oalign{$\bm{#1}$\crcr\hidewidth$\scriptscriptstyle\bm{\sim}$\hidewidth}}}
 
+%\let\oldfootnote\footnote
+%\renewcommand\footnote[1][]{\oldfootnote[frame,#1]}
+
+\let\oldFootnote\footnote
+\newcommand\nextToken\relax
+
+\let\oldFootfullcite\footfullcite
+
+\renewcommand\footnote[1]{%
+    \oldFootnote[frame]{#1}\futurelet\nextToken\isFootnote}
+
+\newcommand\isFootnote{%
+    \ifx\footnote\nextToken\textsuperscript{,}\fi}
+    
+\renewcommand\footfullcite[1]{%
+	\oldFootfullcite{#1}\futurelet\nextToken\isFootfullcite}
+
+\newcommand\isFootfullcite{%
+    \ifx\footfullcite\nextToken\textsuperscript{,}\fi}
 
 % ENVIROMENTS
 %-------------------------------------------------------
@@ -222,14 +245,14 @@
 %-------------------------------------------------------
 \section{Introduction}
 %-------------------------------------------------------
-\subsection{Contextualization}
+\subsection{Motivation}
 %-------------------------------------------------------
 \begin{frame}[c]{Introduction}{Contextualization}
 
 \vskip0.25cm
 
-\begin{itemize}
-	\item We are discussing the \textbf{automatic control} of \textbf{dynamical systems}; \vskip0.2cm
+\begin{itemize} \justifying
+	\item We are discussing the \textbf{optimal control} of \textbf{dynamical systems}. \vskip0.2cm
 	
 	\item We are discussing \textbf{chemical reactor network systems}, for processes described as:\vskip0.2cm
 	
@@ -237,7 +260,7 @@
 		\resizebox{0.6\textwidth}{!}{\input{imgs/nonIsoSchem.tikz}}
 	\end{figure} \vskip0cm
 	
-	\item Optimal control theory has been revisited from several innovative fields in the last years {\bfseries \cite{Cairano:2014, Tang:2016, Eren:2017}}. Furthermore, reactor systems are subject of active research, with several open challenges {\bfseries \cite{Gupta:2012, Mulas:2015}}.
+	\item Optimal control theory has been revisited from several innovative fields in the last years\footfullcite{Tang:2016}\footfullcite{Eren:2017}. Furthermore, reactor systems are subject of active research, with several open challenges. \footfullcite{Mulas:2015}
 \end{itemize}
 
 \end{frame}
@@ -249,43 +272,44 @@
 
 \vskip0.25cm
 \begin{itemize}
-	\item The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by {\bfseries \cite{Klatt:1998}}. \vskip0.25cm
+	\item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
 \end{itemize}
 
 \begin{center}
-\begin{varblock}[1\textwidth]{Non-isothermal CSTR} \centering
+\begin{varblock}[1\textwidth]{} \centering
 	\includegraphics[width=0.5\textwidth]{exoCSTR}
 \end{varblock}
-\end{center} \vskip0.2cm
+\end{center} 
 
 \end{frame}
 
 %-------------------------------------------------------
 \begin{frame}[t]{Introduction}{Problem Definition}
+\addtocounter{footnote}{-1}
 
 \vskip0.25cm
 \begin{itemize}
-	\item The system used for the experiments was the non-isothermal Continuous Stirred Tank Reactor (CSTR) presented by {\bfseries \cite{Klatt:1998}}. \vskip0.25cm
+	\item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
 \end{itemize}	
 
 \begin{center}
-\begin{varblock}[1\textwidth]{Non-isothermal CSTR} \centering
+\begin{varblock}[1\textwidth]{} \centering
 	\begin{minipage}{.5\textwidth}
 		\includegraphics[width=\textwidth]{exoCSTR}
 	\end{minipage}%
 	\begin{minipage}{.5\textwidth}
 		{\justifying \bfseries This system...} \vskip0.2cm
 		
-		\begin{itemize}
-			\item characterizes a wide range of industrial applications;\vskip0.2cm
+		\begin{itemize} \justifying
+			\item class of system that represents a wide range of industrial applications.\vskip0.2cm
 			
-			\item is a classical benchmark for multiple-input multiple-output (MIMO) control systems;\vskip0.2cm
+			\item classical benchmark for multiple-input multiple-output (MIMO) control systems.\vskip0.2cm
 			
-			\item is highly nonlinear, with non-minimum phase behavior and unmeasurable states;\vskip0.2cm
+			\item nonlinear behavior, models with non-minimum phase behavior and unmeasurable states.\vskip0.2cm
 		\end{itemize}
 	\end{minipage}
 \end{varblock}
-\end{center} \vskip0.2cm
+\end{center}
 
 \end{frame}
 
@@ -300,41 +324,48 @@
 
 \vskip0.25cm
 
+We desire to obtain a State-Space mathematical representation of the system.
+\begin{equation}
+\begin{cases}
+	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{f}(}{\color{glgBlue!90} \bm{x}(t)}, {\color{glgBlue!90} \bm{u}(t)} {\color{glgRed!80} )} \\
+    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{g}(}{\color{glgBlue!90} \bm{x}(t)}, {\color{glgBlue!90} \bm{u}(t)} {\color{glgRed!80} )}
+\end{cases}
+\end{equation} \vskip0.2cm
+
+\begin{minipage}{\textwidth}
+\begin{minipage}{0.45\textwidth}
 \begin{itemize}
-	\item Dynamical systems are modelled through the Conservation Laws from physics;
+	\item[$\circ$] ${\color{glgBlue!90} \bm{x}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
+	
+	\item[$\circ$] ${\color{glgBlue!90} \bm{u}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
+	
+	\item[$\circ$] ${\color{glgBlue!90} \bm{y}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
 \end{itemize}
+\end{minipage}
+\begin{minipage}{0.54\textwidth}
+\begin{itemize}
+	\item[$\circ$] ${\color{glgRed!80} \bm{f}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{n}$ is a \textit{state-transition function}.
+	
+	\item[$\circ$] ${\color{glgRed!80} \bm{g}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{p}$ is a \textit{output observation function}.
+\end{itemize}
+\end{minipage}
+\end{minipage}
 
-\begin{varblock}[1\linewidth]{Mass Balance for Chemical Reactors}
-	\begin{equation}
-	\begin{split}
-	    \begin{pmatrix}
-	        \text{Accumulation} \\ \text{of mass} \\ \text{in the system}
-	    \end{pmatrix} &=  \left[ \begin{pmatrix}
-	        \text{Mass flow} \\ \text{entering} \\ \text{system}
-	    \end{pmatrix} + \begin{pmatrix}
-	        \text{Mass} \\  \text{produced} \\ \text{by reactions}
-	    \end{pmatrix} \right] \\ &\ \ \ \ \ \  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  - \left[ \begin{pmatrix}
-	        \text{Mass flow} \\ \text{leaving} \\ \text{system}
-	    \end{pmatrix} + \begin{pmatrix}
-	        \text{Mass} \\ \text{consumed} \\ \text{by reactions}
-	    \end{pmatrix} \right]
-	\end{split}
-	\end{equation} \vskip0.2cm
-\end{varblock}
-
-\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
-	\begin{equation}
-        \begin{pmatrix}
-            \text{Accumulation} \\ \text{of thermal energy} \\ \text{in the system}
-        \end{pmatrix} = \begin{pmatrix}
-            \text{Heat flow} \\ \text{entering} \\ \text{the system}
-        \end{pmatrix} - \begin{pmatrix}
-            \text{Heat flow} \\ \text{leaving} \\ \text{the system}
-        \end{pmatrix} + \begin{pmatrix}
-            \text{Entropy} \\ \text{contribution} \\ \text{from reactions}
-        \end{pmatrix}
-    \end{equation} \vskip0.2cm
-\end{varblock}
+\vskip1cm
+\begin{figure}[ht] \centering
+    \resizebox{!}{!}{
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
+        % We start by placing the blocks
+        \node [input, name=input] {};
+        \node [block, fill=glgBlue!10, right of=input, minimum width=10em, minimum height=5em, node distance=9em] (system) {Open-Loop System};
+        \node [output, right of=system, node distance=9em] (output) {};
+        
+        % Once the nodes are placed, connecting them is easy.       
+        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{u}$}  (system);
+        \draw [->] (system) -- node[pos=0.9]{$\bm{y}$} (output);
+        
+    \end{tikzpicture}}
+\end{figure}
 
 \end{frame}
 
@@ -343,52 +374,112 @@
 
 \vskip0.25cm
 
-\begin{itemize}
-	\item Assuming a continuous reactor of constant volume, comprised by a dilute solution of reactant and products...
+We desire to obtain a State-Space mathematical representation of the system.
+\begin{equation}
+\begin{cases}
+	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{A}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{B}}{\color{glgBlue!90} \bm{u}(t)} \\
+    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{D}}{\color{glgBlue!90} \bm{u}(t)}
+\end{cases}
+\end{equation} \vskip0.2cm
+
+\begin{minipage}{\textwidth}
+\begin{minipage}{0.47\textwidth}
+\begin{itemize} \justifying
+	\item[$\circ$] ${\color{glgBlue!90} \bm{x}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
+	
+	\item[$\circ$] ${\color{glgBlue!90} \bm{u}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
+	
+	\item[$\circ$] ${\color{glgBlue!90} \bm{y}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
 \end{itemize}
-
-\begin{varblock}[1\linewidth]{Mass Balance for Chemical Reactors}
-	\begin{equation}
-	\cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA}(T) (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX}(T) (\rho_A)^{\alpha} \right)
-	\end{equation} \vskip0.2cm
-\end{varblock}
-
-\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
-	\begin{equation}
-    \begin{cases}
-        \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \displaystyle\sum_{\alpha A \rightarrow \beta X} K_{AX}(T) (\rho_A)^{\alpha} \Delta H_{AX} \\
-        \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C)
-    \end{cases}
-    \end{equation} \vskip0.2cm
-\end{varblock}
-
-\begin{itemize}
-	\item \textbf{Remark:} this model is highly nonlinear!
+\end{minipage}
+\begin{minipage}{0.52\textwidth}
+\begin{itemize} \justifying
+	\item[$\circ$] ${\color{glgRed!80} \bm{A}} \in \mathbb{R}^{n\times n}$ is the \textit{system matrix}.
+	
+	\item[$\circ$] ${\color{glgRed!80} \bm{B}} \in \mathbb{R}^{n\times r}$ is the \textit{input matrix}.
+	
+	\item[$\circ$] ${\color{glgRed!80} \bm{C}} \in \mathbb{R}^{p\times n}$ is the \textit{output matrix}.
+	
+	\item[$\circ$] ${\color{glgRed!80} \bm{D}} \in \mathbb{R}^{p\times r}$ is the \textit{feedthrough matrix}.
 \end{itemize}
+\end{minipage}
+\end{minipage}
+
+\vskip0.1cm
+\begin{figure}[ht]
+    \centering
+    \resizebox{!}{!}{
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
+        % We start by placing the blocks
+        \node [input, name=input] {};
+        \node [block, right of=input] (inputMatrix) {$\bm{B}$};
+        \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+        \node [block, right of=stateSum, node distance=4em] (integral) {$\int   $};
+        \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+        \node [output, right of=outputMatrix] (output) {};
+        \node [block, below of=integral, node distance=1.5cm] (stateMatrix) {$\bm{A}$};
+        
+        \begin{scope}[on background layer]
+            \node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= glgBlue!10, rounded corners, inner sep=.3cm, label={[xshift=3.7em, glgBlue!90]above left:Open-Loop System}] {};
+        \end{scope}     
+        
+        % Once the nodes are placed, connecting them is easy.       
+        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{u}$} (inputMatrix);
+        \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
+        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
+        \draw [->] (outputMatrix) -- node[pos=0.9]{$\bm{y}$} (output);
+        \draw [->] (bk1) |- (stateMatrix);
+        \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+    \end{tikzpicture} 
+    }
+\end{figure}
 
 \end{frame}
 
-%%-------------------------------------------------------
-%\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
-%
-%\vskip0.25cm
-%
-%\begin{itemize}
-%	\item In the case of the reactor system in discussion, the models becomes...
-%\end{itemize}
-%
-%\begin{varblock}[1\linewidth]{Mathematical Model of Non-Isothermal CSTR}
-%	\begin{equation}
-%    \begin{cases}
-%	\hfill \cfrac{d(\rho_A)}{dt} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\ \\
-%	\hfill \cfrac{d(\rho_B)}{dt} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\ \\
-%	\hfill \cfrac{d(T)}{dt} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\ \\
-%	\hfill \cfrac{d(T_C)}{dt} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
-%\end{cases}
-%    \end{equation} \vskip0.2cm
-%\end{varblock}
-%
-%\end{frame}
+%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+
+We desire to obtain a State-Space mathematical representation of the system.
+\begin{equation}
+\begin{cases}
+	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{A}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{B}}{\color{glgBlue!90} \bm{u}(t)} \\
+    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{D}}{\color{glgBlue!90} \bm{u}(t)}
+\end{cases}
+\end{equation} \vskip0.2cm
+
+\textbf{This representation has several advantages.} \vskip0.2cm
+
+\begin{itemize} \justifying
+	\item<1-> The \textit{response} of the system has an analytical solution:
+	\begin{equation}
+	\begin{cases}
+        {\color{glgBlue!90} \bm{x}(t)} = e^{{\color{glgRed!80} \bm{A}}(t - t_0)} {\color{glgBlue!90} \bm{x}(t)} + \displaystyle\int_{t_0}^{t} e^{{\color{glgRed!80} \bm{A}}(t - \tau)} {\color{glgRed!80} \bm{B}} {\color{glgBlue!90} \bm{u}(\tau)} d \tau \hfill \\
+        {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}} e^{{\color{glgRed!80} \bm{A}}(t - t_0)} {\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{C}} \displaystyle\int_{t_0}^{t} e^{{\color{glgRed!80} \bm{A}}(t - \tau)} {\color{glgRed!80} \bm{B}} {\color{glgBlue!90} \bm{u}(\tau)} d \tau + {\color{glgRed!80} \bm{D}} {\color{glgBlue!90} \bm{u}(t)}
+    \end{cases}
+	\end{equation} 
+	
+	\item<2|only@2> The \textit{stability} of the model is directly related to the eigenvalues ($\bm{\lambda}$) of ${\color{glgRed!80} \bm{A}}$.
+	\begin{equation}
+	\begin{matrix}
+		{\color{glgBlue!90} \bm{x}(t)} < \infty,\ {\color{glgBlue!90} t} \to \infty & \text{if } \text{Re}[\lambda_i] \leq 0,\ \forall i \in [1, n] 
+	\end{matrix}
+	\end{equation}
+	
+	\item<3|only@3> The \textit{controllability} property is directly related to the \textit{Controllability Matrix}:
+	\begin{equation}
+		\bm{\mathcal{C}} = \begin{bmatrix} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^2 {\color{glgRed!80} \bm{B}} & \cdots & {\color{glgRed!80} \bm{A}}^{n-1} {\color{glgRed!80} \bm{B}} \end{bmatrix}
+	\end{equation}
+	
+	\item<4|only@4> The \textit{observability} property is directly related to the \textit{Observability Matrix}:
+	\begin{equation}
+		\bm{\mathcal{O}} = \begin{bmatrix} {\color{glgRed!80} \bm{C}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^2  & \cdots & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^{n-1} \end{bmatrix}^T
+	\end{equation}
+\end{itemize}
+
+\end{frame}
 
 %-------------------------------------------------------
 \begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
@@ -429,46 +520,215 @@
 
 \end{frame}
 
-
 %-------------------------------------------------------
-\subsection{General Properties of State-Space Models}
-%-------------------------------------------------------
-\begin{frame}[t]{Dynamical System Analysis}{General Properties of Dynamical Models}
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
 
 \vskip0.25cm
 
 \begin{itemize}
-	\item A linear and time-invariant model in State-Space representation has the form:
-	\begin{equation}
-	\begin{cases}
-		\dot{\bm{x}} = \bm{A} \bm{x} + \bm{B} \bm{u} \\
-		\bm{y} = \bm{C} \bm{x} + \bm{D} \bm{u}
-	\end{cases}
-	\end{equation}
+	\item The first principle models are obtained through Conservation Laws from physics.
 \end{itemize}
 
-This representation has several analysis and control design advantages... \vskip0.2cm
+\begin{figure}
+	\includegraphics[width=0.45\textwidth]{tank02}
+\end{figure}
+\begin{varblock}[1\linewidth]{Mass Balance for Chemical Compounds}
+	\begin{equation*}
+        \begin{pmatrix}
+	        \text{Accumulation} \\ \text{of mass} \\ \text{in the system}
+	    \end{pmatrix} =  \begin{pmatrix}
+	        \text{Mass flow} \\ \text{entering} \\ \text{system}
+	    \end{pmatrix} - \begin{pmatrix} \text{Mass flow} \\ \text{leaving} \\ \text{system}
+	    \end{pmatrix} \pm \begin{pmatrix}
+	        \text{Mass flow} \\ \text{from} \\ \text{reactions}
+	    \end{pmatrix}
+    \end{equation*} \vskip0.2cm
+\end{varblock}
+	
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
 
 \begin{itemize}
-	\item The response of the system has a practical analytical solution:
-	\begin{equation}
-	\begin{cases}
-        \bm{x}(t) = e^{\bm{A}(t - t_0)} \bm{x}(t) + \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau \hfill \\
-        \bm{y}(t) = \bm{C} e^{\bm{A}(t - t_0)} \bm{x}(t) + \bm{C} \int_{t_0}^{t} e^{\bm{A}(t - \tau)} \bm{B} \bm{u}(\tau) d \tau + \bm{D} \bm{u}(t)
+	\item The first principle models are obtained through Conservation Laws from physics.
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=0.45\textwidth]{tank02}
+\end{figure}
+\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
+	\begin{equation*}
+        \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA}(T) (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX}(T) (\rho_A)^{\alpha} \right)
+    \end{equation*} \vskip0.2cm
+\end{varblock}
+	
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+
+\begin{itemize}
+	\item The first principle models are obtained through Conservation Laws from physics.
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=0.45\textwidth]{tank02}
+\end{figure}
+
+\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
+	\begin{equation*}
+        \begin{pmatrix}
+            \text{Accumulation} \\ \text{of thermal energy} \\ \text{in the system}
+        \end{pmatrix} = \begin{pmatrix}
+            \text{Heat flow} \\ \text{entering} \\ \text{the system}
+        \end{pmatrix} - \begin{pmatrix}
+            \text{Heat flow} \\ \text{leaving} \\ \text{the system}
+        \end{pmatrix} + \begin{pmatrix}
+            \text{Entropy} \\ \text{contribution} \\ \text{from reactions}
+        \end{pmatrix}
+    \end{equation*} \vskip0.2cm
+\end{varblock}
+	
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+
+\begin{itemize}
+	\item The first principle models are obtained through Conservation Laws from physics.
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=0.45\textwidth]{tank02}
+\end{figure}
+
+\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
+	\begin{equation*}
+    \begin{cases}
+        \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \displaystyle\sum_{\alpha A \rightarrow \beta X} K_{AX}(T) (\rho_A)^{\alpha} \Delta H_{AX} \\
+        \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C)
     \end{cases}
-	;\end{equation}
-		
-	\item The controllability property is directly related to the \textit{Controllability Matrix}:
-	\begin{equation}
-		\bm{\mathcal{C}} = \begin{bmatrix} \bm{B} & \bm{A} \bm{B} & \bm{A}^2 \bm{B} & \cdots & \bm{A}^{n-1} \bm{B} \end{bmatrix}
-	;\end{equation}
+    \end{equation*} \vskip0.2cm
+\end{varblock}
 	
-	\item The observability property is directly related to the \textit{Observability Matrix}:
+\end{frame}
+
+%%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+
+\begin{itemize}
+	\item In the case of the reactor system in discussion, the models becomes...
+\end{itemize}
+
+\begin{varblock}[1\linewidth]{Mathematical Model of Non-Isothermal CSTR}
 	\begin{equation}
-		\bm{\mathcal{O}} = \begin{bmatrix} \bm{C} & \bm{C} \bm{A} & \bm{C} \bm{A}^2 & \cdots & \bm{C} \bm{A}^{n-1} \end{bmatrix}^T
-	;\end{equation}
+    \begin{cases}
+	\hfill \cfrac{d(\rho_A)}{dt} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\ \\
+	\hfill \cfrac{d(\rho_B)}{dt} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\ \\
+	\hfill \cfrac{d(T)}{dt} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\ \\
+	\hfill \cfrac{d(T_C)}{dt} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
+\end{cases}
+    \end{equation} \vskip0.2cm
+\end{varblock}
+
+\end{frame}
+
+%%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+
+\begin{itemize} \justifying
+	\item We choose $\bm{x} = [\rho_A, \rho_B, T, T_C]^T$, $\bm{u} = [q, Q]^T$ and $\bm{y} = [\rho_B, T]^T$. \vskip0.2cm
 	
-	\item The stability of the system is directly related to the eigenvalues of $\bm{A}$;
+	\item We consider the steady-state point $\bm{x}_o = [1.23, 0.90, 134.14, 128.95]^T$ and $\bm{u}_o = [18.83, -4495.7]^T$.
+\end{itemize}
+
+\vskip0.5cm
+\textbf{The linearized state-space model is described by matrices:}
+
+\begin{varblock}[\textwidth]{}
+\begin{equation*}
+\left\{ \begin{matrix*}[l]
+    \bm{A} = \begin{bmatrix*}[r]
+		  -86.1 &        0 &  -4.2 &        0 \\
+		   50.6 & -69.4 &   1.0 &        0 \\
+		  172.2 & 198.0 & -36.7 &  30.8 \\
+		         0 &       0  &  86.8 & -86.7
+    \end{bmatrix*} \hfill & &
+    \bm{B} = \begin{bmatrix*}[r]
+		 3.9  &       0 \\
+		-0.9  &       0 \\
+		-4.1  &       0 \\
+		      0  &  0.1
+    \end{bmatrix*} \hfill \\  \\ 
+    \bm{C} = \begin{bmatrix}
+        0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0
+    \end{bmatrix} \hfill & &
+    \bm{D} = \begin{bmatrix}
+        0 & 0 \\ 0 & 0
+    \end{bmatrix} \hfill
+\end{matrix*} \right.
+\end{equation*}
+\end{varblock}
+
+\end{frame}
+
+%%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+
+\vskip0.25cm
+\textbf{The linearized state-space model is described by matrices:}
+
+\begin{varblock}[\textwidth]{}
+\begin{equation*}
+\left\{ \begin{matrix*}[l]
+    \bm{A} = \begin{bmatrix*}[r]
+		  -86.1 &        0 &  -4.2 &        0 \\
+		   50.6 & -69.4 &   1.0 &        0 \\
+		  172.2 & 198.0 & -36.7 &  30.8 \\
+		         0 &       0  &  86.8 & -86.7
+    \end{bmatrix*} \hfill & &
+    \bm{B} = \begin{bmatrix*}[r]
+		 3.9  &       0 \\
+		-0.9  &       0 \\
+		-4.1  &       0 \\
+		      0  &  0.1
+    \end{bmatrix*} \hfill \\  \\ 
+    \bm{C} = \begin{bmatrix}
+        0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0
+    \end{bmatrix} \hfill & &
+    \bm{D} = \begin{bmatrix}
+        0 & 0 \\ 0 & 0
+    \end{bmatrix} \hfill
+\end{matrix*} \right.
+\end{equation*}
+\end{varblock} \vskip0.2cm
+
+\begin{itemize}
+	\item<1|only@1> All the eigenvalues are real and negative. The system is \textbf{stable}.
+	\begin{equation}
+		\bm{\lambda} = [-16.79, -54.84, -86.33, -121.01]
+	\end{equation}
+	
+	\item<2-> The Controllability Matrix has full-row rank. The system is \textbf{controllable}.
+	\begin{equation} 
+		\texttt{rank}\left( \bm{\mathcal{C}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^2 {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^3 {\color{glgRed!80} \bm{B}} \end{bmatrix} \right) = 4
+	\end{equation}
+	
+	\item<3-> The Observability Matrix has full-column rank. The system is \textbf{observable}.
+	\begin{equation} 
+		\texttt{rank}\left( \bm{\mathcal{O}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{glgRed!80} \bm{C}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^2 & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^3 \end{bmatrix} \right) = 4
+	\end{equation}
 \end{itemize}
 
 \end{frame}
@@ -481,11 +741,11 @@ This representation has several analysis and control design advantages... \vskip
 \vskip0.25cm
 
 \begin{figure}[ht] \centering
-		\begin{tikzpicture}	[node distance=0.7cm]
-		\node (plot) {\includegraphics[width=\textwidth]{dynamics01}};
+		\begin{tikzpicture}	[node distance=1cm]
+		\node (plot) {\includegraphics[width=\textwidth]{dynamics04}};
 		
 		\begin{scope}[on background layer]
-			\node[block, minimum height=1.75em, above of=plot, xshift=0.41cm, node distance=2.75cm, minimum width=0.93\textwidth] (legendBox) {};
+			\node[block, minimum height=1.75em, above of=plot, xshift=0.45cm, node distance=2.75cm, minimum width=0.7\textwidth] (legendBox) {};
 		\end{scope}
 		
 		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
@@ -497,110 +757,6 @@ This representation has several analysis and control design advantages... \vskip
 		\node[right of=label]  (legendStart) {};
 		\node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};		
 		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-	\end{tikzpicture}	
-\end{figure}
-
-\end{frame}
-
-%-------------------------------------------------------
-\begin{frame}[c]{Dynamical System Analysis}{Experiments}
-
-\vskip0.25cm
-
-\begin{figure}[ht] \centering
-		\begin{tikzpicture}	[node distance=0.7cm]
-		\node (plot) {\includegraphics[width=\textwidth]{dynamics02}};
-		
-		\begin{scope}[on background layer]
-			\node[block, minimum height=1.75em, above of=plot, xshift=0.41cm, node distance=2.75cm, minimum width=0.93\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-	\end{tikzpicture}	
-\end{figure}
-
-\end{frame}
-
-%-------------------------------------------------------
-\begin{frame}[c]{Dynamical System Analysis}{Experiments}
-
-\vskip0.25cm
-
-\begin{figure}[ht] \centering
-		\begin{tikzpicture}	[node distance=0.7cm]
-		\node (plot) {\includegraphics[width=\textwidth]{dynamics03}};
-		
-		\begin{scope}[on background layer]
-			\node[block, minimum height=1.75em, above of=plot, xshift=0.41cm, node distance=2.75cm, minimum width=0.93\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.9290, 0.6940, 0.1250};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_C$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.4940, 0.1840, 0.5560};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_D$};		
-		\draw[-, dashed, linecolor, line width=1pt] (legendStart) -- (label);
 		
 		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
 		\node[right of=label]  (legendStart) {};
@@ -652,6 +808,7 @@ This representation has several analysis and control design advantages... \vskip
 \end{figure}
 
 \end{frame}
+
 
 %-------------------------------------------------------
 % SECTION - State-Feedback Controllers
@@ -1327,15 +1484,13 @@ This representation has several analysis and control design advantages... \vskip
 	\item Future;
 \end{itemize}
 
-
 \end{frame}
 
 %-------------------------------------------------------
-\begin{frame}[allowframebreaks] \small
-        \frametitle{References}
-        \bibliographystyle{apalike}
-        \bibliography{citations.bib}
-\end{frame}
+%\begin{frame}[allowframebreaks] \small
+%        \frametitle{References}
+%        \bibliography{citations.bib}
+%\end{frame}
 
 
 %-------------------------------------------------------

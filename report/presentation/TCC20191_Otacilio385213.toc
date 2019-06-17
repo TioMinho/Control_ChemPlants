@@ -1,20 +1,38 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
 \beamer@sectionintoc {1}{Introduction}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{Contextualization}{4}{0}{1}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {1}{1}{Motivation}{4}{0}{1}
+\defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {1}{2}{Problem Definition}{5}{0}{1}
+\defcounter {refsection}{0}\relax 
 \beamer@sectionintoc {2}{Dynamical System Analysis}{7}{0}{2}
+\defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {2}{1}{Dynamical Models for Chemical Reactors}{8}{0}{2}
-\beamer@subsectionintoc {2}{2}{General Properties of State-Space Models}{11}{0}{2}
-\beamer@subsectionintoc {2}{3}{Experiments}{12}{0}{2}
-\beamer@sectionintoc {3}{State-Feedback Controllers}{16}{0}{3}
-\beamer@subsectionintoc {3}{1}{Definitions}{17}{0}{3}
-\beamer@subsectionintoc {3}{2}{Regulation vs. Tracking}{20}{0}{3}
-\beamer@sectionintoc {4}{Optimal Control}{22}{0}{4}
-\beamer@subsectionintoc {4}{1}{Formulation}{23}{0}{4}
-\beamer@subsectionintoc {4}{2}{Linear Quadratic (LQ) Controllers}{27}{0}{4}
-\beamer@subsectionintoc {4}{3}{Simulations}{30}{0}{4}
-\beamer@sectionintoc {5}{Optimal State Estimation}{34}{0}{5}
-\beamer@subsectionintoc {5}{1}{Formulation}{35}{0}{5}
-\beamer@subsectionintoc {5}{2}{Kalman Filter and LQG Controllers}{38}{0}{5}
-\beamer@subsectionintoc {5}{3}{Simulations}{41}{0}{5}
-\beamer@sectionintoc {6}{Conclusion}{45}{0}{6}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{2}{Experiments}{24}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {3}{State-Feedback Controllers}{26}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {3}{1}{Definitions}{27}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {3}{2}{Regulation vs. Tracking}{30}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {4}{Optimal Control}{32}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{1}{Formulation}{33}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{2}{Linear Quadratic (LQ) Controllers}{37}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{3}{Simulations}{40}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {5}{Optimal State Estimation}{44}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{1}{Formulation}{45}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{2}{Kalman Filter and LQG Controllers}{48}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{3}{Simulations}{51}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {6}{Conclusion}{55}{0}{6}

@@ -7,7 +7,7 @@
 	\node [output, above of=output2, node distance=1.5em] (output1) {};		
 	\node [output, below of=output2, node distance=1.5em] (output3) {};
 	
-	\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathbb{R}^{(1)}  & \overset{K_{11}(T)}{\longrightarrow} & \cdots & \overset{K_{1n}(T)}{\longrightarrow} &  \mathcal{P}^{(1)} & & \Delta H_1 \\ \vdots &  & \vdots &  & \vdots  & &  \\ \mathbb{R}^{(N)} &  \overset{K_{n1}(T)}{\longrightarrow} & \cdots & \overset{K_{nn}(T)}{\longrightarrow} & \mathcal{P}^{(N)}  & & \Delta H_n \\ \end{matrix} \right.$};				
+	\node [below of=system, node distance=6em] {$\left\{ \begin{matrix} \mathcal{R}^{(1)}  & \overset{K_{11}(T)}{\longrightarrow} & \cdots & \overset{K_{1n}(T)}{\longrightarrow} &  \mathcal{P}^{(1)} & & \Delta H_1 \\ \vdots &  & \vdots &  & \vdots  & &  \\ \mathcal{R}^{(N)} &  \overset{K_{n1}(T)}{\longrightarrow} & \cdots & \overset{K_{nn}(T)}{\longrightarrow} & \mathcal{P}^{(N)}  & & \Delta H_n \\ \end{matrix} \right.$};				
 	
 	\draw[->, line width=0.5mm] (input1) node[pos=0.1]{Reactants} -- (input1-|system.west);
 	\draw[->, line width=0.5mm] (input3) -- node[pos=0.1]{Heat Capacity} (input3-|system.west);
