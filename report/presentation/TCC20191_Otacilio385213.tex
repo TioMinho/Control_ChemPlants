@@ -64,10 +64,15 @@
 \definecolor{niceBlack}{RGB}{14,17,17}
 \definecolor{niceBlue}{RGB}{14,104,206}
 
+\colorlet{signal1}{niceBlack!90}
+\colorlet{signal2}{niceBlack!90}
+\colorlet{signal3}{niceBlack!90}
+\colorlet{signal4}{niceBlack!90}
+
 % Beamer Color Scheme
-\setbeamercolor{Feather}{fg=niceBlack!20,bg=niceBlack!90}
+\setbeamercolor{Feather}{fg=niceBlack!20,bg=pastelBlue!90}
 \setbeamercolor{structure}{fg=niceBlack}
-\setbeamercolor{frametitle}{bg=niceBlack!70}
+\setbeamercolor{frametitle}{bg=pastelBlue!70}
 \setbeamercolor{normal text}{fg=black!85}
 
 
@@ -83,8 +88,8 @@
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
 \tikzstyle{mcCircle} = [draw, circle, line width=0.5mm, minimum width=3em, minimum height=3em, fill=white]
 \tikzstyle{mcInput} = [draw, rectangle, line width=0.5mm, minimum width=3em, minimum height=3em, fill=black!10]
-\tikzstyle{mcCircleX} = [draw=myBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
-\tikzstyle{mcCircleY} = [draw=myBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
+\tikzstyle{mcCircleX} = [draw=glgBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
+\tikzstyle{mcCircleY} = [draw=glgBlue!80, circle, line width=0.75mm, minimum width=3em, minimum height=3em, fill=white]
 
 
 % DEFFINING AND REDEFINING COMMANDS
@@ -135,7 +140,7 @@
     \ifx\footnote\nextToken\textsuperscript{,}\fi}
     
 \renewcommand\footfullcite[1]{%
-	\oldFootfullcite{#1}\futurelet\nextToken\isFootfullcite}
+  \oldFootfullcite{#1}\futurelet\nextToken\isFootfullcite}
 
 \newcommand\isFootfullcite{%
     \ifx\footfullcite\nextToken\textsuperscript{,}\fi}
@@ -172,7 +177,7 @@
     \usebeamertemplate{block end}%
   \end{actionenv}}
 
-\NewEnviron{myequation}{%
+\NewEnviron{myequation*}{%
     \begin{equation*}
     \scalebox{1.1}{$\BODY$}
     \end{equation*}
@@ -192,12 +197,12 @@
 
 \author[Otacílio Bezerra Leite Neto]
 {      
-	Otacílio Bezerra Leite Neto\\
+  Otacílio Bezerra Leite Neto\\
 }
 
 \institute[]
 {
-	TI0153 - Trabalho de Conclusão de Curso II\\
+  TI0153 - Trabalho de Conclusão de Curso II\\
     Department of Teleinformatics Engineering\\
     Federal University of Ceará - UFC\\
   
@@ -226,16 +231,21 @@
 %-------------------------------------------------------
 
 \begin{frame}
-	\begin{center} \Large \bfseries
-		Summary
-	\end{center}
+  \setcounter{secnumdepth}{1}
+  \setcounter{tocdepth}{1}
+  \begin{center} \Large \bfseries
+    Summary
+  \end{center}
+  \vfill
     \begin{columns}[t]
-        \begin{column}{0.5\textwidth}
+    	\hfill
+        \begin{column}{0.4\textwidth}
             \tableofcontents[sections={1-3}]
         \end{column}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.4\textwidth}
             \tableofcontents[sections={4-6}]
         \end{column}
+        \hfill
     \end{columns}
 \end{frame}
 
@@ -252,15 +262,15 @@
 \vskip0.25cm
 
 \begin{itemize} \justifying
-	\item We are discussing the \textbf{optimal control} of \textbf{dynamical systems}. \vskip0.2cm
-	
-	\item We are discussing \textbf{chemical reactor network systems}, for processes described as:\vskip0.2cm
-	
-	\begin{figure} \centering
-		\resizebox{0.6\textwidth}{!}{\input{imgs/nonIsoSchem.tikz}}
-	\end{figure} \vskip0cm
-	
-	\item Optimal control theory has been revisited from several innovative fields in the last years\footfullcite{Tang:2016}\footfullcite{Eren:2017}. Furthermore, reactor systems are subject of active research, with several open challenges. \footfullcite{Mulas:2015}
+  \item We are discussing the \textbf{optimal control} of \textbf{dynamical systems}. \vskip0.2cm
+  
+  \item We are discussing \textbf{chemical reactor network systems}, for processes described as:\vskip0.2cm
+  
+  \begin{figure} \centering
+    \resizebox{0.55\textwidth}{!}{\input{imgs/nonIsoSchem.tikz}}
+  \end{figure} \vskip0cm
+  
+  \item Optimal control theory has been revisited from several innovative fields in the last years\footfullcite{Tang:2016}\footfullcite{Eren:2017}. Furthermore, reactor systems are subject of active research, with several open challenges. \footfullcite{Mulas:2015}
 \end{itemize}
 
 \end{frame}
@@ -272,12 +282,12 @@
 
 \vskip0.25cm
 \begin{itemize}
-	\item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
+  \item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
 \end{itemize}
 
 \begin{center}
 \begin{varblock}[1\textwidth]{} \centering
-	\includegraphics[width=0.5\textwidth]{exoCSTR}
+  \includegraphics[width=0.5\textwidth]{exoCSTR}
 \end{varblock}
 \end{center} 
 
@@ -289,25 +299,25 @@
 
 \vskip0.25cm
 \begin{itemize}
-	\item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
-\end{itemize}	
+  \item The system used for the experiments was the \textit{non-isothermal Continuous Stirred Tank Reactor} (CSTR) presented by {\color{glgRed!50!black} [Klatt and Engell, 1998]}\footfullcite{Klatt:1998}. 
+\end{itemize} 
 
 \begin{center}
 \begin{varblock}[1\textwidth]{} \centering
-	\begin{minipage}{.5\textwidth}
-		\includegraphics[width=\textwidth]{exoCSTR}
-	\end{minipage}%
-	\begin{minipage}{.5\textwidth}
-		{\justifying \bfseries This system...} \vskip0.2cm
-		
-		\begin{itemize} \justifying
-			\item class of system that represents a wide range of industrial applications.\vskip0.2cm
-			
-			\item classical benchmark for multiple-input multiple-output (MIMO) control systems.\vskip0.2cm
-			
-			\item nonlinear behavior, models with non-minimum phase behavior and unmeasurable states.\vskip0.2cm
-		\end{itemize}
-	\end{minipage}
+  \begin{minipage}{.5\textwidth}
+    \includegraphics[width=\textwidth]{exoCSTR}
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    {\justifying \bfseries This system...} \vskip0.2cm
+    
+    \begin{itemize} \justifying
+      \item class of system that represents a wide range of industrial applications.\vskip0.2cm
+      
+      \item classical benchmark for multiple-input multiple-output (MIMO) control systems.\vskip0.2cm
+      
+      \item nonlinear behavior, models with non-minimum phase behavior and unmeasurable states.\vskip0.2cm
+    \end{itemize}
+  \end{minipage}
 \end{varblock}
 \end{center}
 
@@ -325,28 +335,28 @@
 \vskip0.25cm
 
 We desire to obtain a State-Space mathematical representation of the system.
-\begin{equation}
+\begin{equation*}
 \begin{cases}
-	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{f}(}{\color{glgBlue!90} \bm{x}(t)}, {\color{glgBlue!90} \bm{u}(t)} {\color{glgRed!80} )} \\
-    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{g}(}{\color{glgBlue!90} \bm{x}(t)}, {\color{glgBlue!90} \bm{u}(t)} {\color{glgRed!80} )}
+  {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{f}(}{\color{signal1} {\color{signal1} \bm{x}}(t)}, {\color{signal1} {\color{signal1} \bm{u}}(t)} {\color{signal2} )} \\
+    {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{g}(}{\color{signal1} {\color{signal1} \bm{x}}(t)}, {\color{signal1} {\color{signal1} \bm{u}}(t)} {\color{signal2} )}
 \end{cases}
-\end{equation} \vskip0.2cm
+\end{equation*} \vskip0.2cm
 
 \begin{minipage}{\textwidth}
 \begin{minipage}{0.45\textwidth}
 \begin{itemize}
-	\item[$\circ$] ${\color{glgBlue!90} \bm{x}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
-	
-	\item[$\circ$] ${\color{glgBlue!90} \bm{u}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
-	
-	\item[$\circ$] ${\color{glgBlue!90} \bm{y}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{x}}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
+  
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{u}}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
+  
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{y}}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.54\textwidth}
 \begin{itemize}
-	\item[$\circ$] ${\color{glgRed!80} \bm{f}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{n}$ is a \textit{state-transition function}.
-	
-	\item[$\circ$] ${\color{glgRed!80} \bm{g}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{p}$ is a \textit{output observation function}.
+  \item[$\circ$] ${\color{signal2} \bm{f}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{n}$ is a \textit{state-transition function}.
+  
+  \item[$\circ$] ${\color{signal2} \bm{g}(\cdot)} : \mathbb{R}^{n\times r} \rightarrow \mathbb{R}^{p}$ is a \textit{output observation function}.
 \end{itemize}
 \end{minipage}
 \end{minipage}
@@ -361,8 +371,8 @@ We desire to obtain a State-Space mathematical representation of the system.
         \node [output, right of=system, node distance=9em] (output) {};
         
         % Once the nodes are placed, connecting them is easy.       
-        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{u}$}  (system);
-        \draw [->] (system) -- node[pos=0.9]{$\bm{y}$} (output);
+        \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{u}}$}  (system);
+        \draw [->] (system) -- node[pos=0.9]{${\color{signal1} \bm{y}}$} (output);
         
     \end{tikzpicture}}
 \end{figure}
@@ -375,32 +385,32 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 We desire to obtain a State-Space mathematical representation of the system.
-\begin{equation}
+\begin{equation*}
 \begin{cases}
-	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{A}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{B}}{\color{glgBlue!90} \bm{u}(t)} \\
-    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{D}}{\color{glgBlue!90} \bm{u}(t)}
+  {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{signal1} {\color{signal1} \bm{u}}(t)} \\
+    {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{C}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{D}}{\color{signal1} {\color{signal1} \bm{u}}(t)}
 \end{cases}
-\end{equation} \vskip0.2cm
+\end{equation*} \vskip0.2cm
 
 \begin{minipage}{\textwidth}
 \begin{minipage}{0.47\textwidth}
 \begin{itemize} \justifying
-	\item[$\circ$] ${\color{glgBlue!90} \bm{x}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
-	
-	\item[$\circ$] ${\color{glgBlue!90} \bm{u}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
-	
-	\item[$\circ$] ${\color{glgBlue!90} \bm{y}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{x}}(t)} \in \mathbb{R}^n$ is the \textit{state-vector}.
+  
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{u}}(t)} \in \mathbb{R}^r$ is the \textit{input-vector}.
+  
+  \item[$\circ$] ${\color{signal1} {\color{signal1} \bm{y}}(t)} \in \mathbb{R}^p$ is the \textit{output-vector}.
 \end{itemize}
 \end{minipage}
 \begin{minipage}{0.52\textwidth}
 \begin{itemize} \justifying
-	\item[$\circ$] ${\color{glgRed!80} \bm{A}} \in \mathbb{R}^{n\times n}$ is the \textit{system matrix}.
-	
-	\item[$\circ$] ${\color{glgRed!80} \bm{B}} \in \mathbb{R}^{n\times r}$ is the \textit{input matrix}.
-	
-	\item[$\circ$] ${\color{glgRed!80} \bm{C}} \in \mathbb{R}^{p\times n}$ is the \textit{output matrix}.
-	
-	\item[$\circ$] ${\color{glgRed!80} \bm{D}} \in \mathbb{R}^{p\times r}$ is the \textit{feedthrough matrix}.
+  \item[$\circ$] ${\color{signal2} \bm{A}} \in \mathbb{R}^{n\times n}$ is the \textit{system matrix}.
+  
+  \item[$\circ$] ${\color{signal2} \bm{B}} \in \mathbb{R}^{n\times r}$ is the \textit{input matrix}.
+  
+  \item[$\circ$] ${\color{signal2} \bm{C}} \in \mathbb{R}^{p\times n}$ is the \textit{output matrix}.
+  
+  \item[$\circ$] ${\color{signal2} \bm{D}} \in \mathbb{R}^{p\times r}$ is the \textit{feedthrough matrix}.
 \end{itemize}
 \end{minipage}
 \end{minipage}
@@ -412,23 +422,23 @@ We desire to obtain a State-Space mathematical representation of the system.
     \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
         % We start by placing the blocks
         \node [input, name=input] {};
-        \node [block, right of=input] (inputMatrix) {$\bm{B}$};
+        \node [block, right of=input] (inputMatrix) {${\color{signal2} \bm{B}}$};
         \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
         \node [block, right of=stateSum, node distance=4em] (integral) {$\int   $};
-        \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+        \node [block, right of=integral, node distance=8em] (outputMatrix) {${\color{signal2} \bm{C}}$};
         \node [output, right of=outputMatrix] (output) {};
-        \node [block, below of=integral, node distance=1.5cm] (stateMatrix) {$\bm{A}$};
+        \node [block, below of=integral, node distance=1.5cm] (stateMatrix) {${\color{signal2} \bm{A}}$};
         
         \begin{scope}[on background layer]
             \node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= glgBlue!10, rounded corners, inner sep=.3cm, label={[xshift=3.7em, glgBlue!90]above left:Open-Loop System}] {};
         \end{scope}     
         
         % Once the nodes are placed, connecting them is easy.       
-        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{u}$} (inputMatrix);
+        \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{u}}$} (inputMatrix);
         \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
-        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
-        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
-        \draw [->] (outputMatrix) -- node[pos=0.9]{$\bm{y}$} (output);
+        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{{\color{signal1} \bm{x}}}$} (integral);
+        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{${\color{signal1} \bm{x}}$} (outputMatrix);
+        \draw [->] (outputMatrix) -- node[pos=0.9]{${\color{signal1} \bm{y}}$} (output);
         \draw [->] (bk1) |- (stateMatrix);
         \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
     \end{tikzpicture} 
@@ -443,40 +453,40 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 We desire to obtain a State-Space mathematical representation of the system.
-\begin{equation}
+\begin{equation*}
 \begin{cases}
-	{\color{glgBlue!90} \dot{\bm{x}}(t)} = {\color{glgRed!80} \bm{A}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{B}}{\color{glgBlue!90} \bm{u}(t)} \\
-    {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}}{\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{D}}{\color{glgBlue!90} \bm{u}(t)}
+  {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{signal1} {\color{signal1} \bm{u}}(t)} \\
+    {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{C}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{D}}{\color{signal1} {\color{signal1} \bm{u}}(t)}
 \end{cases}
-\end{equation} \vskip0.2cm
+\end{equation*} \vskip0.2cm
 
 \textbf{This representation has several advantages.} \vskip0.2cm
 
 \begin{itemize} \justifying
-	\item<1-> The \textit{response} of the system has an analytical solution:
-	\begin{equation}
-	\begin{cases}
-        {\color{glgBlue!90} \bm{x}(t)} = e^{{\color{glgRed!80} \bm{A}}(t - t_0)} {\color{glgBlue!90} \bm{x}(t)} + \displaystyle\int_{t_0}^{t} e^{{\color{glgRed!80} \bm{A}}(t - \tau)} {\color{glgRed!80} \bm{B}} {\color{glgBlue!90} \bm{u}(\tau)} d \tau \hfill \\
-        {\color{glgBlue!90} \bm{y}(t)} = {\color{glgRed!80} \bm{C}} e^{{\color{glgRed!80} \bm{A}}(t - t_0)} {\color{glgBlue!90} \bm{x}(t)} + {\color{glgRed!80} \bm{C}} \displaystyle\int_{t_0}^{t} e^{{\color{glgRed!80} \bm{A}}(t - \tau)} {\color{glgRed!80} \bm{B}} {\color{glgBlue!90} \bm{u}(\tau)} d \tau + {\color{glgRed!80} \bm{D}} {\color{glgBlue!90} \bm{u}(t)}
+  \item<1-> The \textit{response} of the system has an analytical solution:
+  \begin{equation*}
+  \begin{cases}
+        {\color{signal1} {\color{signal1} \bm{x}}(t)} = e^{{\color{signal2} \bm{A}}(t - t_0)} {\color{signal1} {\color{signal1} \bm{x}}(t)} + \displaystyle\int_{t_0}^{t} e^{{\color{signal2} \bm{A}}(t - \tau)} {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(\tau)} d \tau \hfill \\
+        {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{C}} e^{{\color{signal2} \bm{A}}(t - t_0)} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{C}} \displaystyle\int_{t_0}^{t} e^{{\color{signal2} \bm{A}}(t - \tau)} {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(\tau)} d \tau + {\color{signal2} \bm{D}} {\color{signal1} {\color{signal1} \bm{u}}(t)}
     \end{cases}
-	\end{equation} 
-	
-	\item<2|only@2> The \textit{stability} of the model is directly related to the eigenvalues ($\bm{\lambda}$) of ${\color{glgRed!80} \bm{A}}$.
-	\begin{equation}
-	\begin{matrix}
-		{\color{glgBlue!90} \bm{x}(t)} < \infty,\ {\color{glgBlue!90} t} \to \infty & \text{if } \text{Re}[\lambda_i] \leq 0,\ \forall i \in [1, n] 
-	\end{matrix}
-	\end{equation}
-	
-	\item<3|only@3> The \textit{controllability} property is directly related to the \textit{Controllability Matrix}:
-	\begin{equation}
-		\bm{\mathcal{C}} = \begin{bmatrix} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^2 {\color{glgRed!80} \bm{B}} & \cdots & {\color{glgRed!80} \bm{A}}^{n-1} {\color{glgRed!80} \bm{B}} \end{bmatrix}
-	\end{equation}
-	
-	\item<4|only@4> The \textit{observability} property is directly related to the \textit{Observability Matrix}:
-	\begin{equation}
-		\bm{\mathcal{O}} = \begin{bmatrix} {\color{glgRed!80} \bm{C}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^2  & \cdots & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^{n-1} \end{bmatrix}^T
-	\end{equation}
+  \end{equation*} 
+  
+  \item<2|only@2> The \textit{stability} of the model is directly related to the eigenvalues ($\bm{\lambda}$) of ${\color{signal2} \bm{A}}$.
+  \begin{equation*}
+  \begin{matrix}
+    {\color{signal1} {\color{signal1} \bm{x}}(t)} < \infty,\ {\color{signal1} t} \to \infty & \text{if } \text{Re}[\lambda_i] \leq 0,\ \forall i \in [1, n] 
+  \end{matrix}
+  \end{equation*}
+  
+  \item<3|only@3> The \textit{controllability} property is directly related to the \textit{Controllability Matrix}:
+  \begin{equation*}
+    \bm{\mathcal{C}} = \begin{bmatrix} {\color{signal2} \bm{B}} & {\color{signal2} \bm{A}} {\color{signal2} \bm{B}} & {\color{signal2} \bm{A}}^2 {\color{signal2} \bm{B}} & \cdots & {\color{signal2} \bm{A}}^{n-1} {\color{signal2} \bm{B}} \end{bmatrix}
+  \end{equation*}
+  
+  \item<4|only@4> The \textit{observability} property is directly related to the \textit{Observability Matrix}:
+  \begin{equation*}
+    \bm{\mathcal{O}} = \begin{bmatrix} {\color{signal2} \bm{C}} & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}} & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}}^2  & \cdots & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}}^{n-1} \end{bmatrix}^T
+  \end{equation*}
 \end{itemize}
 
 \end{frame}
@@ -487,64 +497,66 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{varblock}[1\linewidth]{Linearization by Taylor Series Expansion}
-	Consider a nonlinear time-invariant system:
-    \begin{equation} \label{eq:SSRepr03}
+  Consider a nonlinear time-invariant system:
+    \begin{equation*} \label{eq:SSRepr03}
     \begin{cases}
-        \dot{\bm{x}}(t) = \bm{f}(\bm{x}(t), \bm{u}(t)) \\
-        \bm{y}(t) = \bm{g}(\bm{x}(t), \bm{u}(t))
-    \end{cases}
-    .\end{equation}
+  {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{f}(}{\color{signal1} {\color{signal1} \bm{x}}(t)}, {\color{signal1} {\color{signal1} \bm{u}}(t)} {\color{signal2} )} \\
+    {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{g}(}{\color{signal1} {\color{signal1} \bm{x}}(t)}, {\color{signal1} {\color{signal1} \bm{u}}(t)} {\color{signal2} )}
+\end{cases}
+    .\end{equation*}
     
-    Given steady-state operating points $\bm{x}_o$, $\bm{y}_o$ and $\bm{u}_o$, the dynamics of the system in the neighborhood of these points can be represented by the linear model: 
-    \begin{align}
+    Given steady-state operating points ${\color{signal1} \bm{x}_o}$, ${\color{signal1} \bm{y}_o}$ and ${\color{signal1} \bm{u}_o}$, the dynamics of the system in the neighborhood of these points can be represented by the linear model: 
+    \begin{align*}
     \begin{cases}
-        \Delta \dot{\bm{x}}(t) = \bm{A}\Delta \bm{x}(t) + \bm{B}\Delta \bm{u}(t) & \\
-        \hfill \bm{y}(t) = \bm{C}\Delta \bm{x}(t) + \bm{D}\Delta \bm{u}(t) &
+         { \color{signal1} \Delta \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{A}} { \color{signal1} \Delta {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}} { \color{signal1} \Delta {\color{signal1} \bm{u}}(t)} & \\
+        \hfill {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{C}} { \color{signal1} \Delta {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{D}} { \color{signal1} {\color{signal1} \Delta \bm{u}}(t)} &
     \end{cases}
-    ,\end{align}
+    ,\end{align*}
     
     \noindent where
-    \begin{equation}
+    \begin{equation*}
     \begin{matrix}
-        \bm{A} = \left. \cfrac{\partial \bm{f}}{\partial \bm{x}} \right|_{\bm{x}_o, \bm{u}_o}; & \bm{B} = \left. \cfrac{\partial \bm{f}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o}; & \bm{C} = \left. \cfrac{\partial \bm{g}}{\partial \bm{x}} \right|_{\bm{x}_o,  \bm{u}_o}; & \bm{D} = \left. \cfrac{\partial \bm{g}}{\partial \bm{u}} \right|_{\bm{x}_o, \bm{u}_o} 
+        {\color{signal2} \bm{A}} = \left. \cfrac{\partial {\color{signal2} \bm{f}}}{\partial {\color{signal1} \bm{x}}} \right|_{{\color{signal1} \bm{x}_o}, {\color{signal1} \bm{u}_o}}; & {\color{signal2} \bm{B}} = \left. \cfrac{\partial {\color{signal2} \bm{f}}}{\partial {\color{signal1} \bm{u}}} \right|_{{\color{signal1} \bm{x}_o}, {\color{signal1} \bm{u}_o}}; & {\color{signal2} \bm{C}} = \left. \cfrac{\partial {\color{signal2} \bm{g}}}{\partial {\color{signal1} \bm{x}}} \right|_{{\color{signal1} \bm{x}_o},  {\color{signal1} \bm{u}_o}}; & {\color{signal2} \bm{D}} = \left. \cfrac{\partial {\color{signal2} \bm{g}}}{\partial {\color{signal1} \bm{u}}} \right|_{{\color{signal1} \bm{x}_o}, {\color{signal1} \bm{u}_o}} 
     \end{matrix}
-    \end{equation}
+    \end{equation*}
     
     \noindent and
-    \begin{equation}
+    \begin{equation*}
     \begin{matrix}
-        \Delta \bm{x}(t) = \bm{x}(t) - \bm{x}_o; & & \Delta \bm{u}(t) = \bm{u}(t) - \bm{u}_o
+         {\color{signal1} \Delta {\color{signal1} \bm{x}}(t)} = {\color{signal1} {\color{signal1} \bm{x}}(t)} - {\color{signal1} \bm{x}_o}; & &  {\color{signal1} \Delta {\color{signal1} \bm{u}}(t)} = {\color{signal1} {\color{signal1} \bm{u}}(t)} - {\color{signal1} \bm{u}_o}
     \end{matrix}
-    .\end{equation}
+    .\end{equation*}
 \end{varblock}
 
 \end{frame}
 
 %-------------------------------------------------------
-\begin{frame}[t]{Dynamical System Analysis}{Mathematical Models for Chemical Reactors}
+\subsection{First Principles Model Realization}
+%-------------------------------------------------------
+\begin{frame}[t]{Dynamical System Analysis}{First Principles Model Realization}
 
 \vskip0.25cm
 
 \begin{itemize}
-	\item The first principle models are obtained through Conservation Laws from physics.
+  \item The first principle models are obtained through Conservation Laws from physics.
 \end{itemize}
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{tank02}
+  \includegraphics[width=0.45\textwidth]{tank02}
 \end{figure}
 \begin{varblock}[1\linewidth]{Mass Balance for Chemical Compounds}
-	\begin{equation*}
+  \begin{equation*}
         \begin{pmatrix}
-	        \text{Accumulation} \\ \text{of mass} \\ \text{in the system}
-	    \end{pmatrix} =  \begin{pmatrix}
-	        \text{Mass flow} \\ \text{entering} \\ \text{system}
-	    \end{pmatrix} - \begin{pmatrix} \text{Mass flow} \\ \text{leaving} \\ \text{system}
-	    \end{pmatrix} \pm \begin{pmatrix}
-	        \text{Mass flow} \\ \text{from} \\ \text{reactions}
-	    \end{pmatrix}
+          \text{Accumulation} \\ \text{of mass} \\ \text{in the system}
+      \end{pmatrix} =  \begin{pmatrix}
+          \text{Mass flow} \\ \text{entering} \\ \text{system}
+      \end{pmatrix} - \begin{pmatrix} \text{Mass flow} \\ \text{leaving} \\ \text{system}
+      \end{pmatrix} \pm \begin{pmatrix}
+          \text{Mass flow} \\ \text{from} \\ \text{reactions}
+      \end{pmatrix}
     \end{equation*} \vskip0.2cm
 \end{varblock}
-	
+  
 \end{frame}
 
 %-------------------------------------------------------
@@ -553,18 +565,18 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize}
-	\item The first principle models are obtained through Conservation Laws from physics.
+  \item The first principle models are obtained through Conservation Laws from physics.
 \end{itemize}
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{tank02}
+  \includegraphics[width=0.45\textwidth]{tank02}
 \end{figure}
-\begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
-	\begin{equation*}
+\begin{varblock}[1\linewidth]{Mass Balance for Chemical Reactors}
+  \begin{equation*}
         \cfrac{d (\rho_A)}{dt} = q (\rho^{(A)}_{in} - \rho^{(A)}_{out}) + \left( \sum_{\alpha X \rightarrow \beta A} \cfrac{1}{\beta} K_{XA}(T) (\rho_X)^{\alpha} \right) - \left(\sum_{\alpha A \rightarrow \beta X} \cfrac{1}{\beta} K_{AX}(T) (\rho_A)^{\alpha} \right)
     \end{equation*} \vskip0.2cm
 \end{varblock}
-	
+  
 \end{frame}
 
 %-------------------------------------------------------
@@ -573,27 +585,27 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize}
-	\item The first principle models are obtained through Conservation Laws from physics.
+  \item The first principle models are obtained through Conservation Laws from physics.
 \end{itemize}
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{tank02}
+  \includegraphics[width=0.45\textwidth]{tank02}
 \end{figure}
 
 \begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
-	\begin{equation*}
+  \begin{equation*}
         \begin{pmatrix}
             \text{Accumulation} \\ \text{of thermal energy} \\ \text{in the system}
         \end{pmatrix} = \begin{pmatrix}
             \text{Heat flow} \\ \text{entering} \\ \text{the system}
         \end{pmatrix} - \begin{pmatrix}
             \text{Heat flow} \\ \text{leaving} \\ \text{the system}
-        \end{pmatrix} + \begin{pmatrix}
+        \end{pmatrix} \pm \begin{pmatrix}
             \text{Entropy} \\ \text{contribution} \\ \text{from reactions}
         \end{pmatrix}
     \end{equation*} \vskip0.2cm
 \end{varblock}
-	
+  
 \end{frame}
 
 %-------------------------------------------------------
@@ -602,22 +614,22 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize}
-	\item The first principle models are obtained through Conservation Laws from physics.
+  \item The first principle models are obtained through Conservation Laws from physics.
 \end{itemize}
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{tank02}
+  \includegraphics[width=0.45\textwidth]{tank02}
 \end{figure}
 
 \begin{varblock}[1\linewidth]{Conservation of Energy for Chemical Reactors}
-	\begin{equation*}
+  \begin{equation*}
     \begin{cases}
         \cfrac{d(T)}{dt} = q(T_{in} - T_{out}) + \eta (T_C - T) + \delta \displaystyle\sum_{\alpha A \rightarrow \beta X} K_{AX}(T) (\rho_A)^{\alpha} \Delta H_{AX} \\
         \cfrac{d(T_C)}{dt} = \gamma Q + \beta (T - T_C)
     \end{cases}
     \end{equation*} \vskip0.2cm
 \end{varblock}
-	
+  
 \end{frame}
 
 %%-------------------------------------------------------
@@ -626,18 +638,18 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize}
-	\item In the case of the reactor system in discussion, the models becomes...
+  \item In the case of the reactor system in discussion, the models becomes...
 \end{itemize}
 
 \begin{varblock}[1\linewidth]{Mathematical Model of Non-Isothermal CSTR}
-	\begin{equation}
+  \begin{equation*}
     \begin{cases}
-	\hfill \cfrac{d(\rho_A)}{dt} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\ \\
-	\hfill \cfrac{d(\rho_B)}{dt} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\ \\
-	\hfill \cfrac{d(T)}{dt} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\ \\
-	\hfill \cfrac{d(T_C)}{dt} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
+  \hfill \cfrac{d(\rho_A)}{dt} &= q (\rho^{(A)}_{in} - \rho_A) - \left( K_1(T) \rho_A + K_3(T) \rho^2_A  \right) \\ \\
+  \hfill \cfrac{d(\rho_B)}{dt} &= - q \rho_B + K_1(T) \rho_A - K_2(T) \rho_B \\ \\
+  \hfill \cfrac{d(T)}{dt} &= q(T_{in} - T) + \cfrac{k_W A_r}{\varrho C_p V_r} (T_C - T) \\ & \ \ \ \ \ \ \ \ \ \ \ \ -\cfrac{1}{\varrho C_p} \left( K_1(T) \rho_A \Delta H_{AB} + K_2(T) \rho_B \Delta H_{BC} + K_1(T) \rho_A^2 \Delta H_{AC} \right) \\ \\
+  \hfill \cfrac{d(T_C)}{dt} &= \cfrac{1}{m_K C_{pK}} Q + \cfrac{k_W A_r}{m_K C_{pK}} (T - T_C) 
 \end{cases}
-    \end{equation} \vskip0.2cm
+    \end{equation*} \vskip0.2cm
 \end{varblock}
 
 \end{frame}
@@ -648,9 +660,9 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize} \justifying
-	\item We choose $\bm{x} = [\rho_A, \rho_B, T, T_C]^T$, $\bm{u} = [q, Q]^T$ and $\bm{y} = [\rho_B, T]^T$. \vskip0.2cm
-	
-	\item We consider the steady-state point $\bm{x}_o = [1.23, 0.90, 134.14, 128.95]^T$ and $\bm{u}_o = [18.83, -4495.7]^T$.
+  \item We choose ${\color{signal1} \bm{x}} = [\rho_A, \rho_B, T, T_C]^T$, ${\color{signal1} \bm{u}} = [q, Q]^T$ and ${\color{signal1} \bm{y}} = [\rho_B, T]^T$. \vskip0.2cm
+  
+  \item We consider the steady-state point ${\color{signal1} \bm{x}_o} = [1.23, 0.90, 134.14, 128.95]^T$ and ${\color{signal1} \bm{u}_o} = [18.83, -4495.7]^T$.
 \end{itemize}
 
 \vskip0.5cm
@@ -659,24 +671,22 @@ We desire to obtain a State-Space mathematical representation of the system.
 \begin{varblock}[\textwidth]{}
 \begin{equation*}
 \left\{ \begin{matrix*}[l]
-    \bm{A} = \begin{bmatrix*}[r]
-		  -86.1 &        0 &  -4.2 &        0 \\
-		   50.6 & -69.4 &   1.0 &        0 \\
-		  172.2 & 198.0 & -36.7 &  30.8 \\
-		         0 &       0  &  86.8 & -86.7
-    \end{bmatrix*} \hfill & &
-    \bm{B} = \begin{bmatrix*}[r]
-		 3.9  &       0 \\
-		-0.9  &       0 \\
-		-4.1  &       0 \\
-		      0  &  0.1
-    \end{bmatrix*} \hfill \\  \\ 
-    \bm{C} = \begin{bmatrix}
+    {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = \begin{bmatrix*}[r]
+      -86.1 &        0 &  -4.2 &        0 \\
+       50.6 & -69.4 &   1.0 &        0 \\
+      172.2 & 198.0 & -36.7 &  30.8 \\
+             0 &       0  &  86.8 & -86.7
+    \end{bmatrix*} \begin{bmatrix} {\color{signal1} x_1(t)} \\ {\color{signal1} x_2(t)} \\ {\color{signal1} x_3(t)} \\ {\color{signal1} x_4(t)} \end{bmatrix} + \begin{bmatrix*}[r] 
+     3.9  &       0 \\
+    -0.9  &       0 \\
+    -4.1  &       0 \\
+          0  &  0.1
+    \end{bmatrix*} \begin{bmatrix} {\color{signal1} u_1(t)} \\ {\color{signal1} u_2(t)} \end{bmatrix} \hfill \\  \\ 
+    {\color{signal1} \bm{y}} = \begin{bmatrix}
         0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0
-    \end{bmatrix} \hfill & &
-    \bm{D} = \begin{bmatrix}
+    \end{bmatrix} \begin{bmatrix} {\color{signal1} x_1(t)} \\ {\color{signal1} x_2(t)} \\ {\color{signal1} x_3(t)} \\ {\color{signal1} x_4(t)} \end{bmatrix} + \begin{bmatrix}
         0 & 0 \\ 0 & 0
-    \end{bmatrix} \hfill
+    \end{bmatrix} \begin{bmatrix} {\color{signal1} u_1(t)} \\ {\color{signal1} u_2(t)} \end{bmatrix} \hfill
 \end{matrix*} \right.
 \end{equation*}
 \end{varblock}
@@ -692,43 +702,41 @@ We desire to obtain a State-Space mathematical representation of the system.
 \begin{varblock}[\textwidth]{}
 \begin{equation*}
 \left\{ \begin{matrix*}[l]
-    \bm{A} = \begin{bmatrix*}[r]
-		  -86.1 &        0 &  -4.2 &        0 \\
-		   50.6 & -69.4 &   1.0 &        0 \\
-		  172.2 & 198.0 & -36.7 &  30.8 \\
-		         0 &       0  &  86.8 & -86.7
-    \end{bmatrix*} \hfill & &
-    \bm{B} = \begin{bmatrix*}[r]
-		 3.9  &       0 \\
-		-0.9  &       0 \\
-		-4.1  &       0 \\
-		      0  &  0.1
-    \end{bmatrix*} \hfill \\  \\ 
-    \bm{C} = \begin{bmatrix}
+    {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = \begin{bmatrix*}[r]
+      -86.1 &        0 &  -4.2 &        0 \\
+       50.6 & -69.4 &   1.0 &        0 \\
+      172.2 & 198.0 & -36.7 &  30.8 \\
+             0 &       0  &  86.8 & -86.7
+    \end{bmatrix*} \begin{bmatrix} {\color{signal1} x_1(t)} \\ {\color{signal1} x_2(t)} \\ {\color{signal1} x_3(t)} \\ {\color{signal1} x_4(t)} \end{bmatrix} + \begin{bmatrix*}[r] 
+     3.9  &       0 \\
+    -0.9  &       0 \\
+    -4.1  &       0 \\
+          0  &  0.1
+    \end{bmatrix*} \begin{bmatrix} {\color{signal1} u_1(t)} \\ {\color{signal1} u_2(t)} \end{bmatrix} \hfill \\  \\ 
+    {\color{signal1} \bm{y}} = \begin{bmatrix}
         0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0
-    \end{bmatrix} \hfill & &
-    \bm{D} = \begin{bmatrix}
+    \end{bmatrix} \begin{bmatrix} {\color{signal1} x_1(t)} \\ {\color{signal1} x_2(t)} \\ {\color{signal1} x_3(t)} \\ {\color{signal1} x_4(t)} \end{bmatrix} + \begin{bmatrix}
         0 & 0 \\ 0 & 0
-    \end{bmatrix} \hfill
+    \end{bmatrix} \begin{bmatrix} {\color{signal1} u_1(t)} \\ {\color{signal1} u_2(t)} \end{bmatrix} \hfill
 \end{matrix*} \right.
 \end{equation*}
 \end{varblock} \vskip0.2cm
 
 \begin{itemize}
-	\item<1|only@1> All the eigenvalues are real and negative. The system is \textbf{stable}.
-	\begin{equation}
-		\bm{\lambda} = [-16.79, -54.84, -86.33, -121.01]
-	\end{equation}
-	
-	\item<2-> The Controllability Matrix has full-row rank. The system is \textbf{controllable}.
-	\begin{equation} 
-		\texttt{rank}\left( \bm{\mathcal{C}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}} {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^2 {\color{glgRed!80} \bm{B}} & {\color{glgRed!80} \bm{A}}^3 {\color{glgRed!80} \bm{B}} \end{bmatrix} \right) = 4
-	\end{equation}
-	
-	\item<3-> The Observability Matrix has full-column rank. The system is \textbf{observable}.
-	\begin{equation} 
-		\texttt{rank}\left( \bm{\mathcal{O}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{glgRed!80} \bm{C}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}} & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^2 & {\color{glgRed!80} \bm{C}} {\color{glgRed!80} \bm{A}}^3 \end{bmatrix} \right) = 4
-	\end{equation}
+  \item<1|only@1> All the eigenvalues are real and negative. The system is \textbf{stable}.
+  \begin{equation*}
+    \bm{\lambda} = [-16.79, -54.84, -86.33, -121.01]
+  \end{equation*}
+  
+  \item<2-> The Controllability Matrix has full-row rank. The system is \textbf{controllable}.
+  \begin{equation*} 
+    \texttt{rank}\left( \bm{\mathcal{C}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{signal2} \bm{B}} & {\color{signal2} \bm{A}} {\color{signal2} \bm{B}} & {\color{signal2} \bm{A}}^2 {\color{signal2} \bm{B}} & {\color{signal2} \bm{A}}^3 {\color{signal2} \bm{B}} \end{bmatrix} \right) = 4
+  \end{equation*}
+  
+  \item<3-> The Observability Matrix has full-column rank. The system is \textbf{observable}.
+  \begin{equation*} 
+    \texttt{rank}\left( \bm{\mathcal{O}} \right) = \texttt{rank}\left( \begin{bmatrix} {\color{signal2} \bm{C}} & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}} & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}}^2 & {\color{signal2} \bm{C}} {\color{signal2} \bm{A}}^3 \end{bmatrix} \right) = 4
+  \end{equation*}
 \end{itemize}
 
 \end{frame}
@@ -741,33 +749,33 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[ht] \centering
-		\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{dynamics04}};
-		
-		\begin{scope}[on background layer]
-			\node[block, minimum height=1.75em, above of=plot, xshift=0.45cm, node distance=2.75cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+    \begin{tikzpicture} [node distance=1cm]
+    \node (plot) {\includegraphics[width=\textwidth]{dynamics04}};
+    
+    \begin{scope}[on background layer]
+      \node[block, minimum height=1.75em, above of=plot, xshift=0.45cm, node distance=2.75cm, minimum width=0.7\textwidth] (legendBox) {};
+    \end{scope}
+    
+    \definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
+    \node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};    
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};    
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$T$};   
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$T_c$};   
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+  \end{tikzpicture} 
 \end{figure}
 
 \end{frame}
@@ -778,33 +786,33 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[ht] \centering
-		\begin{tikzpicture}	[node distance=1cm]
-		\node (plot) {\includegraphics[width=\textwidth]{linear01}};
-		
-		\begin{scope}[on background layer]
-			\node[block, minimum height=1.75em, above of=plot, xshift=0.45cm, node distance=2.75cm, minimum width=0.7\textwidth] (legendBox) {};
-		\end{scope}
-		
-		\definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
-		\node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-		
-		\definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
-		\node[right of=label]  (legendStart) {};
-		\node[right of=legendStart, node distance=1cm] (label) {$T_c$};		
-		\draw[-, linecolor, line width=1pt] (legendStart) -- (label);
-	\end{tikzpicture}	
+    \begin{tikzpicture} [node distance=1cm]
+    \node (plot) {\includegraphics[width=\textwidth]{linear01}};
+    
+    \begin{scope}[on background layer]
+      \node[block, minimum height=1.75em, above of=plot, xshift=0.45cm, node distance=2.75cm, minimum width=0.7\textwidth] (legendBox) {};
+    \end{scope}
+    
+    \definecolor{linecolor}{rgb}{0, 0.4470, 0.7410};
+    \node at (legendBox.west) [xshift=0.4cm]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$\rho_A$};    
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.8500,0.3250,0.0980};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$\rho_B$};    
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.6350, 0.0780, 0.1840};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$T$};   
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+    
+    \definecolor{linecolor}{rgb}{0.3010, 0.7450, 0.9330};
+    \node[right of=label]  (legendStart) {};
+    \node[right of=legendStart, node distance=1cm] (label) {$T_c$};   
+    \draw[-, linecolor, line width=1pt] (legendStart) -- (label);
+  \end{tikzpicture} 
 \end{figure}
 
 \end{frame}
@@ -822,74 +830,69 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{varblock}[1\linewidth]{Full State-Feedback Controller}
-	    Given a linear system in State-Space representation, an input action $\bm{u}(t)$ is calculated by the linear control law $\pi(\cdot)$ through state-feedback as:
-    \begin{equation}
-        \bm{u}(t) = \pi(\bm{r}(t), \bm{x}(t)) = \bm{r}(t) - \bm{K} \bm{x}(t)
-    ,\end{equation}
+      The input action ${\color{signal1} {\color{signal1} \bm{u}}(t)}$ is calculated by the linear control law $\pi(\cdot)$ through state-feedback as:
+    \begin{equation*}
+        {\color{signal1} {\color{signal1} \bm{u}}(t)} = \pi({\color{signal1} {\color{signal1} \bm{r}}(t)}, {\color{signal1} {\color{signal1} \bm{x}}(t)}) = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal4} \bm{K}} {\color{signal1} {\color{signal1} \bm{x}}(t)}
+    ,\end{equation*}
     
-    \noindent where $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal that the system must follows and $\bm{K} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
-\end{varblock}
+    \noindent where ${\color{signal1} \bm{r}} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal and ${\color{signal4} \bm{K}} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
+\end{varblock} \vskip0.2cm
 
-\end{frame}
+\begin{itemize}
+  \item<1|only@1> Substituting this control law to the model results in the closed-loop representation:
+  \begin{equation*}
+  \begin{split}
+    {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} &= {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}( {\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} - {\color{signal4} \bm{K}} {\color{signal1} {\color{signal1} \bm{x}}(t)}) \\
+    &= ({\color{signal2} \bm{A}} - {\color{signal2} \bm{B}}{\color{signal4} \bm{K}}) {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} \\
+    &= {\color{signal2} {\color{signal2} \bm{A}}_{cl}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} 
+  \end{split}
+  \end{equation*}
 
-%-------------------------------------------------------
-\begin{frame}[t]{State-Feedback Controllers}{Definitions}
-
-\vskip0.25cm
-
-\begin{varblock}[1\linewidth]{Full State-Feedback Controller}
-	Given a linear system in State-Space representation, an input action $\bm{u}(t)$ is calculated by the linear control law $\pi(\cdot)$ through state-feedback as:
-    \begin{equation}
-        \bm{u}(t) = \pi(\bm{r}(t), \bm{x}(t)) = \bm{r}(t) - \bm{K} \bm{x}(t)
-    ,\end{equation}
+  \item<2|only@2>[] \begin{figure}[ht]
+      \centering
+      \resizebox{0.8\textwidth}{!}{
+        \begin{tikzpicture}[auto, node distance=1.8cm,>=latex', scale=0.2]
+            % We start by placing the blocks
+            \node [input, name=input] {};
+            \node [sum, right of=input, node distance=4em] (fbckSum) {};
+            \node [block, right of=fbckSum] (inputMatrix) {${\color{signal2} \bm{B}}$};
+            \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
+            \node [block, right of=stateSum, node distance=4em] (integral) {$\int   $};
+            \node [block, right of=integral, node distance=8em] (outputMatrix) {${\color{signal2} \bm{C}}$};
+            \node [output, right of=outputMatrix] (output) {};
+            \node [block, below of=integral, node distance=1.5cm] (stateMatrix) {${\color{signal2} \bm{A}}$};
+            \node [block, below of=stateSum, node distance=10em, label={below:Controller}] (fbckGain) {${\color{signal4} \bm{K}}$};
+            
+            \begin{scope}[on background layer]
+                \node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= glgBlue!10, rounded corners, inner sep=.3cm, label={[xshift=3.75em, glgBlue!90]above left:Open-Loop System}] {};
+            \end{scope}     
+            
+            % Once the nodes are placed, connecting them is easy.       
+            \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{r}}$} node[pos=0.8] {$+$}  (fbckSum);
+            \draw [->] (fbckSum) -- node[pos=0.3]{${\color{signal1} \bm{u}}$} (inputMatrix);
+            \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
+            \draw [->] (stateSum) -- node[pos=0.5]{$\dot{{\color{signal1} \bm{x}}}$} (integral);
+            \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{${\color{signal1} \bm{x}}$} (outputMatrix);
+            \draw [->] (outputMatrix) -- node[pos=0.6]{${\color{signal1} \bm{y}}$} (output);
+            \draw [->] (bk1) |- (stateMatrix);
+            \draw [->] (bk2) |- (fbckGain);
+            \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
+            \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
+        \end{tikzpicture} 
+        }
+  \end{figure}
     
-    \noindent where $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$ is a state reference signal that the system must follows and $\bm{K} \in \mathbb{R}^{r \times n}$ is the \textit{feedback gain matrix}.
-\end{varblock}
-
-\begin{varblock}[1\linewidth]{Pole-Placement Property}
-	If a system in State-Space representation is controllable, then by state feedback using a gain matrix $\bm{K} \in \mathbb{R}^{r \times n}$ the eigenvalues of $\bm{A}_{cl}=\bm{A}-\bm{B}\bm{K}$, the poles of the closed-loop system, can be placed arbitrarily in the complex plane, as long as complex conjugate eigenvalues are assigned in pairs.
-\end{varblock}
-
-\end{frame}
-
-%-------------------------------------------------------
-\begin{frame}[c]{State-Feedback Controllers}{Definitions}
-
-\vskip0.25cm
-
-\begin{figure}[ht]
-    \centering
-    \resizebox{!}{!}{
-    \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
-        % We start by placing the blocks
-        \node [input, name=input] {};
-        \node [sum, right of=input, node distance=4em] (fbckSum) {};
-        \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
-        \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
-        \node [block, right of=stateSum, node distance=4em] (integral) {$\int   $};
-        \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
-        \node [output, right of=outputMatrix] (output) {};
-        \node [block, below of=integral, node distance=1.5cm] (stateMatrix) {$\bm{A}$};
-        \node [block, below of=stateSum, node distance=11em, label={below:Controller}] (fbckGain) {$\bm{K}$};
-        
-        \begin{scope}[on background layer]
-            \node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= glgBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, glgBlue!90]above left:Open-Loop System}] {};
-        \end{scope}     
-        
-        % Once the nodes are placed, connecting them is easy.       
-        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (fbckSum);
-        \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
-        \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
-        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
-        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
-        \draw [->] (outputMatrix) -- node[pos=0.6]{$\bm{y}$} (output);
-        \draw [->] (bk1) |- (stateMatrix);
-        \draw [->] (bk2) |- (fbckGain);
-        \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
-        \draw [->] (fbckGain) -| node[pos=0.97]{$-$} (fbckSum);
-    \end{tikzpicture} 
-    }
-\end{figure}
+  \item<3-> Substituting this control law to the model results in the closed-loop representation:
+    \begin{equation*}
+    \begin{split}
+      {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} &= {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}( {\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} - {\color{signal4} \bm{K}} {\color{signal1} {\color{signal1} \bm{x}}(t)}) \\
+      &= ({\color{signal2} \bm{A}} - {\color{signal2} \bm{B}}{\color{signal4} \bm{K}}) {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} \\
+      &= {\color{signal2} {\color{signal2} \bm{A}}_{cl}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{r}}(t)}} 
+    \end{split}
+    \end{equation*} \vskip0.2cm
+  
+  \item<3-> \textbf{Pole-Placement Property:} If $({\color{signal2} \bm{A}}, {\color{signal2} \bm{B}})$ is \textit{controllable}, we can assign the eigenvalues of ${\color{glgRed!80} {\color{signal2} \bm{A}_{cl}}}$ anywhere in the complex plane by means of designing ${\color{signal4} \bm{K}}$.
+\end{itemize}
 
 \end{frame}
 
@@ -898,28 +901,107 @@ We desire to obtain a State-Space mathematical representation of the system.
 %-------------------------------------------------------
 \begin{frame}[t]{State-Feedback Controllers}{Regulation vs. Tracking}
 
-\vskip0.25cm
-{\justifying During the semester, we have discussed Conservation Laws of fluid elements...}
+\vskip0.4cm
+{\justifying \textbf{We discuss the two modes of operation for state-feedback controllers.}}
 
+\vskip0.5cm
+\begin{minipage}{\textwidth}
+\begin{minipage}{0.47\textwidth}
+\begin{varblock}[\textwidth]{}
+  \begin{center} \textbf{Regulation} \end{center}
+  
+  \begin{itemize} \justifying
+    \item \textbf{Objective:} maintain the system in some position (the zero-state) and reject disturbances. \vskip0.25cm
+    
+    \item Special case of the state-feedback when ${\color{signal1} {\color{signal1} \bm{r}}(t)} = 0$. \vskip0.25cm
+    
+    \item Direct from the controller formulation. \vskip0.25cm
+  \end{itemize}\vskip0.25cm
+\end{varblock}
+\end{minipage}
+\hfill
+\begin{minipage}{0.47\textwidth}
+\end{minipage}
+\end{minipage}
 
-\begin{varblock}[1\linewidth]{Conservation of Mass}
-	\begin{equation*}
-		{\begin{pmatrix}
-			\text{Time rate of} \\
-			\text{change of mass} \\
-			\text{in the system}
-		\end{pmatrix}} = 
-		{\begin{pmatrix}
-			\text{Mass} \\
-			\text{entering} \\
-			\text{the system}
-		\end{pmatrix}} - 
-		{\begin{pmatrix}
-			\text{Mass} \\
-			\text{leaving} \\
-			\text{the system}
-		\end{pmatrix}}
-	\end{equation*} \vskip0.2cm
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{State-Feedback Controllers}{Regulation vs. Tracking}
+
+\vskip0.4cm
+{\justifying \textbf{We discuss the two modes of operation for state-feedback controllers.}}
+
+\vskip0.5cm
+\begin{minipage}{\textwidth}
+\begin{minipage}{0.47\textwidth}
+\begin{varblock}[\textwidth]{}
+  \begin{center} \textbf{Regulation} \end{center}
+  
+  \begin{itemize} \justifying
+    \item \textbf{Objective:} maintain the system in some position (the zero-state) and reject disturbances. \vskip0.25cm
+    
+    \item Special case of the state-feedback when ${\color{signal1} {\color{signal1} \bm{r}}(t)} = 0$. \vskip0.25cm
+    
+    \item Direct from the controller formulation. \vskip0.25cm
+  \end{itemize}\vskip0.25cm
+\end{varblock}
+\end{minipage}
+\hfill
+\begin{minipage}{0.47\textwidth}
+\begin{varblock}[\textwidth]{}
+  \begin{center} \textbf{Reference Tracking} \end{center}
+  
+  \begin{itemize} \justifying
+    \item \textbf{Objective:} drive the states of the system towards a non-constant reference signal. \vskip0.25cm
+    
+    \item Special case of the state-feedback when ${\color{signal1} {\color{signal1} \bm{r}}(t)}$ is non-constant. \vskip0.25cm
+    
+    \item Raises the need for \textit{integral action}. \vskip0.25cm
+  \end{itemize}\vskip0.25cm
+\end{varblock}
+\end{minipage}
+\end{minipage}
+
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{State-Feedback Controllers}{Regulation vs. Tracking}
+
+\vskip0.4cm
+{\justifying \textbf{We discuss the two modes of operation for state-feedback controllers.}}
+
+\vskip0.2cm
+\begin{varblock}[\textwidth]{State-Feedback with Integral Action}
+  Consider a State-space system and augmented state ${\color{signal1} \bm{x}}_a : \mathbb{R} \rightarrow \mathbb{R}^{p}$ defined by:
+    \begin{equation*}
+        {\color{signal1} \bm{x}_a(t)} = \int_{0}^{t} {\color{signal1} \bm{r}}(\tau) - {\color{signal1} \bm{y}}(\tau) d\tau \Longrightarrow {\color{signal1} \dot{{\color{signal1} \bm{x}}}_a(t)} = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal1} {\color{signal1} \bm{y}}(t)}
+    .\end{equation*}
+    
+\noindent A robust tracking (or servo) controller, defined by the gain $\tilde{{\color{signal4} \bm{K}}} = \begin{bmatrix} {\color{signal4} \bm{K}} & {\color{signal4} \bm{K}}_a \end{bmatrix}$, for ${\color{signal4} \bm{K}} \in \mathbb{R}^{r \times n}$ and ${\color{signal4} \bm{K}}_a \in \mathbb{R}^{r \times p}$, operates on the following augmented version of the original system:
+    \begin{align*} \label{eq:augmentedSystem}
+    \begin{cases}
+        \begin{bmatrix}
+            {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} \\
+            {\color{signal1} \dot{{\color{signal1} \bm{x}_a(t)}}}
+        \end{bmatrix} &= \begin{bmatrix}
+            {\color{signal2} \bm{A}} - {\color{signal2} \bm{B}} {\color{signal4} \bm{K}} & -{\color{signal2} \bm{B}} {\color{signal4} \bm{K}}_a \\ - {\color{signal2} \bm{C}} & \bm{0}
+        \end{bmatrix} \begin{bmatrix}
+            {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+            {\color{signal1} \bm{x}_a(t)}
+        \end{bmatrix} + \begin{bmatrix}
+            \bm{0} \\
+            \bm{I_p}
+        \end{bmatrix} {\color{signal1} {\color{signal1} \bm{r}}(t)}
+        \\
+        \hfill {\color{signal1} {\color{signal1} \bm{y}}(t)} &= \begin{bmatrix}
+            {\color{signal2} \bm{C}} & \bm{0}
+        \end{bmatrix} \begin{bmatrix}
+            {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+            {\color{signal1} \bm{x}_a(t)}
+        \end{bmatrix}
+    \end{cases}
+    .\end{align*} \vskip0.25cm
 \end{varblock}
 
 \end{frame}
@@ -927,25 +1009,23 @@ We desire to obtain a State-Space mathematical representation of the system.
 %-------------------------------------------------------
 \begin{frame}[c]{State-Feedback Controllers}{Regulation vs. Tracking}
 
-\vskip0.25cm
-
 \begin{figure}[ht]
     \centering
     \resizebox{\textwidth}{!}{
-    \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \begin{tikzpicture}[auto, node distance=1.8cm,>=latex']
         % We start by placing the blocks
         \node [input, name=input] {};
         \node [sum, right of=input, node distance=4em] (intFbckSum) {};
         \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
-        \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
+        \node [block, right of=integralAction, node distance=6em] (intActGain) {${\color{signal4} \bm{K}}_a$};
         \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
-        \node [block, right of=fbckSum] (inputMatrix) {$\bm{B}$};
+        \node [block, right of=fbckSum] (inputMatrix) {${\color{signal2} \bm{B}}$};
         \node [sum, right of=inputMatrix, node distance=4em] (stateSum) {};
         \node [block, right of=stateSum, node distance=4em] (integral) {$\int   $};
-        \node [block, right of=integral, node distance=8em] (outputMatrix) {$\bm{C}$};
+        \node [block, right of=integral, node distance=8em] (outputMatrix) {${\color{signal2} \bm{C}}$};
         \node [output, right of=outputMatrix] (output) {};
-        \node [block, below of=integral] (stateMatrix) {$\bm{A}$};
-        \node [block, below of=stateSum, node distance=13em, label={below:Controller}] (fbckGain) {$\bm{K}$};
+        \node [block, below of=integral] (stateMatrix) {${\color{signal2} \bm{A}}$};
+        \node [block, below of=stateSum, node distance=13em, label={below:Controller}] (fbckGain) {${\color{signal4} \bm{K}}$};
         
         \begin{scope}[on background layer]
             \node [fit=(inputMatrix) (stateMatrix) (outputMatrix), fill= glgBlue!10, rounded corners, inner sep=.4cm, label={[xshift=3.5em, glgBlue!90]above left:Open-Loop System}] {};
@@ -956,15 +1036,15 @@ We desire to obtain a State-Space mathematical representation of the system.
         \end{scope} 
         
         % Once the nodes are placed, connecting them is easy.       
-        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
+        \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{r}}$} node[pos=0.8] {$+$}  (intFbckSum);
         \draw [->] (intFbckSum) -- (integralAction);
-        \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
+        \draw [->] (integralAction) -- node[pos=0.5]{${\color{signal1} \bm{x}}_a$} (intActGain);
         \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);
-        \draw [->] (fbckSum) -- node[pos=0.3]{$\bm{u}$} (inputMatrix);
+        \draw [->] (fbckSum) -- node[pos=0.3]{${\color{signal1} \bm{u}}$} (inputMatrix);
         \draw [->] (inputMatrix) -- node[pos=0.8]{$+$} (stateSum);
-        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{\bm{x}}$} (integral);
-        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{$\bm{x}$} (outputMatrix);
-        \draw [->] (outputMatrix) -- node[name=bk3,pos=0.5]{} node[pos=0.6]{$\bm{y}$} (output);
+        \draw [->] (stateSum) -- node[pos=0.5]{$\dot{{\color{signal1} \bm{x}}}$} (integral);
+        \draw [->] (integral) -- node[name=bk1,pos=0.5]{} node[name=bk2,pos=0.5]{} node[pos=0.5]{${\color{signal1} \bm{x}}$} (outputMatrix);
+        \draw [->] (outputMatrix) -- node[name=bk3,pos=0.5]{} node[pos=0.6]{${\color{signal1} \bm{y}}$} (output);
         \draw [->] (bk1) |- (stateMatrix);
         \draw [->] (bk2) |- (fbckGain);
         \draw [->] (stateMatrix) -| node[pos=0.95]{$+$} (stateSum);
@@ -987,14 +1067,22 @@ We desire to obtain a State-Space mathematical representation of the system.
 
 \vskip0.25cm
 
-\begin{varblock}[1\linewidth]{Optimal Controller}
-	Given a system in State-Space formulation, with state signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $\bm{u}	(t) \in \mathbb{R}^r$, for any time $t$, is optimal if an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ can be found as:
-	    \begin{equation}
-	        \bm{u}(t) = \pi^*(\bm{x}, \bm{r}, t) = \min_{\bm{u}} J(\bm{x}, \bm{r}, t)
-	    ,\end{equation}
-	    
-	\noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
-\end{varblock}
+\begin{varblock}[1\linewidth]{Optimal Controller - General Formulation} \justifying
+  The input action ${\color{signal1} \bm{u}}  (t) \in \mathbb{R}^r$ is \textit{optimal} if an \textit{optimal control law} $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ can be found as:
+      \begin{equation*}
+          {\color{signal1} {\color{signal1} \bm{u}}(t)} = \pi^*({\color{signal1} \bm{x}}, {\color{signal1} \bm{r}}, t) = \operatorname*{arg\,min}_{{\color{signal1} \bm{u}}} J({\color{signal1} \bm{x}}, {\color{signal1} \bm{r}}, t)
+      ,\end{equation*}
+      
+  \noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as the \textit{cost function}. \vskip0.2cm
+\end{varblock} \vskip0.5cm
+
+\begin{itemize}
+  \item<1-> \textbf{This is still a state-feedback controller}: the cost function is a function of past values of the state and reference signals. \vskip0.25cm
+  
+  \item<2-> Reduces the need for hand-designing the feedback gain or any other control law for the system, given some specifications. \vskip0.25cm
+  
+  \item<3-> The type of the optimal controller depends on the choice of $J(\cdot)$ and (possibly) on how the optimization is solved. \vskip0.25cm
+\end{itemize}
 
 \end{frame}
 
@@ -1002,24 +1090,23 @@ We desire to obtain a State-Space mathematical representation of the system.
 \begin{frame}[t]{Optimal Control}{Formulation}
 
 \vskip0.25cm
-
-\begin{varblock}[1\linewidth]{Optimal Controller}
-	Given a system in State-Space formulation, with state signal $\bm{x} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, and a reference signal $\bm{r} : \mathbb{R} \rightarrow \mathbb{R}^{n}$, the input signal $\bm{u}	(t) \in \mathbb{R}^r$, for any time $t$, is optimal if an optimal control law $\pi^* : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}^r$ can be found as:
-	    \begin{equation}
-	        \bm{u}(t) = \pi^*(\bm{x}, \bm{r}, t) = \min_{\bm{u}} J(\bm{x}, \bm{r}, t)
-	    ,\end{equation}
-	    
-	\noindent where $J : \mathbb{R}^{n \times n \times 1} \rightarrow \mathbb{R}$ is known as a \textit{cost function} of the states and reference signals.
-\end{varblock}
 
 \begin{varblock}[1\linewidth]{Finite-Horizon Optimal Regulators}
-	A \textit{Finite-Horizon Optimal Regulator} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
-    \begin{equation}
-        J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}, T)
-    ,\end{equation}
+  A \textit{Finite-Horizon Optimal Regulator} is defined as any controller whose optimal policy over a time interval $t \in [t_0, T]$ minimizes the cost functional:
+    \begin{equation*}
+        J({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t_0) = \int_{t_0}^T l({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, \tau) d \tau + l_f({\color{signal1} \bm{x}}, T)
+    ,\end{equation*}
     
     \noindent where $l(\cdot) : \mathbb{R}^{n \times r \times 1} \rightarrow \mathbb{R}$ and $l_f(\cdot) : \mathbb{R}^{n} \rightarrow \mathbb{R}$ are, respectively, the \textit{trajectory} and \textit{terminal loss functions}. In the case that $t_0 = 0$, $T$ is also known as the \textit{control horizon}.
-\end{varblock}
+\end{varblock} \vskip0.4cm
+
+\begin{itemize}
+  \item<1-> \textbf{Regulator:} this class of optimal controllers is defined for ${\color{signal1} {\color{signal1} \bm{r}}(t)} = \bm{0}$. \vskip0.2cm
+  
+  \item<2-> If $l({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, \tau) \geq 0$ and $l_f({\color{signal1} \bm{x}}, T) \geq 0$, $\forall {\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, \tau$, then the cost function penalizes deviations from the zero-state.
+  
+  \item<3-> Characterizes an entire class of optimal controllers based on finite horizon optimization.
+\end{itemize}
 
 \end{frame}
 
@@ -1028,21 +1115,21 @@ We desire to obtain a State-Space mathematical representation of the system.
 
 \vskip0.25cm
 
-\begin{varblock}[1\linewidth]{Hamilton-Jacobi-Bellman Equation}
-	Consider a finite-horizon cost function for a system described by $\dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t)$:
-    \begin{equation} \label{eq:valueCostFunctional}
-    	V(\bm{x}, \bm{u}, t_0) = \int_{t_0}^T l(\bm{x}, \bm{u}, \tau) d \tau + l_f(\bm{x}(T))
-    \end{equation}
+\begin{varblock}[1\linewidth]{Hamilton-Jacobi-Bellman (HJB) equation} \justifying
+  Consider a finite-horizon cost function for a system described by $\dot{{\color{signal1} \bm{x}}} = \bm{f}({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t)$:
+    \begin{equation*} \label{eq:valueCostFunctional}
+      V({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t_0) = \int_{t_0}^T l({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, \tau) d \tau + l_f({\color{signal1} \bm{x}}(T))
+    \end{equation*}
     
-    \noindent Consider also that the loss $l(\cdot)$ and state function $\bm{f}$ are smooth on their parameters. Then, minimizing any functional in the form of $V(\cdot)$ is equivalent to determining the solution of the \textit{Hamilton-Jacobi equation}, which is given by the partial differential equation:
-    \begin{equation} \label{eq:HJEquation}
-        \cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l(\bm{x}, \bm{u}, t) + \left[ \cfrac{\partial V^*}{\partial x} \right]^T \bm{f}(\bm{x}, \bm{u}, t)  \right]
-    \end{equation}
+    \noindent Minimizing any functional in the form of $V(\cdot)$ is equivalent to determining the solution of the \textit{Hamilton-Jacobi equation*}:
+    \begin{equation*} \label{eq:HJequation*}
+        \cfrac{\partial V^*}{\partial t} = - \min_{u(t)} \left[ l({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t) + \left[ \cfrac{\partial V^*}{\partial x} \right]^T \bm{f}({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t)  \right]
+    \end{equation*}
     
     \noindent and the boundary condition:
-    \begin{equation}
-        V^*(\bm{x}, T) = l_f(\bm{x}(T))
-    .\end{equation} \vskip0.2cm
+    \begin{equation*}
+        V^*({\color{signal1} \bm{x}}, T) = l_f({\color{signal1} \bm{x}}(T))
+    .\end{equation*} \vskip0.2cm
 \end{varblock}
 
 \end{frame}
@@ -1052,8 +1139,14 @@ We desire to obtain a State-Space mathematical representation of the system.
 
 \vskip0.25cm
 
+\begin{itemize}
+  \item The HJB equation provides a \textit{sufficient condition} for finite-horizon optimal controllers. \vskip0.2cm
+  
+  \item This class of optimal controllers is related to the \textit{Bellman's Principle of Optimality}. \vskip0.2cm
+\end{itemize}
+
 \begin{figure}[ht] \centering
-    \resizebox{!}{!}{
+    \resizebox{0.6\textwidth}{!}{
     \begin{tikzpicture}[auto, node distance=1.75cm,>=latex', scale=0.2]
         % Nodes
         \node [mcCircle] (x0) {$x_0$};
@@ -1092,21 +1185,29 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{varblock}[1\linewidth]{Linear Quadratic Regulator (LQR)}
-	Given a linear State-Space system in the form:
-    \begin{align}
+  Given a linear State-Space system in the form:
+    \begin{align*}
     \begin{cases}
-        \dot{\bm{x}}(t) = \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) \\
-        \bm{y}(t) = \bm{C} \bm{x}(t) + \bm{D} \bm{u}(t)
+        {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} = {\color{signal2} \bm{A}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} \\
+        {\color{signal1} {\color{signal1} \bm{y}}(t)} = {\color{signal2} \bm{C}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{D}} {\color{signal1} {\color{signal1} \bm{u}}(t)}
     \end{cases}
-    .\end{align}
+    .\end{align*}
     
     A \textit{Linear Quadratic Regulator} (LQR) for this system is an optimal controller defined by the quadratic cost function:
-    \begin{equation}
-        J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^{T} \left( \bm{x}^T \bm{Q} \bm{x} + \bm{u}^T \bm{R} \bm{u} \right) dt + \bm{x}^T(T) \bm{Q}_f \bm{x}(T)
-    ,\end{equation}
+    \begin{equation*}
+        J({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t_0) = \int_{t_0}^{T} \left( {\color{signal1} \bm{x}}^T {\color{signal3} \bm{Q}} {\color{signal1} \bm{x}} + {\color{signal1} \bm{u}}^T {\color{signal3} \bm{R}} {\color{signal1} \bm{u}} \right) dt + {\color{signal1} \bm{x}}^T(T) {\color{signal3} \bm{Q}}_f {\color{signal1} \bm{x}}(T)
+    ,\end{equation*}
     
-    \noindent where is assumed that $\bm{Q},\bm{Q}_f  \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
-\end{varblock}
+    \noindent where is assumed that ${\color{signal3} \bm{Q}},{\color{signal3} \bm{Q}}_f  \succ 0$ and ${\color{signal3} \bm{R}} \succ 0$.
+\end{varblock} \vskip0.2cm
+
+\begin{itemize}
+  \item<1-> Defined for a \textit{linear} system with \textit{quadratic} cost function. \vskip0.2cm
+  
+  \item<2-> The weights ${\color{signal3} \bm{Q}}$, ${\color{signal3} \bm{Q}}_f$ and ${\color{signal3} \bm{R}}$ are chosen to reflect how the designer wish to penalize state-deviation or control effort. \vskip0.2cm
+  
+  \item<3-> \textbf{Optimization:} closed-form solution for $\pi^*({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t_0)$. \vskip0.2cm
+\end{itemize}
 
 \end{frame}
 
@@ -1116,18 +1217,39 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{varblock}[1\linewidth]{LQR Control Action from Dynamic Programming}
-	Given a Linear Quadratic Regulator, the optimal action produced by this optimal controller at any time $t \in [t_0, T]$ is given by:
-    \begin{equation}
-        \bm{u}^*(t) = - \bm{R}^{-1} \bm{B}^T \bm{P}(t) \bm{x}(t)
-    ,\end{equation}
+  Given a Linear Quadratic Regulator, the optimal action produced is given by:
+    \begin{equation*}
+        {\color{signal1} {\color{signal1} \bm{u}}^*(t)} = - {\color{signal3} \bm{R}}^{-1} {\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t) {\color{signal1} {\color{signal1} \bm{x}}(t)}
+    ,\end{equation*}
     
-    \noindent where $\bm{P}(t)$ is the solution of the matrix Riccati differential equation:
-    \begin{equation}
-        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q}
-    ,\end{equation}
+    \noindent where ${\color{signal3} \bm{P}}(t)$ is the solution of the matrix Riccati differential equation:
+    \begin{equation*}
+        -\dot{{\color{signal3} \bm{P}}}(t) = {\color{signal2} \bm{A}}^T {\color{signal3} \bm{P}}(t) + {\color{signal3} \bm{P}}(t) {\color{signal2} \bm{A}} - {\color{signal3} \bm{P}}(t) {\color{signal2} \bm{B}} {\color{signal3} \bm{R}}^{-1} {\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t) + {\color{signal3} \bm{Q}}
+    ,\end{equation*}
     
-    \noindent with terminal condition $\bm{P}(T) = \bm{Q}_f$.
-\end{varblock}
+    \noindent with terminal condition ${\color{signal3} \bm{P}}(T) = {\color{signal3} \bm{Q}}_f$.
+\end{varblock} \vskip0.3cm
+
+\begin{itemize} \justifying
+  \item<1|only@1> Notice that:
+  \begin{equation*}
+    \begin{split}
+      {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} &= {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}{\color{glgBlue!90} {\color{signal1} {\color{signal1} \bm{u}}^*(t)}} \\
+      &= {\color{signal2} \bm{A}}{\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}}(- {\color{signal3} \bm{R}}^{-1} {\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t) {\color{signal1} {\color{signal1} \bm{x}}(t)}) \\
+      &= ({\color{signal2} \bm{A}} - {\color{signal2} \bm{B}} {\color{signal3} \bm{R}}^{-1} {\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t)) {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+      &= ({\color{signal2} \bm{A}} - {\color{signal2} \bm{B}} {\color{glgRed!80} {\color{signal4} \bm{K}(t)}}) {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+    \end{split}
+  \end{equation*} \vskip0.2cm
+  
+  \item<2-> The optimization results in a \textit{linear} and \textit{time-varying} control law:
+  \begin{equation*}
+    {\color{signal1} {\color{signal1} \bm{u}}^*(t)} = \pi^*({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t) = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal4} \bm{K}(t)} {\color{signal1} {\color{signal1} \bm{x}}(t)}
+  \end{equation*}
+  
+  \item<3-> \textbf{``Open-Loop" Optimization:} the matrix ${\color{signal4} \bm{K}(t)}$ does not depend on past (or actual) states. The Ricatti differential equation can be solved off-line.
+  
+  \item<4-> \textbf{Remark:} nevertheless, the optimal controller performs corrective action.
+\end{itemize}
 
 \end{frame}
 
@@ -1137,40 +1259,40 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{varblock}[1\linewidth]{LQR with Integral Action}
-	Given a linear State-Space system represented by matrices $(\bm{A}, \bm{B}, \bm{C}, \bm{D})$, augmented with state $\dot{\bm{x}}_a(t) = \bm{r}(t) - \bm{C} \bm{x}(t)$:
-    \begin{align} 
+  Given a linear State-Space system augmented with state ${\color{signal1} \dot{{\color{signal1} \bm{x}}}_a(t)} = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal2} \bm{C}} {\color{signal1} {\color{signal1} \bm{x}}(t)}$:
+    \begin{align*} 
     \begin{cases}
         \begin{bmatrix}
-            \dot{\bm{x}}(t) \\
-            \dot{\bm{x}}_a(t)
+            {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} \\
+            {\color{signal1} \dot{{\color{signal1} \bm{x}}}_a(t)}
         \end{bmatrix} &= \underbrace{\begin{bmatrix}
-            \bm{A}  & \bm{0} \\ - \bm{C} & \bm{0}
-        \end{bmatrix}}_{\tilde{\bm{A}}} \underbrace{\begin{bmatrix}
-            \bm{x}(t) \\
-            \bm{x}_a(t)
-        \end{bmatrix}}_{\tilde{\bm{x}}(t)} + \underbrace{\begin{bmatrix}
-            \bm{B} \\
+            {\color{signal2} \bm{A}}  & \bm{0} \\ - {\color{signal2} \bm{C}} & \bm{0}
+        \end{bmatrix}}_{\tilde{{\color{signal2} \bm{A}}}} \underbrace{\begin{bmatrix}
+            {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+            {\color{signal1} \bm{x}}_a(t)
+        \end{bmatrix}}_{\tilde{{\color{signal1} \bm{x}}}(t)} + \underbrace{\begin{bmatrix}
+            {\color{signal2} \bm{B}} \\
             \bm{0}
-        \end{bmatrix}}_{\tilde{\bm{B}}} \bm{u}(t) + \begin{bmatrix}
+        \end{bmatrix}}_{\tilde{{\color{signal2} \bm{B}}}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + \begin{bmatrix}
             \bm{0} \\
             \bm{I}
-        \end{bmatrix} \bm{r}(t)
+        \end{bmatrix} {\color{signal1} {\color{signal1} \bm{r}}(t)}
         \\
-        \hfill \bm{y}(t) &= \begin{bmatrix}
-            \bm{C} & \bm{0}
+        \hfill {\color{signal1} {\color{signal1} \bm{y}}(t)} &= \begin{bmatrix}
+            {\color{signal2} \bm{C}} & \bm{0}
         \end{bmatrix} \begin{bmatrix}
-            \bm{x}(t) \\
-            \bm{x}_a(t)
+            {\color{signal1} {\color{signal1} \bm{x}}(t)} \\
+            {\color{signal1} \bm{x}}_a(t)
         \end{bmatrix}
     \end{cases}
-    .\end{align}
+    .\end{align*}
     
     A \textit{Linear Quadratic Servo} (LQ-Servo) for this system is an optimal controller defined by the quadratic cost function:
-    \begin{equation}
-        J(\bm{x}, \bm{u}, t_0) = \int_{t_0}^{T} \left( \tilde{\bm{x}}^T \tilde{\bm{Q}} \tilde{\bm{x}} + \bm{u}^T \bm{R} \bm{u} \right) dt +\tilde{\bm{x}} \tilde{\bm{Q}}_f \tilde{\bm{x}}(T)
-    ,\end{equation}
+    \begin{equation*}
+        J({\color{signal1} \bm{x}}, {\color{signal1} \bm{u}}, t_0) = \int_{t_0}^{T} \left( \tilde{{\color{signal1} \bm{x}}}^T \tilde{{\color{signal3} \bm{Q}}} \tilde{{\color{signal1} \bm{x}}} + {\color{signal1} \bm{u}}^T {\color{signal3} \bm{R}} {\color{signal1} \bm{u}} \right) dt +\tilde{{\color{signal1} \bm{x}}} \tilde{{\color{signal3} \bm{Q}}}_f \tilde{{\color{signal1} \bm{x}}}(T)
+    ,\end{equation*}
     
-    \noindent where is assumed that $\tilde{\bm{Q}}, \tilde{\bm{Q}}_f \succ 0$ and $\bm{R} \succ 0$ are matrices penalizing, respectively, the state-vector magnitude and the control effort.
+    \noindent where is assumed that $\tilde{{\color{signal3} \bm{Q}}}, \tilde{{\color{signal3} \bm{Q}}}_f \succ 0$ and ${\color{signal3} \bm{R}} \succ 0$.
 \end{varblock}
 
 \end{frame}
@@ -1183,7 +1305,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqr01}
+  \includegraphics[width=\textwidth]{lqr01}
 \end{figure}
 
 \end{frame}
@@ -1194,7 +1316,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqr02}
+  \includegraphics[width=\textwidth]{lqri01}
 \end{figure}
 
 \end{frame}
@@ -1205,7 +1327,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqri01}
+  \includegraphics[width=\textwidth]{lqr02}
 \end{figure}
 
 \end{frame}
@@ -1216,7 +1338,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqri02}
+  \includegraphics[width=\textwidth]{lqri02}
 \end{figure}
 
 \end{frame}
@@ -1230,63 +1352,130 @@ We desire to obtain a State-Space mathematical representation of the system.
 %-------------------------------------------------------
 \begin{frame}[t]{Optimal State Estimation}{Formulation}
 
+\vskip0.1cm
+
+\begin{itemize} \justifying
+  \item<1-> We can \textbf{never} access real state of a physical system. \vskip0.2cm
+  
+  \begin{figure}[ht] \centering
+      \resizebox{0.5\textwidth}{!}{
+      \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.2]
+          % We start by placing the blocks
+          \node [input, name=input] {};
+          \node [block, fill=glgBlue!10, right of=input, minimum width=10em, minimum height=5em, node distance=10em] (system) {Open-Loop System};
+          \node [sum, right of=system, node distance=8em] (sensorSum) {};
+          \node [text width=1em, above of=system, node distance=5em] (dW) {$\bm{w}$};
+          \node [text width=1em, above of=sensorSum, node distance=5em] (dZ) {$\bm{z}$};
+          \node [output, right of=sensorSum, node distance=3em] (output) {};
+          
+          % Once the nodes are placed, connecting them is easy.       
+          \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{u}}$}  (system);
+          \draw [->] (system) -- node[pos=0.9] {$+$}  (sensorSum);
+          \draw [->] (sensorSum) -- node[pos=0.9]{${\color{signal1} \bm{y}}$} (output);
+          \draw [->] (dW) --  (system);
+          \draw [->] (dZ) -- node[pos=0.9] {$+$} (sensorSum);
+      \end{tikzpicture}}
+  \end{figure} \vskip0.2cm
+
+  \item<2|only@2> \textbf{Stochastic State-Space:} formulation that accounts for process and measurements uncertainty ($\bm{w}(t)$ and $\bm{v}(t)$, respectively).
+  \begin{align*}
+    \begin{cases}
+        \hfill {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} &= {\color{signal2} \bm{A}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + \bm{w}(t) \\
+        \hfill {\color{signal1} {\color{signal1} \bm{y}}(t)} &= {\color{signal2} \bm{C}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + \bm{v}(t)
+    \end{cases}
+    \end{align*}
+
+  \item<3-> In probabilistic terms, we interpret the system as a Hidden Markov Model (HMM). \vskip0.2cm
+  
+  \begin{figure}[ht] \centering
+      \resizebox{0.9\textwidth}{!}{
+      \begin{tikzpicture}[auto, node distance=1.6cm,>=latex', scale=0.2]
+          % Nodes
+          \node [mcInput] (u0) {$u_0$};
+          \node [mcCircleX, below of=u0] (x0) {$x_0$};
+          \node [mcCircleY, below of=x0] (y0) {$y_0$};
+          
+          \node [mcInput, right of=u0] (u1) {$u_1$};
+          \node [mcCircleX, below of=u1] (x1) {$x_1$};
+          \node [mcCircleY, below of=x1] (y1) {$y_1$};
+          
+          \node [text width=2em, right of=x1] (cdots1) {$\cdots$};    
+          
+      \node [mcCircleX, right of=cdots1] (xi1) {$x_{k-1}$};     
+          \node [mcInput, above of=xi1] (ui1) {$u_{k-1}$};
+          \node [mcCircleY, below of=xi1] (yi1) {$y_{k-1}$};        
+          
+          \node [mcCircleX, right of=xi1] (xi2) {$x_{k}$};     
+          \node [mcInput, above of=xi2] (ui2) {$u_{k}$};
+          \node [mcCircleY, below of=xi2] (yi2) {$y_{k}$};
+          
+      \node [mcCircleX, right of=xi2] (xi3) {$x_{k+1}$};     
+          \node [mcInput, above of=xi3] (ui3) {$u_{k+1}$};
+          \node [mcCircleY, below of=xi3] (yi3) {$y_{k+1}$};        
+          
+          \node [text width=2em, right of=xi3] (cdots2) {$\cdots$};
+          
+          \node [mcCircleX, right of=cdots2] (xk) {$x_K$};
+          \node [mcCircleY, below of=xk] (yk) {$y_K$};
+          
+          % Lines
+          \draw [->,line width=.5mm] (u0) -- (x1);
+          \draw [->,line width=.5mm] (u1) -- (cdots1);
+          \draw [->,line width=.5mm] (ui1) -- (xi2);
+          \draw [->,line width=.5mm] (ui2) -- (xi3);
+          \draw [->,line width=.5mm] (ui3) -- (cdots2);
+          
+          \draw [->,line width=.5mm] (x0) -- (x1);
+          \draw [->,line width=.5mm] (x1) -- (cdots1);
+          \draw [->,line width=.5mm] (cdots1) -- (xi1);
+          \draw [->,line width=.5mm] (xi1) -- (xi2);
+          \draw [->,line width=.5mm] (xi2) -- (xi3);
+          \draw [->,line width=.5mm] (xi3) -- (cdots2);
+          \draw [->,line width=.5mm] (cdots2) -- (xk);
+         
+          \draw [->,line width=.5mm] (x0) -- (y0);
+          \draw [->,line width=.5mm] (x1) -- (y1);
+          \draw [->,line width=.5mm] (xi1) -- (yi1);
+          \draw [->,line width=.5mm] (xi2) -- (yi2);
+          \draw [->,line width=.5mm] (xi3) -- (yi3);
+          \draw [->,line width=.5mm] (xk) -- (yk);
+      \end{tikzpicture}}
+\end{figure}
+
+\end{itemize}
+
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}[t]{Optimal State Estimation}{Formulation}
+
 \vskip0.25cm
 
 \begin{varblock}[1\textwidth]{Closed-Loop Observer} 
-    Given a system in State-Space with output signal $\bm{y}(t) : \mathbb{R} \rightarrow \mathbb{R}^p$ and an observer gain $\bm{L} \in \mathbb{R}^{n \times p}$, the estimated state-vector $\hat{\bm{x}}(t)$ is represented by the system:
-    \begin{equation}
-        \dot{\hat{\bm{x}}}(t) = \bm{A} \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{L} \left( \bm{y}(t) - \bm{C} \hat{\bm{x}}(t) \right)
-    ,\end{equation}
+    Given a system in State-Space with output signal ${\color{signal1} {\color{signal1} \bm{y}}(t)} : \mathbb{R} \rightarrow \mathbb{R}^p$ and an observer gain ${\color{signal4} \bm{L}} \in \mathbb{R}^{n \times p}$, the estimated state-vector ${\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}$ is represented by the system:
+    \begin{equation*}
+        {\color{signal1} \dot{\hat{{\color{signal1} \bm{x}}}}(t)} = {\color{signal2} \bm{A}} {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + {\color{signal4} \bm{L}} \left( {\color{signal1} {\color{signal1} \bm{y}}(t)} - {\color{signal2} \bm{C}} {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} \right)
+    ,\end{equation*}
     
     \noindent or, equivalently:
-    \begin{equation}
-        \dot{\hat{\bm{x}}}(t) = \left( \bm{A} - \bm{L} \bm{C} \right) \hat{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{L} \bm{y}(t)
-    .\end{equation} \vskip0.2cm
-\end{varblock}
+    \begin{equation*}
+        {\color{signal1} \dot{\hat{{\color{signal1} \bm{x}}}}(t)} = \left( {\color{signal2} \bm{A}} - {\color{signal4} \bm{L}} {\color{signal2} \bm{C}} \right) {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + {\color{signal4} \bm{L}} {\color{signal1} {\color{signal1} \bm{y}}(t)}
+    .\end{equation*} \vskip0.2cm
+\end{varblock} \vskip0.2cm
 
-\begin{itemize}
-	\item The observer system works as a parallel system that is simulated alongside the actual system; \vskip0.2cm
-	
-	\item Alternatively, it is possible to create a variable $\bm{e}(t) = \bm{x}(t) - \hat{\bm{x}}(t)$ such that:
-	\begin{align}
-	\begin{split}
-	    \dot{\bm{e}} &= \bm{x} - \hat{\bm{x}} \\ 
-	        &= \left( \bm{A} - \bm{L} \bm{C} \right) \left( \bm{x} - \hat{\bm{x}} \right) \\
-	        &= \left( \bm{A} - \bm{L} \bm{C} \right) \bm{e},
-	\end{split}
-	\end{align}
-	
-	\noindent implying that the observer tracks the actual state-vector if $\bm{e}(t) = \bm{0}$ as $t \to \infty$.
-\end{itemize}
-
-\end{frame}
-
-%-------------------------------------------------------
-\begin{frame}[t]{Optimal State Estimation}{Formulation}
-
-\vskip0.25cm
-
-\begin{varblock}[1\textwidth]{Pole-Placement Property of Observers} 
-    If a system in State-Space representation is observable, then by a closed-loop observer with gain matrix $\bm{L} \in \mathbb{R}^{n \times p}$ the eigenvalues of $\bm{A}_{obs} = \bm{A} - \bm{L} \bm{C}$ can arbitrarily be assigned anywhere in the complex plane, as long as that complex conjugate eigenvalues are assigned in pairs.
-\end{varblock}
-
-\begin{itemize}
-	\item a
-\end{itemize}
-
-\end{frame}
-
-%-------------------------------------------------------
-\begin{frame}[t]{Optimal State Estimation}{Formulation}
-
-\vskip0.25cm
-
-\begin{varblock}[1\textwidth]{The Separation Principle} 
-    Given a system in State-Space with a Luenberger observer of gain $\bm{L}$ and state-feedback controller of gain $\bm{K}$, the closed-loop eigenvalues contributions of $(\bm{A} - \bm{B}\bm{K})$ are independent from those of $(\bm{A} - \bm{L}\bm{C})$.
-\end{varblock}
-
-\begin{itemize}
-	\item a
+\begin{itemize} \justifying
+  \item<2-> The observer is operated in parallel to the actual system; \vskip0.2cm
+  
+  \item<3-> Consider a variable $\bm{e}(t) = {\color{signal1} {\color{signal1} \bm{x}}(t)} - {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}$ such that:
+  \begin{align*}
+  \begin{split}
+      \dot{\bm{e}} &= {\color{signal1} \bm{x}} - \hat{{\color{signal1} \bm{x}}} \\ 
+          &= \left( {\color{signal2} \bm{A}} - {\color{signal4} \bm{L}} {\color{signal2} \bm{C}} \right) \left( {\color{signal1} \bm{x}} - \hat{{\color{signal1} \bm{x}}} \right) \\
+          &= \left( {\color{signal2} \bm{A}} - {\color{signal4} \bm{L}} {\color{signal2} \bm{C}} \right) \bm{e}
+  \end{split}
+  \end{align*} \vskip0.2cm
+  
+  \item<4-> \textbf{Control-Estimator Duality:} the design of ${\color{signal4} \bm{L}}$ follows the same design procedure of ${\color{signal4} \bm{K}}$.
 \end{itemize}
 
 \end{frame}
@@ -1298,55 +1487,85 @@ We desire to obtain a State-Space mathematical representation of the system.
 
 \vskip0.25cm
 
-\begin{varblock}[1\linewidth]{Kalman-Bucy Optimal Filter}
-	Consider a continuous-time State-Space linear system subject to additive process noise variable $\bm{w}_k \sim \mathcal{N}(\bm{0}, \bm{Q}_{kf})$ and measurement noise variable $\bm{v}_k \sim \mathcal{N}(\bm{0}, \bm{R}_{kf})$, where the covariances $\bm{Q}_{kf} \in \mathbb{R}^{n \times n}$  and $\bm{R}_{kf} \in \mathbb{R}^{p \times p}$ represents the \emph{power spectral density} of the noises. In this case, for an estimated state $\bar{\bm{x}}(t)$ at time $t$, the error covariance:
-    \begin{equation}
-        \bm{J}(\bm{x}, \bar{\bm{x}}, t) = \mathbb{E}\left\{ [\bm{x}(t) - \bar{\bm{x}}(t)][\bm{x}(t) - \bar{\bm{x}}(t)]^T \right\}
-    \end{equation}
+\begin{varblock}[1\linewidth]{Kalman-Bucy Optimal Filter} \justifying
+  Consider a model subject to a additive process noise variable $\bm{w}(t) \sim \mathcal{N}(\bm{0}, {\color{signal3} \bm{Q}}_{kf})$ and a measurement noise variable $\bm{v}(t) \sim \mathcal{N}(\bm{0}, {\color{signal3} \bm{R}}_{kf})$. In this case, for an estimated state ${\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}$ at time $t$, the error covariance:
+    \begin{equation*}
+        \bm{J}({\color{signal1} \bm{x}}, \hat{{\color{signal1} \bm{x}}}, t) = \mathbb{E}\left\{ [{\color{signal1} {\color{signal1} \bm{x}}(t)} - {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}][{\color{signal1} {\color{signal1} \bm{x}}(t)} - {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}]^T \right\}
+    \end{equation*}
     
-    \noindent is minimized by $\bar{\bm{x}}(t)$ obtained through the system:
-    \begin{equation}
-        \dot{\bar{\bm{x}}}(t) = \bm{A} \bar{\bm{x}}(t) + \bm{B} \bm{u}(t) + \bm{K}_{e}(t) \left( \bm{y}(t) - \bm{C} \bar{\bm{x}}(t) \right)
-    ,\end{equation}
+    \noindent is minimized by a ${\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)}$ obtained through the system:
+    \begin{equation*}
+        {\color{signal1} \dot{\hat{{\color{signal1} \bm{x}}}}(t)} = {\color{signal2} \bm{A}} {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + {\color{signal4} \bm{K}}_{e}(t) \left( {\color{signal1} {\color{signal1} \bm{y}}(t)} - {\color{signal2} \bm{C}} {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} \right)
+    ,\end{equation*}
     
-    \noindent where $\bm{K}_e(t) = \bm{P}_e(t)\bm{C}\bm{R}^{-1}$, being $\bm{P}_e(t)$ the solution of the Riccati differential matrix equation:
-    \begin{equation}
-        \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
-    ,\end{equation}
+    \noindent where ${\color{signal4} \bm{K}}_e(t) = {\color{signal3} \bm{P}}_e(t){\color{signal2} \bm{C}}{\color{signal3} \bm{R}}^{-1}$, being ${\color{signal3} \bm{P}}_e(t)$ the solution of the Riccati differential matrix equation:
+    \begin{equation*}
+        \dot{{\color{signal3} \bm{P}}_e}(t) = {\color{signal2} \bm{A}} {\color{signal3} \bm{P}}_e(t) + {\color{signal3} \bm{P}}_e(t) {\color{signal2} \bm{A}}^T - {\color{signal3} \bm{P}}_e(t){\color{signal2} \bm{C}}^T{\color{signal3} \bm{R}}_{kf}^{-1} {\color{signal2} \bm{C}} {\color{signal3} \bm{P}}_e(t) + {\color{signal3} \bm{Q}}_{kf}
+    ,\end{equation*}
     
-    \noindent with initial condition $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
+    \noindent with initial condition ${\color{signal3} \bm{P}}_e(t_0) = \mathbb{E} \left\{ [{\color{signal1} \bm{x}}(t_0) - \bar{{\color{signal1} \bm{x}}}(t_0)][{\color{signal1} \bm{x}}(t_0) - \bar{{\color{signal1} \bm{x}}}(t_0)]^T \right\}$ for $t_0 > -\infty$.
 \end{varblock}
 
 \end{frame}
 
 %-------------------------------------------------------
-\begin{frame}[t]{Optimal State Estimation}{Kalman Filter and Linear Quadratic Gaussian (LQG)}
+\begin{frame}[t]{Optimal State Estimation}{Formulation}
 
 \vskip0.25cm
 
+\begin{varblock}[1\textwidth]{The Separation Principle} 
+    Given a system in State-Space with a Luenberger observer of gain ${\color{signal4} \bm{L}}$ and state-feedback controller of gain ${\color{signal4} \bm{K}}$, the closed-loop eigenvalues contributions of $({\color{signal2} \bm{A}} - {\color{signal2} \bm{B}}{\color{signal4} \bm{K}})$ are independent from those of $({\color{signal2} \bm{A}} - {\color{signal4} \bm{L}}{\color{signal2} \bm{C}})$.
+\end{varblock} \vskip0.3cm
+
+\begin{itemize}
+  \item<1-> It can be shown that the closed-loop dynamics of the system and the error reduces to:
+  \begin{equation*}
+    \begin{bmatrix} \dot{{\color{signal1} \bm{x}}} \\ \dot{\bm{e}}    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        {\color{signal2} \bm{A}} - {\color{signal2} \bm{B}} {\color{signal4} \bm{K}} & - {\color{signal2} \bm{B}} {\color{signal4} \bm{K}} \\
+        \bm{0} & {\color{signal2} \bm{A}} - {\color{signal4} \bm{L}} {\color{signal2} \bm{C}}
+    \end{bmatrix} \begin{bmatrix} {\color{signal1} \bm{x}} \\ \bm{e} \end{bmatrix}
+    +
+    \begin{bmatrix} {\color{signal2} \bm{B}} \\ \bm{0} \end{bmatrix} {\color{signal1} \bm{r}}
+  \end{equation*} \vskip0.2cm
+  
+  \item<2-> The eigenvalues of the augmented system is the direct contribution of  the eigenvalues of $({\color{signal2} \bm{A}}- {\color{signal2} \bm{B}}{\color{signal4} \bm{K}})$ and $({\color{signal2} \bm{A}}- {\color{signal4} \bm{L}}{\color{signal2} \bm{C}})$. \vskip0.2cm
+  
+  \item<3-> \textbf{Direct Result:} the controller and the estimator can be designed separately, and they are \textit{dual problems}. 
+\end{itemize}
+
+\end{frame}
+
+
+%-------------------------------------------------------
+\begin{frame}[t]{Optimal State Estimation}{Kalman Filter and Linear Quadratic Gaussian (LQG)}
+
+\vskip0.15cm
+
 \begin{varblock}[1\linewidth]{Linear Quadratic Gaussian (LQG) Controller}
-	Consider a stochastic system in State-Space representation:
-	\begin{align}
+  Consider a stochastic system in State-Space representation:
+  \begin{align*}
     \begin{cases}
-        \hfill \dot{\bm{x}}(t) &= \bm{A} \bm{x}(t) + \bm{B} \bm{u}(t) + \bm{w}(t) \\
-        \hfill \bm{y}(t) &= \bm{C} \bm{x}(t) + \bm{v}(t)
+        \hfill {\color{signal1} \dot{{\color{signal1} \bm{x}}}(t)} &= {\color{signal2} \bm{A}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + {\color{signal2} \bm{B}} {\color{signal1} {\color{signal1} \bm{u}}(t)} + \bm{w}(t) \\
+        \hfill {\color{signal1} {\color{signal1} \bm{y}}(t)} &= {\color{signal2} \bm{C}} {\color{signal1} {\color{signal1} \bm{x}}(t)} + \bm{v}(t)
     \end{cases}
-    ,\end{align}
+    ,\end{align*}
     
-     \noindent whose estimated state-vector $\hat{\bm{x}}(t)$ is determined by a Kalman-Bucy filter and whose optimal input signal $\bm{u}(t)$ is calculated through a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) control for the horizon $t \in [t_0, T]$, with $-\infty < t_0 \leq T < \infty$, is defined as:
-    \begin{align} 
-        \dot{\hat{\bm{x}}}(t) = \left[\bm{A} - \bm{K}_e(t) \bm{C} - \bm{B} \bm{K}(t) \right] \hat{\bm{x}}(t) + \bm{K}_e(t) \bm{y}(t) 
-    ,\end{align}
+     \noindent whose state-vector is determined by a Kalman-Bucy filter and whose input signal is calculated by a finite-horizon LQR. The Linear Quadratic Gaussian (LQG) is defined as:
+    \begin{align*} 
+        {\color{signal1} \dot{\hat{{\color{signal1} \bm{x}}}}(t)} = \left[{\color{signal2} \bm{A}} - {\color{signal4} \bm{K}}_e(t) {\color{signal2} \bm{C}} - {\color{signal2} \bm{B}} {\color{signal4} \bm{K}}(t) \right] {\color{signal1} \hat{{\color{signal1} \bm{x}}}(t)} + {\color{signal4} \bm{K}}_e(t) {\color{signal1} {\color{signal1} \bm{y}}(t)} 
+    ,\end{align*}
     
-    \noindent where $\bm{K}(t) = \bm{R}^{-1}\bm{B}^T \bm{P}(t)$ and $\bm{K}_e(t) = \bm{P}_e(t) \bm{C} \bm{R}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices $\bm{P}(t)$ and $\bm{P}_e(t)$ that solve the Riccati differential equations:
-    \begin{align}
+    \noindent where ${\color{signal4} \bm{K}}(t) = {\color{signal3} \bm{R}}^{-1}{\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t)$ and ${\color{signal4} \bm{K}}_e(t) = {\color{signal3} \bm{P}}_e(t) {\color{signal2} \bm{C}} {\color{signal3} \bm{R}}^{-1}$ are, respectively, the LQR and Kalman-Bucy gains for matrices ${\color{signal3} \bm{P}}(t)$ and ${\color{signal3} \bm{P}}_e(t)$ that solve the Riccati differential equations:
+    \begin{align*}
     \begin{cases}
-        -\dot{\bm{P}}(t) = \bm{A}^T \bm{P}(t) + \bm{P}(t) \bm{A} - \bm{P}(t) \bm{B} \bm{R}^{-1} \bm{B}^T \bm{P}(t) + \bm{Q} \\
-        \phantom{-} \dot{\bm{P}_e}(t) = \bm{A} \bm{P}_e(t) + \bm{P}_e(t) \bm{A}^T - \bm{P}_e(t)\bm{C}^T\bm{R}_{kf}^{-1} \bm{C} \bm{P}_e(t) + \bm{Q}_{kf}
+        -\dot{{\color{signal3} \bm{P}}}(t) = {\color{signal2} \bm{A}}^T {\color{signal3} \bm{P}}(t) + {\color{signal3} \bm{P}}(t) {\color{signal2} \bm{A}} - {\color{signal3} \bm{P}}(t) {\color{signal2} \bm{B}} {\color{signal3} \bm{R}}^{-1} {\color{signal2} \bm{B}}^T {\color{signal3} \bm{P}}(t) + {\color{signal3} \bm{Q}} \\
+        \phantom{-} \dot{{\color{signal3} \bm{P}}_e}(t) = {\color{signal2} \bm{A}} {\color{signal3} \bm{P}}_e(t) + {\color{signal3} \bm{P}}_e(t) {\color{signal2} \bm{A}}^T - {\color{signal3} \bm{P}}_e(t){\color{signal2} \bm{C}}^T{\color{signal3} \bm{R}}_{kf}^{-1} {\color{signal2} \bm{C}} {\color{signal3} \bm{P}}_e(t) + {\color{signal3} \bm{Q}}_{kf}
     \end{cases}
-    \end{align}
+    \end{align*}
     
-    \noindent for boundary conditions $\bm{P}(T) = \bm{Q}_f$ and $\bm{P}_e(t_0) = \mathbb{E} \left\{ [\bm{x}(t_0) - \bar{\bm{x}}(t_0)][\bm{x}(t_0) - \bar{\bm{x}}(t_0)]^T \right\}$, respectively.
+    \noindent for boundary conditions ${\color{signal3} \bm{P}}(T) = {\color{signal3} \bm{Q}}_f$ and ${\color{signal3} \bm{P}}_e(t_0) = \mathbb{E} \left\{ [{\color{signal1} \bm{x}}(t_0) - \bar{{\color{signal1} \bm{x}}}(t_0)][{\color{signal1} \bm{x}}(t_0) - \bar{{\color{signal1} \bm{x}}}(t_0)]^T \right\}$, respectively.
 \end{varblock}
 
 \end{frame}
@@ -1358,13 +1577,13 @@ We desire to obtain a State-Space mathematical representation of the system.
 
 \begin{figure}[ht]
     \centering
-    \resizebox{0.9\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{
     \begin{tikzpicture}[auto, node distance=1.75cm,>=latex']
         % We start by placing the blocks
         \node [input, name=input] {};
         \node [sum, right of=input, node distance=3em] (intFbckSum) {};
         \node [block, right of=intFbckSum, node distance=4em] (integralAction) {$\int$};
-        \node [block, right of=integralAction, node distance=6em] (intActGain) {$\bm{K}_a$};
+        \node [block, right of=integralAction, node distance=6em] (intActGain) {${\color{signal4} \bm{K}}_a$};
         \node [sum, right of=intActGain, node distance=4.5em] (fbckSum) {};
 
         \node [block, fill=glgBlue!20, minimum height=4em, right of=fbckSum, node distance=14em] (openloopSystem) {Open-Loop System};    
@@ -1372,15 +1591,15 @@ We desire to obtain a State-Space mathematical representation of the system.
         
         \node [block, below of=openloopSystem, node distance=14em] (integralLU) {$\int$};     
         \node [sum, left of=integralLU, node distance=4em] (stateSumLU) {};             
-        \node [block, left of=stateSumLU, node distance=4em] (inputMatrixLU) {$\bm{B}$};
-        \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {$\bm{C}$};
-        \node [block, below of=integralLU] (stateMatrixLU) {$\bm{A}$};
-        \node [block, above of=integralLU] (kalmanGain) {$\bm{K}_e$};       
+        \node [block, left of=stateSumLU, node distance=4em] (inputMatrixLU) {${\color{signal2} \bm{B}}$};
+        \node [block, right of=integralLU, node distance=8em] (outputMatrixLU) {${\color{signal2} \bm{C}}$};
+        \node [block, below of=integralLU] (stateMatrixLU) {${\color{signal2} \bm{A}}$};
+        \node [block, above of=integralLU] (kalmanGain) {${\color{signal4} \bm{K}}_e$};       
         
-        \draw [->] (openloopSystem) -- node[name=bk3,pos=0.5]{} node[name=bk5,pos=0.75]{} node[pos=0.9]{$\bm{y}$} (output);
+        \draw [->] (openloopSystem) -- node[name=bk3,pos=0.5]{} node[name=bk5,pos=0.75]{} node[pos=0.9]{${\color{signal1} \bm{y}}$} (output);
         \node [sum, anchor=base] (fbckOutput) at (bk3.base |- kalmanGain) {};
         
-        \node [block, below of=stateSumLU, node distance=12em, label={below:LQR Controller}] (fbckGain) {$\bm{K}$};     
+        \node [block, below of=stateSumLU, node distance=12em, label={below:LQR Controller}] (fbckGain) {${\color{signal4} \bm{K}}$};     
         
         
         \begin{scope}[on background layer]
@@ -1392,11 +1611,11 @@ We desire to obtain a State-Space mathematical representation of the system.
         \end{scope} 
         
         % Once the nodes are placed, connecting them is easy.       
-        \draw [draw,->] (input) -- node[pos=0.1] {$\bm{r}$} node[pos=0.8] {$+$}  (intFbckSum);
+        \draw [draw,->] (input) -- node[pos=0.1] {${\color{signal1} \bm{r}}$} node[pos=0.8] {$+$}  (intFbckSum);
         \draw [->] (intFbckSum) -- (integralAction);
-        \draw [->] (integralAction) -- node[pos=0.5]{$\bm{x}_a$} (intActGain);
+        \draw [->] (integralAction) -- node[pos=0.5]{${\color{signal1} \bm{x}}_a$} (intActGain);
         \draw [->] (intActGain) -- node[pos=0.8]{$-$} (fbckSum);        
-        \draw [->] (fbckSum) -- node[pos=0.2]{$\bm{u}$} node[name=bku1, pos=0.2]{} (openloopSystem);
+        \draw [->] (fbckSum) -- node[pos=0.2]{${\color{signal1} \bm{u}}$} node[name=bku1, pos=0.2]{} (openloopSystem);
         
 
         \draw [->] (fbckGain) -| node[pos=0.98]{$-$} (fbckSum);
@@ -1405,8 +1624,8 @@ We desire to obtain a State-Space mathematical representation of the system.
         
         \draw [->] (bku1) |- (inputMatrixLU);
         \draw [->] (inputMatrixLU) -- node[pos=0.8]{$+$} (stateSumLU);
-        \draw [->] (stateSumLU) -- node[pos=0.5]{$\dot{\hat{\bm{x}}}$} (integralLU);
-        \draw [->] (integralLU) -- node[name=bk4,pos=0.5]{} node[pos=0.5]{$\hat{\bm{x}}$} (outputMatrixLU);
+        \draw [->] (stateSumLU) -- node[pos=0.5]{$\dot{\hat{{\color{signal1} \bm{x}}}}$} (integralLU);
+        \draw [->] (integralLU) -- node[name=bk4,pos=0.5]{} node[pos=0.5]{$\hat{{\color{signal1} \bm{x}}}$} (outputMatrixLU);
         \draw [->] (outputMatrixLU) -| node[pos=0.95]{$-$} (fbckOutput);
         \draw [->] (bk4) |- (stateMatrixLU);
         \draw [->] (fbckOutput) -- (kalmanGain);
@@ -1429,7 +1648,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqg01}
+  \includegraphics[width=\textwidth]{lqg01}
 \end{figure}
 
 \end{frame}
@@ -1440,7 +1659,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqg02}
+  \includegraphics[width=\textwidth]{lqgi01}
 \end{figure}
 
 \end{frame}
@@ -1451,7 +1670,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqgi01}
+  \includegraphics[width=\textwidth]{lqg02}
 \end{figure}
 
 \end{frame}
@@ -1462,7 +1681,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{figure}[h]
-	\includegraphics[width=\textwidth]{lqgi02}
+  \includegraphics[width=\textwidth]{lqgi02}
 \end{figure}
 
 \end{frame}
@@ -1472,16 +1691,23 @@ We desire to obtain a State-Space mathematical representation of the system.
 %-------------------------------------------------------
 \section{Conclusion}
 %-------------------------------------------------------
-\begin{frame}[t]{Conclusion}{}
+\begin{frame}[c]{Conclusion}{}
 
 \vskip0.25cm
 
 \begin{itemize}
-	\item Past;
-	
-	\item Present;
-	
-	\item Future;
+  \item We have demonstrated the theoretical foundations of optimal control and its application to a specific challenging problem. \vskip0.2cm
+  
+  \item There were noted some limitations:
+  \begin{itemize}
+    \item[$\circ$] The state estimator has not able to reconstruct the state information when far from the steady-state point. \vskip0.2cm
+    
+    \item[$\circ$] The integral action directly from noisy measurements demonstrated a concerning behavior. \vskip0.2cm
+    
+    \item[$\circ$] The optimization was performed in a unconstrained fashion, which is unpractical.
+  \end{itemize} \vskip0.2cm
+  
+  \item This work opens the possibility of evaluating more advanced control and estimation techniques using the same mathematical framework. 
 \end{itemize}
 
 \end{frame}
@@ -1497,9 +1723,11 @@ We desire to obtain a State-Space mathematical representation of the system.
 %-- End Page
 {\1
 \begin{frame}[plain,noframenumbering]
-	\center \Huge \textbf{Thank you!}    	  
-	  
-	Questions?
+  \center \Huge \textbf{Thank you!}       
+  
+  \includegraphics[scale=0.4]{corgi.jpg}
+  
+  Questions?
 \end{frame}
 
 %-------------------------------------------------------
@@ -1513,11 +1741,11 @@ We desire to obtain a State-Space mathematical representation of the system.
 %\begin{frame}{Titulo}{Subtitulo}
 %
 %\begin{block}{title}
-%	Say somethings \alert{new} 
+% Say somethings \alert{new} 
 %\end{block}
 %
 %\begin{itemize}
-%	\item TikZ\footnote{TikZ is a package for creating beautiful graphics. Have a look at these \chref{http://www.texample.net/tikz/examples/}{online examples} or the \chref{http://tug.ctan.org/tex-archive/graphics/pgf/base/doc/generic/pgf/pgfmanual.pdf}{pgf user manual}.}
+% \item TikZ\footnote{TikZ is a package for creating beautiful graphics. Have a look at these \chref{http://www.texample.net/tikz/examples/}{online examples} or the \chref{http://tug.ctan.org/tex-archive/graphics/pgf/base/doc/generic/pgf/pgfmanual.pdf}{pgf user manual}.}
 %\end{itemize}
 %
 %\end{frame}
@@ -1528,29 +1756,29 @@ We desire to obtain a State-Space mathematical representation of the system.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Figure:
 % \begin{figure}[ht]
-% 	\centering
-% 	\includegraphics[trim={0cm 0cm 0cm 0cm},clip,scale=1]{nameFigure}
-% 	\caption{caption of the figure.}
-% 	\label{fig:nameFigure}
+%   \centering
+%   \includegraphics[trim={0cm 0cm 0cm 0cm},clip,scale=1]{nameFigure}
+%   \caption{caption of the figure.}
+%   \label{fig:nameFigure}
 % \end{figure} \vskip0.25cm
 %
 %%%%% Equation:
-% \begin{equation} \label{eq:nameEquation}
+% \begin{equation*} \label{eq:nameequation*}
 % \begin{split}
-%	 X = 1 + 1
+%  X = 1 + 1
 % \end{split}
-% \end{equation} \vskip0.25cm
+% \end{equation*} \vskip0.25cm
 %
 %%%% Table:
 % \begin{table}[hp]
-% 	\centering
-% 	\begin{tabular}{l | c c }
-% 	Principal & Coluna1 & Coluna2 \\
-% 	\hline 
-% 	ABC	& 1 & 2 \\
-% 	DFG	& 3 & 4 \\
-% 	HIJ	& 5 & 6 \\
-% 	\end{tabular} 
-% 	\caption{caption of the table.}
-% 	\label{table:nameTable}	
+%   \centering
+%   \begin{tabular}{l | c c }
+%   Principal & Coluna1 & Coluna2 \\
+%   \hline 
+%   ABC & 1 & 2 \\
+%   DFG & 3 & 4 \\
+%   HIJ & 5 & 6 \\
+%   \end{tabular} 
+%   \caption{caption of the table.}
+%   \label{table:nameTable} 
 % \end{table} \vskip0.25cm

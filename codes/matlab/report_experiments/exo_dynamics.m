@@ -157,8 +157,8 @@ t = (0:0.01:3.99)'; T = numel(t);
 U_ss = [18.83 -4495.7]; X_ss = [1.235 0.9 134.14 128.95];
 
 % Input Signal
-U = [ones(1,T-6*floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1)*1.6 ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1)*1.6 ones(1,floor(T/7))*U_ss(1);
-     ones(1,T-6*floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2)*1.6 ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2)*1.6 ones(1,floor(T/7))*U_ss(2)];
+U = [ones(1,T-6*floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1)*0.4 ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1) ones(1,floor(T/7))*U_ss(1)*0.4 ones(1,floor(T/7))*U_ss(1);
+     ones(1,T-6*floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2)*0.4 ones(1,floor(T/7))*U_ss(2) ones(1,floor(T/7))*U_ss(2)*0.4 ones(1,floor(T/7))*U_ss(2)];
 
 U = U + randn(2,T) .* (0.0*U_ss');
  
@@ -184,8 +184,8 @@ ylim([min(U(1,:))-1, max(U(1,:))+1])
 set(ha(1), "XTickLabel", [])
 
 axes(ha(2))
-plot(t, y(1, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(11,:)); hold on
-plot(t, y(2, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(12,:)); hold on
+plot(t, y(1, :), 'linestyle', '--', 'linewidth', 0.5, 'color', cpal(11,:)); hold on
+plot(t, y(2, :), 'linestyle', '--', 'linewidth', 0.5, 'color', cpal(12,:)); hold on
 plot(t, y_lin(:, 1), 'linestyle', '-', 'linewidth', 1, 'color', cpal(11,:)); hold on
 plot(t, y_lin(:, 2), 'linestyle', '-', 'linewidth', 1, 'color', cpal(12,:));
 ylabel("Concentration (mol/l)")
@@ -197,8 +197,8 @@ ylim([min(U(2,:))-250, max(U(2,:))+250])
 xlabel("Time (hr)")
 
 axes(ha(4)), 
-plot(t, y(3, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(17,:)); hold on
-plot(t, y(4, :), 'linestyle', '--', 'linewidth', 1, 'color', cpal(16,:)); hold on
+plot(t, y(3, :), 'linestyle', '--', 'linewidth', 0.5, 'color', cpal(17,:)); hold on
+plot(t, y(4, :), 'linestyle', '--', 'linewidth', 0.5, 'color', cpal(16,:)); hold on
 plot(t, y_lin(:, 3), 'linestyle', '-', 'linewidth', 1, 'color', cpal(17,:)); hold on
 plot(t, y_lin(:, 4), 'linestyle', '-', 'linewidth', 1, 'color', cpal(16,:));
 xlabel("Time (hr)"), ylabel("Temperatures (^oC)")

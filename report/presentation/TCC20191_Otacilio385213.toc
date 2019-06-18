@@ -11,7 +11,9 @@
 \defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {2}{1}{Dynamical Models for Chemical Reactors}{8}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {2}{2}{Experiments}{24}{0}{2}
+\beamer@subsectionintoc {2}{2}{First Principles Model Realization}{15}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{3}{Experiments}{24}{0}{2}
 \defcounter {refsection}{0}\relax 
 \beamer@sectionintoc {3}{State-Feedback Controllers}{26}{0}{3}
 \defcounter {refsection}{0}\relax 
@@ -19,20 +21,20 @@
 \defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {3}{2}{Regulation vs. Tracking}{30}{0}{3}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {4}{Optimal Control}{32}{0}{4}
+\beamer@sectionintoc {4}{Optimal Control}{34}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {4}{1}{Formulation}{33}{0}{4}
+\beamer@subsectionintoc {4}{1}{Formulation}{35}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {4}{2}{Linear Quadratic (LQ) Controllers}{37}{0}{4}
+\beamer@subsectionintoc {4}{2}{Linear Quadratic (LQ) Controllers}{43}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {4}{3}{Simulations}{40}{0}{4}
+\beamer@subsectionintoc {4}{3}{Simulations}{51}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {5}{Optimal State Estimation}{44}{0}{5}
+\beamer@sectionintoc {5}{Optimal State Estimation}{55}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {5}{1}{Formulation}{45}{0}{5}
+\beamer@subsectionintoc {5}{1}{Formulation}{56}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {5}{2}{Kalman Filter and LQG Controllers}{48}{0}{5}
+\beamer@subsectionintoc {5}{2}{Kalman Filter and LQG Controllers}{63}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {5}{3}{Simulations}{51}{0}{5}
+\beamer@subsectionintoc {5}{3}{Simulations}{69}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {6}{Conclusion}{55}{0}{6}
+\beamer@sectionintoc {6}{Conclusion}{73}{0}{6}
