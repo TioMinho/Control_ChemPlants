@@ -21,281 +21,281 @@
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@subsectionentry {0}{1}{1}{4}{Motivation}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {1}{1}{1}{4/4}{Motivation}{0}}
+\headcommand {\slideentry {1}{1}{1}{4/6}{Motivation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {4}{4}}
+\headcommand {\beamer@framepages {4}{6}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {4}{4}}
+\headcommand {\beamer@subsectionpages {4}{6}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{1}{2}{5}{Problem Definition}}
+\headcommand {\beamer@subsectionentry {0}{1}{2}{7}{Problem Definition}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {1}{2}{1}{5/5}{Problem Definition}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {5}{5}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {1}{2}{2}{6/6}{Problem Definition}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {6}{6}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@sectionpages {3}{6}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {5}{6}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\sectionentry {2}{Dynamical System Analysis}{7}{Dynamical System Analysis}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{0}{1}{7/7}{}{0}}
+\headcommand {\slideentry {1}{2}{1}{7/7}{Problem Definition}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {7}{7}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {7}{7}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{2}{1}{8}{Dynamical Models for Chemical Reactors}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{1}{1}{8/8}{Dynamical Models for Chemical Reactors}{0}}
+\headcommand {\slideentry {1}{2}{2}{8/8}{Problem Definition}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {8}{8}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{1}{2}{9/9}{Dynamical Models for Chemical Reactors}{0}}
+\headcommand {\beamer@sectionpages {3}{8}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionpages {7}{8}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\sectionentry {2}{Dynamical System Analysis}{9}{Dynamical System Analysis}{0}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {2}{0}{1}{9/9}{}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {9}{9}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{1}{3}{10/13}{Dynamical Models for Chemical Reactors}{0}}
+\headcommand {\beamer@subsectionpages {9}{9}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {10}{13}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{10}{Dynamical Models for Chemical Reactors}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{1}{4}{14/14}{Dynamical Models for Chemical Reactors}{0}}
+\headcommand {\slideentry {2}{1}{1}{10/10}{Dynamical Models for Chemical Reactors}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {14}{14}}
+\headcommand {\beamer@framepages {10}{10}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {8}{14}}
+\headcommand {\slideentry {2}{1}{2}{11/11}{Dynamical Models for Chemical Reactors}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{2}{2}{15}{First Principles Model Realization}}
+\headcommand {\beamer@framepages {11}{11}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{1}{15/15}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{1}{3}{12/15}{Dynamical Models for Chemical Reactors}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {15}{15}}
+\headcommand {\beamer@framepages {12}{15}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{2}{16/16}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{1}{4}{16/16}{Dynamical Models for Chemical Reactors}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {16}{16}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{3}{17/17}{First Principles Model Realization}{0}}
+\headcommand {\beamer@subsectionpages {10}{16}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionentry {0}{2}{2}{17}{First Principles Model Realization}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {2}{2}{1}{17/17}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {17}{17}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{4}{18/18}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{2}{2}{18/18}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {18}{18}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{5}{19/19}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{2}{3}{19/19}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {19}{19}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{6}{20/20}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{2}{4}{20/20}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {20}{20}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{2}{7}{21/23}{First Principles Model Realization}{0}}
+\headcommand {\slideentry {2}{2}{5}{21/21}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {21}{23}}
+\headcommand {\beamer@framepages {21}{21}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {15}{23}}
+\headcommand {\slideentry {2}{2}{6}{22/22}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{2}{3}{24}{Experiments}}
+\headcommand {\beamer@framepages {22}{22}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{3}{1}{24/24}{Experiments}{0}}
+\headcommand {\slideentry {2}{2}{7}{23/25}{First Principles Model Realization}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {24}{24}}
+\headcommand {\beamer@framepages {23}{25}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {2}{3}{2}{25/25}{Experiments}{0}}
+\headcommand {\beamer@subsectionpages {17}{25}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {25}{25}}
+\headcommand {\beamer@subsectionentry {0}{2}{3}{26}{Experiments}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@sectionpages {7}{25}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {24}{25}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\sectionentry {3}{State-Feedback Controllers}{26}{State-Feedback Controllers}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{0}{1}{26/26}{}{0}}
+\headcommand {\slideentry {2}{3}{1}{26/26}{Experiments}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {26}{26}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {26}{26}}
+\headcommand {\slideentry {2}{3}{2}{27/27}{Experiments}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{3}{1}{27}{Definitions}}
+\headcommand {\beamer@framepages {27}{27}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{1}{1}{27/29}{Definitions}{0}}
+\headcommand {\beamer@sectionpages {9}{27}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {27}{29}}
+\headcommand {\beamer@subsectionpages {26}{27}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {27}{29}}
+\headcommand {\sectionentry {3}{State-Feedback Controllers}{28}{State-Feedback Controllers}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{3}{2}{30}{Regulation vs. Tracking}}
+\headcommand {\slideentry {3}{0}{1}{28/28}{}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{2}{1}{30/30}{Regulation vs. Tracking}{0}}
+\headcommand {\beamer@framepages {28}{28}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {30}{30}}
+\headcommand {\beamer@subsectionpages {28}{28}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{2}{2}{31/31}{Regulation vs. Tracking}{0}}
+\headcommand {\beamer@subsectionentry {0}{3}{1}{29}{Definitions}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {31}{31}}
+\headcommand {\slideentry {3}{1}{1}{29/31}{Definitions}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{2}{3}{32/32}{Regulation vs. Tracking}{0}}
+\headcommand {\beamer@framepages {29}{31}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionpages {29}{31}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionentry {0}{3}{2}{32}{Regulation vs. Tracking}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {3}{2}{1}{32/32}{Regulation vs. Tracking}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {32}{32}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {3}{2}{4}{33/33}{Regulation vs. Tracking}{0}}
+\headcommand {\slideentry {3}{2}{2}{33/33}{Regulation vs. Tracking}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {33}{33}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@sectionpages {26}{33}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {30}{33}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\sectionentry {4}{Optimal Control}{34}{Optimal Control}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{0}{1}{34/34}{}{0}}
+\headcommand {\slideentry {3}{2}{3}{34/34}{Regulation vs. Tracking}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {34}{34}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {34}{34}}
+\headcommand {\slideentry {3}{2}{4}{35/35}{Regulation vs. Tracking}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{4}{1}{35}{Formulation}}
+\headcommand {\beamer@framepages {35}{35}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{1}{1}{35/37}{Formulation}{0}}
+\headcommand {\beamer@sectionpages {28}{35}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {35}{37}}
+\headcommand {\beamer@subsectionpages {32}{35}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{1}{2}{38/40}{Formulation}{0}}
+\headcommand {\sectionentry {4}{Optimal Control}{36}{Optimal Control}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {38}{40}}
+\headcommand {\slideentry {4}{0}{1}{36/36}{}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{1}{3}{41/41}{Formulation}{0}}
+\headcommand {\beamer@framepages {36}{36}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {41}{41}}
+\headcommand {\beamer@subsectionpages {36}{36}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{1}{4}{42/42}{Formulation}{0}}
+\headcommand {\beamer@subsectionentry {0}{4}{1}{37}{Formulation}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {42}{42}}
+\headcommand {\slideentry {4}{1}{1}{37/39}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {35}{42}}
+\headcommand {\beamer@framepages {37}{39}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{4}{2}{43}{Linear Quadratic (LQ) Controllers}}
+\headcommand {\slideentry {4}{1}{2}{40/42}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{2}{1}{43/45}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {40}{42}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {43}{45}}
+\headcommand {\slideentry {4}{1}{3}{43/43}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{2}{2}{46/49}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {43}{43}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {46}{49}}
+\headcommand {\slideentry {4}{1}{4}{44/44}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{2}{3}{50/50}{Linear Quadratic (LQ) Controllers}{0}}
+\headcommand {\beamer@framepages {44}{44}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {50}{50}}
+\headcommand {\beamer@subsectionpages {37}{44}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {43}{50}}
+\headcommand {\beamer@subsectionentry {0}{4}{2}{45}{Linear Quadratic (LQ) Controllers}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{4}{3}{51}{Simulations}}
+\headcommand {\slideentry {4}{2}{1}{45/47}{Linear Quadratic (LQ) Controllers}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{3}{1}{51/51}{Simulations}{0}}
+\headcommand {\beamer@framepages {45}{47}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {51}{51}}
+\headcommand {\slideentry {4}{2}{2}{48/51}{Linear Quadratic (LQ) Controllers}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{3}{2}{52/52}{Simulations}{0}}
+\headcommand {\beamer@framepages {48}{51}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {4}{2}{3}{52/52}{Linear Quadratic (LQ) Controllers}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {52}{52}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{3}{3}{53/53}{Simulations}{0}}
+\headcommand {\beamer@subsectionpages {45}{52}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionentry {0}{4}{3}{53}{Simulations}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {4}{3}{1}{53/53}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {53}{53}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {4}{3}{4}{54/54}{Simulations}{0}}
+\headcommand {\slideentry {4}{3}{2}{54/54}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {54}{54}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@sectionpages {34}{54}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {51}{54}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\sectionentry {5}{Optimal State Estimation}{55}{Optimal State Estimation}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{0}{1}{55/55}{}{0}}
+\headcommand {\slideentry {4}{3}{3}{55/55}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {55}{55}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {55}{55}}
+\headcommand {\slideentry {4}{3}{4}{56/56}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{5}{1}{56}{Formulation}}
+\headcommand {\beamer@framepages {56}{56}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{1}{1}{56/58}{Formulation}{0}}
+\headcommand {\beamer@sectionpages {36}{56}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {56}{58}}
+\headcommand {\beamer@subsectionpages {53}{56}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{1}{2}{59/62}{Formulation}{0}}
+\headcommand {\sectionentry {5}{Optimal State Estimation}{57}{Optimal State Estimation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {59}{62}}
+\headcommand {\slideentry {5}{0}{1}{57/57}{}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {56}{62}}
+\headcommand {\beamer@framepages {57}{57}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{5}{2}{63}{Kalman Filter and LQG Controllers}}
+\headcommand {\beamer@subsectionpages {57}{57}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{2}{1}{63/63}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{1}{58}{Formulation}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {63}{63}}
+\headcommand {\slideentry {5}{1}{1}{58/60}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{2}{2}{64/66}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@framepages {58}{60}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {64}{66}}
+\headcommand {\slideentry {5}{1}{2}{61/64}{Formulation}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{2}{3}{67/67}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@framepages {61}{64}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {67}{67}}
+\headcommand {\beamer@subsectionpages {58}{64}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{2}{4}{68/68}{Kalman Filter and LQG Controllers}{0}}
+\headcommand {\beamer@subsectionentry {0}{5}{2}{65}{Kalman Filter and LQG Controllers}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@framepages {68}{68}}
+\headcommand {\slideentry {5}{2}{1}{65/65}{Kalman Filter and LQG Controllers}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {63}{68}}
+\headcommand {\beamer@framepages {65}{65}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionentry {0}{5}{3}{69}{Simulations}}
+\headcommand {\slideentry {5}{2}{2}{66/68}{Kalman Filter and LQG Controllers}{0}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{3}{1}{69/69}{Simulations}{0}}
+\headcommand {\beamer@framepages {66}{68}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {5}{2}{3}{69/69}{Kalman Filter and LQG Controllers}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {69}{69}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{3}{2}{70/70}{Simulations}{0}}
+\headcommand {\slideentry {5}{2}{4}{70/70}{Kalman Filter and LQG Controllers}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {70}{70}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{3}{3}{71/71}{Simulations}{0}}
+\headcommand {\beamer@subsectionpages {65}{70}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionentry {0}{5}{3}{71}{Simulations}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {5}{3}{1}{71/71}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {71}{71}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {5}{3}{4}{72/72}{Simulations}{0}}
+\headcommand {\slideentry {5}{3}{2}{72/72}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {72}{72}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\beamer@sectionpages {55}{72}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\beamer@subsectionpages {69}{72}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\sectionentry {6}{Conclusion}{73}{Conclusion}{0}}
-\defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {6}{0}{1}{73/73}{}{0}}
+\headcommand {\slideentry {5}{3}{3}{73/73}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {73}{73}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {6}{0}{2}{74/74}{}{0}}
+\headcommand {\slideentry {5}{3}{4}{74/74}{Simulations}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {74}{74}}
 \defcounter {refsection}{0}\relax 
-\headcommand {\slideentry {6}{0}{3}{75/75}{}{0}}
+\headcommand {\beamer@sectionpages {57}{74}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@subsectionpages {71}{74}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\sectionentry {6}{Conclusion}{75}{Conclusion}{0}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {6}{0}{1}{75/75}{}{0}}
 \defcounter {refsection}{0}\relax 
 \headcommand {\beamer@framepages {75}{75}}
-\headcommand {\beamer@partpages {1}{75}}
-\headcommand {\beamer@subsectionpages {73}{75}}
-\headcommand {\beamer@sectionpages {73}{75}}
-\headcommand {\beamer@documentpages {75}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {6}{0}{2}{76/76}{}{0}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@framepages {76}{76}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\slideentry {6}{0}{3}{77/77}{}{0}}
+\defcounter {refsection}{0}\relax 
+\headcommand {\beamer@framepages {77}{77}}
+\headcommand {\beamer@partpages {1}{77}}
+\headcommand {\beamer@subsectionpages {75}{77}}
+\headcommand {\beamer@sectionpages {75}{77}}
+\headcommand {\beamer@documentpages {77}}
 \headcommand {\gdef \inserttotalframenumber {50}}

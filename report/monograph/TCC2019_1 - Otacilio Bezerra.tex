@@ -227,7 +227,10 @@
     {\normalsize    \textsc{Fortaleza -- Cear\'{a} \\%
      2019}}
 \end{center}
-	
+
+\clearpage
+\thispagestyle{empty}
+
 %-----------------------------------------------------------------------------------------%
 %----------------------------------INTERNAL COVER-----------------------------------------%
 %-----------------------------------------------------------------------------------------%
@@ -300,22 +303,6 @@
 \end{center}
 
 %-----------------------------------------------------------------------------------------%
-%-------------------------------------- RESUMO -------------------------------------------%
-%-----------------------------------------------------------------------------------------%
-\chapter*{Resumo}
-\thispagestyle{empty}
-
-\PARstartLetter{A}{b}  
-
-%-----------------------------------------------------------------------------------------%
-%------------------------------------- ABSTRACT ------------------------------------------%
-%-----------------------------------------------------------------------------------------%
-\chapter*{Abstract}
-\thispagestyle{empty}
-
-\PARstartLetter{A}{b}
-
-%-----------------------------------------------------------------------------------------%
 %------------------------------------ DEDICATÓRIA ----------------------------------------%
 %-----------------------------------------------------------------------------------------%
 \clearpage
@@ -324,6 +311,9 @@
 \begin{flushright}
 Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conhecimento.
 \end{flushright}
+
+\clearpage
+\thispagestyle{empty}%
 
 %-----------------------------------------------------------------------------------------%
 %----------------------------------- AGRADECIMENTOS --------------------------------------%
@@ -336,7 +326,7 @@ Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conh
 
 \vspace{0.6cm}
 
-\noindent Aos meus orientadores, prof. Francesco Corona e profa. Michela Mulas, pelos valiosos ensinamentos, por todo o carinho a atenção e, sobretudo, pela amizade construída.
+\noindent Aos meus orientadores, prof. Francesco Corona e profa. Michela Mulas, pelos valiosos ensinamentos, por todo o carinho, atenção e, sobretudo, pela amizade construída.
 
 \vspace{0.6cm}
 
@@ -348,7 +338,11 @@ Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conh
 
 \vspace{0.6cm}
 
-\noindent A todos os grandes cientistas e engenheiros, que estenderam as fronteiras da tecnologia e proporcionaram o empolgante momento atual para a pesquisa científica em computação.
+\noindent A todos os professores que me incentivaram a perseguir a resposta para as minhas dúvidas, e que me inspiram a repassar tudo que aprendi da mesma forma que me foi passado.
+
+\vspace{0.6cm}
+
+\noindent A todos os grandes cientistas e engenheiros, que estenderam as fronteiras da tecnologia e proporcionaram o empolgante momento atual para a pesquisa científica em Computação.
 
 \vspace{0.6cm}
 
@@ -363,11 +357,38 @@ Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conh
 \null\vfill
 \begin{flushright}
 
-\textit{"Out of the cradle onto dry land, here it is standing: atoms with consciousness; matter with curiosity. Stands at the sea, wonders at wondering: I, a universe of atoms, an atom in the universe."}\\ Richard P. Feynman
+{\large \textit{``There are none.''}}\\ {\small John C. Doyle on ``Guaranteed Margins for LQG Regulators'' (1978)}
 
 \end{flushright}
-   \vspace{3.0cm}
 
+\clearpage
+\thispagestyle{empty}%
+
+%-----------------------------------------------------------------------------------------%
+%-------------------------------------- RESUMO -------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\chapter*{Resumo}
+\thispagestyle{empty}
+
+\PARstartLetter{A}{disciplina} de Engenharia de Sistemas de Controle se tornou uma área ubíqua na maioria das aplicações tecnológicas modernas. Recentemente, dado os avanças em áreas tais como Aprendizagem por Reforço, atenção tem sido dada à necessidade de resolver problemas de controle para sistemas altamente complexos em ambientes carregados de incerteza. Com essa motivação, a área de Controle Robusto e Ótimo se apresentou como uma possível solução a esses problemas. Essas técnicas lidam com o \textit{design} the controles automáticos que manipulam um sistema a fim de otimizar uma função objetiva, considerando também a possibilidade de incerteza em qualquer aspecto desse processo. Neste trabalho, os principais resultados em Controle Ótimo são revisitados em detalhe, focando nos clássicos controladores Linear-Quadráticos (LQ) que assumem um modelo linear do sistema e um índice de performance quadrático para ser minimizado. A otimização discutida nesse trabalho é solucionada através de uma abordagem de Programação Dinâmica. Em adição a isso, Estimadores de Estado Ótimos, especificamente estimadores por Filtros de Kalman, são formulados e integrados aos controles ótimos a fim de lidar com a incerteza acerca do estado real do sistema. Servindo como blocos de construção até estes conceitos, os resultados gerais para modelagem e controle de sistemas dinâmicos também é apresentado, apesar de que apenas os mais importantes e recorrentes teoremas são descritos em detalhes. Os controladores são avaliados à luz de uma classe específica de processos químicos, o reator contínuo perfeitamente agitado (CSTR). Um modelo específico de um sistema dentro dessa classe, o qual é altamente não-linear e carregado de incerteza, é utilizado em simulação como um \textit{benchmark} para demonstrar a abordagem robusta e ótima. \vskip0.3cm
+
+\noindent \textbf{Palavras-Chaves}: Controle Ótimo, Control Linear Quadrático, Controle de Processos, Estimação Ótima, Filtro de Kalman, Reatores Químicos.
+
+\clearpage
+\thispagestyle{empty}%
+
+%-----------------------------------------------------------------------------------------%
+%------------------------------------- ABSTRACT ------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\chapter*{Abstract}
+\thispagestyle{empty}
+
+\PARstartLetter{T}{he} discipline of Control Systems Engineering has become ubiquitous in most modern technological applications. Recently, given the advances in fields such as Reinforcement Learning, attention has been drawn to the need for solving control problems from highly complex systems in conditions loaded with uncertainty. Given this motivation, the field of Optimal and Robust Control presents itself as a feasible solution to these problems. These techniques accounts for the design of automatic controllers that manipulates a system in order to optimize an objective function, considering also the possibility for uncertainty in any aspect of this process. In this work, the main results in optimal control are revisited in detail, focusing in the classical Linear Quadratic (LQ) controllers which assumes a linear model of a system and a quadratic performance index to be minimized. The optimization discussed in this work is solved through a Dynamic Programming approach. In addition to this, optimal state estimators, namely Kalman Filter estimators, are formulated and integrated to the optimal controllers in order to deal with the uncertainty regarding the real state of a system. As building blocks for these concepts, the general results for dynamical systems modeling and control is also presented, although only the most important and recurrent theorems are described in detail. The controllers are evaluated in the light of a specific class of chemical processes, the continuous stirred tank reactors (CSTR). A specific model of a system within this class, which is highly nonlinear and loaded with uncertainty, is used in simulation as a benchmark to demonstrate the optimal and robust approach. \vskip.3cm
+
+\noindent \textbf{Keywords}: Optimal Control, Linear Quadratic Control, Process Control, Optimal Estimation, Kalman Filter, Chemical Reactors.
+
+\clearpage
+\thispagestyle{empty}%
 
 %-----------------------------------------------------------------------------------------%
 %--------------------------------------SUMMARY--------------------------------------------%
@@ -375,6 +396,7 @@ Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conh
 \thispagestyle{empty}   
 \setcounter{secnumdepth}{1}
 \setcounter{tocdepth}{1}
+\setcounter{page}{1}
 \tableofcontents
 \newpage
 
@@ -435,7 +457,7 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 \begin{figure}[ht] 
 	\begin{subfigure}{0.65\textwidth}
 	\vskip0.25cm
-	\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
+	\resizebox{\textwidth}{!}{\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
 	    % We start by placing the blocks
 	    \node [input, name=input] {};
 	    \node [block, minimum width=6em, minimum height=3.5em, right of=input] (controller) {\textbf{Controller}};
@@ -449,12 +471,12 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 	    % Once the nodes are placed, connecting them is easy. 
 	    \draw [draw,->, thick] (input) -- node[pos=0.1] {$r(t)$}  (controller);
 	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
-	\end{tikzpicture}
-	
+	\end{tikzpicture}}
+	\caption{}
 	\end{subfigure} \\ \vspace{.6ex}
 	\hfill \begin{subfigure}{0.65\textwidth}
 	\vskip0.75cm
-	\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
+	\resizebox{\textwidth}{!}{\begin{tikzpicture}[auto, node distance=2.5cm,>=latex']
 	    % We start by placing the blocks
 	    \node [input, name=input] {};
 	    \node [sum, right of=input] (sum) {};
@@ -473,7 +495,8 @@ A controller is used to calculate, for a time $t \in \left[ t_0, t_N \right]$, t
 	    \draw [->, thick] (system) -- node [name=y,pos=0.4]{} node[pos=0.75]{$y(t)$} (output);
 	    \draw [->, thick] (y) |- (measurements);
 	    \draw [->, thick] (measurements) -| node[pos=0.95] {$-$} node [near end] {} (sum);
-	\end{tikzpicture}
+	\end{tikzpicture}}
+	\caption{}
 	\end{subfigure}
 	
 	\caption{The two most popular configurations for connecting controllers to dynamical systems. }
@@ -4007,7 +4030,7 @@ For the sake of completeness, the same tracking objective was simulated for the 
 
 This work has presented a self-contained mathematical framework to model and control chemical reactor systems, focusing on optimal control techniques. In this document, several results were presented and discussed in order to provide a complete understanding of the concepts and methods explored. The discussed methods were applied to a given model of a challenging real-world chemical reactor, which consists of a non-isothermal process following the Van de Vusse reaction scheme. The experiments have shown that optimal control is a feasible solution when the controller has direct access to the internal states of the system, but performed worse when the states are not accessible but estimated. The control simulations, however, still produced practical results that are realistic in respect to real plant of such processes.
 
-The use of optimal controllers greatly reduces the complexity of the controller synthesis procedure, while ensuring an optimal operation. The methods presented can still be expanded to more complex formulations, which would allow for better performance in more adverse cases. Specifically, more advanced state estimation techniques can be considered to mitigate the problem of reference tracking, determining the integral action through an estimate of the controlled variables.
+The use of optimal controllers greatly reduces the complexity of the controller synthesis procedure, while ensuring an optimal operation. The methods presented can still be expanded to more complex formulations, which would allow for better performance in more adverse cases. Specifically, more advanced state estimation techniques can be considered to mitigate the problem of reference tracking, determining the integral action through an estimate of the controlled variables rather than using the observations themselves.
 
 This work also emphasizes the possibility of formulating more advances techniques, within the scope of optimal control, to achieve better results. As future work, there is the necessity to decouple the control and estimator sample time from the continuous-time in which the real system operates, providing a more realistic configuration of feedback control loops. Additionally, non-linear state estimation techniques should be explored to solve the linearized Kalman filter limitation, and constrained optimal controllers should be explored to mathematically ensure that the hard constraints of the system are being respected.
 

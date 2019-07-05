@@ -262,15 +262,15 @@
 \vskip0.25cm
 
 \begin{itemize} \justifying
-  \item We are discussing the \textbf{optimal control} of \textbf{dynamical systems}. \vskip0.2cm
+  \item<1-> We are discussing the \textbf{optimal control} of \textbf{dynamical systems}. \vskip0.2cm
   
-  \item We are discussing \textbf{chemical reactor network systems}, for processes described as:\vskip0.2cm
+  \item<2-> We are discussing \textbf{chemical reaction network systems}, for processes described as:\vskip0.2cm
   
   \begin{figure} \centering
     \resizebox{0.55\textwidth}{!}{\input{imgs/nonIsoSchem.tikz}}
   \end{figure} \vskip0cm
   
-  \item Optimal control theory has been revisited from several innovative fields in the last years\footfullcite{Tang:2016}\footfullcite{Eren:2017}. Furthermore, reactor systems are subject of active research, with several open challenges. \footfullcite{Mulas:2015}
+  \item<3-> Optimal control theory has been revisited from several innovative fields in the last years\footfullcite{Tang:2016}\footfullcite{Eren:2017}. Furthermore, reactor systems are subject of active research, with several open challenges. \footfullcite{Mulas:2015}
 \end{itemize}
 
 \end{frame}
@@ -638,7 +638,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \vskip0.25cm
 
 \begin{itemize}
-  \item In the case of the reactor system in discussion, the models becomes...
+  \item In the case of the reactor system in discussion, the model becomes...
 \end{itemize}
 
 \begin{varblock}[1\linewidth]{Mathematical Model of Non-Isothermal CSTR}
@@ -975,7 +975,7 @@ We desire to obtain a State-Space mathematical representation of the system.
 \begin{varblock}[\textwidth]{State-Feedback with Integral Action}
   Consider a State-space system and augmented state ${\color{signal1} \bm{x}}_a : \mathbb{R} \rightarrow \mathbb{R}^{p}$ defined by:
     \begin{equation*}
-        {\color{signal1} \bm{x}_a(t)} = \int_{0}^{t} {\color{signal1} \bm{r}}(\tau) - {\color{signal1} \bm{y}}(\tau) d\tau \Longrightarrow {\color{signal1} \dot{{\color{signal1} \bm{x}}}_a(t)} = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal1} {\color{signal1} \bm{y}}(t)}
+        {\color{signal1} \bm{x}_a(t)} = \int_{0}^{t} \left( {\color{signal1} \bm{r}}(\tau) - {\color{signal1} \bm{y}}(\tau) \right) d\tau \Longrightarrow {\color{signal1} \dot{{\color{signal1} \bm{x}}}_a(t)} = {\color{signal1} {\color{signal1} \bm{r}}(t)} - {\color{signal1} {\color{signal1} \bm{y}}(t)}
     .\end{equation*}
     
 \noindent A robust tracking (or servo) controller, defined by the gain $\tilde{{\color{signal4} \bm{K}}} = \begin{bmatrix} {\color{signal4} \bm{K}} & {\color{signal4} \bm{K}}_a \end{bmatrix}$, for ${\color{signal4} \bm{K}} \in \mathbb{R}^{r \times n}$ and ${\color{signal4} \bm{K}}_a \in \mathbb{R}^{r \times p}$, operates on the following augmented version of the original system:

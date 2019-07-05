@@ -1998,8 +1998,14 @@
     <bcf:citekey order="1">Tang:2016</bcf:citekey>
     <bcf:citekey order="2">Eren:2017</bcf:citekey>
     <bcf:citekey order="3">Mulas:2015</bcf:citekey>
-    <bcf:citekey order="4">Klatt:1998</bcf:citekey>
-    <bcf:citekey order="5">Klatt:1998</bcf:citekey>
+    <bcf:citekey order="4">Tang:2016</bcf:citekey>
+    <bcf:citekey order="5">Eren:2017</bcf:citekey>
+    <bcf:citekey order="6">Mulas:2015</bcf:citekey>
+    <bcf:citekey order="7">Tang:2016</bcf:citekey>
+    <bcf:citekey order="8">Eren:2017</bcf:citekey>
+    <bcf:citekey order="9">Mulas:2015</bcf:citekey>
+    <bcf:citekey order="10">Klatt:1998</bcf:citekey>
+    <bcf:citekey order="11">Klatt:1998</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

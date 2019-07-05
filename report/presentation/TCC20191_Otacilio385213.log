@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.4.1)  18 JUN 2019 02:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.4.1)  18 JUN 2019 09:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2220,7 +2220,24 @@ Missing character: There is no ; in font nullfont!
  [4
 
 ]
-<imgs/exoCSTR.pdf, id=76, 361.35pt x 302.12875pt>
+(./imgs/nonIsoSchem.tikz)
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 276.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [5
+
+] (./imgs/nonIsoSchem.tikz)
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 276.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [6
+
+]
+<imgs/exoCSTR.pdf, id=96, 361.35pt x 302.12875pt>
 File: imgs/exoCSTR.pdf Graphic file (type pdf)
 <use imgs/exoCSTR.pdf>
 Package pdftex.def Info: imgs/exoCSTR.pdf  used on input line 294.
@@ -2230,7 +2247,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 294.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [5
+ [7
 
  <./imgs/exoCSTR.pdf>]
 File: imgs/exoCSTR.pdf Graphic file (type pdf)
@@ -2247,7 +2264,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 324.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-[6
+[8
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2255,7 +2272,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 329.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [7
+ [9
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2263,7 +2280,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 380.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [8
+ [10
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2271,29 +2288,13 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 448.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [9
+ [11
 
 ]
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <6> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 492.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <5> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 492.
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 492.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [10
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 492.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [11
-
-]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 492.
@@ -2312,13 +2313,29 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 531.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 492.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [14
 
 ]
-<imgs/tank02.pdf, id=232, 371.3875pt x 271.0125pt>
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 492.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [15
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 531.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [16
+
+]
+<imgs/tank02.pdf, id=252, 371.3875pt x 271.0125pt>
 File: imgs/tank02.pdf Graphic file (type pdf)
 <use imgs/tank02.pdf>
 Package pdftex.def Info: imgs/tank02.pdf  used on input line 560.
@@ -2328,7 +2345,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 560.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [15
+ [17
 
  <./imgs/tank02.pdf>]
 File: imgs/tank02.pdf Graphic file (type pdf)
@@ -2340,7 +2357,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 580.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [16
+ [18
 
 ]
 File: imgs/tank02.pdf Graphic file (type pdf)
@@ -2352,7 +2369,8 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 609.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [17
+
+[19
 
 ]
 File: imgs/tank02.pdf Graphic file (type pdf)
@@ -2364,8 +2382,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 633.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-
-[18
+ [20
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2373,7 +2390,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 655.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [19
+ [21
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2381,7 +2398,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 694.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [20
+ [22
 
 ]
 Package microtype Info: Loading generic protrusion settings for font family
@@ -2393,26 +2410,26 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 742.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [21
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 742.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [22
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 742.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
  [23
 
 ]
-<imgs/dynamics04.pdf, id=357, 556.0775pt x 224.84pt>
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 742.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [24
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 742.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [25
+
+]
+<imgs/dynamics04.pdf, id=378, 556.0775pt x 224.84pt>
 File: imgs/dynamics04.pdf Graphic file (type pdf)
 <use imgs/dynamics04.pdf>
 Package pdftex.def Info: imgs/dynamics04.pdf  used on input line 781.
@@ -2431,10 +2448,10 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 781.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-[24
+[26
 
  <./imgs/dynamics04.pdf>]
-<imgs/linear01.pdf, id=373, 556.0775pt x 222.8325pt>
+<imgs/linear01.pdf, id=395, 556.0775pt x 222.8325pt>
 File: imgs/linear01.pdf Graphic file (type pdf)
 <use imgs/linear01.pdf>
 Package pdftex.def Info: imgs/linear01.pdf  used on input line 818.
@@ -2453,7 +2470,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 818.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-[25
+[27
 
  <./imgs/linear01.pdf>]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2461,26 +2478,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 824.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [26
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 897.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [27
-
-]
-Overfull \vbox (72.80745pt too high) detected at line 897
- []
-
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 897.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
-[28
+ [28
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2491,17 +2489,20 @@ Missing character: There is no ; in font nullfont!
  [29
 
 ]
+Overfull \vbox (72.80745pt too high) detected at line 897
+ []
+
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 927.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 897.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [30
+[30
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 966.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 897.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [31
@@ -2509,7 +2510,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1007.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 927.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [32
@@ -2517,7 +2518,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1057.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 966.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [33
@@ -2525,7 +2526,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1062.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1007.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [34
@@ -2533,7 +2534,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1087.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1057.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [35
@@ -2541,7 +2542,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1087.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1062.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [36
@@ -2557,7 +2558,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1111.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1087.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [38
@@ -2565,7 +2566,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1111.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1087.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [39
@@ -2581,7 +2582,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1135.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1111.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [41
@@ -2589,7 +2590,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1177.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1111.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [42
@@ -2597,16 +2598,15 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1212.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1135.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-
-[43
+ [43
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1212.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1177.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [44
@@ -2617,7 +2617,24 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1212.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [45
+
+[45
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1212.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [46
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1212.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [47
 
 ]
 Overfull \vbox (31.05556pt too high) detected at line 1254
@@ -2628,23 +2645,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1254.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
-[46
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1254.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [47
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1254.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [48
+[48
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2657,10 +2658,26 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1298.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1254.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [50
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1254.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [51
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1298.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [52
 
 ]
 Package epstopdf Info: Source file: <imgs/lqr01.eps>
@@ -2673,7 +2690,7 @@ Package epstopdf Info: Source file: <imgs/lqr01.eps>
 o.pdf imgs/lqr01.eps>
 (epstopdf)             \includegraphics on input line 1311.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqr01-eps-converted-to.pdf, id=667, 1153.30875pt x 664.4825pt>
+<imgs/lqr01-eps-converted-to.pdf, id=687, 1153.30875pt x 664.4825pt>
 File: imgs/lqr01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqr01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqr01-eps-converted-to.pdf  used on input line 13
@@ -2684,7 +2701,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1311.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [51
+ [53
 
  <./imgs/lqr01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqri01.eps>
@@ -2697,7 +2714,7 @@ Package epstopdf Info: Source file: <imgs/lqri01.eps>
 to.pdf imgs/lqri01.eps>
 (epstopdf)             \includegraphics on input line 1322.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqri01-eps-converted-to.pdf, id=684, 1145.27875pt x 664.4825pt>
+<imgs/lqri01-eps-converted-to.pdf, id=704, 1145.27875pt x 664.4825pt>
 File: imgs/lqri01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqri01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqri01-eps-converted-to.pdf  used on input line 1
@@ -2708,7 +2725,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1322.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [52
+ [54
 
  <./imgs/lqri01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqr02.eps>
@@ -2721,7 +2738,7 @@ Package epstopdf Info: Source file: <imgs/lqr02.eps>
 o.pdf imgs/lqr02.eps>
 (epstopdf)             \includegraphics on input line 1333.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqr02-eps-converted-to.pdf, id=701, 1142.2675pt x 664.4825pt>
+<imgs/lqr02-eps-converted-to.pdf, id=721, 1142.2675pt x 664.4825pt>
 File: imgs/lqr02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqr02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqr02-eps-converted-to.pdf  used on input line 13
@@ -2732,7 +2749,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1333.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [53
+ [55
 
  <./imgs/lqr02-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqri02.eps>
@@ -2745,7 +2762,7 @@ Package epstopdf Info: Source file: <imgs/lqri02.eps>
 to.pdf imgs/lqri02.eps>
 (epstopdf)             \includegraphics on input line 1344.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqri02-eps-converted-to.pdf, id=718, 1145.27875pt x 664.4825pt>
+<imgs/lqri02-eps-converted-to.pdf, id=740, 1145.27875pt x 664.4825pt>
 File: imgs/lqri02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqri02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqri02-eps-converted-to.pdf  used on input line 1
@@ -2756,7 +2773,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1344.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [54
+ [56
 
  <./imgs/lqri02-eps-converted-to.pdf>]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2764,26 +2781,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1349.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [55
-
-]
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1447.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
- [56
-
-]
-Overfull \vbox (32.2462pt too high) detected at line 1447
- []
-
-File: Feathergraphics/2.png Graphic file (type png)
-<use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1447.
-(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
-Missing character: There is no ; in font nullfont!
-[57
+ [57
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2794,17 +2792,20 @@ Missing character: There is no ; in font nullfont!
  [58
 
 ]
+Overfull \vbox (32.2462pt too high) detected at line 1447
+ []
+
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1481.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1447.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [59
+[59
 
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1481.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1447.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [60
@@ -2828,7 +2829,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1509.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1481.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [63
@@ -2836,7 +2837,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1538.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1481.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [64
@@ -2844,7 +2845,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1538.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1509.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [65
@@ -2860,7 +2861,7 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1571.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1538.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [67
@@ -2868,10 +2869,26 @@ Missing character: There is no ; in font nullfont!
 ]
 File: Feathergraphics/2.png Graphic file (type png)
 <use Feathergraphics/2.png>
-Package pdftex.def Info: Feathergraphics/2.png  used on input line 1641.
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1538.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
  [68
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1571.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [69
+
+]
+File: Feathergraphics/2.png Graphic file (type png)
+<use Feathergraphics/2.png>
+Package pdftex.def Info: Feathergraphics/2.png  used on input line 1641.
+(pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
+Missing character: There is no ; in font nullfont!
+ [70
 
 ]
 Package epstopdf Info: Source file: <imgs/lqg01.eps>
@@ -2884,7 +2901,7 @@ Package epstopdf Info: Source file: <imgs/lqg01.eps>
 o.pdf imgs/lqg01.eps>
 (epstopdf)             \includegraphics on input line 1654.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqg01-eps-converted-to.pdf, id=894, 1153.30875pt x 664.4825pt>
+<imgs/lqg01-eps-converted-to.pdf, id=914, 1153.30875pt x 664.4825pt>
 File: imgs/lqg01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqg01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqg01-eps-converted-to.pdf  used on input line 16
@@ -2895,7 +2912,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1654.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [69
+ [71
 
  <./imgs/lqg01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqgi01.eps>
@@ -2908,7 +2925,7 @@ Package epstopdf Info: Source file: <imgs/lqgi01.eps>
 to.pdf imgs/lqgi01.eps>
 (epstopdf)             \includegraphics on input line 1665.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqgi01-eps-converted-to.pdf, id=911, 1145.27875pt x 664.4825pt>
+<imgs/lqgi01-eps-converted-to.pdf, id=931, 1145.27875pt x 664.4825pt>
 File: imgs/lqgi01-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqgi01-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqgi01-eps-converted-to.pdf  used on input line 1
@@ -2919,7 +2936,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1665.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [70
+ [72
 
  <./imgs/lqgi01-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqg02.eps>
@@ -2932,7 +2949,7 @@ Package epstopdf Info: Source file: <imgs/lqg02.eps>
 o.pdf imgs/lqg02.eps>
 (epstopdf)             \includegraphics on input line 1676.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqg02-eps-converted-to.pdf, id=928, 1142.2675pt x 664.4825pt>
+<imgs/lqg02-eps-converted-to.pdf, id=948, 1142.2675pt x 664.4825pt>
 File: imgs/lqg02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqg02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqg02-eps-converted-to.pdf  used on input line 16
@@ -2943,7 +2960,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1676.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [71
+ [73
 
  <./imgs/lqg02-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <imgs/lqgi02.eps>
@@ -2956,7 +2973,7 @@ Package epstopdf Info: Source file: <imgs/lqgi02.eps>
 to.pdf imgs/lqgi02.eps>
 (epstopdf)             \includegraphics on input line 1687.
 Package epstopdf Info: Output file is already uptodate.
-<imgs/lqgi02-eps-converted-to.pdf, id=945, 1145.27875pt x 664.4825pt>
+<imgs/lqgi02-eps-converted-to.pdf, id=967, 1145.27875pt x 664.4825pt>
 File: imgs/lqgi02-eps-converted-to.pdf Graphic file (type pdf)
 <use imgs/lqgi02-eps-converted-to.pdf>
 Package pdftex.def Info: imgs/lqgi02-eps-converted-to.pdf  used on input line 1
@@ -2967,7 +2984,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1687.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [72
+ [74
 
  <./imgs/lqgi02-eps-converted-to.pdf>]
 File: Feathergraphics/2.png Graphic file (type png)
@@ -2975,7 +2992,7 @@ File: Feathergraphics/2.png Graphic file (type png)
 Package pdftex.def Info: Feathergraphics/2.png  used on input line 1692.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
- [73
+ [75
 
 ]
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <7> not available
@@ -2990,10 +3007,10 @@ Package pdftex.def Info: Feathergraphics/2.png  used on input line 1713.
 (pdftex.def)             Requested size: 19.23752pt x 25.02382pt.
 Missing character: There is no ; in font nullfont!
 
-[74
+[76
 
 ]
-<imgs/corgi.jpg, id=981, 419.166pt x 308.5929pt>
+<imgs/corgi.jpg, id=1001, 419.166pt x 308.5929pt>
 File: imgs/corgi.jpg Graphic file (type jpg)
 <use imgs/corgi.jpg>
 Package pdftex.def Info: imgs/corgi.jpg  used on input line 1731.
@@ -3002,7 +3019,7 @@ File: Feathergraphics/1.png Graphic file (type png)
 <use Feathergraphics/1.png>
 Package pdftex.def Info: Feathergraphics/1.png  used on input line 1731.
 (pdftex.def)             Requested size: 364.21764pt x 273.15689pt.
- [75
+ [77
 
  <./imgs/corgi.jpg>]
 \tf@nav=\write8
@@ -3033,10 +3050,10 @@ Package logreq Info: Writing requests to 'TCC20191_Otacilio385213.run.xml'.
 ### simple group (level 1) entered at line 1724 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 60443 strings out of 492616
- 1326199 string characters out of 6128968
- 1929218 words of memory out of 5000000
- 63117 multiletter control sequences out of 15000+600000
+ 60447 strings out of 492616
+ 1326244 string characters out of 6128968
+ 1929281 words of memory out of 5000000
+ 63113 multiletter control sequences out of 15000+600000
  615704 words of font info for 181 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  63i,36n,102p,918b,2095s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -3061,10 +3078,10 @@ l/texlive/2018/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texli
 ve/2018/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/local/texlive/201
 8/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2018/texmf
 -dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on TCC20191_Otacilio385213.pdf (75 pages, 1216249 bytes).
+Output written on TCC20191_Otacilio385213.pdf (77 pages, 1225111 bytes).
 PDF statistics:
- 1089 PDF objects out of 1200 (max. 8388607)
- 935 compressed objects within 10 object streams
- 174 named destinations out of 1000 (max. 500000)
+ 1110 PDF objects out of 1200 (max. 8388607)
+ 954 compressed objects within 10 object streams
+ 178 named destinations out of 1000 (max. 500000)
  49276 words of extra memory for PDF output out of 51595 (max. 10000000)
 
