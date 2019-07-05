@@ -116,6 +116,34 @@
     {\centering \large \@author}}               
 \makeatother                            
 
+\newlength{\signwidth}
+\setlength{\signwidth}{8.5cm}
+\newlength{\signthickness}
+\setlength{\signthickness}{0.05pt}
+\newlength{\signskip}
+\setlength{\signskip}{1.25cm}
+
+\newcommand{\signcenter}{\@ifstar{\sign}{\csign}}
+
+\newcommand{\sign}[1]{%
+  \parbox{\signwidth}{\vspace*{\signskip}\centering%
+  \rule{\signwidth}{\signthickness}\\%
+  \nopagebreak #1\par}%
+}
+
+\newcommand{\csign}[1]%
+  {\begingroup\par\centering\sign{#1}\par\endgroup}
+
+\def\PARstartLetter#1#2{\begingroup\def\par{\endgraf\endgroup\lineskiplimit=0pt}
+    \setbox2=\hbox{\xspace#2\hspace{0.4em}}\newdimen\tmpht \tmpht \ht2
+    \advance\tmpht by \baselineskip\font\hhuge=cmr10 at \tmpht
+    \setbox1=\hbox{{\hhuge \uppercase{#1}}}
+    \count7=\tmpht \count8=\ht1\divide\count8 by 1000 \divide\count7 by\count8
+    \tmpht=.001\tmpht\multiply\tmpht by \count7\font\hhuge=cmr10 at \tmpht
+    \setbox1=\hbox{{\hhuge \uppercase{#1}}} \noindent \hangindent1.05\wd1
+    \hangafter=-2 {\hskip-\hangindent \lower1\ht1\hbox{\raise1.0\ht2\copy1}%
+    \kern-0\wd1}\copy2\lineskiplimit=-1000pt}
+
 \newcounter{boxed-theorem}
 \makeatletter
 \newenvironment{boxed-theorem}[1]
@@ -200,11 +228,10 @@
      2019}}
 \end{center}
 	
-\afterpage{\blankpage}	
-	
 %-----------------------------------------------------------------------------------------%
 %----------------------------------INTERNAL COVER-----------------------------------------%
 %-----------------------------------------------------------------------------------------%
+\frontmatter
 \thispagestyle{empty}%
 \begin{center}
     \includegraphics[width=2.5cm]{logo_ufc} \\%
@@ -249,10 +276,103 @@
 \end{center}
 
 %-----------------------------------------------------------------------------------------%
+%---------------------------------- APPROVAL PAGE ----------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\clearpage
+\thispagestyle{empty}%
+\begin{center}
+    \textsc{Otacílio Bezerra Leite Neto}\\
+     \vspace{1.5cm} \textbf{Optimal Control: An application to a non-isothermal continuous reactor}     \\
+\end{center}
+
+   \vspace{1.0cm}
+    Este trabalho foi julgado adequado para a obtenção do título de Bacharel em Engenharia de Computação e aprovado em sua forma final pelo Departamento de Engenharia de Teleinformática da Universidade Federal do Ceará.
+    \csign{\textbf{Otacílio Bezerra Leite Neto}}
+     \vspace{1.0cm}
+     \noindent Banca Examinadora:
+     \csign{\textbf{Prof. Dr. Francesco Corona} (Orientador)\\Departamento de Computação\\Universidade Federal do Ceará}
+     \csign{\textbf{Profa. Dra. Michela Mulas} (Co-Orientadora)\\Departamento de Engenharia de Teleinformática\\Universidade Federal do Ceará}
+     \csign{\textbf{Prof. Dr. Bismark Claure Torrico}\\Departamento de Engenharia Elétrica\\Universidade Federal do Ceará}
+     \vspace{0.75cm}%\null\vfill%%
+
+\begin{center}
+    {\normalsize    Fortaleza, 18 de Junho de 2019}
+\end{center}
+
+%-----------------------------------------------------------------------------------------%
+%-------------------------------------- RESUMO -------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\chapter*{Resumo}
+\thispagestyle{empty}
+
+\PARstartLetter{A}{b}  
+
+%-----------------------------------------------------------------------------------------%
+%------------------------------------- ABSTRACT ------------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\chapter*{Abstract}
+\thispagestyle{empty}
+
+\PARstartLetter{A}{b}
+
+%-----------------------------------------------------------------------------------------%
+%------------------------------------ DEDICATÓRIA ----------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\clearpage
+\thispagestyle{empty}%
+\null\vfill
+\begin{flushright}
+Dedico este trabalho aos curiosos, inquietos e a todos\\aqueles com sede de conhecimento.
+\end{flushright}
+
+%-----------------------------------------------------------------------------------------%
+%----------------------------------- AGRADECIMENTOS --------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\clearpage
+\chapter*{Agradecimentos}
+\thispagestyle{empty}
+
+\noindent Aos meus pais, Tereza Diana e Otacílio Filho, por me darem a oportunidade e confiança de me mudar para longe de casa em busca dos meus sonhos. 
+
+\vspace{0.6cm}
+
+\noindent Aos meus orientadores, prof. Francesco Corona e profa. Michela Mulas, pelos valiosos ensinamentos, por todo o carinho a atenção e, sobretudo, pela amizade construída.
+
+\vspace{0.6cm}
+
+\noindent À minha namorada, Mariana Sátiro, por todo o seu amor e por todo o apoio dado a mim durante todos esses anos de minha graduação.
+
+\vspace{0.6cm}
+
+\noindent Aos meus queridos amigos do Departamento de Teleinformática e do Departamento de Computação, cuja amizade levarei para toda a vida e para além dos muros da universidade; bem como aos meus antigos companheiros do Programa de Educação Tutorial do Departamento de Computação, que me acompanharam nessa maravilhosa experiência acadêmica.
+
+\vspace{0.6cm}
+
+\noindent A todos os grandes cientistas e engenheiros, que estenderam as fronteiras da tecnologia e proporcionaram o empolgante momento atual para a pesquisa científica em computação.
+
+\vspace{0.6cm}
+
+\noindent À música, a expressão artística pela qual tenho maior apreço, por estar sempre comigo durante as noites silenciosas e manhãs barulhentas nos últimos anos, me dando condições perfeitas para me perder em meus próprios pensamentos e diminuir as tensões do dia-a-dia.
+
+%-----------------------------------------------------------------------------------------%
+%------------------------------------- EPÍSTROFE -----------------------------------------%
+%-----------------------------------------------------------------------------------------%
+\clearpage
+\thispagestyle{empty}%
+\newpage
+\null\vfill
+\begin{flushright}
+
+\textit{"Out of the cradle onto dry land, here it is standing: atoms with consciousness; matter with curiosity. Stands at the sea, wonders at wondering: I, a universe of atoms, an atom in the universe."}\\ Richard P. Feynman
+
+\end{flushright}
+   \vspace{3.0cm}
+
+
+%-----------------------------------------------------------------------------------------%
 %--------------------------------------SUMMARY--------------------------------------------%
 %-----------------------------------------------------------------------------------------%
 \thispagestyle{empty}   
-\frontmatter
 \setcounter{secnumdepth}{1}
 \setcounter{tocdepth}{1}
 \tableofcontents
