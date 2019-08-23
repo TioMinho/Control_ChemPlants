@@ -1,5 +1,0 @@
-[0] Config.pm:304> INFO - This is Biber 2.12
-[0] Config.pm:307> INFO - Logfile is 'TCC20191_Otacilio385213.aux.blg'
-[53] biber:315> INFO - === seg jun 17, 2019, 16:47:33
-[90] Utils.pm:209> ERROR - Cannot find control file 'TCC20191_Otacilio385213.aux.bcf'! - Did latex run successfully on your .tex file before you ran biber?
-[90] Biber.pm:114> INFO - ERRORS: 1
